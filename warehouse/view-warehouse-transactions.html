@@ -1,0 +1,36 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Racks</h4>
+    <table datatable="ng" dt-options="dtWarehouseTransactionsOptions" dt-column-defs="dtWarehouseTransactionsColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">Mercancía</th>
+                <th class="[ center-align ]">Ubicación</th>
+                <th class="[ center-align ]">Concepto</th>
+                <th class="[ center-align ]">Unidades</th>
+                <th class="[ center-align ]">Fecha de creación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="t in transactions">
+                <td class="[ center-align ]">{{ t.item_name }}</td>
+                <td class="[ center-align ]">{{ t.location }}</td>
+                <td class="[ center-align ]">{{ t.concept }}</td>
+                <td class="[ center-align ]">{{ t.units }}</td>
+                <td class="[ center-align ]">{{ t.created_at | date:'dd/MM/yyyy' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+    <div class="[ row ]">
+        <div class="[ col s12 ][ center-align ]">
+            <a class="[ btn ]" href="#/add-rack"><i class="[ fa fa-plus ][ left ]"></i>Agregar rack</a>
+        </div>
+    </div>  
+</div>
+
+
+
+
+

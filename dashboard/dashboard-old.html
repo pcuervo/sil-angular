@@ -1,0 +1,192 @@
+
+<!-- Stats Panels -->
+<div class="row">
+  <div class="col l4 s12">
+    <a href="#" class="card-panel stats-card indigo lighten-2 indigo-text text-lighten-5">
+      <i class="fa fa-plus"></i>
+      <span class="count">Crear usuario</span>
+    </a>
+  </div>
+  <div class="col l4 s12">
+    <a href="#" class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
+      <i class="fa fa-plus"></i>
+      <span class="count">Crear proyecto</span>
+    </a>
+  </div>
+  <div class="col l4 s12">
+    <div class="card-panel stats-card teal lighten-2 green-text text-lighten-5">
+      <i class="fa fa-plus"></i>
+      <span class="count">Crear cliente</span>
+    </div>
+  </div>
+  <div class="col l4 s12">
+    <a href="#" class="card-panel stats-card indigo lighten-2 indigo-text text-lighten-5">
+      <i class="fa fa-users"></i>
+      <span class="count">20</span>
+      <div class="name">Usuarios de SIL</div>
+    </a>
+  </div>
+  <div class="col l4 s12">
+    <a href="#" class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
+      <i class="fa fa-briefcase"></i>
+
+      <span class="count">12</span>
+      <div class="name">Proyectos activos</div>
+    </a>
+  </div>
+  <div class="col l4 s12">
+    <div class="card-panel stats-card teal lighten-2 green-text text-lighten-5">
+      <i class="mdi-action-assignment-ind"></i>
+      <span class="count">2</span>
+      <div class="name">Clientes Litobel</div>
+    </div>
+  </div>
+</div>
+<!-- /Stats Panels -->
+
+
+<div class="row sortable">
+  <!-- Stacked Area Chart -->
+  <div class="col s12 l7">
+    <div class="card">
+      <div class="title">
+        <h5>Movimientos al inventario</h5>
+        <a class="close" href="#">
+          <i class="mdi-content-clear"></i>
+        </a>
+        <a class="minimize" href="#">
+          <i class="mdi-navigation-expand-less"></i>
+        </a>
+      </div>
+      <div class="content">
+        <flot dataset="flot1data" options="flot1opts" style="display: block; height: 300px"></flot>
+      </div>
+    </div>
+  </div>
+  <!-- /Stacked Area Chart -->
+
+  <!-- Pie Chart -->
+  <div class="col s12 l5">
+    <div class="card">
+      <div class="title">
+        <h5>Inventario por tipo</h5>
+        <a class="close" href="#">
+          <i class="mdi-content-clear"></i>
+        </a>
+        <a class="minimize" href="#">
+          <i class="mdi-navigation-expand-less"></i>
+        </a>
+      </div>
+      <div class="content">
+        <flot dataset="flot2data" options="flot2opts" style="display: block; height: 300px"></flot>
+      </div>
+    </div>
+  </div>
+  <!-- /Pie Chart -->
+</div>
+
+<div class="row sortable">
+  <!-- Orders Card -->
+  <div class="col l6 s12">
+    <div class="card">
+      <div class="title">
+        <h5>Resumen mensual almacén</h5>
+        <a class="close" href="#">
+          <i class="mdi-content-clear"></i>
+        </a>
+        <a class="minimize" href="#">
+          <i class="mdi-navigation-expand-less"></i>
+        </a>
+      </div>
+      <div class="content orders-card">
+
+        <h4>38</h4>
+        <div class="row">
+          <div class="col s6">
+            <small>Ubicaciones de almacén ocupadas</small>
+          </div>
+          <div class="col s6 right-align">
+            77% <i class="fa fa-level-down red-text"></i>
+          </div>
+        </div>
+        <div class="progress small">
+          <div class="determinate" style="width: 77%"></div>
+        </div>
+
+        <h4>$17,180</h4>
+        <div class="row">
+          <div class="col s6">
+            <small>Renta mensual</small>
+          </div>
+          <div class="col s6 right-align">
+            43% <i class="fa fa-level-up green-text"></i>
+          </div>
+        </div>
+        <div class="progress small">
+          <div class="determinate" style="width: 43%"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- /Orders Card -->
+
+  <!-- Mail Card -->
+  <div class="col l6 s12">
+    <div class="card">
+      <div class="title">
+        <h5>Notificaciones</h5>
+        <a class="close" href="#">
+          <i class="mdi-content-clear"></i>
+        </a>
+        <a class="minimize" href="#">
+          <i class="mdi-navigation-expand-less"></i>
+        </a>
+      </div>
+      <div class="content mail-card">
+
+        <div class="row">
+          <div class="col s8">
+            <a href="mail-view.html">
+              <strong>Luis HP</strong>
+            </a>
+          </div>
+          <div class="col s4 right-align">
+            <small>9:02 AM</small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p><small class="red-text">Solicitud de movimiento de salida</small></p>
+            <a href="mail-view.html">
+              ¡Necesito mas flyers de Indigo!
+            </a>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col s8">
+            <a href="mail-view.html">
+              <strong>Jefe de almacén</strong>
+            </a>
+          </div>
+          <div class="col s4 right-align">
+            <small>9:02 AM</small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p><small class="red-text">Ingreso a almacén</small></p>
+            <a href="mail-view.html">
+              Se ha ingresado el artículo XYZ123 a la ubicación A15.
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- /Mail Card -->
+</div>

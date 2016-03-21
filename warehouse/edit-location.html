@@ -1,0 +1,65 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ row ]">
+    <h3 class="[ center-align ]">Editar ubicación</h3>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card blue white-text">
+            <span class="count">{{ rack }}</span>
+            <div class="name">Rack</div>
+        </div>
+    </div>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card blue white-text">
+            <span class="count">{{ item_location_units }}/{{ totalUnits }}</span>
+            <div class="name">Unidades ocupadas</div>
+        </div>
+    </div>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card blue white-text">
+            <span class="count">{{ numItems }}</span>
+            <div class="name"># de artículos</div>
+        </div>
+    </div>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card [ {{ getStatusClass( status ) }}]">
+            <span class="count">{{ statusDescription }}</span>
+            <div class="name">Estatus</div>
+        </div>
+    </div>
+    <div class="[ col s12 m6 ]" ng-hide="1"> 
+        <div class="input-field">
+            <input id="input_text" type="text" name="model" ng-model="model" disabled>
+            <label for="input_text">Modelo</label>
+        </div>
+    </div>
+    <form ng-submit="editLocation()" data-parsley-location>
+        <h5 class="[ center-align ]">Artículos en ubicación</h5>
+        <div class="[ row ]">
+            <div class="[ col s6 m4 offset-m2 ][ input-field ]">
+                <div class="input-field">
+                    <input type="text" id="locationName" ng-model="locationName" required>
+                    <label for="locationName">Nombre</label>
+                </div>
+            </div>
+            <div class="[ col s6 m4 ][ input-field ]">
+                <div class="input-field">
+                    <input type="text" id="units" ng-model="units" required required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor o igual a {{item_location_units}}" min="{{item_location_units}}">
+                    <label for="units">Unidades Totales</label>
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]" >Editar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+  $('[data-parsley-location]').parsley();
+</script>
+
+
+
+

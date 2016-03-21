@@ -1,0 +1,73 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Agregar usuario</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" ng-submit="registerUser()" data-parsley-validate>
+
+            <div class="[ col s12 m4 l3 offset-l1 ]"> 
+                <div class="input-field">
+                    <input type="text" id="email" ng-model="email" required>
+                    <label for="email">Email</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 l3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="firstName" ng-model="firstName" required>
+                    <label for="firstName">Nombre</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 l3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="lastName" ng-model="lastName" required>
+                    <label for="lastName">Apellido(s)</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m4 l3 offset-l1 ][ mt-15 ]"> 
+                <select name="role" ng-model="role" required >
+                    <option value="" disabled selected>Rol</option>
+                    <option value="1">Administrador</option>
+                    <option value="2">Project Manager</option>
+                    <option value="3">Ejecutivo de cuenta</option>
+                    <option value="4">Jefe de almacén</option>
+                    <option value="5">Repartidor</option>
+                </select>
+            </div>
+            <div class="[ col s12 m4 l3 ]"> 
+                <div class="input-field">
+                    <input type="password" id="password" ng-model="password" required>
+                    <label for="password">Contraseña</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 l3 ]"> 
+                <div class="input-field">
+                    <input type="password" id="passwordConfirmation" ng-model="passwordConfirmation" required data-parsley-equalto="#password" data-parsley-equalto-message="Las contraseñas no coinciden.">
+                    <label for="passwordConfirmation">Confirmar contraseña</label>
+                </div>
+            </div>
+            
+            <div class="[ clear ]"></div>
+            <!-- Crear ClientService -->
+         
+            <div class="[ col s12 ]"> 
+                <input type="hidden" name="entry_type" value="unit">
+
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]">agregar</button>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+<script>
+  $('[data-parsley-validate]').parsley();
+</script>
+
+
+
+
+

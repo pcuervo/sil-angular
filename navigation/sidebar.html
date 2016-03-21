@@ -1,0 +1,97 @@
+<div class="[ top ]">
+    <div>
+        <!-- Sidebar toggle -->
+        <a href="#" class="[ yay-toggle ]">
+            <div class="[ burg1 ]"></div>
+            <div class="[ burg2 ]"></div>
+            <div class="[ burg3 ]"></div>
+        </a>
+        <!-- Sidebar toggle -->
+
+        <!-- Logo -->
+        <a href="#" class="[ brand-logo ]">
+            <img src="assets/_con/images/litobel.png">
+        </a>
+        <!-- /Logo -->
+    </div>
+</div>
+
+<div class="[ nano ]">
+    <div class="[ nano-content ]">
+
+        <ul>
+            <li class="label">Control de inventario</li>
+            <li class="active">
+                <a href="#/dashboard" class="waves-effect waves-blue"><i class="fa fa-dashboard"></i> Dashboard {{roleName}}</a>
+            </li>
+            <li>
+                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-th"></i> Inventario<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+                <ul>
+                    <li><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Ver movimientos</a>
+                    </li>
+                    <li ng-show="( role == 1 || role == 2 || role == 3 || role == 6 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
+                    </li>
+                    <li><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i> Entradas</a>
+                    </li>
+                    <li><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i> Salidas</a>
+                    </li>
+                    <!-- <li><a class="waves-effect waves-blue" href="css-colors"><i class="fa fa-pie-chart"></i> Reportes</a>
+                    </li> -->
+                </ul>
+            </li>
+            <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4 )">
+                <a class="yay-sub-toggle waves-effect waves-blue"><i class="mdi-action-view-quilt"></i> Almacén<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+                <ul>
+                    <li><a class="waves-effect waves-blue" href="#/view-warehouse-transactions"><i class="mdi-av-repeat"></i> Movimientos</a>
+                    </li>
+                    <li><a class="waves-effect waves-blue" href="#/wh-dashboard"><i class="fa fa-location-arrow"></i> Ubicaciones</a>
+                    </li>
+                    <li><a class="waves-effect waves-blue" href="#/view-racks"><i class="mdi-action-view-module"></i> Racks</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="label" ng-show="( role == 1 || role == 2 || role == 3 )">Administración del sistema</li>
+            <li ng-show="role == 1">
+                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-users"></i> Usuarios Litobel <span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+                <ul>
+                    <li><a class="waves-effect waves-blue" href="#/add-user"><i class="fa fa-user-plus"></i>Agregar usuario</a>
+                    </li>
+                    <li><a class="waves-effect waves-blue" href="#/view-users"><i class="fa fa-user"></i>Ver usuarios</a>
+                    </li>
+                </ul>
+            </li>
+            <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4 )">
+                <a class="yay-sub-toggle waves-effect waves-blue"><i class="fa fa-briefcase"></i> Proyectos<span class="yay-collapse-icon mdi-navigation-expand-more"></a>
+                <ul>
+                    <li><a class="waves-effect waves-blue" href="#/view-projects"><i class="ion-eye"></i>Ver proyectos</a>
+                    </li>
+                    <li ng-show="role != 4"><a class="waves-effect waves-blue" href="#/add-project"><i class="mdi-content-add-box"></i>Agregar proyecto</a>
+                    </li>
+                </ul>
+            </li>
+            <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4 )">
+                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="mdi-action-assignment-ind"></i> Clientes<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+                <ul>
+                    <li><a class="waves-effect waves-blue" href="#/view-clients"><i class="ion-eye"></i>Ver clientes</a>
+                    </li>
+                    <li ng-show="role != 4"><a class="waves-effect waves-blue" href="#/add-client"><i class="mdi-content-add-box"></i>Agregar cliente</a>
+                    </li>
+                    <li ng-show="role != 4"><a class="waves-effect waves-blue" href="#/view-client-users"><i class="ion-eye"></i>Ver usuarios de cliente</a>
+                    </li>
+                    <li ng-show="role != 4"><a class="waves-effect waves-blue" href="#/add-client-user"><i class="mdi-content-add-box"></i>Agregar usuarios a cliente</a>
+                    </li>
+                </ul>
+            </li>
+            <li ng-show="( role == 1 )">
+                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-truck"></i> Proveedores<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+                <ul>
+                    <li><a class="waves-effect waves-blue" href="#/view-suppliers"><i class="ion-eye"></i>Ver proveedores</a>
+                    </li>
+                    <li><a class="waves-effect waves-blue" href="#/add-supplier"><i class="mdi-content-add-box"></i>Agregar proveedor</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div><!-- nano-content -->
+</div><!-- nano -->

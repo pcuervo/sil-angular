@@ -1,0 +1,45 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<!-- <div class="[ card-panel ]">
+    <div class="[ alert alert-border-left ]">
+        <strong>PENDIENTE:</strong>
+        <ol>
+            <li>Agregar opción para editar usuarios de cliente.</li>
+            <li>Serializar JSON para que traiga incrustado el cliente.</li>
+            <li>Esconder algunas columnas en móvil</li>
+        </ol>
+    </div>
+</div> -->
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Usuario de Clientes</h4>
+    
+        <table datatable="ng" dt-options="dtClientUserOptions" dt-column-defs="dtClientUserColumn" class="row-border hover">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Nombre usuario</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Unidad de negocio</th>
+                    <th>Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="c in clientUsers">
+                <td>{{ getClientName( c.client_id ) }}</td>
+                <td>{{ c.first_name + ' ' + c.last_name }}</td>
+                <td>{{ c.email }}</td>
+                <td>{{ c.phone }}</td>
+                <td>{{ c.business_unit }}</td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-user"><i class="[ fa fa-edit ]"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+
+</div>
+
+
+
+
+

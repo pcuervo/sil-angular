@@ -1,0 +1,276 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]" ng-show="item.actable_type == 'UnitItem'">
+    <div class="row">
+        <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div id="editor"></div>
+        </div>
+    </div>
+    <div class="row">
+        <h4 class="[ center-align ]">Ubicar en almacén</h4>
+        <form name="location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-unit>
+            <div class="[ col s12 m4 offset-m4 ]"> 
+                <div class="input-field">
+                    <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
+                    <label for="input_text">Nombre (alias)</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 l4 offset-l2 ]"> 
+                <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                    <option value="" disabled selected>Selecciona el rack</option>
+                    <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m6 l4 ]"> 
+                <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                    <option value="" disabled selected>Selecciona la ubicación</option>
+                    <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+                </select>
+            </div>
+            <div ng-show="hasSameLocation">
+                <div class="[ col s12 m4 offset-m2 ]" > 
+                    <div class="input-field">
+                        <input id="units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
+                        <label for="units">Unidades que ocupa la mercancía:</label>
+                    </div>
+                </div>
+                <div class="[ col s12 m4 ]"> 
+                    <div class="[ center-align ]">
+                        <button class="[ waves-effect ][ btn ]">Ubicar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div><!-- row -->
+</div><!-- ubicaciones -->
+
+<div class="[ card-panel ]" ng-show="item.actable_type == 'BundleItem'">
+    <div class="row">
+        <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div id="editor"></div>
+        </div>
+    </div>
+    <div class="row">
+        <h4 class="[ center-align ]">Ubicación en almacén</h4>
+        <div class="[ col s12 m4 offset-m2 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
+                <label for="input_text">Nombre (alias)</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <p>
+                <input name="radio-location-bundle" type="radio" id="single-location-bundle" ng-model="locationBundleRadio" ng-click="showLocationForm(locationBundleRadio)" value="same" />
+                <label for="single-location-bundle">Mover todo a una ubicación</label>
+                <input name="radio-location-bundle" type="radio" id="multiple-locations-bundle" ng-model="locationBundleRadio" ng-click="showLocationForm(locationBundleRadio)" value="multiple"  />
+                <label for="multiple-locations-bundle">Repartir en varias ubicaciones</label>
+            </p>
+        </div>
+        <div class="[ clear ]"></div>
+        <form name="location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-bundle-same ng-show="sameLocationType">
+            <div>
+                <div class="[ col s12 m6 l4 offset-l2 ]"> 
+                    <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                        <option value="" disabled selected>Selecciona el rack</option>
+                        <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                    </select>
+                </div>
+                <div class="[ col s12 m6 l4 ]" > 
+                    <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                        <option value="" disabled selected>Selecciona la ubicación</option>
+                        <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="[ col s12 m4 offset-m2 ]" ng-show="hasSameLocation"> 
+                <div class="input-field">
+                    <input id="units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
+                    <label for="units">Unidades que ocupa la mercancía:</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]" ng-show="hasSameLocation">Ubicar</button>
+                </div>
+            </div>
+        </form><!-- sameLocationType -->
+        <form name="multiple_location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-bundle-multiple ng-show="multipleLocationsType">
+            <div class="[ col s12 ]">
+                <h5 class="[ center-align ]">Artículos en paquete</h5>
+                <div class="[ row ]" ng-repeat="part in partsToLocate track by $index">
+                    <div class="[ col s6 m2 ][ input-field ]">
+                        <input id="item-name-{{$index}}" type="text" value="{{part.name}}" ng-readonly="true" >
+                    </div>
+                    <div class="[ col s6 m2 ][ input-field ]">
+                        <input id="item-serial-{{$index}}" type="text" value="{{part.serial_number}}" ng-readonly="true">
+                    </div>
+                    <div class="[ col s6 m2 ][ input-field ]">
+                        <select id="rack-{{$index}}" name="rack-{{$index}}" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocationSelect( selectedRack, $index )">
+                            <option value="" disabled selected>Selecciona el rack</option>
+                            <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                        </select>
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <select name="location-{{$index}}" ng-model="selectedLocation[$index]" ng-change="restrictUnits( selectedLocation[$index], $index )">
+                            <option value="" disabled selected>Selecciona la ubicación</option>
+                            <option ng:repeat="location in multipleLocations[$index]" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+                        </select>
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]" > 
+                        <input id="units-{{$index}}" type="number" name="units-{{$index}}" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocations[$index].available_units }}." min="1" max="{{ currentLocations[$index].available_units }}" required>
+                        <label for="units-{{$index}}">Unidades que ocupa:</label>
+                    </div>
+                    <input type="hidden" id="parts-{{$index}}" value="{{part.id}}">
+                </div>
+            </div> 
+            <div class="[ col s12 ][ center-align ]" ng-show="hasMultipleLocations"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]">Ubicar</button>
+                </div>
+            </div>
+        </form><!-- multipleLocationsType -->
+    </div><!-- row -->
+</div><!-- ubicaciones -->
+
+
+<div class="[ card-panel ]" ng-show="item.actable_type == 'BulkItem'">
+    <div class="row">
+        <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div id="editor"></div>
+        </div>
+    </div>
+    <div class="row">
+        <h4 class="[ center-align ]">Ubicación el almacén</h4>
+        <div class="[ col s8 m4 offset-m2 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
+                <label for="input_text">Nombre (alias)</label>
+            </div>
+        </div>
+        <div class="[ col s4 m2 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="quantity" ng-model="quantity" required disabled>
+                <label for="input_text">Cantidad</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <p>
+                <input name="radio-location" type="radio" id="single-location" ng-model="locationRadio" ng-click="showLocationForm(locationRadio)" value="same" />
+                <label for="single-location">Mover todo a una ubicación</label>
+                <input name="radio-location" type="radio" id="multiple-locations" ng-model="locationRadio" ng-click="showLocationForm(locationRadio)" value="multiple"  />
+                <label for="multiple-locations">Repartir en varias ubicaciones</label>
+            </p>
+        </div>
+        <div class="[ clear ]"></div>
+        <form name="location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-bulk-same ng-show="sameLocationType  && ! multipleLocationsType">
+            <div>
+                <div class="[ col s12 m6 l4 offset-l2 ]"> 
+                    <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                        <option value="" disabled selected>Selecciona el rack</option>
+                        <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                    </select>
+                </div>
+                <div class="[ col s12 m6 l4 ]" > 
+                    <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                        <option value="" disabled selected>Selecciona la ubicación</option>
+                        <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="[ col s12 m4 offset-m2 ]" ng-show="hasSameLocation"> 
+                <div class="input-field">
+                    <input id="units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
+                    <label for="units">Unidades que ocupa la mercancía:</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]" ng-show="hasSameLocation">Ubicar</button>
+                </div>
+            </div>
+        </form><!-- sameLocationType -->
+        <form name="multiple_location_form" class="[ mt-40 ][ left-align ]" data-parsley-bulk-multiple ng-show="multipleLocationsType" ng-submit="addUnitsToLocation()">
+            <div class="[ col s12 m4 offset-m4  ][ input-field ]">
+                <input id="to-locate" type="text" ng-model="pendingUnitsToLocate" ng-readonly="true" >
+                <label for="to-locate">Unidades pendientes por ubicar</label>
+            </div>
+            <div class="[ row ]">
+                <div class="clear"></div>
+                <div class="[ col s6 m2 ][ input-field ]">
+                    <input id="units-to-locate" type="number" name="units-to-locate" ng-model="unitsToLocate" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ pendingUnitsToLocate }}." min="1" max="{{ pendingUnitsToLocate }}"  required>
+                    <label for="units-to-locate">Unidades a ubicar</label>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <select id="rack" name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                        <option value="" disabled selected>Selecciona el rack</option>
+                        <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                    </select>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                        <option value="" disabled selected>Selecciona la ubicación</option>
+                        <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+                    </select>
+                </div>
+                <div class="[ col s6 m2 ][ input-field ]" > 
+                    <input id="units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
+                    <label for="units">Unidades que ocupa:</label>
+                </div>
+                <div class="[ col s12 m2 ]"> 
+                    <div class="[ center-align ]">
+                        <button id="add-to-location" class="[ waves-effect ][ btn ]" href="#">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="[ row ]" ng-show="hasMultipleLocations">
+                <div class="[ col s6 m2 ][ input-field ]">
+                    <h5 class="[ center-align ]">Unidades a ubicar</h5>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <h5 class="[ center-align ]">Rack</h5>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <h5 class="[ center-align ]">Ubicación</h5>
+                </div>
+                <div class="[ col s6 m2 ][ input-field ]" > 
+                    <h5 class="[ center-align ]">Unidades que ocupa</h5>
+                </div>
+                <div class="[ clear ]"></div>
+                <div class="[ row ]" ng-repeat="bl in bulkLocations track by $index">
+                    <div class="[ col s6 m2 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.quantity }}">
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.selectedRack }} ">
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.selectedLocation }}">
+                    </div>
+                    <div class="[ col s6 m2 ][ input-field ]" > 
+                        <input type="text" ng-readonly="true" value="{{ bl.units }}">
+                    </div>
+                    <div class="[ col s12 m2 ]"> 
+                        <div class="[ center-align ]">
+                            <a id="add-to-location" class="[ waves-effect red ][ btn ]" href="#">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="[ col s12 ][ center-align ]" ng-show="pendingUnitsToLocate==0"> 
+                    <div class="[ center-align ]">
+                        <a class="[ waves-effect ][ btn ]" ng-click="addToLocation()">Ubicar</a>
+                    </div>
+                </div>
+            </div>
+        </form><!-- multipleLocationsType -->
+    </div><!-- row -->
+</div><!-- ubicaciones -->
+
+<script>
+    $('[data-parsley-unit]').parsley();
+    $('[data-parsley-bundle-same]').parsley();
+    $('[data-parsley-bundle-multiple]').parsley();
+    $('[data-parsley-bulk-same]').parsley();
+    $('[data-parsley-bulk-multiple]').parsley();
+</script>

@@ -1,0 +1,33 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">{{ rack.rack_info.name }}</h4>
+    <div class="[ row ][ js-rack ]">
+    </div><!-- row -->
+</div>
+
+<div class="[ card-panel ]">
+	<h4 class="[ center-align ]">Artículos en rack</h4>
+	<table datatable="ng" dt-options="dtRackItemsOptions" dt-column-defs="dtRackItemsColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">Entrada</th>
+                <th class="[ center-align ]">Nombre</th>
+                <th class="[ center-align ][ hide-on-small-and-down ]">Ubicación</th>
+                <th class="[ center-align ][ hide-on-small-and-down ]">Unidades ocupadas</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
+                <th class="[ center-align ]">Reubicar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in items">
+                <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i></td>
+                <td>{{ item.name }}</td>
+                <td class="[ center-align ][ hide-on-small-and-down ]"><a href="#/view-location/{{item.location_id}}">{{ item.location }}</a></td>
+                <td class="[ center-align ][ hide-on-small-and-down ]">{{ item.units }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/relocate/{{item.location_id}}/{{item.id}}"><i class="[ fa fa-location-arrow ]"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

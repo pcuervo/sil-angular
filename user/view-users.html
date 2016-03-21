@@ -1,0 +1,44 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Usuarios registrados</h4>
+    <div class="[ row ]">
+        
+        <table datatable="ng" dt-options="dtUsersOptions" dt-column-defs="dtUsersColumnDefs" class="row-border hover">
+            <thead>
+                <tr>
+                    <th class="[ center-align ]">Nombre</th>
+                    <th class="[ center-align ][ hide-on-small-only ]">Rol</th>
+                    <th class="[ center-align ][ hide-on-small-only ]">Correo</th>
+                    <th class="[ center-align ]">Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="u in users">
+                    <td>{{ u.first_name + ' ' + u.last_name }}</td>
+                    <td class="[ center-align ][ hide-on-small-only ]">{{ u.email }}</td>
+                    <td class="[ center-align ][ hide-on-small-only ]">{{ getUserRole( u.role ) }}</td>
+                    <td class="[ center-align ]"><a href="#/edit-user/{{u.id}}" class="[ btn waves-effect waves-green ]"><i class="[ fa fa-edit ]"></i></a></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script>
+    // $('#table1').DataTable({
+    //     "bLengthChange": false,
+    //     "iDisplayLength": 5,
+    //     "filter": false,
+    //     "language": {
+    //         "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
+    //     },
+    //     "columnDefs": [ { "targets": 3, "orderable": false } ],
+    //     responsive: true
+
+    // });
+</script>
+
+
+

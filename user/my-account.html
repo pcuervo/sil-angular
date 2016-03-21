@@ -1,0 +1,43 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Mi cuenta</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateUser()" data-parsley-validate>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="email" ng-model="email" ng-readonly="true">
+                    <label for="email">Email</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="firstName" ng-model="firstName" ng-readonly="true">
+                    <label for="firstName">Nombre</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="lastName" ng-model="lastName" ng-readonly="true">
+                    <label for="lastName">Apellido(s)</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="role" ng-model="role" ng-readonly="true">
+                    <label for="role">Rol</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <a href="#/edit-profile" class="[ waves-effect ][ btn ]">Editar perfil</a>
+                    <a href="#/change-password" class="[ waves-effect ][ btn ]">Cambiar contraseña</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

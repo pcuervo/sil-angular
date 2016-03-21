@@ -1,0 +1,278 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card ]">
+    <div class="[ row ]">
+        <div class="[ title ]">
+            <h3>Reingreso</h3>
+        </div>
+        <div class="content">
+            <p>Busca un artículo escaneando el código de barras:</p>
+            <form ng-submit="searchByBarcode()" data-parsley-validate >
+                <div class="[ col s8 m7 offset-m2 ][ input-field ]">
+                    <input id="[ barcode ]" type="text" ng-model="barcode" required data-parsley-error-message="Código inválido.">
+                    <label for="[ barcode ]"></label>
+                </div>
+                <div class="[ col s4 m3 ][ input-field ]">
+                    <button class="[ waves-effect ][ btn ]"><i class="[ mdi-action-search ][ left ]"></i> Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="[ card-panel ]" ng-show="hasItem">
+    
+    <div class="[ row ]">
+        <div class="[ col s12 ][ mt-10 ]"> 
+            <div class="[ row ]">
+                <div class="[ col s12 m9 ]"> 
+                    <div class="input-field">
+                        <input id="input_text" type="text" name="project" ng-model="item.name" ng-readonly="true">
+                        <label for="textarea1">Nombre</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="input_text" type="text" name="project" ng-model="item.item_type" ng-readonly="true">
+                        <label for="textarea1">Tipo de mercancía</label>
+                    </div>
+                </div>
+                <div class="[ col s12 m3 ][ center-align ][ item ]"> 
+                    <div class="[ card ]">
+                        <div class="[ card-image ][ img-mercancia ]">
+                            <img src="{{item.img}}" alt="{{item.name}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="project" ng-model="item.project" ng-readonly="true">
+                <label for="input_text">Proyecto</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="pm" ng-model="item.pm" ng-readonly="true">
+                <label for="input_text">Project Manager</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="ae" ng-model="item.ae" ng-readonly="true">
+                <label for="input_text">Ejecutivo de cuenta</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="clientName" ng-model="item.client" disabled>
+                <label for="input_disabled">Cliente</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="input_disabled" type="text" name="clientContact" ng-model="item.client_contact" disabled>
+                <label for="input_disabled">Contacto cliente</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]" ng-hide="1"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="serialNumber" ng-model="item.serial_number" ng-readonly="true">
+                <label for="input_text">Número de serie</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]" ng-hide="1"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="brand" ng-model="brand" disabled>
+                <label for="input_text">Marca</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]" ng-hide="1"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="model" ng-model="model" disabled>
+                <label for="input_text">Modelo</label>
+            </div>
+        </div>
+        <div class="[ col s12 ]"> 
+            <div class="input-field">
+                <textarea class="materialize-textarea" name="description" ng-model="item.description" disabled></textarea>
+                <label for="textarea1">Descripción</label>
+            </div>
+        </div>
+        <form ng-show="item.actable_type == 'BulkItem'" ng-submit="reEntry( item.actable_type )" data-parsley-bulk>
+            <div class="[ col s12 m6 ][ mt-10 ]"> 
+                <select name="deliveryCompany" ng-model="deliveryCompany" required>
+                    <option value="" disabled selected>Proveedor</option>
+                    <option ng-repeat="value in ['HP', 'Google', 'BestBuy']">{{value}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="delivery-contact-bulk" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact" required>
+                    <label for="delivery-contact-bulk">¿Quién entregó?</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de entrada (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" required>
+            </div>
+            <div class="[ col s12 m6 ][ mt-10 ]"> 
+                <select name="itemState" ng-model="itemState" required>
+                    <option value="" selected disabled>Estado</option>
+                    <option value="4">Dañado</option>
+                    <option value="5">Incompleto</option>
+                    <option value="6">Necesita mantenimiento</option>
+                    <option value="7">Buen estado</option>
+                </select>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="input-field">
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+                    <label for="textarea1">Observaciones adicionales</label>
+                </div>
+            </div>
+            <div class="[ col s4 m4 offset-m1 ]"> 
+                <div class="input-field">
+                    <input id="input_text" type="text" name="item.quantity" ng-model="item.quantity" disabled>
+                    <label for="input_text">Cantidad actual</label>
+                </div>
+            </div>
+            <div class="[ col s4 m4 ]"> 
+                <div class="input-field">
+                    <input id="withdraw-quantity" type="number" name="quantity" ng-model="quantity" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0." min="1">
+                    <label for="withdraw-quantity">Cantidad a reingresar</label>
+                </div>
+            </div>
+            <div class="[ col s4 m2 ]"> 
+                <button class="[ waves-effect ][ btn red ]">Reingresar</button>
+            </div>
+        </form>
+        <form ng-show="item.actable_type == 'UnitItem'" ng-submit="reEntry( item.actable_type )" data-parsley-unit>
+            <div class="[ col s12 m6 ][ mt-10 ]"> 
+                <select name="deliveryCompanyUnit" ng-model="deliveryCompanyUnit" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="delivery-contact-unit" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact" required>
+                    <label for="delivery-contact-unit">¿Quién entregó?</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de entrada (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" required>
+            </div>
+            <div class="[ col s12 m6 ][ mt-10 ]"> 
+                <select name="itemState" ng-model="itemState" required>
+                    <option value="" selected disabled>Estado</option>
+                    <option value="4">Dañado</option>
+                    <option value="5">Incompleto</option>
+                    <option value="6">Necesita mantenimiento</option>
+                    <option value="7">Buen estado</option>
+                </select>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="input-field">
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+                    <label for="textarea1">Observaciones adicionales</label>
+                </div>
+            </div>
+            <div class="[ col s12 ][ center-align ]" >
+                <button class="[ waves-effect ][ btn red ]">Reingresar</button>
+            </div>
+        </form>
+        <form ng-show="item.actable_type == 'BundleItem'" ng-submit="reEntry( item.actable_type )" data-parsley-bundle>
+            <div class="[ col s12 m6 ][ mt-10 ]"> 
+                <!-- <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+                </select> -->
+                <select name="deliveryCompany" ng-model="deliveryCompany" required>
+                    <option value="" disabled selected>Proveedor</option>
+                    <option ng-repeat="value in ['HP', 'Google', 'BestBuy']">{{value}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="delivery-contact-bundle" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact" required>
+                    <label for="delivery-contact-bundle">¿Quién entregó?</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de entrada (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" required>
+            </div>
+            <div class="[ col s12 m6 ][ mt-10 ]"> 
+                <select name="itemState" ng-model="itemState" required>
+                    <option value="" selected disabled>Estado</option>
+                    <option value="4">Dañado</option>
+                    <option value="5">Incompleto</option>
+                    <option value="6">Necesita mantenimiento</option>
+                    <option value="7">Buen estado</option>
+                </select>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="input-field">
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+                    <label for="textarea1">Observaciones adicionales</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]" ng-show="hasPartsToReturn">
+                <h5 class="[ center-align ]">Artículos en paquete</h5>
+                <div class="[ row ]">
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <label for="part-name">Nombre</label>
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <label for="part-serial-number">No. de serie</label>
+                    </div>
+                    <div class="[ col s6 m4 ][ input-field ]">
+                        <label for="part-brand">Marca / Modelo</label>
+                    </div>
+                    <div class="[ col s6 m2 ][ input-field ]">
+                        <label for="part-model">¿Devolver?</label>
+                    </div>
+                </div>
+                <div class="[ row ]" ng-repeat="part in parts track by $index">
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input id="item-name" type="text" value="{{part.name}}" ng-readonly="true">
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input id="item-name" type="text" value="{{part.serial_number}}" ng-readonly="true">
+                    </div>
+                    <div class="[ col s6 m4 ][ input-field ]">
+                        <input id="item-name" type="text" value="{{part.brand}} / {{part.model}}" ng-readonly="true">
+                    </div>
+                    <div class="[ col s6 m2 ][ input-field ]">
+                        <input class="[ filled-in ]" type="checkbox" id="checkbox-{{$index}}" value="{{part.id}}" name="part-{{part.id}}" checked />
+                        <label for="checkbox-{{$index}}">Si</label>
+                    </div>
+                </div>
+            </div> 
+            <div class="[ clear ]"></div>
+            <div class="[ center-align ]" ng-show="hasPartsToReturn"> 
+                <button class="[ waves-effect ][ btn red ]">Dar salida</button>
+            </div>
+
+            <div ng-show="!hasPartsToReturn">
+                <h5 class="[ center-align ]">No hay artículos disponibles en el paquete.</h5>
+            </div>
+        </form>
+    </div>
+    
+</div>
+
+<script>
+    $('[data-parsley-validate]').parsley();    
+    $('[data-parsley-bulk]').parsley();    
+    $('[data-parsley-unit]').parsley();    
+    $('[data-parsley-bundle]').parsley();    
+</script>
+
+
+

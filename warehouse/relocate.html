@@ -1,0 +1,48 @@
+
+<div class="[ card-panel ]">
+
+    <h4 class="[ center-align ]">Reubicar artículo</h4>
+    <div class="[ row ]">
+
+        <img class="[ materialboxed ][ col s12 m3 offset-m3 ]" src="{{itemLocation.item_img}}">
+        <img class="[ materialboxed ][ col s12 m3 ][ js-barcode ]" src="#">
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 m6 offset-m3 ]"> 
+            <div class="input-field">
+                <input id="item-name" type="text" name="itemName" ng-model="itemLocation.item" ng-readonly="true">
+                <label for="item-name">Nombre (alias)</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 offset-m2 ]"> 
+            <div class="input-field">
+                <input id="item-location" type="text" name="itemLocation" ng-model="itemLocation.location" ng-readonly="true">
+                <label for="item-location">Ubicación actual</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="item-location" type="text" name="itemName" ng-model="itemLocation.units" ng-readonly="true">
+                <label for="item-location">Unidades ocupadas</label>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div><!-- row -->
+</div>
+
+<div class="[ card-panel ]">
+    <div class="[ row ]">
+        <div class="[ col s12 m6 offset-m3 ][ center-align ]">
+            <p>Por favor selecciona la ubicación a la cual deseas mover el artículo.</p>
+        </div>
+        <form name="location_form" class="[ left-align ]" ng-submit="addToLocation()" data-parsley-unit>
+            <div class="[ col s12 m6 offset-m3 ]"> 
+                <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="changeRack( selectedRack )">
+                    <option value="" disabled selected>Selecciona el rack</option>
+                    <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                </select>
+            </div>
+        </form>
+        <h4 class="[ center-align ]">Rack actual: {{ itemLocation.rack_name }}</h4>
+        <div class="[ js-rack ]"></div><!-- row -->
+    </div>
+</div>

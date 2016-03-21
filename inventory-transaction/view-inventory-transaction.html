@@ -1,0 +1,87 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+
+    <h4 class="[ center-align ]">Detalle movimiento al inventario</h4>
+    <div class="[ row ]">
+
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="edititem( item.actable_type )">
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input class="{{ getTransactionTypeClass( inventoryTransaction.actable_type ) }}" id="item-transaction-type" type="text" name="itemTransactionType" ng-model="itemTransactionType">
+                    <label for="item-transaction-type">Tipo de transacción</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field " >
+                    <input id="concept" type="text" name="concept" ng-model="concept" ng-readonly="true">
+                    <label for="concept">Concepto</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field " >
+                    <input id="quantity" type="text" name="quantity" ng-model="quantity" ng-readonly="true">
+                    <label for="quantity">Cantidad</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="transaction-date" type="text" name="transactionDate" ng-model="transactionDate" ng-readonly="true">
+                    <label for="transaction-date">Fecha del movimiento</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="supplier" type="text" name="supplier" ng-model="supplier" ng-readonly="true">
+                    <label for="supplier">Proveedor</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="supplier-contact" type="text" name="supplierContact" ng-model="supplierContact" ng-readonly="true">
+                    <label for="supplier-contact" ng-show=" 'CheckInTransaction' ==  inventoryTransaction.actable_type ">¿Quién entregó?</label>
+                    <label for="supplier-contact" ng-show=" 'CheckOutTransaction' ==  inventoryTransaction.actable_type ">¿Quién recibió?</label>
+                </div>
+            </div>
+            
+            <div class="[ clear ]"></div>
+            <img class="[ materialboxed ][ col s12 m4 offset-m2 ]" src="{{inventoryTransaction.inventory_item.img}}}">
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="item-name" type="text" name="itemName" ng-model="itemName" ng-readonly="true">
+                    <label for="item-name">Nombre (alias)</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="item-status" type="text" name="itemStatus" ng-model="itemStatus" ng-readonly="true">
+                    <label for="item-status">Status</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="item-type" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
+                    <label for="item-type" ng-show=" 'CheckInTransaction' ==  inventoryTransaction.actable_type ">Tipo de entrada</label>
+                    <label for="item-type" ng-show=" 'CheckOutTransaction' ==  inventoryTransaction.actable_type ">Tipo de salida</label>
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="[ input-field ]">
+                    <textarea id="additional-comments" class="materialize-textarea" name="additionalComments" ng-model="additionalComments" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres." ng-readonly="true"></textarea>
+                    <label for="additional-comments">Comentarios adicionales</label>
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]" >¿Editar?</button>
+                </div>
+            </div>
+        </form>
+    </div><!-- row -->
+</div><!-- step 1 Captura -->
+
+
+
+
+
+

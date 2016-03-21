@@ -1,0 +1,69 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ row ]">
+    <h3 class="[ center-align ]">Ubicación {{ locationName }}</h3>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card blue white-text">
+            <span class="count">{{ rack }}</span>
+            <div class="name">Rack</div>
+        </div>
+    </div>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card blue white-text">
+            <span class="count">{{ item_location_units }}/{{ units }}</span>
+            <div class="name">Unidades ocupadas</div>
+        </div>
+    </div>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card blue white-text">
+            <span class="count">{{ numItems }}</span>
+            <div class="name"># de artículos</div>
+        </div>
+    </div>
+    <div class="[ col s12 m3 ]">
+        <div class="card-panel stats-card [ {{ getStatusClass( status ) }}]">
+            <span class="count">{{ statusDescription }}</span>
+            <div class="name">Estatus</div>
+        </div>
+    </div>
+    <div class="[ col s12 m6 ]" ng-hide="1"> 
+        <div class="input-field">
+            <input id="input_text" type="text" name="model" ng-model="model" disabled>
+            <label for="input_text">Modelo</label>
+        </div>
+    </div>
+    <div class="[ center-align ]"> 
+        <a class="[ waves-effect ][ btn ]" href="#/edit-location/{{locationId}}">Editar ubicación</a>
+    </div>
+</div>
+<div class="[ row ][ card-panel ]">
+    <div class="[ col s12 ][ mt-40 ]">
+        <h5 class="[ center-align ]">Artículos en ubicación</h5>
+        <table datatable="ng" dt-options="dtItemsOptions" dt-column-defs="dtItemsColumnDefs" class="row-border hover">
+            <thead>
+                <tr>
+                    <th class="[ center-align ]">Entrada</th>
+                    <th class="[ center-align ]">Nombre</th>
+                    <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
+                    <th class="[ center-align ][ hide-on-med-and-down ]">Proyecto</th>
+                    <th class="[ center-align ][ hide-on-med-and-down ]">Contacto Cliente</th>
+                    <th class="[ center-align ]">Reubicar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in inventory_items">
+                    <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i></td>
+                    <td>{{ item.name }}</td>
+                    <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
+                    <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.project }}</td>
+                    <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.client_contact }}</td>
+                    <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/relocate/{{locationId}}/{{item.id}}"><i class="[ fa fa-location-arrow ]"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div >
+</div>
+
+
+
+
