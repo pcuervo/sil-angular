@@ -258,6 +258,11 @@ conAngular
                         $scope.hasPartsToWithdraw = true;
                     });
                 }
+                if( 'BulkItem' == item.actable_type ){
+                    $scope.isValidQuantity = false;
+                    $scope.multipleBulkLocations = item.locations.length > 1 ? true : false;
+                    console.log( $scope.multipleBulkLocations );
+                }
             });
 
         }// getItem

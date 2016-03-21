@@ -1,0 +1,44 @@
+<form ng-submit="withdraw( item.actable_type )" data-parsley-bulk>
+    <div class="[ col s12 m6 ][ mt-10 ]"> 
+        <select name="pickupCompany" ng-model="pickupCompany" required>
+            <option value="" disabled selected>Proveedor</option>
+            <option ng-repeat="value in ['DHL', 'Fedex', 'Orlando']">{{value}}</option>
+        </select>
+    </div>
+    <div class="[ col s12 m6 ]"> 
+        <div class="input-field">
+            <input id="pickup-contact-bulk" type="text" name="pickupCompanyContact" ng-model="pickupCompanyContact">
+            <label for="pickup-contact-bulk">¿Quién se lo lleva?</label>
+        </div>
+    </div>
+    <div class="[ clear ]"></div>
+    <div class="[ col s12 m6 ]">    
+        <label class="[ fs-12 ]" for="">Fecha de salida (mm/dd/aaaa)</label>
+        <input class="datepicker" type="date" name="exitDate" ng-model="exitDate" required>
+    </div>
+    <div class="[ col s12 m6 ]">    
+        <label class="[ fs-12 ]" for="">Fecha estimada de retorno (mm/dd/aaaa)</label>
+        <input class="datepicker" type="date" ng-model="returnDate">
+    </div>
+    <div class="[ col s4 m4 l4 offset-l2 ]"> 
+        <div class="input-field">
+            <input id="input_text" type="text" name="item.quantity" ng-model="item.quantity" disabled>
+            <label for="input_text">Cantidad disponible</label>
+        </div>
+    </div>
+    <div class="[ col s4 m4 l4 ]"> 
+        <div class="input-field">
+            <input id="withdraw-quantity" type="number" name="item.withdrawQuantity" ng-model="item.withdrawQuantity" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0." min="1">
+            <label for="withdraw-quantity">Cantidad a retirar</label>
+        </div>
+    </div>
+    <div class="[ col s12 ]"> 
+        <div class="input-field">
+            <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+            <label for="textarea1">Observaciones adicionales</label>
+        </div>
+    </div>
+    <div class="[ col s12 ][ center-align ]" ng-show="isValidQuantity"> 
+        <button class="[ waves-effect ][ btn red ]">Dar salida</button>
+    </div>
+</form>
