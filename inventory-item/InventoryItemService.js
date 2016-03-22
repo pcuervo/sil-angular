@@ -156,7 +156,7 @@ conAngular
 
         }// withdrawUnitItem
 
-        function withdrawBulkItem( id, quantity, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, callback ) {
+        function withdrawBulkItem( id, quantity, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, locations, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'bulk_items/withdraw';
             $http.post( serviceUrl, 
@@ -167,7 +167,8 @@ conAngular
                     pickup_company:         pickupCompany,
                     pickup_company_contact: pickupCompanyContact,
                     returnDate:             returnDate,
-                    additional_comments:    additionalComments
+                    additional_comments:    additionalComments,
+                    locations:              locations
                 }
             )
             .success(function( response ) {

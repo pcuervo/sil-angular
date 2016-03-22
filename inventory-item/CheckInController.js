@@ -145,7 +145,7 @@ conAngular
  
             LoaderHelper.showLoader( 'Ubicando en almacén...' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
-                switch( $scope.actable_type ){
+                switch( $scope.item.actable_type ){
                     case 'UnitItem': 
                         var quantity = 1;
                         break;

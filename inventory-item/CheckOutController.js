@@ -174,7 +174,32 @@ conAngular
 
         function withdrawBulkItem( id, quantity, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments ){
 
-            InventoryItemService.withdrawBulkItem( id, quantity, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments,  function( response ){
+            if( $scope.multipleBulkLocations ){
+                var withdrawQuantity = 0;
+                var locations = [];
+
+                angular.forEach( $scope.item.locations, function( location, key){
+                    var $withdrawQuantityInput = $('#withdraw-quantity-' + key);
+                    var $withdrawUnitsInput = $('#withdraw-units-' + key);
+
+                    if( '' == $withdrawQuantityInput.val() || '' == $withdrawUnitsInput.val() ) return 1;
+
+                    locations.push({
+                        location_id:  location.location_id,
+                        quantity:     parseInt( $withdrawQuantityInput.val() ),
+                        units:        parseInt( $withdrawUnitsInput.val() )      
+                    })
+                    withdrawQuantity += parseInt( $withdrawQuantityInput.val() );
+                });
+
+                if( withdrawQuantity <= 0  ){
+                    Materialize.toast( '¡Cantidad o unidades inválidas! Por favor ingresa el número de unidades que desear retirar y las unidades a desocupar.', 4000, 'red');
+                    return;
+                }
+                quantity = withdrawQuantity;
+            }
+            
+            InventoryItemService.withdrawBulkItem( id, quantity, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, locations,  function( response ){
 
                 if( response.errors ){
                     Materialize.toast( response.errors, 4000, 'red');
@@ -259,8 +284,7 @@ conAngular
                     });
                 }
                 if( 'BulkItem' == item.actable_type ){
-                    $scope.isValidQuantity = false;
-                    $scope.multipleBulkLocations = item.locations.length > 1 ? true : false;
+                    $scope.multipleBulkLocations = item.locations.length > 0 ? true : false;
                     console.log( $scope.multipleBulkLocations );
                 }
             });

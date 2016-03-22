@@ -20,16 +20,54 @@
         <label class="[ fs-12 ]" for="">Fecha estimada de retorno (mm/dd/aaaa)</label>
         <input class="datepicker" type="date" ng-model="returnDate">
     </div>
-    <div class="[ col s4 m4 l4 offset-l2 ]"> 
-        <div class="input-field">
-            <input id="input_text" type="text" name="item.quantity" ng-model="item.quantity" disabled>
-            <label for="input_text">Cantidad disponible</label>
+    <div ng-if="multipleBulkLocations">
+        <div class="[ col s4 m4 l4 offset-l4 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="item.quantity" ng-model="item.quantity" disabled>
+                <label for="input_text">Cantidad total disponible</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div ng-repeat="location in item.locations track by $index">
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input id="quantity-location-{{ $index }}" type="text" name="quantity_location_{{ $index }}" ng-model="location.quantity" disabled>
+                    <label for="quantity-location-{{ $index }}">Cantidad en ubicación</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input id="input_text" type="text" name="location" ng-model="location.location" disabled>
+                    <label for="input_text">Ubicación - Unidades ocupadas</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input class="[ withdraw-quantity ]" id="withdraw-quantity-{{$index}}" type="number" name="withdraw-quantity-{{$index}}"  data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 0 y menor {{ location.quantity }}." min="1" max="{{location.quantity}}">
+                    <label for="withdraw-quantity-{{$index}}">Cantidad a retirar</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input class="[ withdraw-units ]" id="withdraw-units-{{$index}}" type="number" name="withdraw-units-{{$index}}"  data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 0 y menor {{ location.units }}." min="1" max="{{location.units}}">
+                    <label for="withdraw-units-{{$index}}">Unidades a desocupar</label>
+                </div>
+            </div>
+            <input type="hidden" value="">
         </div>
     </div>
-    <div class="[ col s4 m4 l4 ]"> 
-        <div class="input-field">
-            <input id="withdraw-quantity" type="number" name="item.withdrawQuantity" ng-model="item.withdrawQuantity" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0." min="1">
-            <label for="withdraw-quantity">Cantidad a retirar</label>
+    <div ng-if="! multipleBulkLocations">
+        <div class="[ col s4 m4 l4 offset-l2 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="item.quantity" ng-model="item.quantity" disabled>
+                <label for="input_text">Cantidad disponible</label>
+            </div>
+        </div>
+        <div class="[ col s4 m4 l4 ]"> 
+            <div class="input-field">
+                <input id="withdraw-quantity" type="number" name="item.withdrawQuantity" ng-model="item.withdrawQuantity" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0." min="1">
+                <label for="withdraw-quantity">Cantidad a retirar</label>
+            </div>
         </div>
     </div>
     <div class="[ col s12 ]"> 
@@ -38,7 +76,11 @@
             <label for="textarea1">Observaciones adicionales</label>
         </div>
     </div>
-    <div class="[ col s12 ][ center-align ]" ng-show="isValidQuantity"> 
+    <div class="[ col s12 ][ center-align ]"> 
         <button class="[ waves-effect ][ btn red ]">Dar salida</button>
     </div>
 </form>
+
+<script>
+    $('[data-parsley-bulk]').parsley();    
+</script>
