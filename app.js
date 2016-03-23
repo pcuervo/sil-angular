@@ -645,6 +645,32 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/withdraw-items', {
+        url: "/withdraw-items",
+        templateUrl: "inventory-item/withdraw-items.html",
+        controller: "CheckOutController",
+        data: {
+            pageTitle: 'Salida',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
+            }, {
+                title: 'Salidas'
+            },
+            {
+                title: 'Salida de inventario'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley, dataTables')
+                }]);
+            }]
+        }
+    })
     .state('/my-inventory', {
         url: "/my-inventory",
         templateUrl: "inventory-item/my-inventory.html",
@@ -1316,7 +1342,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     // API URL
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/'
-    $rootScope.apiUrl = stage;
+    $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
@@ -1365,9 +1391,10 @@ LoaderHelper = {
     showLoader: function( message ){
         var loader = document.getElementById('loader');
         loader.className = loader.className.replace( /(?:^|\s)hide(?!\S)/g , '' );
+        loader.getElementsByTagName('p')[0].innerHTML = message;
     },
     hideLoader: function(){
         var loader = document.getElementById('loader');
-        loader.className += 'hide';
+        loader.className += ' hide';
     }
 }

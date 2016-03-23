@@ -89,16 +89,29 @@ conAngular
                     currentDate.setMonth(currentDate.getMonth() + 6);
                     $scope.validityExpirationDate = currentDate;
                     $('.js-expiration-date-label').text('Fecha vigencia (mm/dd/aaaa)');
+                    $('#serial-number').removeAttr('required');
                     break;
                 case 'Perecedero':
                     $('.js-expiration-date-label').text('Fecha de caducidad (mm/dd/aaaa)');
                     $scope.validityExpirationDate = '';
-                    $scope.storageType = 'Temporal'
+                    $scope.storageType = 'Temporal';
+                    $('#serial-number').removeAttr('required');
                     break;
                 case 'Temporal':
                 case 'Donación':
                     $('.js-expiration-date-label').text('Fecha vigencia (mm/dd/aaaa)');
                     $scope.validityExpirationDate = '';
+                    $('#serial-number').removeAttr('required');
+                    break;
+                case 'Laptop':
+                case 'Desktop':
+                case 'Impresora':
+                case 'Celular':
+                case 'Pantalla':
+                    $('#serial-number').attr('required', 'required');
+                    break;
+                default:
+                    $('#serial-number').removeAttr('required');
             }
             
         }// updateExpirationDate
@@ -444,6 +457,7 @@ conAngular
                     }
 
                     $scope.registeredItemId = response.bundle_item.id;
+                    $scope.item = response.bundle_item;
                     $scope.showMoreActions = true;
                     Materialize.toast('Entrada paquete: "' + $scope.itemName + '" registrada exitosamente!', 4000, 'green');
                     //$state.go('/check-in', {}, { reload: true });

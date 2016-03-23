@@ -21,7 +21,7 @@
                     <th>Nombre usuario</th>
                     <th>Email</th>
                     <th>Teléfono</th>
-                    <th>Unidad de negocio</th>
+                    <th>Celular</th>
                     <th>Editar</th>
                 </tr>
             </thead>
@@ -32,7 +32,7 @@
                 <td>{{ c.email }}</td>
                 <td>{{ c.phone }}</td>
                 <td>{{ c.business_unit }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-user"><i class="[ fa fa-edit ]"></i></a></td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-user/{{c.id}}"><i class="[ fa fa-edit ]"></i></a></td>
                 </tr>
             </tbody>
         </table>

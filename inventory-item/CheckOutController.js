@@ -1,5 +1,5 @@
 conAngular
-    .controller('CheckOutController', ['$scope', '$state', '$stateParams', '$location', 'InventoryItemService', 'InventoryTransactionService', 'UserService', 'ClientService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $state, $stateParams, $location, InventoryItemService, InventoryTransactionService,  UserService, ClientService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
+    .controller('CheckOutController', ['$scope', '$state', '$stateParams', '$location', 'InventoryItemService', 'InventoryTransactionService', 'UserService', 'ClientService', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $state, $stateParams, $location, InventoryItemService, InventoryTransactionService,  UserService, ClientService, SupplierService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
 
         // Constants
 
@@ -60,6 +60,22 @@ conAngular
             }
         }// getTransactionType
 
+        $scope.getItemTypeIcon = function( type ){
+            switch( type ){
+                case 'UnitItem': return "[ fa fa-square ]";
+                case 'BulkItem': return "[ fa fa-align-justify ]";
+                case 'BundleItem': return "[ fa fa-th-large ]";
+            }
+        }// getItemTypeIcon
+
+        $scope.multipleWithdrawal = function(){
+            var ids = getItemIdsToWithdraw();
+            InventoryItemService.multipleWithdrawal( ids, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
+                Materialize.toast( response.success, 4000, 'green');
+                $state.go('/check-out', {}, { reload: true });
+            });
+        }
+
 
 
         /******************
@@ -68,13 +84,17 @@ conAngular
 
         function initWithdrawalOptions( currentPath ){
 
-            getProjectManagers();
-            getAccountExecutives();
-            getClients();
-            initItemsDataTable();
+            if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
+                fetchItemsInStock();
+                initMultipleWithdrawalDataTable();
+                fetchSuppliers();
+                $scope.exitDate = new Date();
+                return;
+            }
 
-            if( currentPath.indexOf( 'withdraw-item' ) > -1 ){
+            if( currentPath.indexOf( 'withdraw-item/' ) > -1 ){
                 getItem( $stateParams.itemId ); 
+                return;
             }
 
             switch( currentPath ){
@@ -88,6 +108,11 @@ conAngular
                     getBundleItems();
                     break;
             }
+
+            getProjectManagers();
+            getAccountExecutives();
+            getClients();
+            initItemsDataTable();
         
 
         }// initWithdrawalOptions
@@ -238,6 +263,14 @@ conAngular
             return parts;
         }
 
+        function getItemIdsToWithdraw(){
+            var ids = []
+            $('input[type="checkbox"]:checked').each( function(i, partCheckbox){
+                ids.push( $(partCheckbox).val() );
+            });
+            return ids;
+        }
+
         function getCheckOutTransactions(){
 
             InventoryTransactionService.getCheckOuts( function( checkOutTransactions ){
@@ -263,7 +296,6 @@ conAngular
         }// initCheckOutsDataTable
 
         function getItem( id ){
-
             InventoryItemService.byId( id, function( item ){
                 if( item.errors ){
                     $scope.hasItem = false;
@@ -288,10 +320,37 @@ conAngular
                     console.log( $scope.multipleBulkLocations );
                 }
             });
-
         }// getItem
 
+        function fetchItemsInStock(){
+             InventoryItemService.getInStock( function( items ){
+                console.log( items );
+                $scope.inventoryItems = items;
+            });
+        }
 
+        function initMultipleWithdrawalDataTable(){
+
+            $scope.dtMultipleWithdrawalOptions = DTOptionsBuilder.newOptions()
+                    .withPaginationType('full_numbers')
+                    .withDisplayLength(20)
+                    .withDOM('')
+                    .withOption('responsive', true)
+                    .withOption('order', [])
+                    .withOption('searching', false);
+            $scope.dtMultipleWithdrawalColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                DTColumnDefBuilder.newColumnDef(1).notSortable(),
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initMultipleWithdrawalDataTable
+
+        function fetchSuppliers(){
+            SupplierService.getAll( function( suppliers ){
+                $scope.suppliers = suppliers;
+            }); 
+        }// fetchSuppliers
 
 
 }]);

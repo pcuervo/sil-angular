@@ -12,6 +12,7 @@ conAngular
         service.withdrawUnitItem = withdrawUnitItem;
         service.withdrawBulkItem = withdrawBulkItem;
         service.withdrawBundleItem = withdrawBundleItem;
+        service.multipleWithdrawal = multipleWithdrawal;
         service.reentryUnitItem = reentryUnitItem;
         service.reentryBulkItem = reentryBulkItem;
         service.reentryBundleItem = reentryBundleItem;
@@ -22,6 +23,7 @@ conAngular
         service.getTotalInventory = getTotalInventory;
         service.getInventoryValue = getInventoryValue;
         service.getCurrentRent = getCurrentRent;
+        service.getInStock = getInStock;
         return service;
 
         // Public 
@@ -203,6 +205,28 @@ conAngular
 
         }// withdrawBundleItem
 
+        function multipleWithdrawal( ids, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/multiple_withdrawal';
+            $http.post( serviceUrl, 
+                { 
+                    inventory_item_ids:     ids,
+                    exit_date:              exitDate,
+                    pickup_company:         pickupCompany,
+                    pickup_company_contact: pickupCompanyContact,
+                    returnDate:             returnDate,
+                    additional_comments:    additionalComments
+                }
+            )
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+
+        }// multipleWithdrawal
+
         function reentryUnitItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, callback ){
             var serviceUrl = $rootScope.apiUrl + 'unit_items/re_entry';
             $http.post( serviceUrl, 
@@ -382,5 +406,20 @@ conAngular
                     callback( response );
                });
         }// getCurrentRent
+
+        function getInStock( callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { in_stock: true  } 
+                })
+               .success(function ( response ) {
+                    callback( response.inventory_items );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getInStock
 
     }]);
