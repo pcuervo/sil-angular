@@ -1,9 +1,10 @@
-conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interval', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', 'InventoryTransactionService', 'InventoryItemService', function($rootScope, $scope, $interval, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, InventoryTransactionService, InventoryItemService) {
+conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interval', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', 'InventoryTransactionService', 'InventoryItemService', 'NotificationService', function( $rootScope, $scope, $interval, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, InventoryTransactionService, InventoryItemService, NotificationService) {
 
     (function initController() {
         $scope.role = $rootScope.globals.currentUser.role;
         $scope.dashboardTemplate = 'dashboard/dashboard-old.html';
         initDashboard( $scope.role ); 
+        fetchNewNotifications();
     })();
 
 
@@ -329,7 +330,11 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         }); 
     }// getLatestEntries
 
-
+    function fetchNewNotifications(){
+        NotificationService.getNumUnread( function( numUnreadNotifications ){
+            NotificationHelper.updateNotifications( numUnreadNotifications );
+        });
+    }
 
 
 

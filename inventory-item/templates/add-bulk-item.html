@@ -1,0 +1,438 @@
+<div class="[ card-panel ]">
+    <div class="row">
+        <div class="content">
+            <div class="[ col s12 m6 l3 ][ center-align ]">
+                <a href="#" class="[ btn ]" ng-click="setActiveStep(1)">1. Captura</a>
+            </div>
+            <div class="[ col s12 m6 l3 ][ center-align ]">
+                <a href="#" class="[ btn ]" ng-class="{ 'disabled': currentStep<=1  }" >2. Confirmación</a>
+            </div>
+            <div class="[ col s12 m6 l3 ][ center-align ]">
+                <a href="#" class="[ btn disabled ]" >3. Ubicación</a>
+            </div>
+            <div class="[ col s12 m6 l3 ][ center-align ]">
+                <a href="#" class="[ btn disabled ]"><span class="left-align">4. Programar envío</span></a>
+            </div>   
+        </div>
+        
+    </div>
+</div>
+
+<div class="[ card-panel ]" ng-show="currentStep==1">
+    <h4 class="[ center-align ]">Captura entrada a granel</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" ng-submit="captureItemData()" data-parsley-validate>
+
+            <div class="[ col s12 m4 ]" >
+                <div class="input-field">
+                    <input id="project-name" type="text" ng-model="projectName" ng-readonly="true">
+                    <label for="project-name">Proyecto</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]" >
+                <div class="input-field">
+                    <input id="pm-name" type="text" ng-model="pmName" ng-readonly="true">
+                    <label for="pm-name">Project Manager</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]" >
+                <div class="input-field">
+                    <input id="ae-name" type="text" ng-model="aeName" ng-readonly="true">
+                    <label for="ae-name">Ejecutivo de Cuenta</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <!-- Crear ClientService -->
+            <!-- Actualizar cada que se cambie el proyecto -->
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="client-name" type="text" ng-model="clientName" ng-readonly="true">
+                    <label for="client-name">Cliente</label>
+                </div>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="client-contact" type="text" name="clientContact" ng-model="clientContact" ng-readonly="true">
+                    <label for="client-contact">Contacto cliente</label>
+                </div>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="item-name" type="text" name="itemName" ng-model="itemName" required>
+                    <label for="item-name">Nombre (alias)</label>
+                </div>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="quantity" type="number" name="quantity" ng-model="quantity" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0." min="1">
+                    <label for="quantity">Cantidad</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]"> 
+                <div class="[ input-field ]">
+                    <textarea id="description" class="materialize-textarea" name="description" ng-model="description" data-parsley-trigger="keyup" data-parsley-maxlength="250" data-parsley-maxlength-message = "Este campo debe contener menos de 250 caracteres."></textarea>
+                    <label for="description">Descripción</label>
+                </div>
+            </div>
+            <!-- Revisar si estas opciones serían dinámicas -->
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="item-type" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
+                    <label for="item-type">Tipo de mercancía</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="1">
+                    <label for="itemValue">Valor</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ][ mt-10 ]"> 
+                <select name="storageType" ng-model="storageType" ng-change="updateExpirationDate( storageType )" required>
+                    <option value="" disabled selected>Tipo de almacenaje</option>
+                    <option ng-repeat="value in ['Permanente', 'Temporal', 'Donación']" value="{{value}}">{{value}}</option>
+                </select>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 ][ mt-10 ]"> 
+                <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="delivery-contact" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact">
+                    <label for="delivery-contact">¿Quién entregó?</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" required>
+            </div>
+            <div class="[ col s12 m6 ]">    
+                <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" ng-model="validityExpirationDate" required>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col m6 s12 ]">
+                <div class="file-field input-field">
+                    <input class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen" required>
+                    <div class="">
+                        <span>Subir imagen</span>
+                        <input type="file" id="itemImgBulk" ng-model="itemImg" />
+                    </div>
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="input-field">
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+                    <label for="textarea1">Observaciones adicionales</label>
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]" >Ingresar</button>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+<div class="[ card-panel ]" ng-show="currentStep==2">
+    <div class="row">
+        <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div id="editor"></div>
+        </div>
+    </div>
+    <div class="row">
+        <h4 class="[ center-align ]">Resumen de entrada</h4>
+        <div class="[ col s12 m4 ]" >
+            <div class="input-field">
+                <input id="project-name" type="text" ng-model="projectName" ng-readonly="true">
+                <label for="project-name">Proyecto</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]" >
+            <div class="input-field">
+                <input id="pm-name" type="text" ng-model="pmName" ng-readonly="true">
+                <label for="pm-name">Project Manager</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]" >
+            <div class="input-field">
+                <input id="ae-name" type="text" ng-model="aeName" ng-readonly="true">
+                <label for="ae-name">Ejecutivo de Cuenta</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="clientName" ng-model="clientName" disabled>
+                <label for="input_disabled">Cliente</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="input_disabled" type="text" name="clientContact" ng-model="clientContact" disabled>
+                <label for="input_disabled">Contacto cliente</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="itemName" ng-model="itemName" disabled>
+                <label for="input_text">Nombre (alias)</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="quantity" ng-model="quantity" disabled>
+                <label for="input_text">Cantidad</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 ]"> 
+            <div class="input-field">
+                <textarea class="materialize-textarea" name="description" ng-model="description" disabled></textarea>
+                <label for="textarea1">Descripción</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="item-type" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
+                <label for="item-type">Tipo de mercancía</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" disabled>
+                <label for="itemValue">Valor</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="selected-storage-type" type="text" name="selectedStorageType" ng-model="selectedStorageTypeText" disabled>
+                <label for="selected-storage-type">Tipo de almacenaje</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="selected-provider" type="text" name="selectedProvider" ng-model="selectedProviderText" disabled>
+                <label for="selected-provider">Proveedor</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="delivery-contact" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact" disabled>
+                <label for="delivery-contact">¿Quién entregó?</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 m6 ]">    
+            <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" required disabled>
+        </div>
+        <div class="[ col s12 m6 ]">    
+            <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" ng-model="validityExpirationDate" disabled>
+        </div>
+        <div class="[ col s12 ]"> 
+            <div class="input-field">
+                <textarea id="textarea1" class="materialize-textarea" disabled="" ng-model="additionalComments"></textarea>
+                <label for="textarea1">Observaciones adicionales</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="row">
+                <div class="[ col s12 ]"> 
+                    <div class="[ card ]">
+                        <div class="card-image" id="barcode">
+                            <img class="[ js-barcode ]" src="#" alt="">
+                        </div>
+                        <div class="[ content ]">
+                            <h5 class="[ center-align ]">{{barCodeVal}}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="[ col s12 ]"> 
+                    <div class="[ card ]">
+                        <div class="[ card-image ][ img-mercancia ]">
+                            <img src="{{itemImg}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+              
+        <div class="[ col s12 m6 ]"> 
+            <div class="[ row ]" ng-show="!showMoreActions">
+                <div class="[ col s12  ][ center ]" >
+                    <a href="#" class="[ waves-effect ][ btn btn-extra green ]" ng-click="registerItem( 'bulk' )"><i class="[ mdi-navigation-check ][ left ]"></i>Confirmar entrada</a>
+                </div>
+            </div>
+            <div class="row" ng-show="showMoreActions">
+                <div class="[ center ][ col s12 ]">
+                    <button class="[ waves-effect ][ btn btn-extra ][  ]" ng-click="printBarcode( '#barcode' )"><i class="mdi-action-print left"></i>Código de barras</button>
+                </div>
+                <div class="[ center ][ col s12 ]">
+                    <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión entrada</button>
+                </div>
+                <div class="[ center ][ col s12 ]">
+                    <a href="#/new-delivery/{{ item.id }}" class="[ waves-effect ][ btn btn-extra ]"><i class="mdi-action-schedule left"></i>Programar envío</a>
+                </div>
+                <div class="[ center ][ col s12 ]">
+                    <a href="#" class="[ waves-effect ][ btn btn-extra ]" ng-click="setActiveStep(3)"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar en almacén</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="[ card-panel ]" ng-show="currentStep==3">
+    <div class="row">
+        <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div id="editor"></div>
+        </div>
+    </div>
+    <div class="row">
+        <h4 class="[ center-align ]">Ubicación el almacén</h4>
+        <div class="[ col s8 m4 offset-m2 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
+                <label for="input_text">Nombre (alias)</label>
+            </div>
+        </div>
+        <div class="[ col s4 m2 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="quantity" ng-model="quantity" required disabled>
+                <label for="input_text">Cantidad</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <p>
+                <input name="radio-location" type="radio" id="single-location" ng-model="locationRadio" ng-click="showLocationForm( locationRadio )" value="same" />
+                <label for="single-location">Mover todo a una ubicación</label>
+                <input name="radio-location" type="radio" id="multiple-locations" ng-model="locationRadio" ng-click="showLocationForm(locationRadio)" value="multiple"  />
+                <label for="multiple-locations">Repartir en varias ubicaciones</label>
+            </p>
+        </div>
+        <div class="[ clear ]"></div>
+        <form name="location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-bulk-same ng-show="sameLocationType  && ! multipleLocationsType">
+            <div>
+                <div class="[ col s12 m6 l4 offset-l2 ]"> 
+                    <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                        <option value="" disabled selected>Selecciona el rack</option>
+                        <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                    </select>
+                </div>
+                <div class="[ col s12 m6 l4 ]" > 
+                    <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                        <option value="" disabled selected>Selecciona la ubicación</option>
+                        <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="[ col s12 m4 offset-m2 ]" ng-show="hasSameLocation"> 
+                <div class="input-field">
+                    <input id="units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
+                    <label for="units">Unidades que ocupa la mercancía:</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]" ng-show="hasSameLocation">Ubicar</button>
+                </div>
+            </div>
+        </form><!-- sameLocationType -->
+        <form name="multiple_location_form" class="[ mt-40 ][ left-align ]" data-parsley-multiple-locations ng-show="multipleLocationsType" ng-submit="addUnitsToLocation()">
+            <div class="[ col s12 m4 offset-m4  ][ input-field ]">
+                <input id="to-locate" type="text" ng-model="pendingUnitsToLocate" ng-readonly="true" >
+                <label for="to-locate">Unidades pendientes por ubicar</label>
+            </div>
+            <div class="[ row ]">
+                <div class="clear"></div>
+                <div class="[ col s6 m2 ][ input-field ]">
+                    <input id="units-to-locate" type="number" name="units-to-locate" ng-model="unitsToLocate" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 0 y menor o igual que {{ pendingUnitsToLocate }}." min="1" max="{{ pendingUnitsToLocate }}"  required>
+                    <label for="units-to-locate">Unidades a ubicar</label>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <select id="rack" name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                        <option value="" disabled selected>Selecciona el rack</option>
+                        <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                    </select>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                        <option value="" disabled selected>Selecciona la ubicación</option>
+                        <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+                    </select>
+                </div>
+                <div class="[ col s6 m2 ][ input-field ]" > 
+                    <input id="units-multiple" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
+                    <label for="units-multiple">Unidades que ocupa:</label>
+                </div>
+                <div class="[ col s12 m2 ]"> 
+                    <div class="[ center-align ]">
+                        <button id="add-to-location" class="[ waves-effect ][ btn ]" href="#">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="[ row ]" ng-show="hasMultipleLocations">
+                <div class="[ col s6 m2 ][ input-field ]">
+                    <h5 class="[ center-align ]">Unidades a ubicar</h5>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <h5 class="[ center-align ]">Rack</h5>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <h5 class="[ center-align ]">Ubicación</h5>
+                </div>
+                <div class="[ col s6 m2 ][ input-field ]" > 
+                    <h5 class="[ center-align ]">Unidades que ocupa</h5>
+                </div>
+                <div class="[ clear ]"></div>
+                <div class="[ row ]" ng-repeat="bl in bulkLocations track by $index">
+                    <div class="[ col s6 m2 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.quantity }}">
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.selectedRack }} ">
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.selectedLocation }}">
+                    </div>
+                    <div class="[ col s6 m2 ][ input-field ]" > 
+                        <input type="text" ng-readonly="true" value="{{ bl.units }}">
+                    </div>
+                    <div class="[ col s12 m2 ]"> 
+                        <div class="[ center-align ]">
+                            <a id="add-to-location" class="[ waves-effect red ][ btn ]" href="#">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="[ row ]">
+                    <div class="[ col s12 ][ center-align ]" ng-show="pendingUnitsToLocate==0"> 
+                        <div class="[ center-align ]">
+                            <a class="[ waves-effect ][ btn ]" ng-click="addToLocation( 'BulkItem' )">Ubicar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="[ clear ]"></div>
+            </div>
+        </form><!-- multipleLocationsType -->
+    </div><!-- row -->
+</div><!-- ubicaciones -->
+
+<script>
+    $('[data-parsley-validate]').parsley();
+    $('[data-parsley-bulk-same]').parsley();    
+    $('[data-parsley-multiple-locations]').parsley();    
+</script>
+
+
+
+
+

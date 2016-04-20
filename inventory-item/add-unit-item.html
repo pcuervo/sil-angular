@@ -2,18 +2,15 @@
 
 <div class="[ card-panel ]">
     <div class="row">
-        <div class="[ col s12 m6 l3 ][ center-align ]">
+        <div class="[ col s12 m4 ][ center-align ]">
                 <a href="#" class="[ btn ]" ng-click="setActiveStep(1)" ng-class="{ 'disabled': currentStep>2 }">1. Captura</a>
             </div>
-            <div class="[ col s12 m6 l3 ][ center-align ]">
+            <div class="[ col s12 m4 ][ center-align ]">
                 <a href="#" class="[ btn ]" ng-class="{ 'disabled': currentStep<=1 || currentStep>2 }">2. Confirmación</a>
             </div>
-            <div class="[ col s12 m6 l3 ][ center-align ]">
+            <div class="[ col s12 m4 ][ center-align ]">
                 <a href="#" class="[ btn ]" ng-class="{ 'disabled': currentStep<=2 }">3. Ubicación</a>
             </div>
-            <div class="[ col s12 m6 l3 ][ center-align ]">
-                <a href="#" class="[ btn  ]" ng-class="{ 'disabled': currentStep<=3 }"><span class="left-align">4. Programar envío</span></a>
-            </div>  
     </div>
 </div>
 
@@ -29,25 +26,29 @@
                     <option ng:repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m4 ]"> 
-                <select name="pm" ng-model="selectedPM" required data-parsley-error-message="Escoge un Project Manager" ng-disabled='!validSelectedProject' ng-hide="role == 2">
-                    <option value="" disabled selected>Selecciona el PM</option>
-                    <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.name}}</option>
-                </select>
+            <div class="[ col s12 m4 ]" ng-if="role == 2"> 
                 <div class="input-field" ng-show="role == 2">
                     <input id="pm" type="hidden" ng-model="selectedPM" ng-readonly="true"  value="{{projectManagerId}}">
                     <label for="pm">Project Manager: {{projectManagerName}}</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 ]"> 
-                <select name="ae" ng-model="selectedAE" required data-parsley-error-message="Escoge un Ejecutivo de cuenta" ng-disabled='!validSelectedProject' ng-hide="role == 3">
-                    <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>
-                    <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.name}}</option>
+            <div class="[ col s12 m4 ]" ng-if="role != 2"> 
+                <select name="pm" ng-model="selectedPM" required data-parsley-error-message="Escoge un Project Manager" ng-disabled='!validSelectedProject' ng-hide="role == 2">
+                    <option value="" disabled selected>Selecciona el PM</option>
+                    <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.name}}</option>
                 </select>
-                <div class="input-field" ng-show="role == 3">
+            </div>
+            <div class="[ col s12 m4 ]" ng-if="role == 3"> 
+                <div class="input-field">
                     <input id="ae" type="hidden" ng-model="selectedAE" ng-readonly="true" value="{{accountExecutiveId}}">
                     <label for="ae">Ejecutivo de cuenta: {{accountExecutiveName}}</label>
                 </div>
+            </div>
+            <div class="[ col s12 m4 ]" ng-if="role != 3"> 
+                <select name="ae" ng-model="selectedAE" required data-parsley-error-message="Escoge un Ejecutivo de cuenta" ng-disabled='!validSelectedProject'>
+                    <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>
+                    <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.name}}</option>
+                </select>
             </div>
             <div class="[ clear ]"></div>
             <div class="[ col s12 m6 ]"> 
@@ -105,7 +106,7 @@
             <div class="[ col s12 m4 ][ mt-10 ]"> 
                 <select name="itemType" ng-model="itemType" required ng-change="updateExpirationDate( itemType )">
                     <option value="" disabled selected>Tipo de mercancía</option>
-                    <option ng-repeat="value in ['Laptop', 'Desktop', 'Impresora', 'Celular', 'Pantalla', 'POP', 'POS', 'Promocional', 'Mobiliario', 'Perecedero', 'Alto valor']" value="{{value}}">{{value}}</option>
+                    <option ng-repeat="value in ['Laptop', 'Desktop', 'Impresora', 'Celular', 'Pantalla', 'POP', 'POS', 'Promocional', 'Mobiliario', 'Perecedero']" value="{{value}}">{{value}}</option>
                 </select>
             </div>
             <div class="[ col s12 m4 ]"> 
@@ -143,13 +144,23 @@
                 <input class="datepicker" type="date" ng-model="validityExpirationDate" required>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col m6 s12 ]">
+            <div class="[ col s12 m6 ]">
                 <div class="file-field input-field">
                     <input class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen" required>
                     <div class="">
                         <span>Subir imagen</span>
                         <input type="file" id="itemImg" ng-model="itemImg" />
                     </div>
+                </div>
+            </div>
+            <div class="[ col s12 m5 offset-m1 ]">
+                <div class="[ input-field ]">
+                    <input class="[ filled-in ]" type="checkbox" id="checkbox-high-value" value="1" name="highValue" />
+                    <label for="checkbox-high-value">Alto Valor</label>
+                </div>
+                <div class="[ input-field ]">
+                    <input class="[ filled-in ]" type="checkbox" id="checkbox-validation" value="1" name="requireValidation" />
+                    <label for="checkbox-validation">Require validación por parte del PM o Ejecutivo de Cuenta</label>
                 </div>
             </div>
             <div class="[ col s12 ]"> 
@@ -177,17 +188,23 @@
     </div>
     <div class="row">
         <h4 class="[ center-align ]">Resumen de entrada</h4>
-        <div class="[ col s12 m6 ][ mt-10 ]"> 
-            <select name="project" ng-model="selectedProject" required data-parsley-error-message="¡El proyecto es obligatorio!" disabled>
-                <option value="" disabled selected>Selecciona el proyecto</option>
-                <option ng:repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
-            </select>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="selected-project" type="text" name="selectedProject" ng-model="selectedProjectText" disabled>
+                <label for="selected-project">Proyecto</label>
+            </div>
         </div>
-        <div class="[ col s12 m6 ][ mt-10 ]"> 
-            <select name="itemType" ng-model="itemType" required disabled>
-                <option value="" disabled selected>Tipo de mercancía</option>
-                <option ng-repeat="value in ['Laptop', 'Desktop', 'Impresora', 'Celular', 'Pantalla', 'POP', 'POS', 'Promocional', 'Mobiliario',  'Perecedero', 'Alto valor']" value="{{value}}">{{value}}</option>
-            </select>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="selected-pm" type="text" name="selectedPM" ng-model="selectedPMText" disabled>
+                <label for="selected-pm">Project Manager</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="selected-ae" type="text" name="selectedAE" ng-model="selectedAEText" disabled>
+                <label for="selected-ae">Ejecutivo de cuenta</label>
+            </div>
         </div>
         <div class="[ col s12 m6 ]"> 
             <div class="input-field">
@@ -226,14 +243,11 @@
                 <label for="input_text">Modelo</label>
             </div>
         </div>
-        <div class="[ col s12 m4 ][ mt-10 ]"> 
-            <select name="itemState" ng-model="itemState" disabled>
-                <option value="" disabled selected>Estado</option>
-                <option value="1" selected>Nuevo</option>
-                <option value="2" selected>Como nuevo</option>
-                <option value="3" selected>Usado</option>
-                <option value="4" selected>Dañado</option>
-            </select>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="selected-item-state" type="text" name="selectedItemState" ng-model="selectedItemStateText" disabled>
+                <label for="selected-item-state">Estado</label>
+            </div>
         </div>
         <div class="[ col s12 ]"> 
             <div class="input-field">
@@ -241,26 +255,44 @@
                 <label for="textarea1">Descripción</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ][ mt-10 ]"> 
-            <select name="itemType" ng-model="itemType" required disabled>
-                <option value="" disabled selected>Tipo de mercancía</option>
-                <option ng-repeat="value in ['Laptop', 'Desktop', 'Impresora', 'Celular', 'Pantalla', 'POP', 'POS', 'Promocional', 'Mobiliario', 'Otro']" value="{{value}}">{{value}}</option>
-            </select>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="selected-item-type" type="text" name="selectedItemType" ng-model="selectedItemTypeText" disabled>
+                <label for="selected-item-type">Tipo de mercancía</label>
+            </div>
         </div>
-        <div class="[ col s12 m6 ][ mt-10 ]"> 
-            <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
-                <option value="" disabled selected>Selecciona el proveedor</option>
-                <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
-            </select>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" disabled>
+                <label for="itemValue">Valor</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="selected-storage-type" type="text" name="selectedStorageType" ng-model="selectedStorageTypeText" disabled>
+                <label for="selected-storage-type">Tipo de almacenaje</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="selected-provider" type="text" name="selectedProvider" ng-model="selectedProviderText" disabled>
+                <label for="selected-provider">Proveedor</label>
+            </div>
+        </div>
+        <div class="[ col s12 m6 ]"> 
+            <div class="input-field">
+                <input id="delivery-contact" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact" disabled>
+                <label for="delivery-contact">¿Quién entregó?</label>
+            </div>
         </div>
         <div class="[ clear ]"></div>
         <div class="[ col s12 m6 ]">    
-            <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
-            <input class="datepicker" type="date" name="validityExpirationDate" ng-model="validityExpirationDate" required disabled>
+            <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" disabled>
         </div>
         <div class="[ col s12 m6 ]">    
-            <label class="[ fs-12 ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
-            <input class="datepicker" type="date" disabled>
+            <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" name="validityExpirationDate" ng-model="validityExpirationDate" disabled>
         </div>
         <div class="[ col s12 ]"> 
             <div class="input-field">
@@ -271,7 +303,7 @@
         <div class="[ col s12 m6 ]"> 
             <div class="row">
                 <div class="[ col s12 ]"> 
-                    <div class="[ card ]">
+                    <div class="[ card ]" id="barcode">
                         <div class="card-image">
                             <img class="[ js-barcode ]" src="#" alt="">
                         </div>
@@ -291,24 +323,23 @@
         </div>
               
         <div class="[ col s12 m6 ]"> 
-            <div class="row">
-                <div class="[ col s12  ][ center ][ hide ]">
-                    <a href="#" class="[ waves-effect ][ btn ]"><i class="mdi-action-print left"></i>Imprimir código de barras</a>
-                </div>
-                <div class="[ col s12  ][ center ][ hide ]">
-                    <a href="#" class="[ waves-effect ][ btn ]"><i class="mdi-action-print left"></i>Imprimir remisión</a>
-                </div>
-                <div class="[ col s12  ][ center ][ hide ]">
-                    <a href="#" class="[ waves-effect ][ btn ]"><i class="mdi-action-schedule left"></i>Programar envío</a>
-                </div>
-                <div class="[ col s12  ][ center ]" ng-show="showMoreActions">
-                    <a href="#" class="[ waves-effect ][ btn btn-extra ]" ng-click="setActiveStep(3)"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar en almacén</a>
-                </div>
-                <div class="[ col s12  ][ center ][ hide ]">
-                    <a href="#" class="[ waves-effect ][ btn btn-extra green ]"><i class="fa fa-envelope left"></i>Avisar cliente</a>
-                </div>
-                <div class="[ col s12  ][ center ]" ng-show="!showMoreActions">
+            <div class="[ row ]" ng-show="!showMoreActions">
+                <div class="[ col s12  ][ center ]" >
                     <a href="#" class="[ waves-effect ][ btn btn-extra green ]" ng-click="registerItem( 'unit' )"><i class="[ mdi-navigation-check ][ left ]"></i>Confirmar entrada</a>
+                </div>
+            </div>
+            <div class="row" ng-show="showMoreActions">
+                <div class="[ center ][ col s12 ]">
+                    <button class="[ waves-effect ][ btn btn-extra ][  ]" ng-click="printBarcode( '#barcode' )"><i class="mdi-action-print left"></i>Código de barras</button>
+                </div>
+                <div class="[ center ][ col s12 ]">
+                    <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión entrada</button>
+                </div>
+                <div class="[ center ][ col s12 ]">
+                    <a href="#/new-delivery/{{ item.id }}" class="[ waves-effect ][ btn btn-extra ]"><i class="mdi-action-schedule left"></i>Programar envío</a>
+                </div>
+                <div class="[ center ][ col s12 ]">
+                    <a href="#" class="[ waves-effect ][ btn btn-extra ]" ng-click="setActiveStep(3)"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar en almacén</a>
                 </div>
             </div>
         </div>

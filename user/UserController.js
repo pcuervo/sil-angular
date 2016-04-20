@@ -1,9 +1,10 @@
 conAngular
-    .controller('UserController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'UserService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $rootScope, $state, $stateParams, $location, UserService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
+    .controller('UserController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'UserService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $rootScope, $state, $stateParams, $location, UserService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
         
         var currentPath = $location.path();
 
         (function initController() {
+            fetchNewNotifications();
             if( '/edit-profile' === currentPath || '/my-account' === currentPath ){
                 getUser( $rootScope.globals.currentUser.id );
                 return;
@@ -14,6 +15,7 @@ conAngular
             }
             getAllUsers();
             initUsersDataTable();
+
         })();
 
         /******************
@@ -125,7 +127,6 @@ conAngular
         }// getUser
 
         function initUsersDataTable(){
-
             $scope.dtUsersOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(10)
@@ -137,7 +138,12 @@ conAngular
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
-
         }// initUsersDataTable
+
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
 
     }]);

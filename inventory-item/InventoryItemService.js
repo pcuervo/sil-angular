@@ -6,6 +6,7 @@ conAngular
         service.getAll = getAll;
         service.getLatestEntries = getLatestEntries;
         service.getPendingEntries = getPendingEntries;
+        service.getPendingWithdrawals = getPendingWithdrawals;
         service.byBarcode = byBarcode;
         service.byType = byType;
         service.byId = byId;
@@ -17,18 +18,24 @@ conAngular
         service.reentryBulkItem = reentryBulkItem;
         service.reentryBundleItem = reentryBundleItem;
         service.authorizeEntry = authorizeEntry;
+        service.authorizeWithdrawal = authorizeWithdrawal;
         service.withPendingLocation = withPendingLocation;
         service.search = search;
         service.getStatuses = getStatuses;
+        service.getStatus = getStatus;
+        service.getItemState = getItemState;
         service.getTotalInventory = getTotalInventory;
         service.getInventoryValue = getInventoryValue;
         service.getCurrentRent = getCurrentRent;
         service.getInStock = getInStock;
+        service.getOutOfStock = getOutOfStock;
+        service.requestEntry = requestEntry;
+        service.getPendingEntryRequests = getPendingEntryRequests;
+        service.getItemRequest = getItemRequest;
         return service;
 
         // Public 
         function create( name, description, status, userId, projectId, clientId, img, ext, callback ) {
-
             var deferred = $q.defer();
             var serviceUrl = $rootScope.apiUrl + 'users/1/inventory_items/';
             $http.post(serviceUrl, { 
@@ -84,6 +91,22 @@ conAngular
                });
         }// getPendingEntries
 
+        function getPendingWithdrawals( callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/pending_withdrawal';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { recent: true  } 
+                })
+               .success(function ( response ) {
+                    console.log( response );
+                    callback( response.inventory_items );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getPendingWithdrawals
+
         function byType( type, status, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/by_type';
@@ -105,13 +128,13 @@ conAngular
 
         }// byType
 
-        function byBarcode( barcode, callback ) {
+        function byBarcode( barcode, isReEntry, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/by_barcode';
             $http ({
                 url: serviceUrl, 
                 method: "GET",
-                params: { barcode: barcode  } 
+                params: { barcode: barcode, re_entry: isReEntry  } 
                 })
                .success(function ( response ) {
                     callback( response.inventory_item );
@@ -304,6 +327,20 @@ conAngular
 
         }// authorizeEntry
 
+        function authorizeWithdrawal( id, callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/authorize_withdrawal';
+            $http.post( serviceUrl, { id: id } )
+            .success(function( response ) {
+                console.log( response );
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+
+        }// authorizeWithdrawal
+
         function withPendingLocation( callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/with_pending_location';
@@ -374,6 +411,50 @@ conAngular
             callback( statuses );
         }// getStatuses
 
+        function getItemState( stateId, callback ){
+            var state;
+            switch( stateId ){
+                case 1:
+                    state = 'Nuevo';
+                    break;
+                case 2:
+                    state = 'Como nuevo';
+                    break;
+                case 3:
+                    state = 'Usado';
+                    break;
+                case 4:
+                    state = 'Dañado';
+                    break;
+            }
+            callback( state );
+        }// getItemState
+
+        function getStatus( statusId, callback ){
+            var status;
+            switch( statusId ){
+                case 1:
+                    status = 'En existencia';
+                    break;
+                case 2:
+                    status = 'Sin existencia';
+                    break;
+                case 3:
+                    status = 'Existencia parcial';
+                    break;
+                case 4:
+                    status = 'Caducado';
+                    break;
+                case 5:
+                    status = 'Entrada pendiente';
+                    break;
+                case 6:
+                    status = 'Salida pendiente';
+                    break;
+            }
+            callback( status );
+        }// getStatus
+
         function getTotalInventory( callback ) {
             var serviceUrl = $rootScope.apiUrl  + 'inventory_items/total_number_items';
             $http.get ( serviceUrl )
@@ -421,5 +502,77 @@ conAngular
                     callback( response );
                });
         }// getInStock
+
+        function getOutOfStock( callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { out_of_stock: true  } 
+                })
+               .success(function ( response ) {
+                    callback( response.inventory_items );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getOutOfStock
+    
+        function requestEntry( name, quantity, description, itemType, projectId, pmId, aeId, itemState, entryDate, validityExpirationDate, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/request_item_entry';
+            $http.post( serviceUrl, 
+                { 
+                    inventory_item_request: {
+                        name:                       name,
+                        quantity:                   quantity,
+                        description:                description,
+                        item_type:                  itemType,
+                        project_id:                 projectId,
+                        pm_id:                      pmId,
+                        ae_id:                      aeId,
+                        project_id:                 projectId,
+                        state:                      itemState,
+                        entry_date:                 entryDate,
+                        validity_expiration_date:   validityExpirationDate
+                    }
+                }
+            )
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+        }// requestEntry
+
+        function getPendingEntryRequests( callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/pending_entry_requests';
+            $http.get( serviceUrl )
+                .success(function ( response ) {
+                    callback( response.inventory_item_requests );
+                })
+               .error(function ( response ) {
+                    callback( response );
+                });
+        }// getPendingEntryRequests
+
+        function getItemRequest( id, callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/get_item_request';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { 
+                    id: id
+                } 
+                })
+               .success(function ( response ) {
+                    callback( response.inventory_item_requests[0] );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+
+        }// getItemRequest
 
     }]);

@@ -8,7 +8,7 @@ conAngular
 
 		$scope.login = function(){
 
-			$scope.dataLoading = true;
+			LoaderHelper.showLoader('Iniciando sesión...')
 			AuthenticationService.login($scope.email, $scope.password, function (response) {
 
                 if( null === response ){

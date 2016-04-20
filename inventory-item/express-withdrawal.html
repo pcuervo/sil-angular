@@ -112,9 +112,9 @@
         </div>
         <form ng-show="item.actable_type == 'BulkItem'" ng-submit="withdraw( item.actable_type )" data-parsley-bulk>
             <div class="[ col s12 m6 ][ mt-10 ]"> 
-                <select name="pickupCompany" ng-model="pickupCompany" required>
-                    <option value="" disabled selected>Proveedor</option>
-                    <option ng-repeat="value in ['DHL', 'Fedex', 'Orlando']">{{value}}</option>
+                <select name="pickupCompany" ng-model="pickupCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m6 ]"> 

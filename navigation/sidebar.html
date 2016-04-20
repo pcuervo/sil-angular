@@ -18,8 +18,10 @@
 
 <div class="[ nano ]">
     <div class="[ nano-content ]">
-
         <ul>
+            <li class="[ notification-menu ]">
+                <a href="#/notifications"><i class="[ fa fa-bell ]"></i> Notificaciones<span class="[ badge ][ red ]">{{ unreadNotifications }}</span></a>
+            </li>
             <li class="label">Control de inventario</li>
             <li class="active">
                 <a href="#/dashboard" class="waves-effect waves-blue"><i class="fa fa-dashboard"></i> Dashboard {{roleName}}</a>
@@ -29,26 +31,27 @@
                 <ul>
                     <li><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Ver movimientos</a>
                     </li>
-                    <li ng-show="( role == 1 || role == 2 || role == 3 || role == 6 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
+                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 6 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
                     </li>
-                    <li><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i> Entradas</a>
+                    <li ><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i>  Entradas</a>
                     </li>
-                    <li><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i> Salidas</a>
+                    <li ng-if="( role == 1 || role == 6 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
                     </li>
-                    <!-- <li><a class="waves-effect waves-blue" href="css-colors"><i class="fa fa-pie-chart"></i> Reportes</a>
-                    </li> -->
                 </ul>
             </li>
             <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4 )">
                 <a class="yay-sub-toggle waves-effect waves-blue"><i class="mdi-action-view-quilt"></i> Almacén<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
                 <ul>
-                    <li><a class="waves-effect waves-blue" href="#/view-warehouse-transactions"><i class="mdi-av-repeat"></i> Movimientos</a>
+                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/view-warehouse-transactions"><i class="mdi-av-repeat"></i> Movimientos</a>
                     </li>
                     <li><a class="waves-effect waves-blue" href="#/wh-dashboard"><i class="fa fa-location-arrow"></i> Ubicaciones</a>
                     </li>
                     <li><a class="waves-effect waves-blue" href="#/view-racks"><i class="mdi-action-view-module"></i> Racks</a>
                     </li>
                 </ul>
+            </li>
+            <li ng-show="( role == 1 || role == 2 || role == 3 || role == 6 )">
+                <a href="#/delivery-dashboard" class="waves-effect waves-blue"><i class="fa fa-motorcycle"></i> Envíos</a>
             </li>
             <li class="label" ng-show="( role == 1 || role == 2 || role == 3 )">Administración del sistema</li>
             <li ng-show="role == 1">

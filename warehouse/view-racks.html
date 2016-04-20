@@ -6,17 +6,20 @@
         <thead>
             <tr>
                 <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ]"># de ubicaciones</th>
+                <th class="[ center-align ]">Ubicaciones disponibles</th>
                 <th class="[ center-align ]">Fecha de creación</th>
                 <th class="[ center-align ]">Ver detalle</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="r in racks">
+            <tr id="{{r.id}}" ng-repeat="r in racks">
                 <td>{{ r.name }}</td>
-                <td class="[ center-align ]">{{ r.warehouse_locations.length }}</td>
+                <td class="[ center-align ]">{{ r.available_locations + ' de ' + r.total_locations }}</td>
                 <td class="[ center-align ]">{{ r.created_at | date:'dd/MM/yyyy' }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-rack/{{r.id}}"><i class="[ fa fa-eye ]"></i></a></td>
+                <td class="[ center-align ]">
+                    <a class="[ btn waves-effect ]" href="#/view-rack/{{r.id}}"><i class="[ fa fa-eye ]"></i></a>
+                    <a class="[ btn waves-effect ][ red ]" ng-click="deleteRack( r.id )" ng-if="r.is_empty"><i class="[ fa fa-times ]"></i></a>
+                </td>
             </tr>
         </tbody>
     </table>

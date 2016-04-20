@@ -1,11 +1,12 @@
 conAngular
-    .controller('InventoryTransactionController', ['$scope', '$state', '$stateParams', 'InventoryTransactionService', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$location', function($scope, $state, $stateParams, InventoryTransactionService, SupplierService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $location){
+    .controller('InventoryTransactionController', ['$scope', '$state', '$stateParams', 'InventoryTransactionService', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$location', function($scope, $state, $stateParams, InventoryTransactionService, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $location){
 
         // Constants
         
         (function initController() {
             var currentPath = $location.path();
             initInventoryTransactions( currentPath );
+            fetchNewNotifications();
         })();
 
         
@@ -118,5 +119,11 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
         }// initInventoryTransactionsDataTable
+
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
 
 }]);

@@ -1,9 +1,10 @@
 conAngular
-    .controller('SupplierController', ['$scope', '$state', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, SupplierService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
+    .controller('SupplierController', ['$scope', '$state', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
         
         (function initController() {
             getAllSuppliers();
             initSupplierDataTable();
+            fetchNewNotifications();
         })();
 
         
@@ -14,12 +15,12 @@ conAngular
 
         $scope.registerSupplier = function(){
             SupplierService.register( $scope.supplierName, function ( response ){
-                    if(response.errors) {
-                        ErrorHelper.display( response.errors );
-                        return;
-                    }
-                    Materialize.toast('Proveedor "' + $scope.supplierName + '" registrado exitosamente!', 4000, 'green');
-                    $state.go('/view-suppliers', {}, { reload: true });
+                if(response.errors) {
+                    ErrorHelper.display( response.errors );
+                    return;
+                }
+                Materialize.toast('Proveedor "' + $scope.supplierName + '" registrado exitosamente!', 4000, 'green');
+                $state.go('/view-suppliers', {}, { reload: true });
             });
         }// registerSupplier
 
@@ -49,5 +50,11 @@ conAngular
 
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initSupplierDataTable
+
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
 
     }]);

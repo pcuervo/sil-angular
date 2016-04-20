@@ -1,26 +1,22 @@
 conAngular
-    .controller('CheckOutController', ['$scope', '$state', '$stateParams', '$location', 'InventoryItemService', 'InventoryTransactionService', 'UserService', 'ClientService', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $state, $stateParams, $location, InventoryItemService, InventoryTransactionService,  UserService, ClientService, SupplierService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
-
-        // Constants
+    .controller('CheckOutController', ['$scope', '$state', '$stateParams', '$location', 'InventoryItemService', 'InventoryTransactionService', 'UserService', 'ClientService', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $state, $stateParams, $location, InventoryItemService, InventoryTransactionService,  UserService, ClientService, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
 
         (function initController() {
-
             var currentPath = $location.path();
             initWithdrawalOptions( currentPath ); 
             getCheckOutTransactions();
             initCheckOutsDataTable();
-            
+            fetchNewNotifications();
         })();
 
         
-
         /******************
         * PUBLIC FUNCTIONS
         *******************/
 
         $scope.searchByBarcode = function(){
-
-            InventoryItemService.byBarcode( $scope.barcode, function( item ){
+            var isReEntry = false;
+            InventoryItemService.byBarcode( $scope.barcode, isReEntry, function( item ){
                 if( item.errors ){
                     $scope.hasItem = false;
                     Materialize.toast( 'No se encontró ningún artículo con código de barras: "' + $scope.barcode + '"', 4000, 'red');
@@ -76,6 +72,16 @@ conAngular
             });
         }
 
+        $scope.authorizeWithdrawal = function( itemId ){
+            InventoryItemService.authorizeWithdrawal( itemId, function( response ){
+                Materialize.toast(response.success, 4000, 'green');
+                getPendingWithdrawals(); 
+            }); 
+        }
+
+        $scope.printSummary = function(){
+            window.print();
+        }
 
 
         /******************
@@ -93,11 +99,17 @@ conAngular
             }
 
             if( currentPath.indexOf( 'withdraw-item/' ) > -1 ){
+                $scope.isSummary = false;
                 getItem( $stateParams.itemId ); 
+                fetchSuppliers();
                 return;
             }
 
             switch( currentPath ){
+                case '/pending-withdrawals':
+                    getPendingWithdrawals();
+                    initPendingWithdrawalsDataTable();
+                    break;
                 case '/withdraw-unit-item':
                     getUnitItems();
                     break;
@@ -191,7 +203,8 @@ conAngular
                 }
 
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/check-out', {}, { reload: true });
+                $scope.isSummary = true;
+                $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
 
             });
 
@@ -210,6 +223,7 @@ conAngular
                     if( '' == $withdrawQuantityInput.val() || '' == $withdrawUnitsInput.val() ) return 1;
 
                     locations.push({
+                        location: location.location,
                         location_id:  location.location_id,
                         quantity:     parseInt( $withdrawQuantityInput.val() ),
                         units:        parseInt( $withdrawUnitsInput.val() )      
@@ -224,6 +238,7 @@ conAngular
                 quantity = withdrawQuantity;
             }
             
+            
             InventoryItemService.withdrawBulkItem( id, quantity, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, locations,  function( response ){
 
                 if( response.errors ){
@@ -231,8 +246,10 @@ conAngular
                     return;
                 }
 
+                $scope.fromLocations = locations;
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/check-out', {}, { reload: true });
+                $scope.isSummary = true;
+                $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
 
             });
 
@@ -249,7 +266,8 @@ conAngular
                 }
 
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/check-out', {}, { reload: true });
+                $scope.isSummary = true;
+                $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
 
             });
 
@@ -302,9 +320,15 @@ conAngular
                     Materialize.toast( 'No se encontró ningún artículo con id: "' + id + '"', 4000, 'red');
                     return;
                 }
-                console.log( item );
                 $scope.item = item;
                 $scope.exitDate = new Date();
+                $scope.locations = '-';
+                $.each( item.locations, function(i, loc){
+                    console.log( loc );
+                    $scope.locations += loc.location + ', ';
+                });
+                $scope.locations = $scope.locations.replace(/,\s*$/, "");
+
                 if( 'BundleItem' == item.actable_type ){
                     $scope.itemParts = [];
                     $scope.hasPartsToWithdraw = false;
@@ -317,7 +341,6 @@ conAngular
                 }
                 if( 'BulkItem' == item.actable_type ){
                     $scope.multipleBulkLocations = item.locations.length > 0 ? true : false;
-                    console.log( $scope.multipleBulkLocations );
                 }
             });
         }// getItem
@@ -352,5 +375,31 @@ conAngular
             }); 
         }// fetchSuppliers
 
+        function getPendingWithdrawals(){
+            InventoryItemService.getPendingWithdrawals( function( pendingInventoryItems ){
+                console.log( pendingInventoryItems );
+                $scope.pendingInventoryItems = pendingInventoryItems;
+            }); 
+        }// getPendingWithdrawals
 
+        function initPendingWithdrawalsDataTable(){
+            $scope.dtPendingWithdrawalsOptions = DTOptionsBuilder.newOptions()
+                    .withPaginationType('full_numbers')
+                    .withDisplayLength(20)
+                    .withDOM('it')
+                    .withOption('responsive', true)
+                    .withOption('order', [])
+                    .withOption('searching', false);
+            $scope.dtPendingWithdrawalsColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(4).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initPendingWithdrawalsDataTable
+
+
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
 }]);

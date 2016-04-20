@@ -17,35 +17,7 @@
                     <label for="projectName">Nombre del proyecto</label>
                 </div>
             </div>
-            <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 l4 offset-l2  ][ mt-15 ]"> 
-                <select name="client" ng-model="clientId" required ng-change="fillClientContact()">
-                    <option value="" disabled selected>Cliente</option>
-                    <option ng:repeat="client in clients" value="{{client.id}}">{{ client.name }}</option>
-                </select>
-            </div>
-            <div class="[ col s12 m6 l4 ][ mt-15 ]"> 
-                <select name="clientContact" ng-model="clientContactId" required >
-                    <option value="" disabled selected>Contacto cliente</option>
-                    <option ng:repeat="contact in clientContacts" value="{{contact.id}}">{{ contact.first_name + ' ' + contact.last_name }}</option>
-                </select>
-            </div>
-            <div class="[ col s12 m6 l4 offset-l2  ][ mt-15 ]"> 
-                <select ng-model="projectManagerId" required >
-                    <option value="" disabled selected>Project Manager</option>
-                    <option ng:repeat="pm in projectManagers" value="{{pm.id}}">{{pm.first_name + ' ' + pm.last_name}}</option>
-                </select>
-            </div>
-            <div class="[ col s12 m6 l4  ][ mt-15 ]"> 
-                <select ng-model="accountExecutiveId" required >
-                    <option value="" disabled selected>Ejecutivo de cuenta</option>
-                    <option ng:repeat="ae in accountExecutives" value="{{ae.id}}">{{ae.first_name + ' ' + ae.last_name}}</option>
-                </select>
-            </div>
-            <div class="[ clear ]"></div>
             <div class="[ col s12 ]"> 
-                <input type="hidden" name="entry_type" value="unit">
-
                 <div class="[ center-align ]">
                     <button class="[ waves-effect ][ btn ]">editar</button>
                 </div>
@@ -54,12 +26,7 @@
     </div>
 </div>
 
-<div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Usuario en el proyecto</h4>
-    <div class="[ row ]">
-        
-    </div>
-</div>
+<div class="[ mt-20 ]" ng-include src="'project/templates/project-users.html'"></div>
 
 <script>
   $('[data-parsley-validate]').parsley();

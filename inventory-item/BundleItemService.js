@@ -11,12 +11,11 @@ conAngular
         * PUBLIC FUNCTIONS
         *******************/
 
-        function create( name, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, parts, validityExpirationDate, itemValue, callback ) {
+        function create( name, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, parts, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, callback ) {
 
             var userId = $rootScope.globals.currentUser.id;
-            var status = $rootScope.globals.currentUser.role == 1 ? 1 : 6;
+            //var status = $rootScope.globals.currentUser.role == 1 ? 1 : 6;
             var serviceUrl = $rootScope.apiUrl  + 'users/' + userId + '/bundle_items/';
-
             $http.post(serviceUrl, 
                 { 
                     bundle_item: {
@@ -29,8 +28,10 @@ conAngular
                         barcode:                    barcode,
                         validity_expiration_date:   validityExpirationDate,
                         value:                      itemValue,
-                        storage_type:               storageType
+                        storage_type:               storageType,
+                        is_high_value:              isHighValue
                     },
+                    item_request_id: itemRequestId,
                     parts: parts,
                     filename: filename,
                     item_img: imgBase64,

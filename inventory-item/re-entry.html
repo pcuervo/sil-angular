@@ -1,13 +1,13 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
-<div class="[ card ]">
+<div class="[ card ]" ng-show="!hasBarcode">
     <div class="[ row ]">
         <div class="[ title ]">
             <h3>Reingreso</h3>
         </div>
         <div class="content">
             <p>Busca un artículo escaneando el código de barras:</p>
-            <form ng-submit="searchByBarcode()" data-parsley-validate >
+            <form ng-submit="searchByBarcode( barcode )" data-parsley-validate >
                 <div class="[ col s8 m7 offset-m2 ][ input-field ]">
                     <input id="[ barcode ]" type="text" ng-model="barcode" required data-parsley-error-message="Código inválido.">
                     <label for="[ barcode ]"></label>
@@ -100,9 +100,9 @@
         </div>
         <form ng-show="item.actable_type == 'BulkItem'" ng-submit="reEntry( item.actable_type )" data-parsley-bulk>
             <div class="[ col s12 m6 ][ mt-10 ]"> 
-                <select name="deliveryCompany" ng-model="deliveryCompany" required>
-                    <option value="" disabled selected>Proveedor</option>
-                    <option ng-repeat="value in ['HP', 'Google', 'BestBuy']">{{value}}</option>
+                <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m6 ]"> 
@@ -144,12 +144,24 @@
                 </div>
             </div>
             <div class="[ col s4 m2 ]"> 
-                <button class="[ waves-effect ][ btn red ]">Reingresar</button>
+                <button class="[ waves-effect ][ btn red ]" ng-if="item.status == 2 || 'BulkItem' == item.actable_type">Reingresar</button>
+                <p ng-if="item.status == 1 && 'BulkItem' != item.actable_type">
+                    No se puede reingresar el artículo porque ya se encuentra en existencia.
+                </p>
+                <p ng-if="item.status == 4">
+                    No se puede reingresar el artículo porque no tiene vigencia válida o está caduco.
+                </p>
+                <p ng-if="item.status == 5">
+                    No se puede reingresar el artículo porque tiene una entrada pendiente.
+                </p>
+                <p ng-if="item.status == 6">
+                    No se puede reingresar el artículo porque tiene una salida pendiente.
+                </p>
             </div>
         </form>
         <form ng-show="item.actable_type == 'UnitItem'" ng-submit="reEntry( item.actable_type )" data-parsley-unit>
             <div class="[ col s12 m6 ][ mt-10 ]"> 
-                <select name="deliveryCompanyUnit" ng-model="deliveryCompanyUnit" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
@@ -181,18 +193,26 @@
                 </div>
             </div>
             <div class="[ col s12 ][ center-align ]" >
-                <button class="[ waves-effect ][ btn red ]">Reingresar</button>
+                <button class="[ waves-effect ][ btn red ]" ng-if="item.status == 2">Reingresar</button>
+                <p ng-if="item.status == 1">
+                    No se puede reingresar el artículo porque ya se encuentra en existencia.
+                </p>
+                <p ng-if="item.status == 4">
+                    No se puede reingresar el artículo porque no tiene vigencia válida o está caduco.
+                </p>
+                <p ng-if="item.status == 5">
+                    No se puede reingresar el artículo porque tiene una entrada pendiente.
+                </p>
+                <p ng-if="item.status == 6">
+                    No se puede reingresar el artículo porque tiene una salida pendiente.
+                </p>
             </div>
         </form>
         <form ng-show="item.actable_type == 'BundleItem'" ng-submit="reEntry( item.actable_type )" data-parsley-bundle>
             <div class="[ col s12 m6 ][ mt-10 ]"> 
-                <!-- <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
-                </select> -->
-                <select name="deliveryCompany" ng-model="deliveryCompany" required>
-                    <option value="" disabled selected>Proveedor</option>
-                    <option ng-repeat="value in ['HP', 'Google', 'BestBuy']">{{value}}</option>
                 </select>
             </div>
             <div class="[ col s12 m6 ]"> 
@@ -256,7 +276,19 @@
             </div> 
             <div class="[ clear ]"></div>
             <div class="[ center-align ]" ng-show="hasPartsToReturn"> 
-                <button class="[ waves-effect ][ btn red ]">Dar salida</button>
+                <button class="[ waves-effect ][ btn red ]" ng-if="item.status == 2 || item.status == 3">Reingresar</button>
+                <p ng-if="item.status == 1">
+                    No se puede reingresar el artículo porque ya se encuentra en existencia.
+                </p>
+                <p ng-if="item.status == 4">
+                    No se puede reingresar el artículo porque no tiene vigencia válida o está caduco.
+                </p>
+                <p ng-if="item.status == 5">
+                    No se puede reingresar el artículo porque tiene una entrada pendiente.
+                </p>
+                <p ng-if="item.status == 6">
+                    No se puede reingresar el artículo porque tiene una salida pendiente.
+                </p>
             </div>
 
             <div ng-show="!hasPartsToReturn">

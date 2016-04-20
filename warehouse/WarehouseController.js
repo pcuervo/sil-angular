@@ -1,5 +1,5 @@
 conAngular
-    .controller('WarehouseController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'WarehouseService', 'InventoryItemService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $rootScope, $state, $stateParams, $location, WarehouseService, InventoryItemService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
+    .controller('WarehouseController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'WarehouseService', 'InventoryItemService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $rootScope, $state, $stateParams, $location, WarehouseService, InventoryItemService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
         
         /******************
         * CONSTANTS
@@ -11,6 +11,7 @@ conAngular
         (function initController() {
             var currentPath = $location.path();
             initWarehouseOptions( currentPath ); 
+            fetchNewNotifications();
         })();
 
 
@@ -68,20 +69,20 @@ conAngular
 
         $scope.addToLocation = function(){
 
-            LoaderHelper.showLoader( 'Ubicando en almacén...' );
+            console.log( this.selectedLocation );
+            LoaderHelper.showLoader( 'Agregando artículo a ubicación...' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
                 switch( $scope.item.actable_type ){
                     case 'UnitItem': 
                         var quantity = 1;
                         break;
                     case 'BulkItem': 
-                        var quantity = $scope.quantity;
+                        var quantity = this.quantity;
                         break;
                     default:
                         var quantity = $scope.parts.length;
                 }
-                WarehouseService.locateItem( $scope.item.id, $scope.selectedLocation, $scope.units, quantity, true, function( response ) {
-                    console.log( response );
+                WarehouseService.locateItem( $scope.item.id, this.selectedLocation, this.units, quantity, true, $scope.item.actable_type, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                     $state.go('/wh-dashboard', {}, { reload: true });
                 });
@@ -146,7 +147,6 @@ conAngular
 
         $scope.editLocation = function(){
             WarehouseService.editLocation( $scope.locationId, $scope.locationName, $scope.units, function( location ){
-                console.log( location );
                 Materialize.toast('¡Se ha editado la ubicación: "' + $scope.locationName + '" exitosamente!', 4000, 'green');
                 $state.go('/view-location', { 'locationId' : location.id  }, { reload: true });
             });
@@ -161,30 +161,48 @@ conAngular
         }// getEntryType
 
         $scope.addUnitsToLocation = function(){
-            var bulkLocation = {
-                locationId:     $scope.selectedLocation,
-                quantity:       $scope.unitsToLocate,
-                units:          $scope.units,
-                rack:           $scope.selectedRack
-            }
 
+            var bulkLocation = {
+                locationId:     this.selectedLocation,
+                quantity:       this.unitsToLocate,
+                units:          this.units,
+                rackLocation:   $('[name="rack"] option:selected').first().text() + ' / ' + $('[name="location"] option:selected').first().text()
+            }
+            console.log( bulkLocation );
             $scope.bulkLocations.push( bulkLocation );
-            $scope.pendingUnitsToLocate -= $scope.unitsToLocate;
+            this.pendingUnitsToLocate -= this.unitsToLocate;
             $scope.hasMultipleLocations = true;
-            $scope.selectedLocation = '';
-            $scope.selectedRack = '';
-            $scope.unitsToLocate = '';
-            $scope.units = '';
+            this.selectedLocation = '';
+            this.selectedRack = '';
+            this.unitsToLocate = '';
+            this.units = '';
         }
 
         $scope.changeRack = function( rackId ){
-            console.log( rackId );
             getRackRelocation( rackId );
         }// changeRack
  
-        $scope.locationTest = function( locationId ){
-            console.log( locationId );
-        }
+        $scope.deleteRack = function( rackId ){
+            WarehouseService.deleteRack( rackId, function(){
+                Materialize.toast('¡Se ha eliminado el rack!', 4000, 'red');
+                $('#'+rackId).remove();
+            });
+        }// deleteRack
+
+        $scope.updateRows = function( column ){
+            if( 1 == column ){
+                $scope.rows = 1;
+                $scope.units = 100000;
+                $scope.isFloor = true;
+                return;
+            }   
+
+            $scope.rows = '';
+            $scope.units = '';
+            $scope.isFloor = false;
+        }// updateRows
+
+
 
         /******************
         * PRIVATE FUNCTIONS
@@ -192,6 +210,7 @@ conAngular
 
         function initWarehouseOptions( currentPath ){
 
+            
             if( currentPath.indexOf('view-racks') > -1 ){
                 fetchWarehouseRacks();
                 initRacksDataTable(); 
@@ -216,8 +235,9 @@ conAngular
             }
 
             if( currentPath.indexOf('relocate') > -1 ){
-                LoaderHelper.showLoader( 'Cargando reubicación de mercancía.' );
+                LoaderHelper.showLoader( 'Reubicando artículo(s)...' );
                 fetchWarehouseRacks();
+                console.log('before getting item_location');
                 getItemLocation( $stateParams.itemId, $stateParams.locationId )
                 return;
             }
@@ -228,25 +248,33 @@ conAngular
                 return;
             }
 
-            getItemsWithPendingLocation();
-            initPendingLocationDataTable();
+            switch( currentPath ){
+                case '/add-rack':
+                    console.log('add');
+                    $scope.isFloor = false;
+                    break;
+                case '/wh-dashboard':
+                    getItemsWithPendingLocation();
+                    initPendingLocationDataTable();
+                    break;
+            }
     
         }// initWarehouseOptions
 
         function getRack( id ){
             WarehouseService.getRack( id, function( rack ){
                 var hasLocations = true;
+                console.log( rack );
                 displayRack( rack.locations, rack.rack_info.columns, hasLocations );
                 $scope.warehouse_locations = rack.locations;
                 $scope.rack = rack;
-                console.log( rack );
                 getItemsByRack( id );
             }); 
         }// getRack
 
         function getRackRelocation( id ){
+            console.log( $scope.itemLocation );
             WarehouseService.getRack( id, function( rack ){
-                console.log( rack );
                 var hasLocations = false;
                 displayRack( rack.locations, rack.rack_info.columns, hasLocations );
                 $scope.warehouse_locations = rack.locations;
@@ -264,8 +292,17 @@ conAngular
             var rackHTML = [];
             $('.js-rack').empty();    
             switch( columns ){
+                case 7:
+                    rackHTML = getRackHTMLSevenCol( locations, columns, hasLocations )
+                    break;
                 case 8:
                     rackHTML = getRackHTMLEightCol( locations, columns, hasLocations )
+                    break;
+                case 9:
+                    rackHTML = getRackHTMLNineCol( locations, columns, hasLocations )
+                    break;
+                case 10:
+                    rackHTML = getRackHTMLTenCol( locations, columns, hasLocations )
                     break;
                 default:
                     rackHTML = getRackHTML( locations, columns, hasLocations )
@@ -316,6 +353,9 @@ conAngular
 
         function getColClass( columns ){
              switch( columns ){
+                case 1:
+                    colClass = 'm12';
+                    break;
                 case 2:
                     colClass = 'm6';
                     break;
@@ -325,6 +365,9 @@ conAngular
                 case 4:
                     colClass = 'm3';
                     break;
+                case 5:
+                    colClass = 'm2';
+                    break;
                 case 6:
                     colClass = 'm2';
                     break;
@@ -333,6 +376,57 @@ conAngular
             }// switch
             return colClass;
         }// getColClass
+
+        function getRackHTMLSevenCol( locations, columns, hasLocations ){
+            var rackHTML = [];
+            var currentRow = 0;
+            var j = 0;
+            rackHTML[ currentRow ] = '';
+
+            $.each( locations, function( i, location ){
+                var statusClass = $scope.getStatusClass( location.status );
+
+                if( j % 2 == 0 ) rackHTML[ currentRow ] += '<div class="[ col s12 m3 ]"><div class="row">';
+                rackHTML[ currentRow ] += '\
+                    <div class="[ col s6 ]"> \
+                        <div class="[ card ][ minimized ]"> \
+                            <div class="[ title ]' + statusClass + '"> \
+                                <h5>' + location.name + '</h5> \
+                                <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
+                            </div> \
+                            <div class="content"> \
+                                <p>Capacidad</p> \
+                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                if( hasLocations ){
+                    rackHTML[currentRow] += '\
+                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                } else {
+                    rackHTML[currentRow] += '\
+                        <p>Reubicar aquí</p> \
+                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                }
+
+                rackHTML[ currentRow ] += '\
+                            </div> \
+                        </div> \
+                    </div>';
+                
+                if( ( parseInt( i )+1 ) % 7 == 0){
+                    rackHTML[ currentRow ] += '<div class="[ col s6 ]"><div class="[ card ][ minimized ]"><div class="[ title ][ black ]"><h5>-</h5></div></div></div>';    
+                    rackHTML[ currentRow ] += '</div></div>';
+                    currentRow += 1;
+                    rackHTML[ currentRow ] = '<div class="[ clear ]"></div>';      
+                    j += 1;         
+                } 
+                if( j % 2 == 1 ) {
+                    rackHTML[ currentRow ] += '</div></div>';
+                }
+                j += 1;
+            });
+
+            return rackHTML;
+        }// getRackHTMLSevenCol
 
         function getRackHTMLEightCol( locations, columns, hasLocations ){
             var rackHTML = [];
@@ -377,6 +471,97 @@ conAngular
             return rackHTML;
         }// getRackHTMLEightCol
 
+        function getRackHTMLNineCol( locations, columns, hasLocations ){
+            var rackHTML = [];
+            var currentRow = 0;
+            rackHTML[ currentRow ] = '';
+
+            $.each( locations, function( i, location ){
+                var statusClass = $scope.getStatusClass( location.status );
+                if( i % 3 == 0 ) rackHTML[ currentRow ] += '<div class="[ col s12 m4 ]"><div class="row">';
+                rackHTML[ currentRow ] += '\
+                    <div class="[ col s4 ]"> \
+                        <div class="[ card ][ minimized ]"> \
+                            <div class="[ title ]' + statusClass + '"> \
+                                <h5>' + location.name + '</h5> \
+                                <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
+                            </div> \
+                            <div class="content"> \
+                                <p>Capacidad</p> \
+                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                if( hasLocations ){
+                    rackHTML[currentRow] += '\
+                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                } else {
+                    rackHTML[currentRow] += '\
+                        <p>Reubicar aquí</p> \
+                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                }
+
+                rackHTML[ currentRow ] += '\
+                            </div> \
+                        </div> \
+                    </div>';
+                if( i % 3 == 2 ) {
+                    rackHTML[ currentRow ] += '</div></div>';
+                }
+
+                if( ( parseInt( i )+1 ) % 9 == 0) {
+                    currentRow += 1;
+                    rackHTML[ currentRow ] = '<div class="[ clear ]"></div>';
+                }
+            });
+
+            return rackHTML;
+        }// getRackHTMLNineCol
+
+        function getRackHTMLTenCol( locations, columns, hasLocations ){
+            var rackHTML = [],
+                currentRow = 0,
+                colClass = getColClass( columns ),
+                offsetClass = '';
+
+            rackHTML[ currentRow ] = '';
+            $.each( locations, function( i, location ){
+                var statusClass = $scope.getStatusClass( location.status );
+                if( ( parseInt( i ) ) % 10 == 0) {
+                    offsetClass = 'offset-m1';
+                } else {
+                    offsetClass = '';
+                }
+                rackHTML[ currentRow ] += '\
+                    <div class="[ col s12 ' + colClass + ' ' + offsetClass + ' ]"> \
+                        <div class="[ card ][ minimized ]"> \
+                            <div class="[ title ]' + statusClass + '"> \
+                                <h5>' + location.name + '</h5> \
+                                <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
+                            </div> \
+                            <div class="content"> \
+                                <p>Disponibilidad</p> \
+                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                if( hasLocations ){
+                    rackHTML[currentRow] += '\
+                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                } else {
+                    rackHTML[currentRow] += '\
+                        <p>Reubicar aquí</p> \
+                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                }
+                                
+                rackHTML[ currentRow ] += '\
+                            </div> \
+                        </div> \
+                    </div>';
+                if( 0 == (i+1) % parseInt( columns )  ) rackHTML[ currentRow ] += '<div class="[ clear ]"></div>';
+
+            });
+            return rackHTML;
+
+        }// getRackHTMLTenCol
+
+
         function getLocation( id ){
 
             WarehouseService.getLocation( id, function( location ){
@@ -399,14 +584,17 @@ conAngular
         }// getLocation
 
         function getItemLocation( itemId, locationId ){
+            console.log('getting ItemLocation');
             WarehouseService.getItemLocation( itemId, locationId, function( itemLocation ){
                 $scope.itemLocation = itemLocation;
+                console.log( itemLocation );
                 $('.js-barcode').JsBarcode( itemLocation.barcode );
                 getRackRelocation( itemLocation.rack_id ); 
-                //$scope.selectedRack = itemLocation.rack_id;
                 $('body').on('click', '.js-location', function(){
+                    $scope.itemLocation = itemLocation;
+                    console.log( $scope.itemLocation.id );
                     var newLocationId = $(this).data('location');
-                    LoaderHelper.showLoader('reubicando');
+                    LoaderHelper.showLoader('Reubicando artículo(s)...');
                     relocateItem( $scope.itemLocation.id, newLocationId );
                 });
                 LoaderHelper.hideLoader();
@@ -445,12 +633,12 @@ conAngular
 
         function initPendingLocationDataTable(){
             $scope.dtPendingLocationOptions = DTOptionsBuilder.newOptions()
-                    .withPaginationType('full_numbers')
-                    .withDisplayLength(10)
-                    .withDOM('itp')
-                    .withOption('responsive', true)
-                    .withOption('order', [])
-                    .withOption('searching', false);
+                .withPaginationType('full_numbers')
+                .withDisplayLength(10)
+                .withDOM('itp')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false);
             $scope.dtPendingLocationColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];
@@ -466,6 +654,8 @@ conAngular
                     .withOption('order', [])
                     .withOption('searching', false);
             $scope.dtRackItemsColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                DTColumnDefBuilder.newColumnDef(1).notSortable(),
                 DTColumnDefBuilder.newColumnDef(5).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
@@ -474,7 +664,7 @@ conAngular
         function initWarehouseTransactionsDataTable(){
             $scope.dtWarehouseTransactionsOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDisplayLength(30)
+                    .withDisplayLength(20)
                     .withDOM('itp')
                     .withOption('responsive', true)
                     .withOption('order', [])
@@ -488,6 +678,7 @@ conAngular
 
         function fetchWarehouseRacks(){
             WarehouseService.getRacks( function( racks ){
+                console.log( racks );
                 $scope.racks = racks;
             });
         }// fetchWarehouseRacks
@@ -502,9 +693,10 @@ conAngular
         function initRacksDataTable(){
             $scope.dtRackOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDOM('t')
+                    .withDOM('it')
                     .withOption('responsive', true)
                     .withOption('order', [])
+                    .withDisplayLength(30)
             $scope.dtRackColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
@@ -513,13 +705,24 @@ conAngular
 
         function relocateItem( itemLocationId, newLocationId ){
             WarehouseService.relocateItem( itemLocationId, newLocationId, function( item_location ) {
+                if( item_location.errors ){
+                    Materialize.toast( item_location.errors, 4000, 'red' );
+                    LoaderHelper.hideLoader();
+                    return;
+                }
+
                 Materialize.toast('¡Se reubicó el artículo: "' + item_location.inventory_item.name + '" exitosamente!', 4000, 'green');
-                $state.go('/relocate', { 
-                    locationId: item_location.warehouse_location.id,
-                    itemId: item_location.inventory_item.id
+                $state.go('/view-location', { 
+                    locationId: item_location.warehouse_location.id
                  }, { reload: true });
             });
             return;
+        }
+
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
         }
 
 }]);

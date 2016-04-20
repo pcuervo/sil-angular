@@ -1,0 +1,103 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]" ng-if="0 == currentStep">
+
+    <h4 class="[ center-align ]">Autorizar entrada</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" data-parsley-entry>
+            <div class="[ col s12 m3 offset-m1 ]" >
+                <div class="input-field">
+                    <input id="project-name" type="text" ng-model="projectName" ng-readonly="true">
+                    <label for="project-name">Proyecto</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]" >
+                <div class="input-field">
+                    <input id="pm-name" type="text" ng-model="pmName" ng-readonly="true">
+                    <label for="pm-name">Project Manager</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]" >
+                <div class="input-field">
+                    <input id="ae-name" type="text" ng-model="aeName" ng-readonly="true">
+                    <label for="ae-name">Ejecutivo de Cuenta</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m5 offset-m1 ]"> 
+                <div class="input-field">
+                    <input id="client-name" type="text" ng-model="clientName" ng-readonly="true">
+                    <label for="client-name">Cliente</label>
+                </div>
+            </div>
+            <div class="[ col s12 m5 ]"> 
+                <div class="input-field">
+                    <input id="client-contact" type="text" name="clientContact" ng-model="clientContact" ng-readonly="true">
+                    <label for="client-contact">Contacto cliente</label>
+                </div>
+            </div>
+            <div class="[ col s12 m5 offset-m1 ]"> 
+                <div class="input-field">
+                    <input id="item-name" type="text" name="itemName" ng-model="itemName" ng-readonly="true">
+                    <label for="item-name">Nombre de artículo</label>
+                </div>
+            </div>
+            <div class="[ col s12 m5 ]"> 
+                <div class="input-field">
+                    <input id="item-quantity" type="text" name="itemQuantity" ng-model="itemQuantity" ng-readonly="true">
+                    <label for="item-quantity">Cantidad</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m5 offset-m1 ]"> 
+                <div class="input-field">
+                    <input id="item-type" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
+                    <label for="item-type">Tipo de mercancía</label>
+                </div>
+            </div>
+            <div class="[ col s12 m5 ]"> 
+                <div class="input-field">
+                    <input id="item-state" type="text" name="itemState" ng-model="itemState" ng-readonly="true">
+                    <label for="item-state">Estado</label>
+                </div>
+            </div>
+            <div class="[ col s12 m10 offset-m1 ]"> 
+                <div class="[ input-field ]">
+                    <textarea id="description" class="materialize-textarea" name="description" ng-model="item.description" ng-readonly="true"></textarea>
+                    <label for="description">Descripción</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m5 offset-m1 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" ng-readonly="true">
+            </div>
+            <div class="[ col s12 m5 ]">    
+                <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="expirationDate" ng-model="validityExpirationDate" ng-readonly="true">
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <p class="[ center-align ]">Selecciona el tipo de entrada:</p>
+                    <button class="[ waves-effect ][ btn ]" ng-click="setRequestType( 'UnitItem' )"><i class="[ fa fa-square ][ left ]" ></i>Unitaria</button>
+                    <button class="[ waves-effect ][ btn ]" ng-click="setRequestType( 'BundleItem' )"><i class="[ fa fa-th-large ][ left ]"></i>Paquete</button>
+                    <button class="[ waves-effect ][ btn ]" ng-click="setRequestType( 'BulkItem' )"><i class="[ fa fa-align-justify ][ left ]"></i>Granel</button>
+                </div>
+            </div>
+        </form>
+    </div><!-- row -->
+</div><!-- step 0 Entry request -->
+
+<div ng-include src="'inventory-item/templates/add-unit-item.html'" ng-if="requestType == 'UnitItem'"></div>
+<div ng-include src="'inventory-item/templates/add-bulk-item.html'" ng-if="requestType == 'BulkItem'"></div>
+<div ng-include src="'inventory-item/templates/add-bundle-item.html'" ng-if="requestType == 'BundleItem'"></div>
+
+<script>
+  $('[data-parsley-entry]').parsley();
+</script>
+
+
+
+
+

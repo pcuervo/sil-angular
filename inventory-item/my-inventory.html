@@ -42,7 +42,7 @@
                 <select name="itemType" ng-model="itemType">
                     <option value="" selected disabled>Tipo de mercancía</option>
                     <option value="">Todos</option>
-                    <option ng-repeat="value in ['Laptop', 'Desktop', 'Impresora', 'Celular', 'Pantalla', 'POP', 'POS', 'Promocional', 'Mobiliario', 'Perecedero', 'Alto valor']" value="{{value}}">{{value}}</option>
+                    <option ng-repeat="value in ['Laptop', 'Desktop', 'Impresora', 'Celular', 'Pantalla', 'POP', 'POS', 'Promocional', 'Mobiliario', 'Perecedero']" value="{{value}}">{{value}}</option>
                 </select>
             </div>
             <div class="[ col s12 m3 ][ mt-10 ]">
@@ -68,7 +68,8 @@
     <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
             <tr>
-                <th class="[ center-align ]">Tipo</th>
+                <th class="[ center-align ]"></th>
+                <th class="[ center-align ]"></th>
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ]">Tipo de mercancía</th>
                 <th class="[ center-align ]">Estatus</th>
@@ -80,6 +81,7 @@
         <tbody>
             <tr ng-repeat="i in inventoryItems">
                 <td class="[ ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
+                <td><img src="{{ i.img }}" alt=""></td>
                 <td>{{ i.name }}</td>
                 <td class="[ center-align ]">{{ i.item_type }}</td>
                 <td class="[ center-align ]">{{ getStatus( i.status ) }}</td>
@@ -92,12 +94,12 @@
                     </div>
                     <div ng-if="( i.status == 3 )">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/"><i class="[ fa fa-indent ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.barcode}}"><i class="[ fa fa-indent ]"></i></a>
                         <a class="[ btn waves-effect red ]" href="#/withdraw-item/{{i.id}}"><i class="[ fa fa-outdent ]"></i></a>
                     </div>
                     <div ng-if="( i.status == 2 )">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/"><i class="[ fa fa-indent ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.barcode}}"><i class="[ fa fa-indent ]"></i></a>
                     </div>
                     <div ng-if="( i.status == 4 || i.status == 5 || i.status == 6  )">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>

@@ -9,6 +9,7 @@ conAngular
         service.getProjectManagers = getProjectManagers
         service.getClientContacts = getClientContacts
         service.getAccountExecutives = getAccountExecutives
+        service.getDeliveryUsers = getDeliveryUsers
         service.getRole = getRole
         service.changePassword = changePassword
         return service;
@@ -122,6 +123,17 @@ conAngular
                     callback( response );
                });
         }// getAccountExecutives
+
+        function getDeliveryUsers( callback ){
+            var serviceUrl = $rootScope.apiUrl + 'users/get_delivery_users';
+            $http.get(serviceUrl)
+               .success(function ( response ) {
+                    callback( response.users );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getDeliveryUsers
 
         function getRole( roleId ){
             switch( roleId ){

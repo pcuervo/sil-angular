@@ -1,9 +1,10 @@
 conAngular
-    .controller('ProjectController', ['$scope', '$state', '$stateParams', '$location', 'ClientService', 'ProjectService', 'UserService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $state, $stateParams, $location, ClientService, ProjectService, UserService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
+    .controller('ProjectController', ['$scope', '$state', '$stateParams', '$location', 'ClientService', 'ProjectService', 'UserService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $state, $stateParams, $location, ClientService, ProjectService, UserService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
         
         (function initController() {
             var currentPath = $location.path();
             initProjects( currentPath );
+            fetchNewNotifications();
         })();
 
         
@@ -46,6 +47,7 @@ conAngular
         }// fillClientContact
 
         $scope.addUsersToProject = function(){
+            console.log( $scope.project.id );
             console.log( $scope.projectManagerId );
             console.log( $scope.accountExecutiveId );
             ProjectService.addUsers( $scope.project.id, $scope.projectManagerId, $scope.accountExecutiveId, function ( response ){
@@ -60,6 +62,15 @@ conAngular
             return 'Ejecutivo de cuenta';
         }// getUserRole
 
+        $scope.removeUserFromProject = function( projectId, userId ){
+            console.log( projectId );
+            console.log( userId );
+            ProjectService.removeUser( projectId, userId, function( response ){
+                Materialize.toast( response.success , 4000, 'green');
+                $state.go('/add-user-to-project', { projectId: $scope.project.id }, { reload: true });
+            });
+        }// removeUserFromProject
+
 
         /******************
         * PRIVATE FUNCTIONS
@@ -68,6 +79,8 @@ conAngular
         function initProjects( currentPath ){
             if( currentPath.indexOf( '/edit-project' ) > -1 ){
                 getProject( $stateParams.projectId );
+                getProjectManagersAndAccountExecutives();
+                initProjectUsersDataTable()
                 return;
             }
 
@@ -156,5 +169,11 @@ conAngular
                 $scope.projectUsers = project.users;
             });
         }// getProject
+
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
 
     }]);

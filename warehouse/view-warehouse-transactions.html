@@ -6,7 +6,7 @@
         <thead>
             <tr>
                 <th class="[ center-align ]">Mercancía</th>
-                <th class="[ center-align ]">Ubicación</th>
+                <th class="[ center-align ]">Rack / Ubicación</th>
                 <th class="[ center-align ]">Concepto</th>
                 <th class="[ center-align ]">Unidades</th>
                 <th class="[ center-align ]">Fecha de creación</th>
@@ -15,7 +15,7 @@
         <tbody>
             <tr ng-repeat="t in transactions">
                 <td class="[ center-align ]">{{ t.item_name }}</td>
-                <td class="[ center-align ]">{{ t.location }}</td>
+                <td class="[ center-align ]"><a href="#/view-rack/{{t.rack_id}}">{{ t.rack }}</a> / <a href="#/view-location/{{t.location_id}}">{{ t.location }}</a></td>
                 <td class="[ center-align ]">{{ t.concept }}</td>
                 <td class="[ center-align ]">{{ t.units }}</td>
                 <td class="[ center-align ]">{{ t.created_at | date:'dd/MM/yyyy' }}</td>

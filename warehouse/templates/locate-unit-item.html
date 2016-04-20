@@ -1,0 +1,42 @@
+<div class="row">
+    <h4 class="[ center-align ]">Ubicar en almacén</h4>
+    <form name="location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-unit>
+        <div class="[ col s12 m4 offset-m4 ]"> 
+            <div class="input-field">
+                <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
+                <label for="input_text">Nombre (alias)</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 m6 l4 offset-l2 ]"> 
+            <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                <option value="" disabled selected>Selecciona el rack</option>
+                <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+            </select>
+        </div>
+        <div class="[ col s12 m6 l4 ]"> 
+            <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                <option value="" disabled selected>Selecciona la ubicación</option>
+                <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+            </select>
+        </div>
+        <div ng-show="hasSameLocation">
+            <div class="[ col s12 m4 offset-m2 ]" > 
+                <div class="input-field">
+                    <input id="units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
+                    <label for="units">Unidades que ocupa la mercancía:</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]">Ubicar</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div><!-- row -->
+
+<script>
+    $('[data-parsley-unit]').parsley();
+</script>

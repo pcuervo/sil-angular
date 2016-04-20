@@ -89,6 +89,7 @@ window.conAssets = function(get) {
         parsley: ['assets/parsley/parsley.min.js'],
 
         gmaps: ['assets/gmaps/gmaps.min.js'],
+        geoAutocomplete: ['assets/geo-autocomplete/geo-autocomplete.js'],
 
         jvectormap: [
             'assets/jquery-jvectormap/jquery-jvectormap.css',
@@ -299,7 +300,6 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
-
     .state('/add-bulk-item', {
         url: "/add-bulk-item",
         templateUrl: "inventory-item/add-bulk-item.html",
@@ -332,7 +332,6 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
-
     .state('/add-bundle-item', {
         url: "/add-bundle-item",
         templateUrl: "inventory-item/add-bundle-item.html",
@@ -365,9 +364,8 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
-
     .state('/re-entry', {
-        url: "/re-entry",
+        url: "/re-entry/:barcode",
         templateUrl: "inventory-item/re-entry.html",
         controller: "CheckInController",
         data: {
@@ -394,6 +392,33 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                     serie: true, // used for synchronous load chart scripts
                     insertBefore: '#ngInsertBefore',
                     files: conAssets('sparkline,flot,rickshaw,jvectormap')
+                }]);
+            }]
+        }
+    })
+    .state('/request-entry', {
+        url: "/request-entry",
+        templateUrl: "inventory-item/request-entry.html",
+        controller: "CheckInController",
+        data: {
+            pageTitle: 'Solicitud de entrada',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Entradas',
+                href: '#/check-in'
+            }, {
+                title: 'Solicitud de entrada'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                    files: conAssets('parsley')
                 }]);
             }]
         }
@@ -427,6 +452,76 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                     insertBefore: '#ngInsertBefore',
                     files: conAssets('sparkline,flot,rickshaw,jvectormap')
                 }]);
+            }]
+        }
+    })
+    .state('/pending-entry-requests', {
+        url: "/pending-entry-requests",
+        templateUrl: "inventory-item/pending-entry-requests.html",
+        controller: "CheckInController",
+        data: {
+            pageTitle: 'Entradas pendientes',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Entradas',
+                href: '#/check-in'
+            }, {
+                title: 'Entradas pendientes'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley,jsBarcode')
+                }]);
+            }]
+        }
+    })
+    .state('/authorize-entry', {
+        url: "/authorize-entry/:itemId",
+        templateUrl: "inventory-item/authorize-entry.html",
+        controller: "CheckInController",
+        data: {
+            pageTitle: 'Entrada',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
+            }, {
+                title: 'Entradas'
+            },
+            {
+                title: 'Autorizar entrada'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('jsBarcode,parsley')
+                }]);
+            }]
+        }
+    })
+    .state('/pending-withdrawals', {
+        url: "/pending-withdrawals",
+        templateUrl: "inventory-item/pending-withdrawals.html",
+        controller: "CheckOutController",
+        data: {
+            pageTitle: 'Salidas pendientes',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Salidas',
+                href: '#/check-out'
+            }, {
+                title: 'Salidas pendientes'
             }]
         }
     })
@@ -1333,6 +1428,145 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/notifications', {
+        url: "/notifications",
+            templateUrl: "notification/notifications.html",
+            controller: "NotificationController",
+            data: {
+                pageTitle: 'Notifications',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Ver proveedores',
+            }]
+        }
+    })
+
+    .state('/delivery-dashboard', {
+        url: "/delivery-dashboard",
+            templateUrl: "delivery/delivery-dashboard.html",
+            controller: "DeliveryController",
+            data: {
+                pageTitle: 'Envíos',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Dashboard envíos',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley, dataTables')
+                }]);
+            }]
+        }
+    })
+    .state('/multiple-items-delivery', {
+        url: "/multiple-items-delivery",
+        templateUrl: "delivery/multiple-items-delivery.html",
+        controller: "DeliveryController",
+        data: {
+            pageTitle: 'Envío',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
+            }, {
+                title: 'Envíos'
+            },
+            {
+                title: 'Envíos'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables,parsley,geoAutocomplete,gmaps')
+                }]);
+            }]
+        }
+    })
+    .state('/single-item-delivery', {
+        url: "/single-item-delivery",
+        templateUrl: "delivery/single-item-delivery.html",
+        controller: "DeliveryController",
+        data: {
+            pageTitle: 'Envío',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
+            }, {
+                title: 'Envíos'
+            },
+            {
+                title: 'Envíos'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
+        }
+    })
+    .state('/new-delivery', {
+        url: "/new-delivery/:itemId",
+        templateUrl: "delivery/new-delivery.html",
+        controller: "DeliveryController",
+        data: {
+            pageTitle: 'Envíos',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
+            }, {
+                title: 'Envíos'
+            },
+            {
+                title: 'Envío'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables,parsley,geoAutocomplete,gmaps')
+                }]);
+            }]
+        }
+    })
+    .state('/view-delivery', {
+        url: "/view-delivery/:deliveryId",
+        templateUrl: "delivery/view-delivery.html",
+        controller: "DeliveryController",
+        data: {
+            pageTitle: 'Detalle artículo',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Detalle artículo'
+            }]
+        }, resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('geoAutocomplete,gmaps,parsley')
+                }]);
+            }]
+        }
+    })
 
 }]);
 
@@ -1383,6 +1617,17 @@ var FormatHelper = FormatHelper || {};
 FormatHelper = {
     slug: function( text ){
         return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
+    },
+    dateYMD: function( date, separator ){
+        var dd = date.getDate();
+        var mm = date.getMonth()+1; 
+        var yyyy = date.getFullYear();
+
+        if( dd<10 ) dd = '0' + dd;
+        if( mm<10 ) mm = '0' + mm;
+
+        var date = yyyy + separator + mm + separator+ dd;
+        return date;
     }
 };
 
@@ -1397,4 +1642,9 @@ LoaderHelper = {
         var loader = document.getElementById('loader');
         loader.className += ' hide';
     }
+}
+
+var NotificationHelper = NotificationHelper || {};
+NotificationHelper = {
+    updateNotifications: function( numNotifications ){ $('.notification-menu span').text( numNotifications ); }
 }

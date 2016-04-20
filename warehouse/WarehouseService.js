@@ -15,6 +15,7 @@ conAngular
         service.getItems = getItems;
         service.getItemLocation = getItemLocation;
         service.getWarehouseTransactions = getWarehouseTransactions
+        service.deleteRack = deleteRack
         return service;
 
 
@@ -102,7 +103,7 @@ conAngular
                });
         }// getRackAvailableLocations
 
-        function locateItem( inventoryItemId, warehouseLocationId, units, quantity, isInventoryItem, callback ){
+        function locateItem( inventoryItemId, warehouseLocationId, units, quantity, isInventoryItem, actableType, callback ){
             var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/locate_item';
             $http.post( serviceUrl, 
                 { 
@@ -110,7 +111,8 @@ conAngular
                     warehouse_location_id:  warehouseLocationId,
                     units:                  units,
                     quantity:               quantity,
-                    is_inventory_item:       isInventoryItem,
+                    is_inventory_item:      isInventoryItem,
+                    actable_type:           actableType
                 }
             )
             .success(function( response ) {
@@ -214,6 +216,17 @@ conAngular
                     callback( response );
                });
         }// getWarehouseTransactions
+
+        function deleteRack( id, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'warehouse_racks/destroy';
+            $http.post( serviceUrl, { id: id } )
+               .success(function ( response ) {
+                    callback ( response.warehouse_rack );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// deleteRack
 
     }]);
 

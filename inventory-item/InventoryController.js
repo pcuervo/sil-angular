@@ -117,18 +117,24 @@ conAngular
                 $scope.selectedClient = $rootScope.globals.currentUser.id;
                 InventoryItemService.search( '', $scope.selectedClient, '', '', '', '', '', '', function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
+                    console.log( inventoryItems );
                 });
             }
         }// fetchInventory
 
         function initInventoryDataTable(){
             $scope.dtOptions = DTOptionsBuilder.newOptions()
-                    .withPaginationType('full_numbers')
-                    .withDisplayLength(20)
-                    .withDOM('pitp')
-                    .withOption('responsive', true)
-                    .withOption('order', []);
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('pitp')
+                .withOption('responsive', true)
+                .withOption('order', []);
+            $scope.dtColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0).notSortable()
+            ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+
         }// initInventoryDataTable
 
         function getItem( id ){

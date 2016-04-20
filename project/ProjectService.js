@@ -9,6 +9,7 @@ conAngular
         service.getProjectClient = getProjectClient;
         service.register = register;
         service.addUsers = addUsers;
+        service.removeUser = removeUser;
 
         return service;
 
@@ -41,7 +42,6 @@ conAngular
             var serviceUrl = $rootScope.apiUrl  + 'projects/by_user/' + userId;
             $http.get ( serviceUrl )
                .success(function ( response ) {
-                    console.log(response);
                     callback( response.projects );
                })
                .error(function ( response ) {
@@ -94,19 +94,34 @@ conAngular
                });
         }// register
 
-         function addUsers( projectId, projectManagerId, accountExecutiveId, callback ){
+        function addUsers( projectId, projectManagerId, accountExecutiveId, callback ){
             var serviceUrl = $rootScope.apiUrl  + 'projects/add_users';
             $http.post(serviceUrl, {
-                    project_id:     projectId,
-                    new_pm_id:      projectManagerId,
-                    new_ae_id:      accountExecutiveId,
-                })
-               .success(function ( response ) {
-                    callback ( response );
-               })
-               .error(function ( response ) {
-                    callback ( response );
-               });
+                project_id:     projectId,
+                new_pm_id:      projectManagerId,
+                new_ae_id:      accountExecutiveId,
+            })
+           .success(function ( response ) {
+                callback ( response );
+           })
+           .error(function ( response ) {
+                callback ( response );
+           });
         }// addUsers
+
+        function removeUser( projectId, userId, callback ){
+            var serviceUrl = $rootScope.apiUrl  + 'projects/remove_user';
+            $http.post(serviceUrl, {
+                user_id:     userId,
+                project_id:  projectId,
+            })
+           .success(function ( response ) {
+                console.log( response )
+                callback ( response );
+           })
+           .error(function ( response ) {
+                callback ( response );
+           });
+        }// removeUser
 
     }]);

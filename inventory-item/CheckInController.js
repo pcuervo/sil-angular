@@ -1,5 +1,5 @@
 conAngular
-	.controller('CheckInController', ['$scope', '$rootScope', '$state', '$stateParams', 'ProjectService', 'InventoryItemService', 'UnitItemService', 'BulkItemService', 'BundleItemService', 'WarehouseService', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$interval', '$location', '$filter', function( $scope, $rootScope, $state, $stateParams, ProjectService, InventoryItemService, UnitItemService, BulkItemService, BundleItemService, WarehouseService, SupplierService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $interval, $location, $filter ){
+	.controller('CheckInController', ['$scope', '$rootScope', '$state', '$stateParams', 'ProjectService', 'InventoryItemService', 'UnitItemService', 'BulkItemService', 'BundleItemService', 'WarehouseService', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$interval', '$location', '$filter', function( $scope, $rootScope, $state, $stateParams, ProjectService, InventoryItemService, UnitItemService, BulkItemService, BundleItemService, WarehouseService, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $interval, $location, $filter ){
 
 		/******************
         * CONSTANTS
@@ -13,6 +13,7 @@ conAngular
             $scope.role = $rootScope.globals.currentUser.role;
             var currentPath = $location.path();
             initCheckIn( currentPath ); 
+            fetchNewNotifications();
 		})();
 
 		
@@ -22,38 +23,59 @@ conAngular
 
 		$scope.captureItemData = function(){
             $scope.setActiveStep( CONFIRMATION_STEP );
-            getItemImg();
-            $scope.barCodeVal = FormatHelper.slug( $scope.itemName );
+            switch( $scope.requestType ){
+                case 'UnitItem':
+                    getItemImg( 'itemImgUnit' );
+                    break;
+                case 'BulkItem':
+                    getItemImg( 'itemImgBulk' );
+                    break;
+                case 'BulkItem':
+                    getItemImg( 'itemImgBulk' );
+                    break;
+                default:
+                    getItemImg();                
+            }
+            
+            var randomNum = Math.floor((Math.random() * 100) + 1);
+            $scope.barCodeVal = FormatHelper.slug( $scope.itemName + ' ' + randomNum );
             $('.js-barcode').JsBarcode( $scope.barCodeVal );
-		}      
+            $scope.selectedProjectText = $('[name="project"] option:selected').text();
+            $scope.selectedPMText = $('[name="pm"] option:selected').text();
+            $scope.selectedAEText = $('[name="ae"] option:selected').text();
+            $scope.selectedItemStateText = $('[name="itemState"] option:selected').text();
+            $scope.selectedItemTypeText = $('[name="itemType"] option:selected').text();
+            $scope.selectedStorageTypeText = $('[name="storageType"] option:selected').text();
+            $scope.selectedProviderText = $('[name="deliveryCompany"] option:selected').text();
+		} 
 
 		$scope.setActiveStep = function( step ){
             window.scrollTo(0, 0);
 			$scope.currentStep = step;
 		}// setActiveStep
 
-		$scope.registerItem = function( type ){
+		$scope.registerItem = function( type, itemRequestId ){
             LoaderHelper.showLoader( 'Registrando entrada...' );
             switch( type ){
                 case 'unit':
-                    registerUnitItem();
+                    registerUnitItem( itemRequestId );
                     break;
                 case 'bulk':
-                    registerBulkItem();
+                    registerBulkItem( itemRequestId );
                     break;
                 case 'bundle':
-                    registerBundleItem();
+                    registerBundleItem( itemRequestId );
                     break;
             }
-
 		}// registerItem
 
         $scope.fillProjectData = function(){
-
             fillProjectUsersSelects();
-            fillProjectClient();
-                   
+            fillProjectClient( $scope.selectedProject );
         }// fillProjectData
+
+        $scope.selectAE = function( ae ){ $scope.selectedAE = ae; }
+        $scope.selectPM = function( pm ){ $scope.selectedPM = pm; }
 
         $scope.getEntryType = function( type ){
             switch( type ){
@@ -86,7 +108,7 @@ conAngular
             switch( storageType ){
                 case 'Permanente':
                     var currentDate = new Date();
-                    currentDate.setMonth(currentDate.getMonth() + 6);
+                    currentDate.setMonth(currentDate.getMonth() + 12);
                     $scope.validityExpirationDate = currentDate;
                     $('.js-expiration-date-label').text('Fecha vigencia (mm/dd/aaaa)');
                     $('#serial-number').removeAttr('required');
@@ -142,6 +164,7 @@ conAngular
                 $scope.hasSameLocation = true;
                 $scope.sameLocationType = true;
                 $scope.currentLocation = location;
+                $scope.selectedLocation = locationId;
             });
         }// showLocationDetails
 
@@ -156,7 +179,7 @@ conAngular
 
         $scope.addToLocation = function( type ){
  
-            LoaderHelper.showLoader( 'Ubicando en almacén...' );
+            LoaderHelper.showLoader( 'Ubicando ' + $scope.item.name + ' en almacén' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
                 switch( $scope.item.actable_type ){
                     case 'UnitItem': 
@@ -168,8 +191,11 @@ conAngular
                     default:
                         var quantity = $scope.parts.length;
                 }
-                console.log( quantity );
-                WarehouseService.locateItem( $scope.registeredItemId, $scope.selectedLocation, $scope.units, quantity, false, function( response ) {
+                if( 'undefined' == typeof $scope.units ){
+                    $scope.units = this.units;
+                }
+
+                WarehouseService.locateItem( $scope.registeredItemId, $scope.selectedLocation, $scope.units, quantity, true, $scope.item.actable_type, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                     $state.go('/check-in', {}, { reload: true });
                 });
@@ -186,25 +212,27 @@ conAngular
                         units:      $('#units-' + i).val()
                     }
                 }); 
-                WarehouseService.locateBundle( $scope.registeredItemId, partsLocation, $scope.parts.length, false, function( response ) {
+                WarehouseService.locateBundle( $scope.registeredItemId, partsLocation, $scope.parts.length, true, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                     $state.go('/check-in', {}, { reload: true });
                 });
                 return;
             }
-            WarehouseService.locateBulk( $scope.registeredItemId, $scope.bulkLocations, false, function( response ) {
+            WarehouseService.locateBulk( $scope.registeredItemId, $scope.bulkLocations, true, function( response ) {
                 Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                 $state.go('/check-in', {}, { reload: true });
             });
             
         }// addToLocation
 
-        $scope.searchByBarcode = function(){
+        $scope.searchByBarcode = function( barcode ){
 
-            InventoryItemService.byBarcode( $scope.barcode, function( item ){
+            console.log( barcode );
+            var isReEntry = true;
+            InventoryItemService.byBarcode( barcode, isReEntry, function( item ){
                 if( item.errors ){
                     $scope.hasItem = false;
-                    Materialize.toast( 'No se encontró ningún artículo con código de barras: "' + $scope.barcode + '"', 4000, 'red');
+                    Materialize.toast( 'No se encontró ningún artículo con código de barras: "' + barcode + '"', 4000, 'red');
                     return;
                 }
                 $scope.item = item;
@@ -256,6 +284,13 @@ conAngular
         }
 
         $scope.addUnitsToLocation = function(){
+            if( $scope.itemRequestId > 0 ){
+                $scope.unitsToLocate = this.unitsToLocate;
+                $scope.selectedLocation = this.selectedLocation;
+                $scope.units = this.units;
+                $scope.selectedRack = this.selectedRack;
+            }
+
             var bulkLocation = {
                 locationId:     $scope.selectedLocation,
                 quantity:       $scope.unitsToLocate,
@@ -266,11 +301,78 @@ conAngular
             $scope.bulkLocations.push( bulkLocation );
             $scope.pendingUnitsToLocate -= $scope.unitsToLocate;
             $scope.hasMultipleLocations = true;
+
+            if( $scope.itemRequestId > 0 ){
+                this.selectedLocation = '';
+                this.selectedRack = '';
+                this.unitsToLocate = '';
+                this.units = '';
+            }
+
             $scope.selectedLocation = '';
             $scope.selectedRack = '';
             $scope.unitsToLocate = '';
             $scope.units = '';
         }
+
+        $scope.requestEntry = function(){
+            var pmId = ( typeof $scope.projectManagerId == 'undefined' ) ? $scope.selectedPM : $scope.projectManagerId;
+            var aeId = ( typeof $scope.accountExecutiveId == 'undefined' ) ? $scope.selectedAE : $scope.accountExecutiveId;
+            InventoryItemService.requestEntry( $scope.itemName, $scope.itemQuantity, $scope.description, $scope.itemType, $scope.selectedProject, pmId, aeId, $scope.itemState, $scope.entryDate, $scope.validityExpirationDate, function( response ){
+                Materialize.toast( '¡Solicitud de entrada enviada!', 4000, 'green');
+                $state.go('/check-in', {}, { reload: true });
+            }); 
+        }
+
+        $scope.setRequestType = function( type ){
+            this.itemType = $scope.item.item_type;
+            $scope.requestType = type;
+            $scope.currentStep = 1;
+            if( 'BulkItem' == type ){
+                $scope.quantity = $scope.itemQuantity;
+            }
+        }
+
+        $scope.printSummary = function(){
+            window.print();
+        }
+
+        $scope.printBarcode = function( divId ){
+
+            var barcodeEl = $(divId).html();
+            console.log( $scope.serialNumber );
+            var serialNumber = ( 'undefined' == typeof $scope.serialNumber ) ? '' : $scope.serialNumber;
+
+            var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
+            barcodeWindow.document.write('<html><head><title>' + $scope.barcode + '</title>');
+            /*optional stylesheet*/ //barcodeWindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+            barcodeWindow.document.write('</head><body >');
+            barcodeWindow.document.write( barcodeEl );
+            barcodeWindow.document.write('<p>Nombre: ' + $scope.item.name + '</p >');
+            barcodeWindow.document.write('<p>Proyecto: ' + $scope.item.project_number + ' - ' + $scope.selectedProjectText + '</p >');
+            barcodeWindow.document.write('<p>Cliente: ' + $scope.clientName + ' - ' + $scope.clientContact + '</p >');
+            barcodeWindow.document.write('<p>PM: ' + $scope.selectedPMText + '</p >');
+            barcodeWindow.document.write('<p>Ejecutivo de cuenta: ' + $scope.selectedAEText + '</p >');
+            if( $scope.serialNumber != '' ){
+                barcodeWindow.document.write('<p>Número de serie: ' + serialNumber + '</p >');
+            }
+            barcodeWindow.document.write('</body></html>');
+
+            barcodeWindow.document.close(); // necessary for IE >= 10
+            barcodeWindow.focus(); // necessary for IE >= 10
+
+            barcodeWindow.print();
+            barcodeWindow.close();
+
+            return true;
+        }
+
+        $scope.getStatus = function( statusId ){
+            InventoryItemService.getStatus( statusId, function( status ){
+                $scope.itemStatus = status;
+            }); 
+        }
+
 
 
 		/******************
@@ -283,6 +385,10 @@ conAngular
                 case '/pending-entries':
                     getPendingEntries();
                     initPendingEntriesDataTable();
+                    break;
+                case '/pending-entry-requests':
+                    getPendingEntryRequests();
+                    initPendingEntryRequestsDataTable();
                     break;
                 case '/check-in':
                     getLatestEntries();
@@ -308,15 +414,40 @@ conAngular
                     $scope.hasLocation = false;
                     fetchSuppliers();
                     break;
-                case '/re-entry':
-                    fetchSuppliers();
-                    $scope.hasPartsToReturn = false;
+                case '/request-entry':
                     $scope.entryDate = new Date();
+                    $scope.itemQuantity = 1;
+                    fetchProjects();
                     break;
+            }
+
+            if( currentPath.indexOf( '/re-entry/' ) > -1 ){
+                if( 0 != $stateParams.barcode ){
+                    getByBarcode( $stateParams.barcode );
+                    $scope.hasItem = true;
+                    $scope.exitDate = new Date();
+                }
+                fetchSuppliers();
+                $scope.hasPartsToReturn = false;
+                $scope.entryDate = new Date();
             }
 
             if( currentPath.indexOf( '/edit-item' ) > -1 ){
                 getItem( $stateParams.itemId );
+                $scope.$on('$includeContentLoaded', function ( e, template ) {
+                    if( 'inventory-item/templates/edit-unit-item.html' == template || 'inventory-item/templates/edit-bulk-item.html' == template || 'inventory-item/templates/edit-bundle-item.html' == template ){
+                        $('.js-barcode').JsBarcode( $scope.item.barcode );
+                    }
+                });
+                
+            }
+
+            if( currentPath.indexOf( '/authorize-entry' ) > -1 ){
+                $scope.currentStep = 0;
+                getItemRequest( $stateParams.itemId );
+                fetchSuppliers();
+                fetchWarehouseRacks();
+                $scope.hasLocation = false;
             }
 
         }// initCheckIn
@@ -329,6 +460,7 @@ conAngular
                         $scope.projects = projects;
                         $scope.projectManagerName = $rootScope.globals.currentUser.name;
                         $scope.projectManagerId = $rootScope.globals.currentUser.id;
+                        $scope.selectedPM = $rootScope.globals.currentUser.id;
                     });
                     break;
                 case 3:
@@ -336,6 +468,7 @@ conAngular
                         $scope.projects = projects;
                         $scope.accountExecutiveName = $rootScope.globals.currentUser.name;
                         $scope.accountExecutiveId = $rootScope.globals.currentUser.id;
+                        $scope.selectedAE = $rootScope.globals.currentUser.id;
                     });
                     break;
                 default:
@@ -349,6 +482,7 @@ conAngular
         function fetchWarehouseRacks(){
 
             WarehouseService.getRacks( function( racks ){
+                console.log( racks );
                 $scope.racks = racks;
             });
 
@@ -365,8 +499,7 @@ conAngular
 
                 $scope.projectManagers = [];
                 $scope.accountExecutives = [];
-                angular.forEach(response.users, function( user ) {
-
+                angular.forEach( response.users, function( user ) {
                     switch( user.role ){
                         case 2:
                             if( 2 == $scope.role ) break;
@@ -377,14 +510,22 @@ conAngular
                             $scope.accountExecutives.push( user );
                     }
                 })
+
+                if( $scope.projectManagers.length == 0 && 2 != $scope.role  ){
+                    Materialize.toast('El proyecto que seleccionaste no tiene Project Managers relacionados.', 6000, 'red');
+                }
+                if( $scope.accountExecutives.length == 0 && 3!= $scope.role  ){
+                    Materialize.toast('El proyecto que seleccionaste no tiene Ejecutivos de Cuenta relacionados.', 6000, 'red');
+                }
+
                 $scope.validSelectedProject = true;  
             });
 
         }// fillProjectUsersSelects
 
-        function fillProjectClient(){
+        function fillProjectClient( projectId ){
 
-            ProjectService.getProjectClient( $scope.selectedProject, function ( response ){
+            ProjectService.getProjectClient( projectId, function ( response ){
 
                 $scope.clientName = response.client.name;
                 $scope.clientContact = response.client.contact_name;
@@ -393,9 +534,9 @@ conAngular
 
         }// fillProjectClient
 
-        function getItemImg(){
-
-            var fileInput = document.getElementById('itemImg');
+        function getItemImg( type = 0 ){
+            var imgId = type == 0 ? 'itemImg' : type;
+            var fileInput = document.getElementById( imgId );
             file = fileInput.files[0];
             fr = new FileReader();
             fr.readAsDataURL(file);
@@ -403,13 +544,17 @@ conAngular
                 $scope.itemImg = fr.result;
                 $scope.itemImgExt = file.name.split('.').pop().toLowerCase();
             }
-
         }// getItemImg
 
-        function registerUnitItem(){
+        function registerUnitItem( itemRequestId = 0 ){
 
+            var status = 1;
+            if( $('#checkbox-validation:checked').length ){
+                status = 7;
+            }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
-            UnitItemService.create( $scope.serialNumber, $scope.brand, $scope.model, $scope.itemName, $scope.itemState, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, function ( response ){
+            var isHighValue = $('#checkbox-high-value:checked').length;
+            UnitItemService.create( $scope.serialNumber, $scope.brand, $scope.model, $scope.itemName, $scope.itemState, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -418,17 +563,24 @@ conAngular
                     return;
                 }
 
-                $scope.registeredItemId = response.unit_item.id;
+                $scope.registeredItemId = response.inventory_item.id;
+                $scope.item = response.inventory_item;
+                $scope.itemRequestId = itemRequestId;
                 $scope.showMoreActions = true;
                 Materialize.toast('Entrada unitaria: "' + $scope.itemName + '" registrada exitosamente!', 4000, 'green');
             });
 
         }// registerUnitItem
 
-        function registerBulkItem(){
+        function registerBulkItem( itemRequestId = 0 ){
 
+            var status = 1;
+            if( $('#checkbox-validation:checked').length ){
+                status = 7;
+            }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
-            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, function ( response ){
+            var isHighValue = $('#checkbox-high-value:checked').length;
+            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -437,30 +589,43 @@ conAngular
                     return;
                 }
 
-                $scope.registeredItemId = response.bulk_item.id;
+                console.log( response.inventory_item );
+
+                $scope.registeredItemId = response.inventory_item.id;
+                $scope.item = response.inventory_item;
+                $scope.itemRequestId = itemRequestId;
+                $scope.quantity = parseInt( response.inventory_item.quantity );
                 $scope.showMoreActions = true;
                 Materialize.toast('Entrada a granel: "' + $scope.itemName + '" registrada exitosamente!', 4000, 'green');
             });
 
         }// registerBulkItem
 
-        function registerBundleItem(){
+        function registerBundleItem( itemRequestId = 0 ){
 
+            var status = 1;
+            if( $('#checkbox-validation:checked').length ){
+                status = 7;
+            }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
-            BundleItemService.create( $scope.itemName, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.parts, $scope.validityExpirationDate, $scope.itemValue,  function ( response ){
+            var isHighValue = $('#checkbox-high-value:checked').length;
+            BundleItemService.create( $scope.itemName, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.parts, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, function ( response ){
 
-                    LoaderHelper.hideLoader();
-                    if( response.errors ) {
-                        ErrorHelper.display( response.errors );
-                        $scope.currentStep = 1;
-                        return;
-                    }
+                LoaderHelper.hideLoader();
+                if( response.errors ) {
+                    ErrorHelper.display( response.errors );
+                    $scope.currentStep = 1;
+                    return;
+                }
 
-                    $scope.registeredItemId = response.bundle_item.id;
-                    $scope.item = response.bundle_item;
-                    $scope.showMoreActions = true;
-                    Materialize.toast('Entrada paquete: "' + $scope.itemName + '" registrada exitosamente!', 4000, 'green');
-                    //$state.go('/check-in', {}, { reload: true });
+                console.log( response.inventory_item );
+
+                $scope.registeredItemId = response.inventory_item.id;
+                $scope.item = response.inventory_item;
+                $scope.parts = response.inventory_item.parts;
+                $scope.itemRequestId = itemRequestId;
+                $scope.showMoreActions = true;
+                Materialize.toast('Entrada paquete: "' + $scope.itemName + '" registrada exitosamente!', 4000, 'green');
             });
 
         }// registerBundleItem
@@ -468,6 +633,7 @@ conAngular
         function getLatestEntries(){
 
             InventoryItemService.getLatestEntries( function( latestInventoryItems ){
+                console.log( latestInventoryItems );
                 $scope.latestInventoryItems = latestInventoryItems;
             }); 
 
@@ -483,7 +649,9 @@ conAngular
                     .withOption('order', [])
                     .withOption('searching', false);
             $scope.dtLatestEntriesColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(4).notSortable()
+                DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                DTColumnDefBuilder.newColumnDef(1).notSortable(),
+                DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
@@ -508,6 +676,27 @@ conAngular
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initPendingEntriesDataTable
+
+        function getPendingEntryRequests(){
+            InventoryItemService.getPendingEntryRequests( function( pendingInventoryItems ){
+                console.log( pendingInventoryItems );
+                $scope.pendingInventoryItems = pendingInventoryItems;
+            }); 
+        }// getPendingEntryRequests
+
+        function initPendingEntryRequestsDataTable(){
+            $scope.dtPendingEntryRequestsOptions = DTOptionsBuilder.newOptions()
+                    .withPaginationType('full_numbers')
+                    .withDisplayLength(20)
+                    .withDOM('it')
+                    .withOption('responsive', true)
+                    .withOption('order', [])
+                    .withOption('searching', false);
+            $scope.dtPendingEntryRequestsColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(6).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initPendingEntryRequestsDataTable
 
         function reentryUnitItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments  ){
             InventoryItemService.reentryUnitItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, function( response ){
@@ -536,9 +725,6 @@ conAngular
         function reentryBundleItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments  ){
             var parts = getBundlePartsToAdd();
             var quantity = parts.length;
-            console.log( deliveryCompany );
-            console.log( deliveryCompanyContact );
-            console.log( additionalComments );
 
             InventoryItemService.reentryBundleItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, parts, quantity, function( response ){
 
@@ -547,7 +733,7 @@ conAngular
                     return;
                 }
                 Materialize.toast( response.success, 4000, 'green');
-                //$state.go('/check-in', {}, { reload: true });
+                $state.go('/check-in', {}, { reload: true });
             });
         }// withdrawUnitItem
 
@@ -568,7 +754,6 @@ conAngular
         function getBundleMissingParts( parts ){
             var validParts = [];
             $.each( parts, function( i, part ){
-                console.log( part );
                 if( 2 == part.status){
                     validParts.push( part );
                     return true;
@@ -587,21 +772,60 @@ conAngular
                 }
                 initItem( item );
                 $scope.item = item;
-                if( 'BundleItem' == item.actable_type ){
-                    $scope.itemParts = [];
-                    $scope.hasPartsToWithdraw = false;
-                    $.each( item.parts, function(i, part){
-                        if( part.status == 2 ) return true;
 
-                        $scope.itemParts.push( part );
-                        $scope.hasPartsToWithdraw = true;
-                    });
+                switch( item.actable_type ){
+                    case 'UnitItem':
+                        $scope.serialNumber = item.serial_number;
+                        $scope.brand = item.brand;
+                        $scope.model = item.model;
+                        break;
+                    case 'BundleItem':
+                        initItemPartsDataTable();
+                        $scope.itemParts = [];
+                        $scope.hasPartsToWithdraw = false;
+                        $.each( item.parts, function(i, part){
+                            if( part.status == 2 ) return true;
+
+                            $scope.itemParts.push( part );
+                            $scope.hasPartsToWithdraw = true;
+                        });
+                        break;
                 }
             });
 
         }// getItem
 
+        function getItemRequest( id ){
+
+            InventoryItemService.getItemRequest( id, function( item ){
+                console.log( item );
+                fillProjectClient( item.project_id )
+                $scope.item = item;
+                $scope.projectName = item.project;
+                $scope.selectedProject = item.project_id;
+                $scope.pmName = item.pm;
+                $scope.aeName = item.ae;
+                $scope.itemName = item.name;
+                $scope.itemQuantity = item.quantity;
+                $scope.itemType = item.item_type;
+                $scope.description = item.description;
+                $scope.entryDate = new Date( item.entry_date );
+                if( null != item.validity_expiration_date ){
+                    $scope.validityExpirationDate = new Date( item.validity_expiration_date );
+                }
+                getItemState( item.state );
+            });
+
+        }// getItemRequest
+
+        function getItemState( stateId ){
+            InventoryItemService.getItemState( stateId, function( state ){
+                $scope.itemState = state;
+            });
+        }
+
         function initItem( item ){
+            $scope.id = item.id;
             $scope.project = item.project;
             $scope.pm = item.pm;
             $scope.ae = item.ae;
@@ -611,14 +835,80 @@ conAngular
             $scope.itemName = item.name;
             $scope.itemState = item.state;
             $scope.itemType = item.item_type;
+            $scope.storageType = item.storage_type;
             $scope.itemValue = item.value;
-            $scope.entryDate = new Date( $filter('date')(item.created_at, 'dd/MM/yyyy') );
-            $scope.validityExpirationDate = new Date( $filter('date')(item.validity_expiration_date, 'dd/MM/yyyy') );;
-            $('.js-barcode').JsBarcode( item.barcode );
+            $scope.getStatus( item.status );
+            $scope.itemQuantity = item.quantity;
+            $scope.entryDate = new Date( $filter('date')( item.created_at, 'yyyy-MM-dd' ) );
+            $scope.validityExpirationDate = new Date( $filter('date')( item.validity_expiration_date, 'yyyy-MM-dd' ) );
+            $scope.hasLocations = 0;
+
+            if( item.locations.length > 0 ){
+                $scope.hasLocations = 1;
+                initItemLocationsDataTable();
+            }
             console.log( item );
         }// initItem
 
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
 
+        function getByBarcode( barcode ){
+            $scope.hasBarcode = true;
+            var isReEntry = true;
+            InventoryItemService.byBarcode( barcode, isReEntry, function( item ){
+                if( item.errors ){
+                    $scope.hasItem = false;
+                    Materialize.toast( 'No se encontró ningún artículo con código de barras: "' + barcode + '"', 4000, 'red');
+                    return;
+                }
+                $scope.item = item;
+                $scope.hasItem = true;
+                $scope.exitDate = new Date();
+                console.log( item );
+
+                if( 'BundleItem' == item.actable_type ){
+                    $scope.hasPartsToReturn = true;
+                    $scope.parts = getBundleMissingParts( item.parts );
+                }
+            });
+
+        }// getByBarcode
+
+        function initItemLocationsDataTable(){
+            $scope.dtItemLocationsOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false);
+            $scope.dtItemLocationsColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                DTColumnDefBuilder.newColumnDef(1).notSortable(),
+                DTColumnDefBuilder.newColumnDef(2).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initItemLocationsDataTable
+
+        function initItemPartsDataTable(){
+            $scope.dtItemPartsOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false);
+            $scope.dtItemPartsColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                DTColumnDefBuilder.newColumnDef(1).notSortable(),
+                DTColumnDefBuilder.newColumnDef(2).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initItemPartsDataTable
 
 // 		// Dashboard 
 // 		// sparkline 1

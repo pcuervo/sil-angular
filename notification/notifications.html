@@ -1,0 +1,63 @@
+<h3 class="center-align">Notificaciones</h3>
+
+<div class="[ row ]">
+    <div class="col s12 m10 offset-m1">
+        <div class="[ card ]">
+            <div class="[ title ]">
+                <h5 class="[ text-uppercase ]">Nuevas</h5>
+                <a class="[ minimize ]" href="#"><i class="[ mdi-navigation-expand-less ]"></i></a>
+            </div>
+            <div class="[ content ]">
+                <div id="{{ n.id }}" ng-repeat="n in unreadNotifications">
+                    <div class="[ row ]">
+                        <div class="[ col s8 ]">
+                            <h5>{{ n.title }}</h5>
+                        </div>
+                        <div class="[ col s4 ][ right-align ]">
+                            <small>{{ n.created_at | date:"dd/MM/yyyy h:mma" }}</small>
+                        </div>
+                    </div>
+                    <div class="[ row ]">
+                        <div class="[ col s8 ]">
+                            <p>{{ n.message }}</p>
+                        </div>
+                        <div class="[ col s4 ][ right-align ]">
+                            <a href="{{ getNotificationUrl( n.title, n.inventory_item_id ) }}" class="[ btn ]"><i class="[ fa fa-eye ]"></i></a>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <p class="[ notification-text ]"></p>
+            </div>
+        </div>
+        <div class="[ card ][ minimized ]">
+            <div class="[ title ]">
+                <h5 class="[ text-uppercase ]">Leídas</h5>
+                <a class="[ minimize ]" href="#"><i class="[ mdi-navigation-expand-less ]"></i></a>
+            </div>
+            <div class="[ content ]">
+                <div id="{{ n.id }}" ng-repeat="n in readNotifications">
+                    <div class="[ row ]">
+                        <div class="[ col s8 ]">
+                            <h5>{{ n.title }}</h5>
+                        </div>
+                        <div class="[ col s4 ][ right-align ]">
+                            <small>{{ n.created_at | date:"dd/MM/yyyy h:mma" }}</small>
+                        </div>
+                    </div>
+                    <div class="[ row ]">
+                        <div class="[ col s8 ]">
+                            <p>{{ n.message }}</p>
+                        </div>
+                        <div class="[ col s4 ][ right-align ]">
+                            <a href="{{ getNotificationUrl( n.title, n.inventory_item_id ) }}" class="[ btn ]"><i class="[ fa fa-eye ]"></i></a>
+                            <button class="[ btn red ]" ng-click="deleteNotification( n.id )" ><i class="[ fa fa-times ]"></i></button>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    

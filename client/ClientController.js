@@ -1,13 +1,12 @@
 conAngular
-    .controller('ClientController', ['$scope', '$state', 'ClientService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, ClientService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
+    .controller('ClientController', ['$scope', '$state', 'ClientService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, ClientService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
         
         (function initController() {
-
             getAllClients();
             getAllClientUsers();
             initClientDataTable();
             initClientUserDataTable();
-            
+            fetchNewNotifications();
         })();
 
         
@@ -96,7 +95,6 @@ conAngular
         }// initClientDataTable
 
         function initClientUserDataTable(){
-
             $scope.dtClientUserOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(20)
@@ -109,9 +107,12 @@ conAngular
             ];
 
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
-
         }// initClientUserDataTable
 
-
+        function fetchNewNotifications(){
+            NotificationService.getNumUnread( function( numUnreadNotifications ){
+                NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
 
     }]);
