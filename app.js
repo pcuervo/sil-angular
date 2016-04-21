@@ -159,15 +159,15 @@ window.conAssets = function(get) {
 /*
  * Con AngularJS Version
  */
-var conAngular = 
+var conAngular =
     angular.module("conAngular", [
-        "ui.router", 
-        "ui.materialize", 
-        "oc.lazyLoad",  
+        "ui.router",
+        "ui.materialize",
+        "oc.lazyLoad",
         "ngSanitize",
         "ngCookies",
         "datatables",
-    ]); 
+    ]);
 
 // Config ocLazyLoader
 conAngular.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -190,11 +190,11 @@ conAngular.controller('AppController', ['$scope', '$rootScope', '$state', functi
 // Setup Rounting For All Pages
 conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // Redirect any unmatched url
-    $urlRouterProvider.otherwise("/dashboard");  
-  
+    $urlRouterProvider.otherwise("/dashboard");
+
   // pages
   $stateProvider
-    // Login 
+    // Login
     .state('/login', {
         url: "/login",
         templateUrl: "authentication/login.html",
@@ -1192,11 +1192,11 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             deps: ['$ocLazyLoad', function($ocLazyLoad) {
                 return $ocLazyLoad.load([{
                     name: 'conAngular',
-                    insertBefore: '#ngInsertBefore', 
+                    insertBefore: '#ngInsertBefore',
                     files: conAssets('simpleWeather,sortable')
                 }, {
                     name: 'conAngular',
-                    serie: true, 
+                    serie: true,
                     insertBefore: '#ngInsertBefore',
                     files: conAssets('sparkline,flot,rickshaw,jvectormap')
                 }]);
@@ -1576,11 +1576,11 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     // API URL
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/'
-    $rootScope.apiUrl = test;
+    $rootScope.apiUrl = stage;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
-    $rootScope.$state = $state; 
+    $rootScope.$state = $state;
     // keep user logged in after page refresh
     $rootScope.globals = $cookies.getObject('globals') || {};
     if ($rootScope.globals.currentUser) {
@@ -1597,7 +1597,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
         if (restrictedPage && !loggedIn ) {
             event.preventDefault();
             $state.go('/login');
-        } 
+        }
 
     });
 
@@ -1620,7 +1620,7 @@ FormatHelper = {
     },
     dateYMD: function( date, separator ){
         var dd = date.getDate();
-        var mm = date.getMonth()+1; 
+        var mm = date.getMonth()+1;
         var yyyy = date.getFullYear();
 
         if( dd<10 ) dd = '0' + dd;

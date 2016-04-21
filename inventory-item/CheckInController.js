@@ -8,15 +8,15 @@ conAngular
         var CONFIRMATION_STEP = 2;
         var LOCATION_STEP = 3;
 		var PROGRAM_EXIT_STEP = 4;
-		
+
 		(function initController() {
             $scope.role = $rootScope.globals.currentUser.role;
             var currentPath = $location.path();
-            initCheckIn( currentPath ); 
+            initCheckIn( currentPath );
             fetchNewNotifications();
 		})();
 
-		
+
         /******************
         * PUBLIC FUNCTIONS
         *******************/
@@ -34,9 +34,9 @@ conAngular
                     getItemImg( 'itemImgBulk' );
                     break;
                 default:
-                    getItemImg();                
+                    getItemImg();
             }
-            
+
             var randomNum = Math.floor((Math.random() * 100) + 1);
             $scope.barCodeVal = FormatHelper.slug( $scope.itemName + ' ' + randomNum );
             $('.js-barcode').JsBarcode( $scope.barCodeVal );
@@ -47,7 +47,7 @@ conAngular
             $scope.selectedItemTypeText = $('[name="itemType"] option:selected').text();
             $scope.selectedStorageTypeText = $('[name="storageType"] option:selected').text();
             $scope.selectedProviderText = $('[name="deliveryCompany"] option:selected').text();
-		} 
+		}
 
 		$scope.setActiveStep = function( step ){
             window.scrollTo(0, 0);
@@ -135,7 +135,7 @@ conAngular
                 default:
                     $('#serial-number').removeAttr('required');
             }
-            
+
         }// updateExpirationDate
 
         $scope.getItemTypeIcon = function( type ){
@@ -178,14 +178,14 @@ conAngular
         }// updateLocations
 
         $scope.addToLocation = function( type ){
- 
+
             LoaderHelper.showLoader( 'Ubicando ' + $scope.item.name + ' en almacén' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
                 switch( $scope.item.actable_type ){
-                    case 'UnitItem': 
+                    case 'UnitItem':
                         var quantity = 1;
                         break;
-                    case 'BulkItem': 
+                    case 'BulkItem':
                         var quantity = $scope.quantity;
                         break;
                     default:
@@ -211,7 +211,7 @@ conAngular
                         locationId: location.id,
                         units:      $('#units-' + i).val()
                     }
-                }); 
+                });
                 WarehouseService.locateBundle( $scope.registeredItemId, partsLocation, $scope.parts.length, true, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                     $state.go('/check-in', {}, { reload: true });
@@ -222,7 +222,7 @@ conAngular
                 Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                 $state.go('/check-in', {}, { reload: true });
             });
-            
+
         }// addToLocation
 
         $scope.searchByBarcode = function( barcode ){
@@ -249,20 +249,20 @@ conAngular
 
         $scope.reEntry = function( type ){
             switch( type ){
-                case 'UnitItem': 
+                case 'UnitItem':
                     reentryUnitItem( $scope.item.actable_id, $scope.entryDate, $scope.deliveryCompanyUnit, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments );
                     break;
-                case 'BulkItem': 
+                case 'BulkItem':
                     reentryBulkItem( $scope.item.actable_id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantity );
                     break;
-                case 'BundleItem': 
+                case 'BundleItem':
                     reentryBundleItem( $scope.item.actable_id, $scope.exitDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments  );
                     break;
             }
         }// reentry
 
         $scope.showLocationForm = function( type ){
-            
+
             if( 'same' === type ){
                 $scope.sameLocationType = true;
                 $scope.multipleLocationsType = false;
@@ -279,8 +279,8 @@ conAngular
         $scope.authorizeEntry = function( itemId ){
             InventoryItemService.authorizeEntry( itemId, function( response ){
                 Materialize.toast(response.success, 4000, 'green');
-                getPendingEntries(); 
-            }); 
+                getPendingEntries();
+            });
         }
 
         $scope.addUnitsToLocation = function(){
@@ -321,7 +321,7 @@ conAngular
             InventoryItemService.requestEntry( $scope.itemName, $scope.itemQuantity, $scope.description, $scope.itemType, $scope.selectedProject, pmId, aeId, $scope.itemState, $scope.entryDate, $scope.validityExpirationDate, function( response ){
                 Materialize.toast( '¡Solicitud de entrada enviada!', 4000, 'green');
                 $state.go('/check-in', {}, { reload: true });
-            }); 
+            });
         }
 
         $scope.setRequestType = function( type ){
@@ -344,18 +344,19 @@ conAngular
             var serialNumber = ( 'undefined' == typeof $scope.serialNumber ) ? '' : $scope.serialNumber;
 
             var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
-            barcodeWindow.document.write('<html><head><title>' + $scope.barcode + '</title>');
-            /*optional stylesheet*/ //barcodeWindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-            barcodeWindow.document.write('</head><body >');
+            barcodeWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>' + $scope.barcode + '</title>');
+            barcodeWindow.document.write('<link rel="stylesheet" href="assets/_con/css/print.css" type="text/css" />');
+            barcodeWindow.document.write('</head><body>');
             barcodeWindow.document.write( barcodeEl );
-            barcodeWindow.document.write('<p>Nombre: ' + $scope.item.name + '</p >');
-            barcodeWindow.document.write('<p>Proyecto: ' + $scope.item.project_number + ' - ' + $scope.selectedProjectText + '</p >');
-            barcodeWindow.document.write('<p>Cliente: ' + $scope.clientName + ' - ' + $scope.clientContact + '</p >');
-            barcodeWindow.document.write('<p>PM: ' + $scope.selectedPMText + '</p >');
-            barcodeWindow.document.write('<p>Ejecutivo de cuenta: ' + $scope.selectedAEText + '</p >');
+            barcodeWindow.document.write('<table><tr><td><tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.selectedProjectText + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>PM</td><td> ' + $scope.selectedPMText + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>Ejecutivo de cuenta</td><td>' + $scope.selectedAEText + '</td></tr>');
             if( $scope.serialNumber != '' ){
-                barcodeWindow.document.write('<p>Número de serie: ' + serialNumber + '</p >');
+                barcodeWindow.document.write('<tr><td>Número de serie</td><td>' + serialNumber + '</td></tr>');
             }
+            barcodeWindow.document.write('</table><img id="watermark" src="assets/_con/images/litobel-gray.jpg">');
             barcodeWindow.document.write('</body></html>');
 
             barcodeWindow.document.close(); // necessary for IE >= 10
@@ -370,7 +371,7 @@ conAngular
         $scope.getStatus = function( statusId ){
             InventoryItemService.getStatus( statusId, function( status ){
                 $scope.itemStatus = status;
-            }); 
+            });
         }
 
 
@@ -439,7 +440,7 @@ conAngular
                         $('.js-barcode').JsBarcode( $scope.item.barcode );
                     }
                 });
-                
+
             }
 
             if( currentPath.indexOf( '/authorize-entry' ) > -1 ){
@@ -493,7 +494,7 @@ conAngular
             ProjectService.getProjectUsers( $scope.selectedProject, function ( response ){
 
                 if( response.users.length == 0 ) {
-                    $scope.validSelectedProject = false; 
+                    $scope.validSelectedProject = false;
                     return;
                 }
 
@@ -518,7 +519,7 @@ conAngular
                     Materialize.toast('El proyecto que seleccionaste no tiene Ejecutivos de Cuenta relacionados.', 6000, 'red');
                 }
 
-                $scope.validSelectedProject = true;  
+                $scope.validSelectedProject = true;
             });
 
         }// fillProjectUsersSelects
@@ -635,7 +636,7 @@ conAngular
             InventoryItemService.getLatestEntries( function( latestInventoryItems ){
                 console.log( latestInventoryItems );
                 $scope.latestInventoryItems = latestInventoryItems;
-            }); 
+            });
 
         }// getLatestEntries
 
@@ -660,7 +661,7 @@ conAngular
         function getPendingEntries(){
             InventoryItemService.getPendingEntries( function( pendingInventoryItems ){
                 $scope.pendingInventoryItems = pendingInventoryItems;
-            }); 
+            });
         }// getPendingEntries
 
         function initPendingEntriesDataTable(){
@@ -681,7 +682,7 @@ conAngular
             InventoryItemService.getPendingEntryRequests( function( pendingInventoryItems ){
                 console.log( pendingInventoryItems );
                 $scope.pendingInventoryItems = pendingInventoryItems;
-            }); 
+            });
         }// getPendingEntryRequests
 
         function initPendingEntryRequestsDataTable(){
@@ -748,7 +749,7 @@ conAngular
         function fetchSuppliers(){
             SupplierService.getAll( function( suppliers ){
                 $scope.suppliers = suppliers;
-            }); 
+            });
         }// fetchSuppliers
 
         function getBundleMissingParts( parts ){
@@ -910,7 +911,7 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initItemPartsDataTable
 
-// 		// Dashboard 
+// 		// Dashboard
 // 		// sparkline 1
 //   $scope.spark1data = [76,78,87,65,43,35,23,25,12,14,27,35,32,37,31,46,43,32,36,57,78,87,82,75,58,54,70,23,54,67,34,23,87,12,43,65,23,76,32,55];
 //   $scope.spark1opts = {
@@ -945,7 +946,7 @@ conAngular
 //       data: rickshawLine1,
 //       color: '#42a5f5',
 //       name: 'Visits'
-//     }, {    
+//     }, {
 //       data: rickshawLine2,
 //       color: '#90caf9',
 //       name: 'Views'
@@ -971,7 +972,7 @@ conAngular
 //       data: rickshawLine1,
 //       color: '#26a69a',
 //       name: 'Visits'
-//     }, {    
+//     }, {
 //       data: rickshawLine2,
 //       color: '#80cbc4',
 //       name: 'Views'
@@ -1009,7 +1010,7 @@ conAngular
 //   $interval(function () {
 //     $scope.randomData.removeData($scope.rickshawSeries);
 //     $scope.randomData.addData($scope.rickshawSeries);
-    
+
 //     $scope.$broadcast('rickshaw::resize');
 //   }, 1000);
 
@@ -1028,11 +1029,11 @@ conAngular
 //       lines: {
 //         show: true,
 //         lineWidth: 1,
-//         fill: true, 
+//         fill: true,
 //         fillColor: { colors: [ { opacity: 0.1 }, { opacity: 0.13 } ] }
 //       },
 //       points: {
-//         show: true, 
+//         show: true,
 //         lineWidth: 2,
 //         radius: 3
 //       },
@@ -1040,8 +1041,8 @@ conAngular
 //       stack: true
 //     },
 //     grid: {
-//       hoverable: true, 
-//       clickable: true, 
+//       hoverable: true,
+//       clickable: true,
 //       tickColor: "#f9f9f9",
 //       borderWidth: 0
 //     },
@@ -1049,10 +1050,10 @@ conAngular
 //       // show: false
 //       backgroundOpacity: 0,
 //       labelBoxBorderColor: "#fff"
-//     },  
+//     },
 //     colors: ["#3f51b5", "#009688", "#2196f3"],
 //     xaxis: {
-//       ticks: [[1, "Jan"], [2, "Feb"], [3, "Mar"], [4,"Apr"], [5,"May"], [6,"Jun"], 
+//       ticks: [[1, "Jan"], [2, "Feb"], [3, "Mar"], [4,"Apr"], [5,"May"], [6,"Jun"],
 //                  [7,"Jul"], [8,"Aug"], [9,"Sep"], [10,"Oct"], [11,"Nov"], [12,"Dec"]],
 //       font: {
 //         family: "Roboto,sans-serif",
@@ -1060,7 +1061,7 @@ conAngular
 //       }
 //     },
 //     yaxis: {
-//       ticks:7, 
+//       ticks:7,
 //       tickDecimals: 0,
 //       font: {color: "#ccc"}
 //     },
