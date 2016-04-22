@@ -3,7 +3,10 @@ conAngular.controller('NavbarController', ['$scope', '$rootScope', '$cookies', f
     $scope.$on('$includeContentLoaded', function() {
 
         $rootScope.$watch('loggedIn', function() {
-            if( $rootScope.loggedIn ) $scope.role = $rootScope.globals.currentUser.role;
+            if( $rootScope.loggedIn ) {
+                $scope.role = $rootScope.globals.currentUser.role;
+                $('#my-account span').text( $rootScope.globals.currentUser.name );
+            }
         });
     });
 }]);

@@ -1,0 +1,76 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Ajustes generales</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateSettings()" data-parsley-validate>
+            
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input type="text" id="units-per-location" ng-model="unitsPerLocation" required>
+                    <label for="units-per-location">Unidades por ubicación</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input type="text" id="cost-per-location" ng-model="costPerLocation" required>
+                    <label for="cost-per-location">Costo por ubicación</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input type="text" id="cost-high-value" ng-model="costHighValue" required>
+                    <label for="cost-high-value">Costo extra por artículo de alto valor</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]">actualizar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Descuento por cliente</h4>
+    <div class="[ row ]">
+        <table datatable="ng" dt-options="dtClientsOptions" dt-column-defs="dtClientsColumnDefs" class="[ row-border hover ][ col sm-12 ]">
+            <thead>
+                <tr>
+                    <th class="[ center-align ]">Contacto cliente</th>
+                    <th class="[ center-align ][ hide-on-small-and-down ]">Cliente</th>
+                    <th class="[ center-align ][ hide-on-small-and-down ]">Renta mes actual</th>
+                    <th class="[ center-align ]">Multiplicador de descuento</th>
+                    <th class="[ center-align ]">Actualizar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="c in clientUsers">
+                    <td>{{ c.first_name + ' ' + c.last_name }}</td>
+                    <td class="[ center-align ]">{{ c.client.name }}</td>
+                    <td class="[ center-align ]">100</td>
+                    <td class="[ center-align ]">
+                        <div class="[ input-field ]">
+                            <input type="text" id="{{c.id}}" value="{{ c.discount }}" name="discount" />
+                            <label for="{{c.id}}"></label>
+                        </div>
+                    </td>
+                    <td class="[ center-align ]">
+                        <button class="[ btn ]" ng-click="updateDiscount( c.id )"><i class="[ fa fa-refresh ]"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+  $('[data-parsley-validate]').parsley();
+</script>
+
+
+
+
+

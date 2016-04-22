@@ -1,57 +1,124 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
-<div class="[ card-panel ]">
-    <div class="row">
-        <div class="col l4 s12">
-            <div class="card-panel stats-card blue white-text">
-                <i class="mdi-action-view-module"></i>
-                <span class="count">2</span>
-                <div class="name">Racks</div>
+<div class="[ row ][ mb-10 ]">
+    <div class="[ col s12 m12 l4 ]">
+        <div class="card">
+            <div class="title">
+                <h5>Resumen del día</h5>
+            </div>
+            <div class="content orders-card">
+                <h4>{{ stats.total_occupied_locations }} de {{ stats.total_locations }} ubicaciones</h4>
+                <div class="row">
+                    <div class="col s6">
+                        <small>Ocupación de almacén</small>
+                    </div>
+                    <span class="[ col s6 ][ right-align ]">{{ stats.warehouse_occupation_percentage }} %</span>
+                </div>
+                <div class="progress small">
+                    <div class="determinate" style="width: {{ stats.warehouse_occupation_percentage }}%"></div>
+                </div>
+                <!-- TODO sacar renta del día -->
+                <h4>$17,180</h4>
+                <div class="row">
+                    <div class="col s6">
+                        <small>Renta mensual</small>
+                    </div>
+                    <span class="col s6 right-align">43%</span>
+                </div>
+                <div class="progress small">
+                    <div class="determinate" style="width: 43%"></div>
+                </div>
             </div>
         </div>
-        <div class="col l4 s12">
-            <div class="card-panel stats-card blue white-text">
-                <i class="mdi-maps-navigation"></i>
-                <span class="count">40</span>
-                <div class="name">Ubicaciones totales</div>
+    </div>
+    <div class="[ col s12 m12 l8 ]">
+        <div class="[ row ]">
+            <div class="[ col s12 m6 ]">
+                <div class="card-panel stats-card blue white-text">
+                    <i class="mdi-action-view-module"></i>
+                    <span class="count">{{ stats.total_racks }}</span>
+                    <div class="name">Racks</div>
+                </div>
             </div>
-        </div>
-        <div class="col l4 s12">
-            <div class="card-panel stats-card blue white-text">
-                <i class="mdi-navigation-apps"></i>
-                <span class="count">150</span>
-                <div class="name">Artículos en almacén</div>
+            <div class="[ col s12 m6 ]">
+                <div class="card-panel stats-card blue white-text">
+                    <i class="mdi-maps-navigation"></i>
+                    <span class="count">{{ stats.total_locations }}</span>
+                    <div class="name">Ubicaciones totales</div>
+                </div>
+            </div>
+            <div class="[ col s12 m6 ]">
+                <div class="card-panel stats-card blue white-text">
+                    <i class="mdi-navigation-apps"></i>
+                    <span class="count">{{ stats.total_items_in_warehouse }}</span>
+                    <div class="name">Artículos en almacén</div>
+                </div>
+            </div>
+            <div class="[ col s12 m6 ]">
+                <div class="card-panel stats-card blue white-text">
+                    <i class="fa fa-warning"></i>
+                    <span class="count">{{ stats.total_items_with_pending_location }}</span>
+                    <div class="name">Artículos con ubicación pendiente</div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="[ card-panel ]">
+    <div class="[ row ]">
+        <div class="[ col s12 ]">
+            <h4 class="[ center-align ]">Racks</h4>
+            <table datatable="ng" dt-options="dtRackOptions" dt-column-defs="dtRackColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th class="[ center-align ]">Nombre</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Ubicaciones disponibles</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Fecha de creación</th>
+                        <th class="[ center-align ]">Ver detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="{{r.id}}" ng-repeat="r in racks">
+                        <td>{{ r.name }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ r.available_locations + ' de ' + r.total_locations }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ r.created_at | date:'dd/MM/yyyy' }}</td>
+                        <td class="[ center-align ]">
+                            <a class="[ btn waves-effect ]" href="#/view-rack/{{r.id}}"><i class="[ fa fa-eye ]"></i></a>
+                            <a class="[ btn waves-effect ][ red ]" ng-click="deleteRack( r.id )" ng-if="r.is_empty"><i class="[ fa fa-times ]"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+
+<div class="[ card-panel ]">
     <div>
-      <p>Tipo de entradas:</p>
-      <p><i class="[ fa fa-square ]"> Unitaria - </i> <i class="[ fa fa-th-large ]"> Paquete - </i> <i class="[ fa fa-align-justify ]"> Granel</i></p>
+      <p><i class="[ fa fa-square ]"></i> Unitaria - <i class="[ fa fa-th-large ]"></i> Paquete - <i class="[ fa fa-align-justify ]"></i> Granel</p>
     </div>
     <h4 class="[ center-align ]">Artículos con ubicación pendiente</h4>
-    
     <table datatable="ng" dt-options="dtPendingLocationOptions" dt-column-defs="dtPendingLocationColumnDefs" class="row-border hover">
         <thead>
             <tr>
-                <th class="[ center-align ]">Entrada</th>
+                <th class="[ center-align ]">Tipo</th>
+                <th></th>
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Valor</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Fecha de creación</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Vigencia</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Cantidad</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
                 <th class="[ center-align ]">Asignar ubicación</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="item in pending_locations">
-                <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i></td>
-                <td>{{ item.name }}</td>
+                <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i><p class="[ hide ]">{{item.actable_type}}</p></td>
+                <td><img src="{{ item.item_img_thumb }}" alt=""></td>
+                <td> {{ item.name }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.value  | currency : symbol : fractionSize }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ item.created_at | date:'dd/MM/yyyy' }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ item.quantity }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ item.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
                 <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/locate-item/{{item.id}}" ><i class="[ fa fa-location-arrow ]"></i></a></td>
             </tr>
@@ -59,70 +126,5 @@
     </table>
     <div class="[ center-align ]">
         <a class="[ btn waves-effect ]" href="#/view-item"><i class="[ fa fa-eye ][ left ]"></i> Ver mas</a>
-    </div>
-    
-</div>
-<div class="row">
-    <div class="col s12 m6">
-        <div class="card">
-            <div class="title">
-                <h5>Racks</h5>
-                <a class="minimize" href="#">
-                    <i class="mdi-navigation-expand-less"></i>
-                </a>
-            </div>
-            <div class="[ row ]">
-                <div class="[ col s6 ]">
-                    <div class="content">
-                        <h4>Rack principal</h4>
-                        <a class="[ btn ]" href="#/view-rack/1">Ver</a>
-                    </div>
-                </div>
-                <div class="[ col s6 ]">
-                    <div class="content">
-                        <h4>Piso</h4>
-                        <a class="[ btn ]" href="#/view-rack/2">Ver</a>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-    <div class="col s12 m6">
-        <div class="card">
-            <div class="title">
-                <h5>Resumen del día almacén</h5>
-                <a class="minimize" href="#">
-                    <i class="mdi-navigation-expand-less"></i>
-                </a>
-            </div>
-            <div class="content orders-card">
-                <h4>38</h4>
-                <div class="row">
-                    <div class="col s6">
-                        <small>Ubicaciones de almacén ocupadas</small>
-                    </div>
-                    <div class="col s6 right-align">
-                        77% <i class="fa fa-level-down red-text"></i>
-                    </div>
-                </div>
-                <div class="progress small">
-                    <div class="determinate" style="width: 77%"></div>
-                </div>
-
-                <h4>$17,180</h4>
-                <div class="row">
-                    <div class="col s6">
-                        <small>Renta mensual</small>
-                    </div>
-                    <div class="col s6 right-align">
-                        43% <i class="fa fa-level-up green-text"></i>
-                    </div>
-                </div>
-                <div class="progress small">
-                    <div class="determinate" style="width: 43%"></div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

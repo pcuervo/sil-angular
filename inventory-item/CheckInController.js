@@ -97,6 +97,7 @@ conAngular
             $scope.partSerialNumber = null;
             $scope.partBrand = null;
             $scope.partModel = null;
+            $('#part-name').focus();
         }// addPart
 
         $scope.removePart = function( index ){
@@ -225,6 +226,8 @@ conAngular
 
         }// addToLocation
 
+
+
         $scope.searchByBarcode = function( barcode ){
 
             console.log( barcode );
@@ -293,12 +296,14 @@ conAngular
 
             var bulkLocation = {
                 locationId:     $scope.selectedLocation,
+                location:       $('#location option:selected').text(),
                 quantity:       $scope.unitsToLocate,
                 units:          $scope.units,
-                rack:           $scope.selectedRack
+                rack:           $('#rack option:selected').text()
             }
 
             $scope.bulkLocations.push( bulkLocation );
+            console.log( $scope.bulkLocations );
             $scope.pendingUnitsToLocate -= $scope.unitsToLocate;
             $scope.hasMultipleLocations = true;
 
@@ -313,6 +318,13 @@ conAngular
             $scope.selectedRack = '';
             $scope.unitsToLocate = '';
             $scope.units = '';
+        }
+
+        $scope.removeUnitsFromLocation = function( bulkLocationId ){
+            console.log( $scope.bulkLocations[bulkLocationId] );
+            $scope.pendingUnitsToLocate += parseInt( $scope.bulkLocations[bulkLocationId].quantity );
+            $scope.bulkLocations.splice( bulkLocationId, 1 );
+            $('#bulk-units-'+bulkLocationId).remove();
         }
 
         $scope.requestEntry = function(){
