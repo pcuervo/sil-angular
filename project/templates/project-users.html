@@ -13,7 +13,7 @@
                 <td class="[ center-align ]">{{ u.first_name }}</td>
                 <td class="[ center-align ]">{{ getUserRole( u.role ) }}</td>
                 <td class="[ center-align ]">
-                    <button class="[ btn waves-effect red ]" ng-click="removeUserFromProject( project.id, u.id  )"><i class="[ fa fa-times ]"></i></button>
+                    <button class="[ btn waves-effect red ]" ng-click="removeUserFromProject( project.id, u.id  )" ng-show="u.role != 6"><i class="[ fa fa-times ]"></i></button>
                 </td>
             </tr>
         </tbody>

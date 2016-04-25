@@ -1180,12 +1180,12 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             templateUrl: "warehouse/wh-dashboard.html",
             controller: "WarehouseController",
             data: {
-                pageTitle: 'Resumen almacén',
+                pageTitle: 'Resumen ubicaciones',
                 crumbs: [{
                 title: '<i class="fa fa-dashboard"></i> Dashboard',
                 href: '#/dashboard'
             }, {
-                title: 'Resumen almacén',
+                title: 'Resumen ubicaciones',
             }]
         },
         resolve: {
@@ -1567,6 +1567,31 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    // Settings
+    .state('/system-settings', {
+        url: "/system-settings",
+            templateUrl: "system-settings/system-settings.html",
+            controller: "SettingsController",
+            data: {
+                pageTitle: 'Configuración',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Configuración',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
 
 }]);
 
@@ -1576,7 +1601,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     // API URL
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/'
-    $rootScope.apiUrl = stage;
+    $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view

@@ -44,7 +44,7 @@
     </form><!-- sameLocationType -->
     <form name="multiple_location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-bundle-multiple ng-show="multipleLocationsType">
         <div class="[ col s12 ]">
-            <h5 class="[ center-align ]">Artículos en paquete</h5>
+            <h5 class="[ center-align ]">Partes del paquete</h5>
             <div class="[ row ]" ng-repeat="part in partsToLocate track by $index">
                 <div class="[ col s6 m2 ][ input-field ]">
                     <input id="item-name-{{$index}}" type="text" value="{{part.name}}" ng-readonly="true" >
@@ -71,7 +71,7 @@
                 <input type="hidden" id="parts-{{$index}}" value="{{part.id}}">
             </div>
         </div> 
-        <div class="[ col s12 ][ center-align ]" ng-show="hasMultipleLocations"> 
+        <div class="[ col s12 ][ center-align ]"> 
             <div class="[ center-align ]">
                 <button class="[ waves-effect ][ btn ]">Ubicar</button>
             </div>

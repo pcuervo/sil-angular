@@ -389,7 +389,7 @@
                     </select>
                 </div>
                 <div class="[ col s6 m3 ][ input-field ]">
-                    <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                    <select id="location" name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
                         <option value="" disabled selected>Selecciona la ubicación</option>
                         <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
                     </select>
@@ -418,22 +418,22 @@
                     <h5 class="[ center-align ]">Unidades que ocupa</h5>
                 </div>
                 <div class="[ clear ]"></div>
-                <div class="[ row ]" ng-repeat="bl in bulkLocations track by $index">
+                <div class="[ row ]" ng-repeat="bl in bulkLocations track by $index" id="bulk-units-{{$index}}">
                     <div class="[ col s6 m2 ][ input-field ]">
                         <input type="text" ng-readonly="true" value="{{ bl.quantity }}">
                     </div>
                     <div class="[ col s6 m3 ][ input-field ]">
-                        <input type="text" ng-readonly="true" value="{{ bl.selectedRack }} ">
+                        <input type="text" ng-readonly="true" value="{{ bl.rack }} ">
                     </div>
                     <div class="[ col s6 m3 ][ input-field ]">
-                        <input type="text" ng-readonly="true" value="{{ bl.selectedLocation }}">
+                        <input type="text" ng-readonly="true" value="{{ bl.location }}">
                     </div>
                     <div class="[ col s6 m2 ][ input-field ]" > 
                         <input type="text" ng-readonly="true" value="{{ bl.units }}">
                     </div>
                     <div class="[ col s12 m2 ]"> 
                         <div class="[ center-align ]">
-                            <a id="add-to-location" class="[ waves-effect red ][ btn ]" href="#">Eliminar</a>
+                            <a id="remove-from-location" class="[ waves-effect red ][ btn ]" href="#" ng-click="removeUnitsFromLocation( $index )">Eliminar</a>
                         </div>
                     </div>
                 </div>
@@ -449,7 +449,7 @@
 
 <script>
     $('[data-parsley-validate]').parsley();
-    $('[data-parsley-location]').parsley();    
+    $('[data-parsley-bulk-same]').parsley();    
     $('[data-parsley-multiple-locations]').parsley();    
 </script>
 

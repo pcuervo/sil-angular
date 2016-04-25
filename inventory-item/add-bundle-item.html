@@ -241,26 +241,6 @@
             </div>
         </div>
         <div class="[ col s12 ]">
-            <div class="[ row ]">
-                <div class="[ col s6 m3 ][ input-field ]">
-                    <input id="part-name" type="text" ng-model="partName">
-                    <label for="part-name">Nombre</label>
-                </div>
-                <div class="[ col s6 m3 ][ input-field ]">
-                    <input id="part-serial-number" type="text" ng-model="partSerialNumber">
-                    <label for="part-serial-number">No. de serie</label>
-                </div>
-                <div class="[ col s6 m3 ][ input-field ]">
-                    <input id="part-brand" type="text" ng-model="partBrand">
-                    <label for="part-brand">Marca</label>
-                </div>
-                <div class="[ col s6 m3 ][ input-field ]">
-                    <input id="part-model" type="text" ng-model="partModel">
-                    <label for="part-model">Modelo</label>
-                </div>
-            </div>
-        </div> 
-        <div class="[ col s12 ]">
             <h5 class="[ center-align ]">Artículos agregados</h5>
             <div class="[ row ]">
                 <div class="[ col s6 m3 ][ input-field ]">
@@ -484,7 +464,7 @@
                     <input type="hidden" id="parts-{{$index}}" value="{{part.id}}">
                 </div>
             </div> 
-            <div class="[ col s12 ][ center-align ]" ng-show="hasMultipleLocations"> 
+            <div class="[ col s12 ][ center-align ]"> 
                 <div class="[ center-align ]">
                     <button class="[ waves-effect ][ btn ]">Ubicar</button>
                 </div>

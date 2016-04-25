@@ -57,9 +57,19 @@ conAngular
         }// addUsersToProject
 
         $scope.getUserRole = function( roleId ){
-            if( 2 == roleId ) return 'Project Manager';
+            var role;
+            switch( roleId ){
+                case 2:
+                    role = 'Project Manager';
+                    break;
+                case 3:
+                    role = 'Ejecutivo de cuenta';
+                    break;
+                default:
+                    role = 'Cliente';
+            }
 
-            return 'Ejecutivo de cuenta';
+            return role;
         }// getUserRole
 
         $scope.removeUserFromProject = function( projectId, userId ){
@@ -70,7 +80,6 @@ conAngular
                 $state.go('/add-user-to-project', { projectId: $scope.project.id }, { reload: true });
             });
         }// removeUserFromProject
-
 
         /******************
         * PRIVATE FUNCTIONS

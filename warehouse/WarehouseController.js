@@ -69,7 +69,6 @@ conAngular
 
         $scope.addToLocation = function(){
 
-            console.log( this.selectedLocation );
             LoaderHelper.showLoader( 'Agregando artículo a ubicación...' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
                 switch( $scope.item.actable_type ){
@@ -202,6 +201,28 @@ conAngular
             $scope.isFloor = false;
         }// updateRows
 
+        $scope.getTransactionType = function( type ){
+            switch( type ){
+                case 'UnitItem':
+                    return 'Unitaria'
+                case 'BulkItem':
+                    return 'Granel'
+                case 'BundleItem':
+                    return 'Paquete'
+            }
+        }// getTransactionType
+
+        $scope.getTransactionTypeClass = function( concept ){
+            switch( concept ){
+                case 'Entrada':
+                    return 'green lighten-3';
+                case 'Salida':
+                    return 'red lighten-3';
+                default:
+                    return 'yellow lighten-3';
+            }
+        }// getTransactionTypeClass
+
 
 
         /******************
@@ -210,10 +231,9 @@ conAngular
 
         function initWarehouseOptions( currentPath ){
 
-            
             if( currentPath.indexOf('view-racks') > -1 ){
                 fetchWarehouseRacks();
-                initRacksDataTable(); 
+                initRacksDataTable( 10 ); 
                 return;
             }
 
@@ -254,7 +274,10 @@ conAngular
                     $scope.isFloor = false;
                     break;
                 case '/wh-dashboard':
+                    fetchStats();
+                    fetchWarehouseRacks();
                     getItemsWithPendingLocation();
+                    initRacksDataTable( 5 ); 
                     initPendingLocationDataTable();
                     break;
             }
@@ -627,6 +650,7 @@ conAngular
 
         function getItemsWithPendingLocation(){
             InventoryItemService.withPendingLocation( function( locations ){
+                console.log( locations );
                 $scope.pending_locations = locations;
             }); 
         }// getItemsWithPendingLocation
@@ -634,12 +658,13 @@ conAngular
         function initPendingLocationDataTable(){
             $scope.dtPendingLocationOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
-                .withDisplayLength(10)
+                .withDisplayLength( 15 )
                 .withDOM('itp')
                 .withOption('responsive', true)
                 .withOption('order', [])
                 .withOption('searching', false);
             $scope.dtPendingLocationColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(1).notSortable(),
                 DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
@@ -678,25 +703,23 @@ conAngular
 
         function fetchWarehouseRacks(){
             WarehouseService.getRacks( function( racks ){
-                console.log( racks );
                 $scope.racks = racks;
             });
         }// fetchWarehouseRacks
 
         function fetchWarehouseTransactions(){
             WarehouseService.getWarehouseTransactions( function( transactions ){
-                console.log( transactions );
                 $scope.transactions = transactions;
             });
         }// fetchWarehouseTransactions
 
-        function initRacksDataTable(){
+        function initRacksDataTable( displayLength ){
             $scope.dtRackOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDOM('it')
+                    .withDOM('itp')
                     .withOption('responsive', true)
                     .withOption('order', [])
-                    .withDisplayLength(30)
+                    .withDisplayLength( displayLength )
             $scope.dtRackColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
@@ -722,6 +745,12 @@ conAngular
         function fetchNewNotifications(){
             NotificationService.getNumUnread( function( numUnreadNotifications ){
                 NotificationHelper.updateNotifications( numUnreadNotifications );
+            });
+        }
+
+        function fetchStats(){
+            WarehouseService.stats( function( stats ){
+                $scope.stats = stats;
             });
         }
 
