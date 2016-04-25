@@ -307,7 +307,7 @@
                 <div class="[ center ][ col s12 ]">
                     <a href="#/new-delivery/{{ item.id }}" class="[ waves-effect ][ btn btn-extra ]"><i class="mdi-action-schedule left"></i>Programar envío</a>
                 </div>
-                <div class="[ center ][ col s12 ]">
+                <div class="[ center ][ col s12 ]" ng-show="item.status != 7">
                     <a href="#" class="[ waves-effect ][ btn btn-extra ]" ng-click="setActiveStep(3)"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar en almacén</a>
                 </div>
             </div>

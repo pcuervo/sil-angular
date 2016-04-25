@@ -17,21 +17,21 @@
         <table datatable="ng" dt-options="dtClientUserOptions" dt-column-defs="dtClientUserColumn" class="row-border hover">
             <thead>
                 <tr>
-                    <th>Cliente</th>
-                    <th>Nombre usuario</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Celular</th>
-                    <th>Editar</th>
+                    <th class="[ center-align ]">Cliente</th>
+                    <th class="[ center-align ]">Nombre usuario</th>
+                    <th class="[ center-align ]">Email</th>
+                    <th class="[ center-align ]">Teléfono</th>
+                    <th class="[ center-align ]">Celular</th>
+                    <th class="[ center-align ]">Editar</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="c in clientUsers">
-                <td>{{ getClientName( c.client_id ) }}</td>
-                <td>{{ c.first_name + ' ' + c.last_name }}</td>
-                <td>{{ c.email }}</td>
-                <td>{{ c.phone }}</td>
-                <td>{{ c.business_unit }}</td>
+                <td class="[ center-align ]">{{ c.client.name }}</td>
+                <td class="[ center-align ]">{{ c.first_name + ' ' + c.last_name }}</td>
+                <td class="[ center-align ]">{{ c.email }}</td>
+                <td class="[ center-align ]">{{ c.phone }}</td>
+                <td class="[ center-align ]">{{ c.business_unit }}</td>
                 <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-user/{{c.id}}"><i class="[ fa fa-edit ]"></i></a></td>
                 </tr>
             </tbody>
