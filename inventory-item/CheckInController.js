@@ -30,8 +30,8 @@ conAngular
                 case 'BulkItem':
                     getItemImg( 'itemImgBulk' );
                     break;
-                case 'BulkItem':
-                    getItemImg( 'itemImgBulk' );
+                case 'BundleItem':
+                    getItemImg( 'itemImgBundle' );
                     break;
                 default:
                     getItemImg();
@@ -86,6 +86,13 @@ conAngular
         }// getEntryType
 
         $scope.addPart = function(){
+            if( $scope.itemRequestId > 0 ){
+                $scope.partName = this.partName;
+                $scope.partSerialNumber = this.partSerialNumber;
+                $scope.partBrand = this.partBrand;
+                $scope.partModel = this.partModel;
+            }
+
             $scope.parts.push({
                 name:           $scope.partName,
                 serial_number:  $scope.partSerialNumber,
@@ -93,10 +100,18 @@ conAngular
                 model:          $scope.partModel,
             });
 
-            $scope.partName = null;
-            $scope.partSerialNumber = null;
-            $scope.partBrand = null;
-            $scope.partModel = null;
+            if( $scope.itemRequestId > 0 ){
+                this.partName = null
+                this.partSerialNumber = null;
+                this.partBrand = null;
+                this.partModel = null;
+            } else {
+                $scope.partName = null;
+                $scope.partSerialNumber = null;
+                $scope.partBrand = null;
+                $scope.partModel = null;
+            }
+
             $('#part-name').focus();
         }// addPart
 
@@ -230,7 +245,6 @@ conAngular
 
         $scope.searchByBarcode = function( barcode ){
 
-            console.log( barcode );
             var isReEntry = true;
             InventoryItemService.byBarcode( barcode, isReEntry, function( item ){
                 if( item.errors ){
@@ -342,6 +356,10 @@ conAngular
             $scope.currentStep = 1;
             if( 'BulkItem' == type ){
                 $scope.quantity = $scope.itemQuantity;
+                return;
+            }
+            if( 'BundleItem' == type ){
+                $scope.parts = [];
             }
         }
 
@@ -352,8 +370,6 @@ conAngular
         $scope.printBarcode = function( divId ){
 
             var barcodeEl = $(divId).html();
-            console.log( $scope.serialNumber );
-            var serialNumber = ( 'undefined' == typeof $scope.serialNumber ) ? '' : $scope.serialNumber;
 
             var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
             barcodeWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>' + $scope.barcode + '</title>');
@@ -365,8 +381,8 @@ conAngular
             barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
             barcodeWindow.document.write('<tr><td>PM</td><td> ' + $scope.selectedPMText + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Ejecutivo de cuenta</td><td>' + $scope.selectedAEText + '</td></tr>');
-            if( $scope.serialNumber != '' ){
-                barcodeWindow.document.write('<tr><td>Número de serie</td><td>' + serialNumber + '</td></tr>');
+            if( 'undefined' != typeof $scope.serialNumber ){
+                barcodeWindow.document.write('<tr><td>Número de serie</td><td>' + $scope.serialNumber + '</td></tr>');
             }
             barcodeWindow.document.write('</table><img id="watermark" src="assets/_con/images/litobel-gray.jpg">');
             barcodeWindow.document.write('</body></html>');
@@ -814,6 +830,7 @@ conAngular
                 console.log( item );
                 fillProjectClient( item.project_id )
                 $scope.item = item;
+                $scope.itemRequestId = item.id;
                 $scope.projectName = item.project;
                 $scope.selectedProject = item.project_id;
                 $scope.pmName = item.pm;
@@ -826,6 +843,7 @@ conAngular
                 if( null != item.validity_expiration_date ){
                     $scope.validityExpirationDate = new Date( item.validity_expiration_date );
                 }
+                $scope.itemState = item.state;
                 getItemState( item.state );
             });
 
@@ -833,7 +851,7 @@ conAngular
 
         function getItemState( stateId ){
             InventoryItemService.getItemState( stateId, function( state ){
-                $scope.itemState = state;
+                $scope.itemStateLabel = state;
             });
         }
 

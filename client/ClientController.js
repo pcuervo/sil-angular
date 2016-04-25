@@ -31,7 +31,7 @@ conAngular
 
         $scope.registerClientUser = function(){
 
-            ClientService.registerUser( $scope.email, $scope.firstName, $scope.lastName, 4, $scope.password, $scope.phone, $scope.phoneExt, $scope.businessUnit, $scope.clientId, function ( response ){
+            ClientService.registerUser( $scope.email, $scope.firstName, $scope.lastName, 6, $scope.password, $scope.phone, $scope.phoneExt, $scope.businessUnit, $scope.clientId, function ( response ){
 
                     if(response.errors) {
                         ErrorHelper.display( response.errors );
