@@ -360,8 +360,6 @@ conAngular
             }
             if( 'BundleItem' == type ){
                 $scope.parts = [];
-                $scope.multipleLocations = [];
-                $scope.currentLocations = [];
             }
         }
 
@@ -376,11 +374,11 @@ conAngular
             var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
             barcodeWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>' + $scope.barcode + '</title>');
             barcodeWindow.document.write('<style>');
-            barcodeWindow.document.write('@page{size:auto;margin:0}.card-image img{max-width:100%;display:block;margin-left:auto;margin-right:auto}.content h5{text-align:center}table{width:100%}#watermark{width:50%;height:auto;margin:0;color:#d0d0d0;position:absolute;left:25%;top:35%;opacity:.3;z-index:-1;-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg)}');
+            barcodeWindow.document.write('@page{size:auto;margin:0}.card-image img{width:100%;display:block;margin-left:auto;margin-right:auto}.content h5{text-align:center}table{width:100%}#watermark{width:50%;height:auto;margin:0 auto;display:block;opacity:.3;z-index:-1;}');
             barcodeWindow.document.write('</style>');
             barcodeWindow.document.write('</head><body>');
-            barcodeWindow.document.write('<table><tr><td>'+barcodeEl+'</td><td></td></tr>');
-            barcodeWindow.document.write('<tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
+            barcodeWindow.document.write( barcodeEl );
+            barcodeWindow.document.write('<table><tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.selectedProjectText + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
             barcodeWindow.document.write('<tr><td>PM</td><td> ' + $scope.selectedPMText + '</td></tr>');
