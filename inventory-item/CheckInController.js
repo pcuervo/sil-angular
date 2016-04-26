@@ -39,7 +39,27 @@ conAngular
 
             var randomNum = Math.floor((Math.random() * 100) + 1);
             $scope.barCodeVal = FormatHelper.slug( $scope.itemName + ' ' + randomNum );
-            $('.js-barcode').JsBarcode( $scope.barCodeVal );
+            $('.js-barcode').JsBarcode( $scope.barCodeVal,
+                {
+                    width: 2,
+                    height: 100,
+                    format: "CODE128",
+                    displayValue: false,
+                    fontOptions: "",
+                    font: "monospace",
+                    textAlign: "center",
+                    textPosition: "bottom",
+                    textMargin: 2,
+                    fontSize: 20,
+                    background: "#ffffff",
+                    lineColor: "#000000",
+                    margin: 10,
+                    marginTop: undefined,
+                    marginBottom: undefined,
+                    marginLeft: undefined,
+                    marginRight: undefined
+                }
+            );
             $scope.selectedProjectText = $('[name="project"] option:selected').text();
             $scope.selectedPMText = $('[name="pm"] option:selected').text();
             $scope.selectedAEText = $('[name="ae"] option:selected').text();
@@ -405,6 +425,16 @@ conAngular
             });
         }
 
+        $scope.getRackLocationLink = function( id, locations ){
+            $('#'+id+' .js-location-links').empty();
+            var links = '';
+            $.each( locations, function( i, val ){
+                links += '<a href="#/view-location/' + val.location_id + '">' + val.location + '</a><br>';
+            });
+            $('#'+id+' .js-location-links').append( links );
+            //return links;
+        }
+
 
 
 		/******************
@@ -421,6 +451,10 @@ conAngular
                 case '/pending-entry-requests':
                     getPendingEntryRequests();
                     initPendingEntryRequestsDataTable();
+                    break;
+                case '/validate-entries':
+                    getPendingValidationEntries();
+                    initPendingValidationEntriesDataTable();
                     break;
                 case '/check-in':
                     getLatestEntries();
@@ -725,6 +759,27 @@ conAngular
                     .withOption('order', [])
                     .withOption('searching', false);
             $scope.dtPendingEntryRequestsColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(6).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initPendingEntryRequestsDataTable
+
+        function getPendingValidationEntries(){
+            InventoryItemService.getPendingValidationEntries( function( inventoryItems ){
+                console.log( inventoryItems );
+                $scope.inventoryItems = inventoryItems;
+            });
+        }// getPendingValidationEntries
+
+        function initPendingValidationEntriesDataTable(){
+            $scope.dtPendingValidationEntriesOptions = DTOptionsBuilder.newOptions()
+                    .withPaginationType('full_numbers')
+                    .withDisplayLength(20)
+                    .withDOM('it')
+                    .withOption('responsive', true)
+                    .withOption('order', [])
+                    .withOption('searching', false);
+            $scope.dtPendingValidationEntriesColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');

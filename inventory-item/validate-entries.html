@@ -1,0 +1,30 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Validar entradas</h4>
+    
+    <table datatable="ng" dt-options="dtPendingValidationEntriesOptions" dt-column-defs="dtPendingValidationEntriesColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">Nombre</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Proyecto</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Project Manager</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Ejecutivo de Cuenta</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
+                <th class="[ center-align ]">Ingresar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in inventoryItems">
+                <td>{{ item.name }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.project }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ item.pm }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ item.ae }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ item.entry_date | date:'dd/MM/yyyy' }}</td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/authorize-entry/{{ item.id }}"><i class="[ fa fa-indent ]"></i></a></td>
+            </tr>
+        </tbody>
+    </table>    
+</div>

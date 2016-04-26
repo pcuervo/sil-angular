@@ -31,6 +31,7 @@ conAngular
         service.getOutOfStock = getOutOfStock;
         service.requestEntry = requestEntry;
         service.getPendingEntryRequests = getPendingEntryRequests;
+        service.getPendingValidationEntries = getPendingValidationEntries;
         service.getItemRequest = getItemRequest;
         return service;
 
@@ -555,6 +556,17 @@ conAngular
                     callback( response );
                 });
         }// getPendingEntryRequests
+
+        function getPendingValidationEntries( callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/pending_validation_entries';
+            $http.get( serviceUrl )
+                .success(function ( response ) {
+                    callback( response.inventory_items );
+                })
+               .error(function ( response ) {
+                    callback( response );
+                });
+        }// getPendingValidationEntries
 
         function getItemRequest( id, callback ) {
  
