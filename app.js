@@ -482,6 +482,33 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/validate-entries', {
+        url: "/validate-entries",
+        templateUrl: "inventory-item/validate-entries.html",
+        controller: "CheckInController",
+        data: {
+            pageTitle: 'Validar entradas',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Entradas',
+                href: '#/check-in'
+            }, {
+                title: 'Validar entradas'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
     .state('/authorize-entry', {
         url: "/authorize-entry/:itemId",
         templateUrl: "inventory-item/authorize-entry.html",
@@ -1601,7 +1628,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     // API URL
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/'
-    $rootScope.apiUrl = stage;
+    $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view

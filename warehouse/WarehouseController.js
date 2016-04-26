@@ -223,6 +223,16 @@ conAngular
             }
         }// getTransactionTypeClass
 
+        $scope.getRackLocationLink = function( id, locations ){
+            $('#'+id+' .js-location-links').empty();
+            var links = '';
+            $.each( locations, function( i, val ){
+                links += '<a href="#/view-location/' + val.location_id + '">' + val.location + '</a><br>';
+            });
+            $('#'+id+' .js-location-links').append( links );
+            //return links;
+        }
+
 
 
         /******************
@@ -307,6 +317,7 @@ conAngular
 
         function getItemsByRack( id ){
             WarehouseService.getItems( id, function( items ){
+                console.log( items );
                 $scope.items = items;
             }); 
         }
@@ -590,6 +601,7 @@ conAngular
             WarehouseService.getLocation( id, function( location ){
                 $scope.locationId = location.id;
                 $scope.rack = location.warehouse_rack.name;
+                $scope.rackId = location.warehouse_rack.id;
                 $scope.locationName = location.name;
                 $scope.status = location.status;
                 $scope.units = location.units;

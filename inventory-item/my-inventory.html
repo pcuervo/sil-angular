@@ -104,6 +104,10 @@
                     <div ng-if="( i.status == 4 || i.status == 5 || i.status == 6  )">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
                     </div>
+                    <div ng-if="( i.status == 7 )">
+                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
+                        <a class="[ btn waves-effect ]" href="#/validate-entry/{{i.id}}"><i class="[ fa fa-check ]"></i></a>
+                    </div>
                 </td>
             </tr>
         </tbody>

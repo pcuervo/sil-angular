@@ -1,24 +1,28 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
 <div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Clientes</h4>
+    <div class="[ row ]">
+        <div class="[ col s12 m8 offset-m2 }">
+            <h4 class="[ center-align ]">Clientes</h4>
+            <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th class="[ center-align ]">Nombre</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Fecha creación</th>
+                        <th class="[ center-align ]">Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="c in clients">
+                    <td>{{ c.name }}</td>
+                    <td class="[ hide-on-small-only ]">{{ c.created_at | date:'dd/MM/yyyy' }}</td>
+                    <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-user"><i class="[ fa fa-edit ]"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     
-    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
-        <thead>
-            <tr>
-                <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Fecha creación</th>
-                <th class="[ center-align ]">Editar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="c in clients">
-            <td>{{ c.name }}</td>
-            <td class="[ hide-on-small-only ]">{{ c.created_at | date:'dd/MM/yyyy' }}</td>
-            <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-user"><i class="[ fa fa-edit ]"></i></a></td>
-            </tr>
-        </tbody>
-    </table>
     
 </div>
 
