@@ -360,6 +360,8 @@ conAngular
             }
             if( 'BundleItem' == type ){
                 $scope.parts = [];
+                $scope.multipleLocations = [];
+                $scope.currentLocations = [];
             }
         }
 

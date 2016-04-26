@@ -1641,7 +1641,7 @@ ErrorHelper = {
 var FormatHelper = FormatHelper || {};
 FormatHelper = {
     slug: function( text ){
-        return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
+        return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,' ');
     },
     dateYMD: function( date, separator ){
         var dd = date.getDate();
