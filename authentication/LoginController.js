@@ -8,18 +8,20 @@ conAngular
 
 		$scope.login = function(){
 
-			LoaderHelper.showLoader('Iniciando sesión...')
+			LoaderHelper.showLoader('Iniciando sesión...');
 			AuthenticationService.login($scope.email, $scope.password, function (response) {
 
                 if( null === response ){
                     $scope.dataLoading = false;
                     Materialize.toast('No se ha podido establecer conexión con el servidor.', 4000, 'red');
+                    LoaderHelper.hideLoader();
                     return;
                 }
 
                 if( response.errors ){
                     $scope.dataLoading = false;
                     Materialize.toast(response.errors, 4000, 'red');
+                    LoaderHelper.hideLoader();
                     return;
                 }
 
