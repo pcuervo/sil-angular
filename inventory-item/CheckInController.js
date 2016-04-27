@@ -313,10 +313,10 @@ conAngular
             $scope.bulkLocations = [];
         }
 
-        $scope.authorizeEntry = function( itemId ){
+        $scope.validateEntry = function( itemId ){
             InventoryItemService.authorizeEntry( itemId, function( response ){
-                Materialize.toast(response.success, 4000, 'green');
-                getPendingEntries();
+                Materialize.toast( response.success, 4000, 'green' );
+                getPendingValidationEntries();
             });
         }
 
@@ -427,6 +427,9 @@ conAngular
 
         $scope.getRackLocationLink = function( id, locations ){
             $('#'+id+' .js-location-links').empty();
+
+            if( locations.length == 0 ) $('#'+id+' .js-location-links').append( '-' );;
+
             var links = '';
             $.each( locations, function( i, val ){
                 links += '<a href="#/view-location/' + val.location_id + '">' + val.location + '</a><br>';
@@ -435,6 +438,11 @@ conAngular
             //return links;
         }
 
+        $scope.appendItemImg = function( id, imgURL, itemName ){
+            $('#' + id + ' .js-item-img').empty();
+            var imgHtml = '<img src="' + imgURL + '" alt=" ' + itemName + '">';
+            $('#' + id + ' .js-item-img').append( imgHtml );
+        }
 
 
 		/******************
@@ -503,6 +511,8 @@ conAngular
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
                     if( 'inventory-item/templates/edit-unit-item.html' == template || 'inventory-item/templates/edit-bulk-item.html' == template || 'inventory-item/templates/edit-bundle-item.html' == template ){
                         $('.js-barcode').JsBarcode( $scope.item.barcode );
+                        $('[name="storageType"]').val( $scope.item.storage_type );
+                        $('[name="itemType"]').val( $scope.item.item_type );
                     }
                 });
 
@@ -548,7 +558,6 @@ conAngular
         function fetchWarehouseRacks(){
 
             WarehouseService.getRacks( function( racks ){
-                console.log( racks );
                 $scope.racks = racks;
             });
 
@@ -780,7 +789,8 @@ conAngular
                     .withOption('order', [])
                     .withOption('searching', false);
             $scope.dtPendingValidationEntriesColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(6).notSortable()
+                DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                DTColumnDefBuilder.newColumnDef(7).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initPendingEntryRequestsDataTable

@@ -1,30 +1,37 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
 <div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Validar entradas</h4>
-    
-    <table datatable="ng" dt-options="dtPendingValidationEntriesOptions" dt-column-defs="dtPendingValidationEntriesColumnDefs" class="row-border hover">
-        <thead>
-            <tr>
-                <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Proyecto</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Project Manager</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Ejecutivo de Cuenta</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
-                <th class="[ center-align ]">Ingresar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="item in inventoryItems">
-                <td>{{ item.name }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.project }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ item.pm }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ item.ae }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ item.entry_date | date:'dd/MM/yyyy' }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/authorize-entry/{{ item.id }}"><i class="[ fa fa-indent ]"></i></a></td>
-            </tr>
-        </tbody>
-    </table>    
+    <div class="row">
+        <div class="[ col s12 ]">
+            <h4 class="[ center-align ]">Validar entradas</h4>
+            <table datatable="ng" dt-options="dtPendingValidationEntriesOptions" dt-column-defs="dtPendingValidationEntriesColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th class="[ center-align ]">Nombre</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Proyecto</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Cliente</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Contacto Cliente</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">¿Quién solicita entrada?</th>
+                        <th class="[ center-align ]">Validar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in inventoryItems" id="{{item.id}}">
+                        <td class="[ js-item-img ]">{{ appendItemImg( item.id, item.item_img_thumb, item.name ) }}</td>
+                        <td>{{ item.name }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.project_data.name }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.project_data.client }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.project_data.client_contact }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.owner }}</td>
+                        <td class="[ center-align ]">
+                            <button class="[ btn waves-effect green ]" ng-click="validateEntry( item.id )"><i class="[ fa fa-check ]"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>    
+        </div>
+    </div>
 </div>

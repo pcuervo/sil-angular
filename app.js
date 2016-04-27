@@ -578,7 +578,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
     .state('/edit-item', {
         url: "/edit-item/:itemId",
         templateUrl: "inventory-item/edit-item.html",
-        controller: "CheckInController",
+        controller: "InventoryController",
         data: {
             pageTitle: 'Editar artículo',
             crumbs: [{

@@ -1,5 +1,13 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
+
+<div class="[ card-panel ]" ng-include src="'inventory-item/templates/view-unit-item.html'" ng-if="'UnitItem'==item.actable_type"></div>
+<div class="[ card-panel ]" ng-include src="'inventory-item/templates/view-bulk-item.html'" ng-if="'BulkItem'==item.actable_type"></div>
+<div class="[ card-panel ]" ng-include src="'inventory-item/templates/view-bundle-item.html'" ng-if="'BundleItem'==item.actable_type"></div>
+
+
+
+<!-- 
 <div class="[ card-panel ]">
 
     <h4 class="[ center-align ]">Detalle artículo</h4>
@@ -137,9 +145,5 @@
                 </div>
             </div>
         </form>
-    </div><!-- row -->
+    </div><!-- row 
 </div><!-- card-panel -->
-
-
-
-

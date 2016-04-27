@@ -4,6 +4,7 @@ conAngular
  
         service.create = create;
         service.getBulkItems = getBulkItems;
+        service.edit = edit;
         return service;
 
         /******************
@@ -62,10 +63,31 @@ conAngular
 
         }// getBulkItems
 
+        function edit( id, name, description, value, storageType, validityExpirationDate, state, isHighValue, isInventoryItem, callback ) {
 
+            var userId = $rootScope.globals.currentUser.id;
+            var serviceUrl = $rootScope.apiUrl + 'bulk_items/update';
+            $http.post(serviceUrl, 
+                { 
+                    id:                 id,
+                    is_inventory_item:  isInventoryItem,
+                    bulk_item: {
+                        name:                       name, 
+                        description:                description, 
+                        value:                      value,
+                        storage_type:               storageType,
+                        state:                      state,
+                        validity_expiration_date:   validityExpirationDate,
+                        is_high_value:              isHighValue
+                    }
+                })
+                .success(function( response ) {
+                    callback( response.inventory_item );
+                })
+                .error(function( response ) {
+                    callback( response );
+                });
 
-        /******************
-        * PRIVATE FUNCTIONS
-        *******************/
+        }// edit
 
     }]);
