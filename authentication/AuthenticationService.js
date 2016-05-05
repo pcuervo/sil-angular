@@ -22,17 +22,18 @@ conAngular
                
         }// login
     
-        function setCredentials(id, name, email, role, authToken, password) {
+        function setCredentials(id, name, email, role, authToken, password, avatar) {
 
             var authdata = Base64.encode(email + ':' + password);
  
             $rootScope.globals = {
                 currentUser: {
-                    id:         id,
-                    name:       name,
-                    email:      email,
-                    authdata:   authToken,
-                    role:       role
+                    id:             id,
+                    name:           name,
+                    email:          email,
+                    authdata:       authToken,
+                    role:           role,
+                    avatarUrl:      avatar
                 }
             };
  

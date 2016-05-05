@@ -1,16 +1,23 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
 <div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Edita tu perfil</h4>
+    <h4 class="[ center-align ]">Editar perfil</h4>
     <div class="[ row ]">
-        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateUser()" data-parsley-validate>
-            <div class="[ col s12 m3 ]"> 
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateUser()" enctype="multipart/form-data" data-parsley-validate>
+            <div class="[ col s12 m3 offset-m3 ]"> 
                 <div class="input-field">
-                    <input type="text" id="email" ng-model="email" required>
+                    <input type="text" id="email" ng-model="email" ng-readonly="true">
                     <label for="email">Email</label>
                 </div>
             </div>
             <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="role" ng-model="role" ng-readonly="true">
+                    <label for="role">Rol</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m3 offset-m3 ]"> 
                 <div class="input-field">
                     <input type="text" id="firstName" ng-model="firstName" required>
                     <label for="firstName">Nombre</label>
@@ -21,16 +28,18 @@
                     <input type="text" id="lastName" ng-model="lastName" required>
                     <label for="lastName">Apellido(s)</label>
                 </div>
-            </div>
-            <div class="[ col s12 m3 ]"> 
-                <div class="input-field">
-                    <input type="text" id="role" ng-model="role" ng-readonly="true">
-                    <label for="role">Rol</label>
+            </div>    
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 offset-m3 ]"> 
+                <div class="file-field input-field">
+                    <input class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen">
+                    <div class="">
+                        <span>Subir imagen</span>
+                        <input type="file" id="userImg" ng-model="userImg" />
+                    </div>
                 </div>
             </div>
-            <div class="[ clear ]"></div>
             <div class="[ col s12 ]"> 
-                <input type="hidden" name="entry_type" value="unit">
                 <div class="[ center-align ]">
                     <button class="[ waves-effect ][ btn ]">actualizar</button>
                 </div>

@@ -27,7 +27,7 @@ conAngular
 
 				var userObj = response.user;
 				var userName = userObj.first_name + ' ' + userObj.last_name;
-			    AuthenticationService.setCredentials(userObj.id, userName, $scope.email, userObj.role, userObj.auth_token, $scope.password);
+			    AuthenticationService.setCredentials(userObj.id, userName, $scope.email, userObj.role, userObj.auth_token, $scope.password, userObj.avatar_thumb);
 				$scope.logged_in = true;
 
                 // toast

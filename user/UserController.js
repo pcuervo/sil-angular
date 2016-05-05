@@ -7,6 +7,9 @@ conAngular
             fetchNewNotifications();
             if( '/edit-profile' === currentPath || '/my-account' === currentPath ){
                 getUser( $rootScope.globals.currentUser.id );
+                $("#userImg").change(function(){
+                    getUserImg();
+                });
                 return;
             }
             if( 0 !== Object.keys($stateParams).length ) {
@@ -50,12 +53,17 @@ conAngular
             // Add feedback saving
             console.log('actualizando usuario...');
 
-            UserService.update( $scope.id, $scope.email, $scope.firstName, $scope.lastName, function ( response ){
+            var userImgName = $scope.firstName.toLowerCase() + '-' + $scope.lastName.toLowerCase() + '.' + $scope.userImgExt;
+            UserService.update( $scope.id, $scope.email, $scope.firstName, $scope.lastName, $scope.userImg, userImgName, function ( response ){
 
                     if(response.errors) {
                         console.log(response.errors);
                         ErrorHelper.display( response.errors );
                         return;
+                    }
+                    console.log( response.user )
+                    if( '/images/thumb/missing.png' != response.user.avatar_thumb ){
+                        $('#user-avatar').attr('src', response.user.avatar_thumb );
                     }
                     Materialize.toast('¡Usuario "' + $scope.firstName + ' ' + $scope.lastName + '" actualizado exitosamente!', 4000, 'green');
                     if( '/edit-profile' === currentPath ){
@@ -122,6 +130,11 @@ conAngular
                 $scope.lastName = user.last_name;
                 $scope.role = $scope.getUserRole( user.role );
                 $scope.id = id;
+                if( '/images/thumb/missing.png' != user.avatar_thumb ){
+                    $scope.avatarUrl = user.avatar_thumb;
+                    return;
+                }
+                $scope.avatarUrl = 'assets/_con/images/new-user.jpg';
             }); 
 
         }// getUser
@@ -145,5 +158,18 @@ conAngular
                 NotificationHelper.updateNotifications( numUnreadNotifications );
             });
         }
+
+        function getUserImg(){
+            var imgId = 'userImg';
+            var fileInput = document.getElementById( imgId );
+            file = fileInput.files[0];
+            fr = new FileReader();
+            fr.readAsDataURL(file);
+            fr.onload = function(){
+                $scope.userImg = fr.result;
+                $scope.userImgExt = file.name.split('.').pop().toLowerCase();
+            }
+
+        }// getUserImg
 
     }]);
