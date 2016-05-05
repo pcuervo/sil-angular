@@ -41,23 +41,22 @@ conAngular
             $scope.barCodeVal = FormatHelper.slug( $scope.itemName + ' ' + randomNum );
             $('.js-barcode').JsBarcode( $scope.barCodeVal,
                 {
-                    width: 2,
-                    height: 100,
+                    width: 5,
+                    height: 70,
                     format: "CODE128",
                     displayValue: false,
-                    fontOptions: "",
                     font: "monospace",
                     textAlign: "center",
                     textPosition: "bottom",
                     textMargin: 2,
-                    fontSize: 20,
+                    fontSize: 36,
                     background: "#ffffff",
                     lineColor: "#000000",
                     margin: 10,
-                    marginTop: undefined,
-                    marginBottom: undefined,
-                    marginLeft: undefined,
-                    marginRight: undefined
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginLeft: 0,
+                    marginRight: 0
                 }
             );
             $scope.selectedProjectText = $('[name="project"] option:selected').text();
@@ -394,11 +393,12 @@ conAngular
             var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
             barcodeWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>' + $scope.barcode + '</title>');
             barcodeWindow.document.write('<style>');
-            barcodeWindow.document.write('@page{size:auto;margin:0}.card-image img{width:100%;display:block;margin-left:auto;margin-right:auto}.content h5{text-align:center}table{width:100%}#watermark{width:50%;height:auto;margin:0 auto;display:block;opacity:.3;z-index:-1;}');
+            barcodeWindow.document.write('@page{size:auto;margin:0}.card-image img{max-width:60%;display:block;margin-left:auto;margin-right:auto}.content h5{margin:0;text-align:center}table{width:5.5in}#watermark{width:50%;height:auto;margin:0;color:#d0d0d0;position:absolute;right:-.8in;bottom:1.5in;opacity:.3;z-index:-1;-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg)}');
             barcodeWindow.document.write('</style>');
-            barcodeWindow.document.write('</head><body>');
+            barcodeWindow.document.write('</head><body><table>');
+            barcodeWindow.document.write('<tr><th colspan="2">');
             barcodeWindow.document.write( barcodeEl );
-            barcodeWindow.document.write('<table><tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
+            barcodeWindow.document.write('</th></tr><tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.selectedProjectText + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
             barcodeWindow.document.write('<tr><td>PM</td><td> ' + $scope.selectedPMText + '</td></tr>');
@@ -412,7 +412,7 @@ conAngular
             barcodeWindow.document.close(); // necessary for IE >= 10
             barcodeWindow.focus(); // necessary for IE >= 10
             barcodeWindow.print();
-            //barcodeWindow.close();
+            barcodeWindow.close();
 
             return true;
         }
