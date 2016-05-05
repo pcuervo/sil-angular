@@ -4,6 +4,9 @@
     <h4 class="[ center-align ]">Mi cuenta</h4>
     <div class="[ row ]">
         <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateUser()" data-parsley-validate>
+            <div class="[ col s12 m3 offset-m1 ]"> 
+                <img class="[ circle ][ img-responsive ]" src="{{ avatarUrl }}" alt="Imagen del usuario">
+            </div>
             <div class="[ col s12 m3 ]"> 
                 <div class="input-field">
                     <input type="text" id="email" ng-model="email" ng-readonly="true">

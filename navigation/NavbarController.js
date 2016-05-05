@@ -6,6 +6,9 @@ conAngular.controller('NavbarController', ['$scope', '$rootScope', '$cookies', f
             if( $rootScope.loggedIn ) {
                 $scope.role = $rootScope.globals.currentUser.role;
                 $('#my-account span').text( $rootScope.globals.currentUser.name );
+                if( '/images/thumb/missing.png' != $rootScope.globals.currentUser.avatarUrl ){
+                    $('#user-avatar').attr('src', $rootScope.globals.currentUser.avatarUrl );
+                }
             }
         });
     });

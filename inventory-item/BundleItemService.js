@@ -74,7 +74,6 @@ conAngular
                 .error(function( response ) {
                     callback( response );
                 });
-
         }// edit
 
 
