@@ -41,8 +41,8 @@ conAngular
             $scope.barCodeVal = FormatHelper.slug( $scope.itemName + ' ' + randomNum );
             $('.js-barcode').JsBarcode( $scope.barCodeVal,
                 {
-                    width: 5,
-                    height: 70,
+                    width: 4,
+                    height: 150,
                     format: "CODE128",
                     displayValue: false,
                     font: "monospace",
@@ -393,7 +393,7 @@ conAngular
             var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
             barcodeWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>' + $scope.barcode + '</title>');
             barcodeWindow.document.write('<style>');
-            barcodeWindow.document.write('@page{size:auto;margin:0}.card-image img{max-width:60%;display:block;margin-left:auto;margin-right:auto}.content h5{margin:0;text-align:center}table{width:5.5in}#watermark{width:50%;height:auto;margin:0;color:#d0d0d0;position:absolute;right:-.8in;bottom:1.5in;opacity:.3;z-index:-1;-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg)}');
+            barcodeWindow.document.write('@page{size:auto;margin:0}.card-image img{max-width:100%;display:block;margin-left:auto;margin-right:auto}.content h5{margin:0 0 30px;text-align:center}table{width:100%}#watermark{width:50%;height:auto;margin:0;color:#d0d0d0;position:absolute;right:0;bottom:1.2in;opacity:.3;z-index:-1;-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg)}');
             barcodeWindow.document.write('</style>');
             barcodeWindow.document.write('</head><body><table>');
             barcodeWindow.document.write('<tr><th colspan="2">');
@@ -412,7 +412,7 @@ conAngular
             barcodeWindow.document.close(); // necessary for IE >= 10
             barcodeWindow.focus(); // necessary for IE >= 10
             barcodeWindow.print();
-            barcodeWindow.close();
+            //barcodeWindow.close();
 
             return true;
         }
