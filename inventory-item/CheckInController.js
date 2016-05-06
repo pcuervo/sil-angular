@@ -34,7 +34,7 @@ conAngular
                     getItemImg( 'itemImgBundle' );
                     break;
                 default:
-                    getItemImg();
+                    getItemImg( '' );
             }
 
             var randomNum = Math.floor((Math.random() * 100) + 1);
@@ -607,8 +607,8 @@ conAngular
 
         }// fillProjectClient
 
-        function getItemImg( type = 0 ){
-            var imgId = type == 0 ? 'itemImg' : type;
+        function getItemImg( type ){
+            var imgId = type == '' ? 'itemImg' : type;
             var fileInput = document.getElementById( imgId );
             file = fileInput.files[0];
             fr = new FileReader();
@@ -619,7 +619,7 @@ conAngular
             }
         }// getItemImg
 
-        function registerUnitItem( itemRequestId = 0 ){
+        function registerUnitItem( itemRequestId ){
 
             var status = 1;
             if( $('#checkbox-validation:checked').length ){
@@ -645,7 +645,7 @@ conAngular
 
         }// registerUnitItem
 
-        function registerBulkItem( itemRequestId = 0 ){
+        function registerBulkItem( itemRequestId ){
 
             var status = 1;
             if( $('#checkbox-validation:checked').length ){
@@ -674,7 +674,7 @@ conAngular
 
         }// registerBulkItem
 
-        function registerBundleItem( itemRequestId = 0 ){
+        function registerBundleItem( itemRequestId ){
 
             var status = 1;
             if( $('#checkbox-validation:checked').length ){
@@ -724,7 +724,9 @@ conAngular
             $scope.dtLatestEntriesColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(6).notSortable()
+                DTColumnDefBuilder.newColumnDef(7).notSortable(),
+                DTColumnDefBuilder.newColumnDef(6).withOption('orderData', '5'),
+                DTColumnDefBuilder.newColumnDef(5).withOption('type', 'nullable').notVisible()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 

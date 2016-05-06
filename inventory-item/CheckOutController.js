@@ -65,8 +65,8 @@ conAngular
         }// getItemTypeIcon
 
         $scope.multipleWithdrawal = function(){
-            var ids = getItemIdsToWithdraw();
-            InventoryItemService.multipleWithdrawal( ids, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
+            var items = getItemToWithdraw();
+            InventoryItemService.multipleWithdrawal( items, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
                 Materialize.toast( response.success, 4000, 'green');
                 $state.go('/check-out', {}, { reload: true });
             });
@@ -281,12 +281,15 @@ conAngular
             return parts;
         }
 
-        function getItemIdsToWithdraw(){
-            var ids = []
+        function getItemToWithdraw(){
+            var items = []
             $('input[type="checkbox"]:checked').each( function(i, partCheckbox){
-                ids.push( $(partCheckbox).val() );
+                item = {};
+                item['id'] = $(partCheckbox).val();
+                item['quantity'] = $( '#quantity-'+item['id'] ).val();
+                items.push( item );
             });
-            return ids;
+            return items;
         }
 
         function getCheckOutTransactions(){
@@ -357,12 +360,13 @@ conAngular
             $scope.dtMultipleWithdrawalOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(20)
-                    .withDOM('')
+                    .withDOM('flitrp')
                     .withOption('responsive', true)
                     .withOption('order', [])
-                    .withOption('searching', false);
+                    .withOption('searching', true);
             $scope.dtMultipleWithdrawalColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                DTColumnDefBuilder.newColumnDef(6).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
