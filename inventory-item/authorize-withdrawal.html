@@ -1,0 +1,65 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+
+    <h4 class="[ center-align ]">Autorizar salida</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="authorizeWithdrawal()" data-parsley-entry>
+            <table datatable="ng" dt-options="dtPendingEntryRequestsOptions" dt-column-defs="dtPendingEntryRequestsColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="[ center-align ]">Artículo</th>
+                        <th class="[ center-align ]">Tipo de mercancía</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="i in withdrawItems">
+                        <td><img src="{{ i.item_img }}" /></td>
+                        <td>{{ i.name }}</td>
+                        <td class="[ center-align ]">{{ i.item_type }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.quantity }}</td>
+                    </tr>
+                </tbody>
+            </table>  
+            <div class="[ clear ]"></div>
+            <div class="[ mt-40 ]"></div>
+            <div class="[ col s12 m4 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de salida (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="exitDate" ng-model="exitDate" ng-readonly="true">
+            </div>
+            <div class="[ col s12 m4 ][ mt-20 ]"> 
+                <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="pickup-contact-unit" type="text" name="pickupCompanyContact" ng-model="pickupCompanyContact">
+                    <label for="pickup-contact-unit">¿Quién se lo lleva?</label>
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="input-field">
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+                    <label for="textarea1">Observaciones adicionales</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ][ center-align ]" >
+                <button class="[ waves-effect ][ btn red ]">Dar salida</button>
+            </div>
+        </form>
+    </div><!-- row -->
+</div><!-- step 0 Entry request -->
+
+<script>
+  $('[data-parsley-entry]').parsley();
+</script>
+
+
+
+
+

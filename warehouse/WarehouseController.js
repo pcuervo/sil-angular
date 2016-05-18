@@ -189,7 +189,8 @@ conAngular
         }// deleteRack
 
         $scope.updateRows = function( column ){
-            if( 1 == column ){
+            var columnText = $('[name="columns"] option:selected').text();
+            if( 1 == column && ( 'piso' == columnText || 'taller' == columnText ) ){
                 $scope.rows = 1;
                 $scope.units = 100000;
                 $scope.isFloor = true;

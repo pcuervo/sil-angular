@@ -35,7 +35,7 @@
                     </li>
                     <li ><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i>  Entradas</a>
                     </li>
-                    <li ng-if="( role == 1 || role == 6 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
+                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 6 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
                     </li>
                 </ul>
             </li>
@@ -85,7 +85,7 @@
                     </li>
                 </ul>
             </li>
-            <li ng-show="( role == 1 )">
+            <li ng-show="( role == 1 || role == 6 )">
                 <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-truck"></i> Proveedores<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
                 <ul>
                     <li><a class="waves-effect waves-blue" href="#/view-suppliers"><i class="ion-eye"></i>Ver proveedores</a>

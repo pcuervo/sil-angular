@@ -417,7 +417,34 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 return $ocLazyLoad.load([
                 {
                     name: 'conAngular',
-                    insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
+    .state('/request-exit', {
+        url: "/request-exit",
+        templateUrl: "inventory-item/request-exit.html",
+        controller: "CheckOutController",
+        data: {
+            pageTitle: 'Solicitud de salida',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Salidas',
+                href: '#/check-in'
+            }, {
+                title: 'Solicitud de salida'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
                     files: conAssets('parsley')
                 }]);
             }]
@@ -482,6 +509,33 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/pending-withdrawal-requests', {
+        url: "/pending-withdrawal-requests",
+        templateUrl: "inventory-item/pending-withdrawal-requests.html",
+        controller: "CheckOutController",
+        data: {
+            pageTitle: 'Salidas pendientes',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Salidas',
+                href: '#/check-in'
+            }, {
+                title: 'Salidas pendientes'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley,jsBarcode')
+                }]);
+            }]
+        }
+    })
     .state('/validate-entries', {
         url: "/validate-entries",
         templateUrl: "inventory-item/validate-entries.html",
@@ -522,6 +576,32 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             },
             {
                 title: 'Autorizar entrada'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('jsBarcode,parsley')
+                }]);
+            }]
+        }
+    })
+    .state('/authorize-withdrawal', {
+        url: "/authorize-withdrawal/:withdrawRequestId",
+        templateUrl: "inventory-item/authorize-withdrawal.html",
+        controller: "CheckOutController",
+        data: {
+            pageTitle: 'Salida',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
+            }, {
+                title: 'Salidas'
+            },
+            {
+                title: 'Autorizar salida'
             }]
         },
         resolve: {
@@ -1514,7 +1594,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 {
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
-                    files: conAssets('dataTables,parsley,geoAutocomplete,gmaps')
+                    files: conAssets('dataTables,parsley,geoAutocomplete,gmaps,clockpicker')
                 }]);
             }]
         }
@@ -1635,7 +1715,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     $rootScope.$state = $state;
     // keep user logged in after page refresh
     $rootScope.globals = $cookies.getObject('globals') || {};
-    if ($rootScope.globals.currentUser) {
+    if ( $rootScope.globals.currentUser ) {
       $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.authdata; // jshint ignore:line
     }
 

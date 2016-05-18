@@ -1,7 +1,7 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
 <div class="[ card-panel ]">
-    <div class="[ row ]">
+    <div class="[ row ]" ng-if="1 == role || 4 == role">
         <div class="[ col s12 m6 l4 ]"> 
             <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/withdraw-unit-item"><i class="[ fa fa-outdent ][ left ]"></i>Unitaria</a>
         </div>
@@ -18,7 +18,12 @@
             <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/withdraw-items"><i class="[ fa fa-outdent ][ left ]"></i>Masiva</a>
         </div>
         <div class="[ col s12 m6 l4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/pending-withdrawals"><i class="[ fa fa-eye ][ left ]"></i>Pendientes</a>
+            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/pending-withdrawal-requests"><i class="[ fa fa-eye ][ left ]"></i>Solicitudes de salida</a>
+        </div>
+    </div>
+    <div class="[ row ]" ng-if="2 == role || 3 == role">
+        <div class="[ col s12 m4 offset-m4 ]"> 
+            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/request-exit"><i class="[ fa fa-outdent ][ left ]"></i>Solicitud de salida</a>
         </div>
     </div>
 </div>

@@ -33,6 +33,9 @@ conAngular
         service.getPendingEntryRequests = getPendingEntryRequests;
         service.getPendingValidationEntries = getPendingValidationEntries;
         service.getItemRequest = getItemRequest;
+        service.requestWithdrawal = requestWithdrawal;
+        service.getPendingWithdrawalRequests = getPendingWithdrawalRequests;
+        service.getWithdrawRequest = getWithdrawRequest;
         return service;
 
         // Public 
@@ -328,12 +331,17 @@ conAngular
 
         }// authorizeEntry
 
-        function authorizeWithdrawal( id, callback ) {
+        function authorizeWithdrawal( id, pickupCompanyContact, additionalComments, callback ) {
  
-            var serviceUrl = $rootScope.apiUrl + 'inventory_items/authorize_withdrawal';
-            $http.post( serviceUrl, { id: id } )
+            var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/authorize_withdrawal';
+            $http.post( serviceUrl, 
+                {  
+                    id:                     id, 
+                    pickup_company_contact: pickupCompanyContact,
+                    additional_comments:    additionalComments
+                }
+            )
             .success(function( response ) {
-                console.log( response );
                 callback( response );
             })
             .error(function( response ) {
@@ -586,5 +594,48 @@ conAngular
                });
 
         }// getItemRequest
+
+        function requestWithdrawal( items, exitDate, pickupCompanyId, callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/';
+            $http.post( serviceUrl, 
+                { 
+                    withdraw_request: {
+                        inventory_items:        items,
+                        exit_date:              exitDate,
+                        pickup_company_id:      pickupCompanyId,
+                    }
+                }
+            )
+            .success(function( response ) {
+                callback( response.withdraw_request );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+
+        }// requestWithdrawal
+
+        function getPendingWithdrawalRequests( callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/';
+            $http.get( serviceUrl )
+                .success(function ( response ) {
+                    callback( response.withdraw_requests );
+                })
+               .error(function ( response ) {
+                    callback( response );
+                });
+        }// getPendingWithdrawalRequests
+
+        function getWithdrawRequest( id, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/' + id;
+            $http.get( serviceUrl )
+                .success(function ( response ) {
+                    callback( response.withdraw_request );
+                })
+               .error(function ( response ) {
+                    callback( response );
+                });
+        }// getWithdrawRequest
 
     }]);

@@ -527,7 +527,6 @@ conAngular
         }// initCheckIn
 
 		function fetchProjects(){
-
             switch( $scope.role  ){
                 case 2:
                     ProjectService.byUser( $rootScope.globals.currentUser.id, function( projects ){
@@ -550,15 +549,12 @@ conAngular
                         $scope.projects = projects;
                     });
             }
-
 		}// fetchProjects
 
         function fetchWarehouseRacks(){
-
             WarehouseService.getRacks( function( racks ){
                 $scope.racks = racks;
             });
-
         }// fetchWarehouseRacks
 
         function fillProjectUsersSelects(){
