@@ -43,20 +43,22 @@
     <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
         <thead>
             <tr>
-                <th class="[ center-align ]">Repartidor</th>
-                <th class="[ center-align ]">Empresa donde se entrega</th>
-                <th class="[ center-align ]">Dirección</th>
-                <th class="[ center-align ]">Número de artículos</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Repartidor</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Proveedor</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Empresa donde se entrega</th>
+                <th class="[ center-align ]">¿Quién solicito?</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Número de artículos</th>
                 <th class="[ center-align ]">Status</th>
                 <th class="[ center-align ]">Ver</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="d in latestDeliveries">
-                <td>{{ d.delivery_user_id }}</td>
-                <td class="[ center-align ]">{{ d.company }}</td>
-                <td class="[ center-align ]">{{ d.address }}</td>
-                <td class="[ center-align ]">{{ d.delivery_items.length }}</td>
+                <td class="[ hide-on-med-and-down ]">{{ d.delivery_user }}</td>
+                <td class="[ hide-on-med-and-down ]">{{ d.supplier }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.company }}</td>
+                <td class="[ center-align ]">{{ d.user.first_name + ' ' + d.user.last_name }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.delivery_items.length }}</td>
                 <td class="[ center-align ]">{{ getStatus( d.status ) }}</td>
                 <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-delivery/{{d.id}}"><i class="[ fa fa-eye ]"></i></a></td>
             </tr>

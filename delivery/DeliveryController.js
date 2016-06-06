@@ -34,7 +34,9 @@ conAngular
             var deliveryDate = getDateTime( $scope.deliveryDate, $scope.deliveryTime );
             if( 'undefined' == typeof $scope.deliveryGuy ) $scope.deliveryGuy = -1;
 
-            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.selectedItems, function( delivery ){
+            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.deliveryCompany, $scope.selectedItems, function( delivery ){
+
+                $scope.delivery = delivery;
 
                 $scope.isSummary = true;
                 if( delivery.errors ){
@@ -67,8 +69,9 @@ conAngular
             $scope.address_summary = $scope.address;
             var deliveryDate = getDateTime( this.deliveryDate, this.deliveryTime );
             if( 'undefined' == typeof $scope.deliveryGuy ) $scope.deliveryGuy = -1;
-            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, this.recipientName, this.recipientPhone, this.additionalComments, deliveryDate, $scope.selectedItems, function( delivery ){
+            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, this.recipientName, this.recipientPhone, this.additionalComments, deliveryDate, this.deliveryCompany, $scope.selectedItems, function( delivery ){
 
+                $scope.delivery = delivery;
                 $scope.isSummary = true;
                 if( delivery.errors ){
                     Materialize.toast( 'No se pudo crear el envío, revisa la información e intenta nuevamente.', 4000, 'red');
@@ -153,7 +156,9 @@ conAngular
             if( currentPath.indexOf( '/new-delivery' ) > -1 ){
                 getItem( $stateParams.itemId );
                 fetchDeliveryUsers();
+                fetchSuppliers();
                 $scope.isSummary = false;
+                $scope.deliveryDate = new Date();
 
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
                     if( 'delivery/templates/unit-item-delivery.html' == template || 'delivery/templates/bulk-item-delivery.html' == template || 'delivery/templates/bundle-item-delivery.html' == template ){
@@ -184,7 +189,6 @@ conAngular
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
                     fetchSuppliers();
-                    $scope.deliveryDate = new Date();
                     break;
                 case '/delivery-dashboard':
                     fetchLatestDeliveries();
@@ -302,6 +306,8 @@ conAngular
                 $scope.additionalComments = delivery.additional_comments;
                 $scope.deliveryItems = delivery.delivery_items;
                 $scope.statusText = $scope.getStatus( delivery.status );
+                console.log( delivery );
+                $scope.supplier = delivery.supplier;
                 initGeoAutocomplete( '#address', '#map', delivery.latitude, delivery.longitude, 15 );
                  $(document).on('change', '#deliveryImg', function(){ 
                     getDeliveryImg();
@@ -386,6 +392,7 @@ conAngular
 
         function fetchLatestDeliveries(){
             DeliveryService.all( function( deliveries ){
+                console.log(deliveries)
                 $scope.latestDeliveries = deliveries;
             });
         }// fetchLatestDeliveries
