@@ -41,7 +41,7 @@ conAngular
                });
         }// all
 
-        function create( userId, deliveryUserId, company, address, latitude, longitude, status, addressee, addresseePhone, additionalComments, deliveryDate, inventoryItems, callback ) {
+        function create( userId, deliveryUserId, company, address, latitude, longitude, status, addressee, addresseePhone, additionalComments, deliveryDate, deliveryCompanyId, inventoryItems, callback ) {
             var serviceUrl = $rootScope.apiUrl + 'deliveries/';
             $http.post(serviceUrl, {
                     delivery: {
@@ -54,7 +54,8 @@ conAngular
                         addressee:              addressee,
                         addressee_phone:        addresseePhone,
                         additional_comments:    additionalComments,
-                        date_time:              deliveryDate 
+                        date_time:              deliveryDate, 
+                        supplier_id:            deliveryCompanyId, 
                     },
                     user_id:            userId,
                     inventory_items:    inventoryItems

@@ -38,13 +38,20 @@
                 </tbody>
             </table>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <h4 class="[ center-align ]">Datos de envío</h4>
+            <div class="[ col s12 m4 ][ mt-10 ]"> 
                 <select name="deliveryGuy" ng-model="deliveryGuy" data-parsley-error-message="¡El repartidor es obligatorio!">
                     <option value="" disabled selected>Selecciona el repartidor</option>
                     <option ng:repeat="user in deliveryUsers" value="{{user.id}}">{{ user.first_name + ' ' + user.last_name }}</option>
                 </select>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m4 ][ mt-10 ]"> 
+                <select name="deliveryCompany" ng-model="deliveryCompany" data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
                     <input id="company" type="text" name="company" ng-model="company" required>
                     <label for="company">Empresa donde se entrega</label>
@@ -105,11 +112,18 @@
         </div>
         <div class="[ col s12 m4 ]"> 
             <div class="input-field">
+                <input id="supplier" type="text" name="delivery.supplier" ng-model="delivery.supplier" disabled>
+                <label for="supplier">Proveedor</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 m2 offset-m2 ]"> 
+            <div class="input-field">
                 <input id="company" type="text" name="company" ng-model="company" disabled>
                 <label for="company">Empresa donde se entrega</label>
             </div>
         </div>
-        <div class="[ col s12 m8 offset-m2 ]"> 
+        <div class="[ col s12 m6 ]"> 
             <div class="input-field">
                 <input id="address-summary" type="text" name="address" ng-model="address" disabled>
                 <label for="address-summary">Dirección</label>
@@ -154,7 +168,7 @@
         </div>
         <div class="[ clear ]"></div>
         <div class="[ center ][ col s12 ]">
-            <a class="[ waves-effect ][ btn btn-extra ]" href="#/delivery-dashboard"><i class="fa fa-eye left"></i>Ver todos los envíos</a>
+            <a class="[ waves-effect ][ btn btn-extra ]" href="#/delivery-dashboard"><i class="fa fa-arrow-left left"></i>Ver todos los envíos</a>
             <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión envío</button>
         </div>
     </div>

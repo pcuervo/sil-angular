@@ -23,11 +23,17 @@
             </div>
             <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
+                    <input id="supplier" type="text" name="supplier" ng-model="supplier" disabled>
+                    <label for="supplier">Proveedor</label>
+                </div>
+            </div>
+            <div class="[ col s12 m2 offset-m2 ]"> 
+                <div class="input-field">
                     <input id="company" type="text" name="company" ng-model="company" required>
                     <label for="company">Empresa donde se entrega</label>
                 </div>
             </div>
-            <div class="[ col s12 m8 offset-m2 ]"> 
+            <div class="[ col s12 m6  ]"> 
                 <div class="input-field">
                     <input id="address" type="text" name="address" ng-model="address">
                     <label for="address">Dirección</label>
@@ -63,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <h4 class="[ center-align ][ mb-20 ]">Artículos enviados</h4>
+            <h4 class="[ center-align ][ mb-20 ]">Artículos en envío</h4>
             <div class="[ col s12 m8 offset-m2 ]"> 
                 <table datatable="ng" dt-options="dtDeliverySummaryOptions" dt-column-defs="dtDeliverySummaryColumnDefs" class="row-border hover">
                     <thead>
