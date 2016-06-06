@@ -363,7 +363,7 @@ conAngular
 
         }// withPendingLocation
 
-        function search( projectId, clientContactId, pmId, aeId, status, itemType, storageType, keyword, callback ) {
+        function search( projectId, clientContactId, pmId, aeId, status, itemType, storageType, keyword, serialNumber, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
             $http ({
@@ -378,7 +378,8 @@ conAngular
                         status:             status,
                         item_type:          itemType,
                         storage_type:       storageType,
-                        keyword:            keyword
+                        keyword:            keyword,
+                        serial_number:      serialNumber
                     }
                 })
                .success(function ( response ) {

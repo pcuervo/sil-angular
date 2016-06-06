@@ -29,6 +29,18 @@ conAngular.controller('NotificationController', ['$scope', '$rootScope', '$state
             case 'Solicitud de entrada':
                 url = '#/pending-entry-requests';
                 break;
+            case 'Solicitud de salida':
+                url = '#/pending-withdrawal-requests';
+                break;
+            case 'Solicitud de envío':
+                url = '#/pending-deliveries';
+                break;
+            case 'Aprobación de envío':
+                url = '#/delivery-dashboard';
+                break;
+            case 'Aprobación de salida':
+                url = '#/check-out';
+                break;
             default:
                 url = '#/view-item/'+id;
         }

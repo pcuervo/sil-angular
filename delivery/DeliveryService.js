@@ -7,6 +7,7 @@ conAngular
         service.create = create;
         service.update = update;
         service.stats = stats;
+        service.pendingApproval = pendingApproval;
         return service;
 
 
@@ -40,7 +41,7 @@ conAngular
                });
         }// all
 
-        function create( userId, deliveryUserId, company, address, latitude, longitude, status, addressee, addresseePhone, additionalComments, inventoryItems, callback ) {
+        function create( userId, deliveryUserId, company, address, latitude, longitude, status, addressee, addresseePhone, additionalComments, deliveryDate, inventoryItems, callback ) {
             var serviceUrl = $rootScope.apiUrl + 'deliveries/';
             $http.post(serviceUrl, {
                     delivery: {
@@ -53,6 +54,7 @@ conAngular
                         addressee:              addressee,
                         addressee_phone:        addresseePhone,
                         additional_comments:    additionalComments,
+                        date_time:              deliveryDate 
                     },
                     user_id:            userId,
                     inventory_items:    inventoryItems
@@ -66,11 +68,12 @@ conAngular
                });
         }// create
 
-        function update( id, company, address, latitude, longitude, status, addressee, addresseePhone, additionalComments, image, filename, callback ) {
+        function update( id, company, address, latitude, longitude, status, addressee, addresseePhone, additionalComments, deliveryUserId, image, filename, callback ) {
             var serviceUrl = $rootScope.apiUrl + 'deliveries/update';
             $http.post(serviceUrl, {
                     id: id,
                     delivery: {
+                        delivery_user_id:       deliveryUserId,
                         company:                company,
                         address:                address,
                         latitude:               latitude,
@@ -103,6 +106,17 @@ conAngular
                     callback( response );
                });
         }// stats
+
+        function pendingApproval( callback ){
+            var serviceUrl = $rootScope.apiUrl + 'deliveries/pending_approval/';
+            $http.get( serviceUrl )
+               .success(function ( response ) {
+                    callback( response.deliveries );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// pendingApproval
 
     }]);
 

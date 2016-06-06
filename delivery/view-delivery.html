@@ -1,6 +1,6 @@
 <div class="[ card-panel ]">
     <div class="[ row ]">
-        <form name="delivery-form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" ng-submit="deliver( status )" data-parsley-delivery>
+        <form name="delivery-form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" data-parsley-delivery>
             <h4 class="[ center-align ][ mb-20 ]">Información de envío</h4>
             <div class="[ col s12 m4 offset-m2 ]" ng-if="2 == delivery.status || 3 == delivery.status">
                 <div class="input-field">
@@ -9,15 +9,21 @@
                 </div>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m4 offset-m2 ]">
+            <div class="[ col s12 m4 offset-m2 ]" ng-if="5 != delivery.status">
                 <div class="input-field">
-                    <input id="delivery-guy" type="text" name="delivery-guy" ng-model="delivery.delivery_guy">
+                    <input id="delivery-guy" type="text" name="delivery-guy" ng-model="delivery.delivery_guy" ng-readonly="true">
                     <label for="delivery-guy">Repartidor</label>
                 </div>
             </div>
+            <div class="[ col s12 m4 offset-m2 ][ mt-10 ]" ng-if="5 == delivery.status"> 
+                <select name="delivery-guy" ng-model="deliveryGuy" required data-parsley-error-message="¡El repartidor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el repartidor</option>
+                    <option ng:repeat="user in deliveryUsers" value="{{user.id}}">{{ user.first_name + ' ' + user.last_name }}</option>
+                </select>
+            </div>
             <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
-                    <input id="company" type="text" name="company" ng-model="company">
+                    <input id="company" type="text" name="company" ng-model="company" required>
                     <label for="company">Empresa donde se entrega</label>
                 </div>
             </div>
@@ -50,7 +56,7 @@
             </div>
             <div class="[ col s12 m8 offset-m2 ]" ng-if="1 == delivery.status"> 
                 <div class="file-field input-field">
-                    <input class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen" required>
+                    <input id="delivery-img" class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen">
                     <div class="">
                         <span>Subir imagen</span>
                         <input type="file" id="deliveryImg" ng-model="deliveryImg" />
@@ -84,10 +90,16 @@
                 </table>
             </div>
             <div class="[ clear ]"></div>
-            <img class="[ col s12 m8 offset-m2 ][ materialboxed ]" src="{{delivery.image}}}" ng-if="2 == delivery.status || 3 == delivery.status"> 
+            <div id="deliveryImgProof" ng-if="2 == delivery.status">
+                <h4 class="[ center-align ][ mb-20 ]">Comprobante de entrega</h4>               
+                <img class="[ col s12 m8 offset-m2 ][ ]" ng-src="{{delivery.image}}}">
+            </div> 
             <div class="[ center ][ col s12 ]" ng-if="1 == delivery.status">
-                <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="status=2"><i class="mdi-navigation-check left"></i>Entregado</button>
-                <button class="[ waves-effect ][ btn btn-extra ][ red ]" ng-click="status=3"><i class="mdi-navigation-close left"></i>Cancelado</button>
+                <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="deliver( 2 )"><i class="mdi-navigation-check left"></i>Entregado</button>
+                <button class="[ waves-effect ][ btn btn-extra ][ red ]" ng-click="deliver( 3 )"><i class="mdi-navigation-close left"></i>Rechazado</button>
+            </div>
+            <div class="[ center ][ col s12 ]" ng-if="5 == delivery.status">
+                <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="deliver( 1 )"><i class="mdi-navigation-check left"></i>Confirmar envío</button>
             </div>
         </form>
     </div>

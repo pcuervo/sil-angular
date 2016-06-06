@@ -12,7 +12,7 @@ conAngular
         * PUBLIC FUNCTIONS
         *******************/
 
-        $scope.getStatus = function( statusId ){
+        $scope.getStatusLabel = function( statusId ){
             switch( statusId ){
                 case 1: return 'En existencia';
                 case 2: return 'Sin existencias';
@@ -22,7 +22,7 @@ conAngular
                 case 6: return 'Salida pendiente';
                 default: return 'Validación pendiente';
             }
-        }// getStatus
+        }// getStatusLabel
 
         $scope.searchItem = function(){
 
@@ -35,7 +35,7 @@ conAngular
             if( 3 === $scope.role ){ 
                 $scope.selectedAE = $rootScope.globals.currentUser.id;
             }
-            InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedPM, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, function( inventoryItems ){
+            InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedPM, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
                 $scope.inventoryItems = inventoryItems;
                 console.log( inventoryItems );
             })
@@ -67,6 +67,7 @@ conAngular
 
         $scope.getStatus = function( statusId ){
             InventoryItemService.getStatus( statusId, function( status ){
+                console.log( status );
                 $scope.itemStatus = status;
             });
         }
@@ -159,6 +160,7 @@ conAngular
 
             switch( currentPath ){
                 case '/my-inventory':
+                    LoaderHelper.showLoader( 'Obteniendo inventario...' );
                     if( 1 === $scope.role ) {
                         fetchProjectManagers();
                         fetchAccountExecutives();
@@ -179,6 +181,8 @@ conAngular
             if( 1 === $scope.role ){
                 InventoryItemService.getAll( function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
+                    console.log( inventoryItems );
+                    LoaderHelper.hideLoader();
                 });
                 return;
             }
@@ -186,12 +190,15 @@ conAngular
                 $scope.selectedPM = $rootScope.globals.currentUser.id;
                 InventoryItemService.search( '', '', $scope.selectedPM, '', '', '', '', '', function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
+                    LoaderHelper.hideLoader();
                 });
+                return;
             }
             if( 3 === $scope.role ){ 
                 $scope.selectedAE = $rootScope.globals.currentUser.id;
                 InventoryItemService.search( '', '', '', $scope.selectedAE, '', '', '', '', function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
+                    LoaderHelper.hideLoader();
                 });
                 return;
             }
@@ -199,7 +206,7 @@ conAngular
                 $scope.selectedClient = $rootScope.globals.currentUser.id;
                 InventoryItemService.search( '', $scope.selectedClient, '', '', '', '', '', '', function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
-                    console.log( inventoryItems );
+                    LoaderHelper.hideLoader();
                 });
             }
         }// fetchInventory
@@ -212,7 +219,9 @@ conAngular
                 .withOption('responsive', true)
                 .withOption('order', []);
             $scope.dtColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0).notSortable()
+                DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                DTColumnDefBuilder.newColumnDef(1).notSortable(),
+                DTColumnDefBuilder.newColumnDef(8).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 

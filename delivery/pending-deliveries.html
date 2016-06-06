@@ -1,0 +1,28 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Solicitudes de envíos</h4>
+    
+    <table datatable="ng" dt-options="dtPendingDeliveryOptions" dt-column-defs="dtPendingDeliveryColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">¿Quién solicita?</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Empresa donde se entrega</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Dirección</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Número de artículos</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrega</th>
+                <th class="[ center-align ]">Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="d in pendingDeliveries">
+                <td class="[ center-align ]">{{ d.user.first_name + ' ' + d.user.last_name }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.company }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.address }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.delivery_items.length }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.date_time | date:'dd/MM/yyyy' }}</td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/view-delivery/{{ d.id }}"><i class="[ fa fa-indent ]"></i></a></td>
+            </tr>
+        </tbody>
+    </table>    
+</div>

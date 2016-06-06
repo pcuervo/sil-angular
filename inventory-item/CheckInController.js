@@ -22,6 +22,12 @@ conAngular
         *******************/
 
 		$scope.captureItemData = function(){
+
+            if( $scope.validityExpirationDate < $scope.entryDate ){
+                Materialize.toast('La fecha de vigencia no puede ser menor a la fecha de ingreso.', 5000, 'red');
+                return;
+            }
+
             $scope.setActiveStep( CONFIRMATION_STEP );
             switch( $scope.requestType ){
                 case 'UnitItem':
@@ -286,7 +292,7 @@ conAngular
         $scope.reEntry = function( type ){
             switch( type ){
                 case 'UnitItem':
-                    reentryUnitItem( $scope.item.actable_id, $scope.entryDate, $scope.deliveryCompanyUnit, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments );
+                    reentryUnitItem( $scope.item.actable_id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments );
                     break;
                 case 'BulkItem':
                     reentryBulkItem( $scope.item.actable_id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantity );
@@ -424,11 +430,11 @@ conAngular
         }
 
         $scope.getRackLocationLink = function( id, locations ){
-            $('#'+id+' .js-location-links').empty();
+            var links = '';
 
+            $('#'+id+' .js-location-links').empty();
             if( locations.length == 0 ) $('#'+id+' .js-location-links').append( '-' );;
 
-            var links = '';
             $.each( locations, function( i, val ){
                 links += '<a href="#/view-location/' + val.location_id + '">' + val.location + '</a><br>';
             });
@@ -595,10 +601,9 @@ conAngular
         function fillProjectClient( projectId ){
 
             ProjectService.getProjectClient( projectId, function ( response ){
-
+                console.log( response );
                 $scope.clientName = response.client.name;
                 $scope.clientContact = response.client.contact_name;
-
             } );
 
         }// fillProjectClient

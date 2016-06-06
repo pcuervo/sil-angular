@@ -115,7 +115,7 @@
         <tbody>
             <tr ng-repeat="item in pending_locations">
                 <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i><p class="[ hide ]">{{item.actable_type}}</p></td>
-                <td><img src="{{ item.item_img_thumb }}" alt=""></td>
+                <td><img ng-src="{{ item.item_img_thumb }}" alt=""></td>
                 <td> {{ item.name }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ item.quantity }}</td>

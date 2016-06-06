@@ -1,5 +1,5 @@
 conAngular
-    .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
+    .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, SupplierService,  DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
         
         (function initController() {
             var currentPath = $location.path();
@@ -30,13 +30,24 @@ conAngular
             }
 
             initDeliverySummaryDataTable();
-            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, $scope.selectedItems, function( delivery ){
+            $scope.address = $('#address').val();
+            var deliveryDate = getDateTime( $scope.deliveryDate, $scope.deliveryTime );
+            if( 'undefined' == typeof $scope.deliveryGuy ) $scope.deliveryGuy = -1;
+
+            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.selectedItems, function( delivery ){
 
                 $scope.isSummary = true;
                 if( delivery.errors ){
                     Materialize.toast( 'No se pudo crear el envío, revisa la información e intenta nuevamente.', 4000, 'red');
                     return;
                 }
+
+                if( 5 == delivery.status ){
+                    Materialize.toast( 'Tu solicitud de envío se le ha enviado al jefe de almacén.', 4000, 'green' );
+                    $state.go('/delivery-dashboard', {}, { reload: true });
+                    return;
+                }
+
                 Materialize.toast( 'Se ha creado el envío.', 4000, 'green');
             });
         }
@@ -54,7 +65,9 @@ conAngular
             initDeliverySummaryDataTable();
             $scope.address = $('#address').val();
             $scope.address_summary = $scope.address;
-            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, this.recipientName, this.recipientPhone, this.additionalComments, $scope.selectedItems, function( delivery ){
+            var deliveryDate = getDateTime( this.deliveryDate, this.deliveryTime );
+            if( 'undefined' == typeof $scope.deliveryGuy ) $scope.deliveryGuy = -1;
+            DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, this.recipientName, this.recipientPhone, this.additionalComments, deliveryDate, $scope.selectedItems, function( delivery ){
 
                 $scope.isSummary = true;
                 if( delivery.errors ){
@@ -71,9 +84,29 @@ conAngular
         }
 
         $scope.deliver = function( status ){
+
+            if( 2 == status ){  
+                $('#delivery-img').prop('required', true);
+            }
+
+            var isValid = $('[data-parsley-delivery]').parsley(). isValid();
+            if( ! isValid ) return;
             var deliveryImgName = 'envio-' + $scope.delivery.id + '.' + $scope.deliveryImgExt;
-            DeliveryService.update( $scope.delivery.id, $scope.company, $scope.address, $scope.delivery.latitude, $scope.delivery.longitude, status, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, $scope.deliveryImg, deliveryImgName, function( delivery ){
-                console.log( delivery );
+            DeliveryService.update( $scope.delivery.id, $scope.company, $scope.address, $scope.delivery.latitude, $scope.delivery.longitude, status, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, $scope.deliveryGuy, $scope.deliveryImg, deliveryImgName, function( delivery ){
+
+                switch( status ){
+                    case 1: 
+                        toastMsg = 'Se ha confirmado el envío y se le ha cambiado el estatus a "enviado". Se le mandará una notificación al usuario que lo solicitó.';
+                        break;
+                    case 2: 
+                        toastMsg = 'Se ha entregado el envío en su totalidad.';
+                        break;
+                    case 3: 
+                        toastMsg = 'Se ha cancelado el envío.';
+                        break;
+                }
+                Materialize.toast( toastMsg, 4000, 'green' );
+                $state.go('/delivery-dashboard', {}, { reload: true });
             });
         }
 
@@ -89,8 +122,20 @@ conAngular
                 case 3:
                     status = 'Rechazado';
                     break;
+                case 4:
+                    status = 'Entrega parcial';
+                    break;
+                default:
+                    status = 'Pendiente por aprobar'
             }
             return status;
+        }
+
+        $scope.showDeliveryImage = function( imgUrl ){
+            $('#deliveryImgProof img').remove();
+            var imgHtml = '<img class="[ col s12 m8 offset-m2 ][ materialboxed ]" src="' + imgUrl + '" alt="Remisión de envío">';
+            $('#deliveryImgProof').append( imgHtml );
+            $('.materialboxed').materialbox();
         }
 
         /******************
@@ -101,6 +146,7 @@ conAngular
 
             if( currentPath.indexOf( '/view-delivery' ) > -1 ){
                 getDelivery( $stateParams.deliveryId );
+                fetchDeliveryUsers();
                 initDeliverySummaryDataTable();
             }
 
@@ -112,6 +158,7 @@ conAngular
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
                     if( 'delivery/templates/unit-item-delivery.html' == template || 'delivery/templates/bulk-item-delivery.html' == template || 'delivery/templates/bundle-item-delivery.html' == template ){
                         initGeoAutocomplete( '#address', '#map', 19.397260, -99.186684, 12 );
+                        $('.clockpicker').clockpicker();
                     }
                 });
                 return;
@@ -119,12 +166,14 @@ conAngular
 
             switch( currentPath ){
                 case '/multiple-items-delivery':
-                    LoaderHelper.showLoader( 'Obteniendo inventario...' )
+                    LoaderHelper.showLoader( 'Obteniendo inventario...' );
                     fetchItemsInStock();
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
+                    fetchSuppliers();
                     initGeoAutocomplete( '#address', '#map', 19.397260, -99.186684, 12 );
                     $scope.isSummary = false;
+                    $scope.deliveryDate = new Date();
                     break;
                 case '/single-item-delivery':
                     fetchItemsInStock();
@@ -134,10 +183,16 @@ conAngular
                     fetchProjects();
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
+                    fetchSuppliers();
+                    $scope.deliveryDate = new Date();
                     break;
                 case '/delivery-dashboard':
                     fetchLatestDeliveries();
                     fetchStats();
+                    break;
+                case '/pending-deliveries':
+                    fetchPendingDeliveries();
+                    initPendingDeliveryDataTable();
                     break;
             }
         }// initDeliveries
@@ -229,13 +284,16 @@ conAngular
                         $scope.itemParts.push( part );
                         $scope.hasPartsToWithdraw = true;
                     });
+                    return;
+                }
+                if( 'BulkItem' == item.actable_type ){
+                    $scope.itemQuantity = item.quantity;
                 }
             });
         }// getItem
 
         function getDelivery( id ){
             DeliveryService.get( id, function( delivery ){
-                console.log( delivery );
                 $scope.delivery = delivery;
                 $scope.company = delivery.company;
                 $scope.address = delivery.address;
@@ -245,7 +303,7 @@ conAngular
                 $scope.deliveryItems = delivery.delivery_items;
                 $scope.statusText = $scope.getStatus( delivery.status );
                 initGeoAutocomplete( '#address', '#map', delivery.latitude, delivery.longitude, 15 );
-                $("#deliveryImg").change(function(){
+                 $(document).on('change', '#deliveryImg', function(){ 
                     getDeliveryImg();
                 });
             });
@@ -276,13 +334,17 @@ conAngular
         }
 
         function getDeliveryItem(){
-            // TODO: Bulk and Bundle
+            // TODO: Bundle
             items = [];
             item = {};
 
             item['item_id'] = $scope.item.id;
             item['actable_type'] = $scope.item.actable_type;
-            item['quantity'] = $scope.item.quantity;
+            if( 'BulkItem' == $scope.item.actable_type ){
+                item['quantity'] = $('#item-quantity').val();
+            } else {
+                item['quantity'] = $scope.item.quantity;
+            }
             item['name'] = $scope.item.name;
             item['item_type'] = $scope.item.item_type;
             items.push( item );
@@ -335,10 +397,54 @@ conAngular
             fr = new FileReader();
             fr.readAsDataURL(file);
             fr.onload = function(){
+                console.log( file.name );
                 $scope.deliveryImg = fr.result;
                 $scope.deliveryImgExt = file.name.split('.').pop().toLowerCase();
             }
 
         }// getDeliveryImg
 
-    }]);
+        function getDateTime( date, time ){
+            var year, month, day, hours, minutes;
+
+            if( '' == time || typeof time == 'undefined' ){
+                hours = 0;
+                minutes = 0;
+            } else {
+                var timeAr = time.split(':');
+                hours = timeAr[0];
+                minutes = timeAr[1];
+            }
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            return date;
+        }
+
+        function fetchPendingDeliveries(){
+            DeliveryService.pendingApproval( function( deliveries ){
+                console.log( deliveries )
+                $scope.pendingDeliveries = deliveries;
+            });
+        }// fetchPendingDeliveries
+
+        function initPendingDeliveryDataTable(){
+            $scope.dtPendingDeliveryOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('itp')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false);
+            $scope.dtPendingDeliveryColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(5).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initDeliveryDataTable
+
+        function fetchSuppliers(){
+            SupplierService.getAll( function( suppliers ){
+                $scope.suppliers = suppliers;
+            });
+        }// fetchSuppliers
+
+}]);

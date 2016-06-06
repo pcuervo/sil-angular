@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="i in withdrawItems">
-                        <td><img src="{{ i.item_img }}" /></td>
+                        <td><img ng-src="{{ i.item_img }}" /></td>
                         <td>{{ i.name }}</td>
                         <td class="[ center-align ]">{{ i.item_type }}</td>
                         <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.quantity }}</td>

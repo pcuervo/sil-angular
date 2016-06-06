@@ -4,7 +4,7 @@
     <h4 class="[ center-align ]">Reubicar artículo</h4>
     <div class="[ row ]">
 
-        <img class="[ materialboxed ][ col s6 m2 offset-m4 ]" src="{{itemLocation.item_img}}">
+        <img class="[ materialboxed ][ col s6 m2 offset-m4 ]" ng-src="{{itemLocation.item_img}}">
         <img class="[ materialboxed ][ col s6 m3 ][ js-barcode ]" src="#">
         <div class="[ clear ]"></div>
         <div class="[ col s12 m6 offset-m3 ]"> 
@@ -32,7 +32,7 @@
 <div class="[ card-panel ]">
     <div class="[ row ]">
         <div class="[ col s12 m6 offset-m3 ][ center-align ]">
-            <p>Por favor selecciona la ubicación a la cual deseas mover el artículo.</p>
+            <p>Por favor selecciona la ubicación a la cual deseas reubicar el artículo.</p>
         </div>
         <form name="location_form" class="[ left-align ]" ng-submit="addToLocation()" data-parsley-unit>
             <div class="[ col s12 m6 offset-m3 ]"> 

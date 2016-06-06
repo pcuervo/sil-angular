@@ -2,7 +2,7 @@
     <div class="[ row ]" >
         <h4 class="[ center-align ]">Artículo a enviar</h4>
         <div class="[ col s12 m4 offset-m2 ][ mt-20 ][ center-align ]">
-            <img class="[ materialboxed ][ s12 ]" src="{{item.img}}}">
+            <img class="[ materialboxed ][ s12 ]" ng-src="{{item.img}}}">
         </div>
         <div class="[ col s12 m4 ][ mt-20 ]"> 
             <div class="input-field">
@@ -120,6 +120,17 @@
                     <label for="recipient-phone">Teléfono de quien va a recibir</label>
                 </div>
             </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de envío (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="deliveryDate" ng-model="deliveryDate" required>
+            </div>
+            <div class="[ col s12 m6 ][ mt-5 ]"> 
+                <div class="input-field">
+                    <input id="clockpicker" class="clockpicker" type="text" ng-model="deliveryTime" data-donetext="OK">
+                    <label for="clockpicker">Hora</label>
+                </div>
+            </div>
             <div class="[ col s12 ]"> 
                 <div class="input-field">
                     <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
@@ -195,12 +206,12 @@
         </div>
         <div class="[ clear ]"></div>
         <div class="[ center ][ col s12 ]">
-            <a class="[ waves-effect ][ btn btn-extra ]" href="#/delivery-dashboard"><i class="fa fa-eye left"></i>Ver todos los envíos</a>
-            <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión envío</button>
+            <a class="[ waves-effect ][ btn btn-extra ]" href="#/delivery-dashboard"><i class="fa fa-eye left"></i>Regresar</a>
+            <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Imprimir remisión</button>
         </div>
     </div>
 </div>
 
 <script>
-  //$('[data-parsley-item]').parsley();
+  $('[data-parsley-item]').parsley();
 </script>

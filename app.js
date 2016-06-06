@@ -1646,7 +1646,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 {
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
-                    files: conAssets('dataTables,parsley,geoAutocomplete,gmaps')
+                    files: conAssets('dataTables,parsley,geoAutocomplete,gmaps,clockpicker')
                 }]);
             }]
         }
@@ -1674,6 +1674,30 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/pending-deliveries', {
+        url: "/pending-deliveries",
+            templateUrl: "delivery/pending-deliveries.html",
+            controller: "DeliveryController",
+            data: {
+                pageTitle: 'Envíos pendientes',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Dashboard envíos',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
+        }
+    })
+
     // Settings
     .state('/system-settings', {
         url: "/system-settings",
