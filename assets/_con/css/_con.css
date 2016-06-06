@@ -8562,7 +8562,7 @@ body {
       padding-left: 15px;
       padding-right: 90px; }
 
-/* 
+/*
  * Top Navbar
  */
 .navbar-top {
@@ -12514,14 +12514,14 @@ figure.effect-duke:hover h2, figure.effect-duke:hover p {
     //top: 0;
     //width: 100%;
     //height: 6px;
-    //background-color: #009688; 
+    //background-color: #009688;
     position: absolute;
     z-index: 1000;
     top: 4%;
-    left: 20%; 
+    left: 20%;
   }
     .load-spinner > div > p{
-      text-align: center; 
+      text-align: center;
       color: #ED244B;
       font-size: 1.2em;
     }
@@ -12529,7 +12529,7 @@ figure.effect-duke:hover h2, figure.effect-duke:hover p {
   @media (min-width: 480px){
         .load-spinner > div {
         top: 12%;
-        left: 40%; 
+        left: 40%;
       }
         .load-spinner > div > p{
           font-size: 1.5em;
@@ -12539,13 +12539,13 @@ figure.effect-duke:hover h2, figure.effect-duke:hover p {
    @media (min-width: 780px){
         .load-spinner > div {
         top: 20%;
-        left: 45%; 
+        left: 45%;
       }
         .load-spinner > div > p{
           font-size: 1.5em;
         }
    }
-      
+
 
 .bar1, .bar2, .bar3, .bar4 {
   display: inline;
@@ -13046,3 +13046,42 @@ html.rtl .spinner-layer .left {
   width: 100%;
   height: auto;
 }
+
+
+/*-------------------------------------------*\
+    #Remisión de salida - Print
+\*-------------------------------------------*/
+@media print {
+
+  html, body { height: 99%; }
+
+  .toast-container, .toast{ display: none; }
+
+  .pcuervo-print{}
+
+  .pcuervo-print .row .col.s12 { width: 33%; }
+  .pcuervo-print .btn { display: none; }
+
+  .print--cliente{ width: 50% !important; }
+  .print--contacto-cliente{ width: 50% !important; }
+  .print--num-serie{  }
+  .print--marca{  }
+  .print--modelo{  }
+  .print--proveedor{ width: 50% !important; }
+  .print--quien-se-lo-lleva{ width: 50% !important; }
+  .print--fecha-salida{ width: 50% !important; }
+  .print--fecha-retorno{ width: 50% !important; }
+  .print--observaciones{ width: 100% !important; }
+  .print--ubicacion{ width: 33% !important; }
+  .print--cantidad-retirada{ width: 33% !important; }
+  .print--unidades-desocupadas{ width: 33% !important; }
+
+  .print--firma{
+    display: block !important;
+    width: 33% !important;
+    margin: 0 auto !important;
+  }
+}
+
+
+.print--firma{ display: none; }
