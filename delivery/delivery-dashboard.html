@@ -25,13 +25,13 @@
 
 <div class="[ card-panel ]">
     <div class="[ row ]">
-        <div class="[ col s12 m4 ]"> 
+        <div class="[ col s12 m6 l4 ]">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/multiple-items-delivery"><i class="[ fa fa-truck ][ left ]"></i>Envío masivo</a>
         </div>
-        <div class="[ col s12 m4 ]"> 
+        <div class="[ col s12 m6 l4 ]">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/single-item-delivery"><i class="[ fa fa-motorcycle ][ left ]"></i>Envío por artículo</a>
         </div>
-        <div class="[ col s12 m4 ]"> 
+        <div class="[ col s12 m6 l4 ]">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/view-deliveries"><i class="[ fa fa-eye ][ left ]"></i>Consultar envíos</a>
         </div>
     </div>
@@ -39,7 +39,7 @@
 
 <div class="[ card-panel ]">
     <h4 class="[ center-align ]">Últimos envíos</h4>
-    
+
     <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
         <thead>
             <tr>
@@ -63,6 +63,6 @@
                 <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-delivery/{{d.id}}"><i class="[ fa fa-eye ]"></i></a></td>
             </tr>
         </tbody>
-    </table>    
+    </table>
 </div>
 

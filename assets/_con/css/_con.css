@@ -13049,24 +13049,44 @@ html.rtl .spinner-layer .left {
 
 
 /*-------------------------------------------*\
-    #Remisión de salida - Print
+    #Print
 \*-------------------------------------------*/
+
+.print-only{ display: none !important; }
+
 @media print {
 
-  html, body { height: 99%; }
+  /*-------------------------------------------*\
+      #General
+  \*-------------------------------------------*/
+
+  @page { size: auto;  margin: 0mm; }
 
   .toast-container, .toast{ display: none; }
 
-  .pcuervo-print{}
+  .print-only{ display: block !important; }
+
+  .watermark {
+    width: 20%; height: auto;
+    margin: 50px auto;
+    color: #d0d0d0;
+    opacity: 0.3;
+    z-index: -1;
+  }
+
+
+  /*-------------------------------------------*\
+        #Remisión de salida
+  \*-------------------------------------------*/
+
+
+  div{ border: 1px solid transparent; }
 
   .pcuervo-print .row .col.s12 { width: 33%; }
   .pcuervo-print .btn { display: none; }
 
   .print--cliente{ width: 50% !important; }
   .print--contacto-cliente{ width: 50% !important; }
-  .print--num-serie{  }
-  .print--marca{  }
-  .print--modelo{  }
   .print--proveedor{ width: 50% !important; }
   .print--quien-se-lo-lleva{ width: 50% !important; }
   .print--fecha-salida{ width: 50% !important; }
@@ -13077,11 +13097,7 @@ html.rtl .spinner-layer .left {
   .print--unidades-desocupadas{ width: 33% !important; }
 
   .print--firma{
-    display: block !important;
     width: 33% !important;
     margin: 0 auto !important;
   }
 }
-
-
-.print--firma{ display: none; }
