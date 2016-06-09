@@ -13062,9 +13062,15 @@ html.rtl .spinner-layer .left {
 
   @page { size: auto;  margin: 0mm; }
 
+  div{ border: 1px solid transparent; }
+  .card, .card .content, .card-panel{ box-shadow: none; }
+
   .toast-container, .toast{ display: none; }
 
   .print-only{ display: block !important; }
+  .print-hidden{ display: none !important; }
+
+  .print-left{ float: left; }
 
   .watermark {
     width: 20%; height: auto;
@@ -13074,13 +13080,15 @@ html.rtl .spinner-layer .left {
     z-index: -1;
   }
 
+  .print--firma{
+    width: 33% !important;
+    margin: 0 auto !important;
+  }
+
 
   /*-------------------------------------------*\
         #Remisión de salida
   \*-------------------------------------------*/
-
-
-  div{ border: 1px solid transparent; }
 
   .pcuervo-print .row .col.s12 { width: 33%; }
   .pcuervo-print .btn { display: none; }
@@ -13096,8 +13104,35 @@ html.rtl .spinner-layer .left {
   .print--cantidad-retirada{ width: 33% !important; }
   .print--unidades-desocupadas{ width: 33% !important; }
 
-  .print--firma{
-    width: 33% !important;
-    margin: 0 auto !important;
+
+   /*-------------------------------------------*\
+        #Remisión de entrada
+  \*-------------------------------------------*/
+
+  .print-proyecto{ width: 33% !important; }
+  .print-project-manager{ width: 33% !important; }
+  .print-ejecutivo-de-cuenta{ width: 33% !important; }
+  .print-cliente{ width: 50% !important; }
+  .print-contacto-cliente{ width: 50% !important; }
+  .print-nombre{ width: 50% !important; }
+  .print-numero-de-serie{ width: 50% !important; }
+  .print-marca{ width: 33% !important; }
+  .print-modelo{ width: 33% !important; }
+  .print-estado{ width: 33% !important; }
+  .print-descripcion{ width: 100% !important; }
+  .print-tipo-de-mercancia{ width: 33% !important; }
+  .print-valir{ width: 33% !important; }
+  .print-tipo-de-almacenaje{ width: 33% !important; }
+  .print-proveedor{ width: 50% !important; }
+  .print-quien-entrego{ width: 50% !important; }
+  .print-fecha-de-ingreso{ width: 50% !important; }
+  .print-fecha-vigencia{ width: 50% !important; }
+  .print-observaciones{ width: 100% !important; }
+  .print-barcode{ width: 50% !important; }
+  .print-barcode-barcode{
+    width: 100% !important;
+    margin: 0 auto;
+    display: block;
   }
+
 }
