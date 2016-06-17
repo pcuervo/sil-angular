@@ -2,6 +2,7 @@ conAngular.service('SupplierService', ['$http', '$rootScope', function($http, $r
 
     var service = {};
     service.register = register;
+    service.edit = edit;
     service.getAll = getAll;
     service.byId = byId;
     return service;
@@ -50,6 +51,24 @@ conAngular.service('SupplierService', ['$http', '$rootScope', function($http, $r
                 callback( response );
            });
     }// byId
+
+    function edit( id, name, callback ){
+
+        var serviceUrl = $rootScope.apiUrl + 'suppliers/update';
+        $http.post(serviceUrl, {
+                id: id,
+                supplier: {
+                    name: name
+                }
+            })
+           .success(function ( response ) {
+                callback ( response );
+           })
+           .error(function ( response ) {
+                callback ( response );
+           });
+
+    }// edit
 
 }]);
 

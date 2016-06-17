@@ -16,8 +16,8 @@
             <tbody>
                 <tr ng-repeat="u in users">
                     <td>{{ u.first_name + ' ' + u.last_name }}</td>
-                    <td class="[ center-align ][ hide-on-small-only ]">{{ u.email }}</td>
                     <td class="[ center-align ][ hide-on-small-only ]">{{ getUserRole( u.role ) }}</td>
+                    <td class="[ center-align ][ hide-on-small-only ]">{{ u.email }}</td>
                     <td class="[ center-align ]"><a href="#/edit-user/{{u.id}}" class="[ btn waves-effect waves-green ]"><i class="[ fa fa-edit ]"></i></a></i></a></td>
                 </tr>
             </tbody>

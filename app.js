@@ -1535,6 +1535,30 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/edit-supplier', {
+        url: "/edit-supplier/:supplierId",
+            templateUrl: "supplier/edit-supplier.html",
+            controller: "SupplierController",
+            data: {
+                pageTitle: 'Editar proveedor',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Editar proveedor',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
+
     .state('/notifications', {
         url: "/notifications",
             templateUrl: "notification/notifications.html",

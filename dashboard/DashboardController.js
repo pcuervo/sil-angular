@@ -32,9 +32,10 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         switch( role ){
             case 1:
                 initDashboardAdmin();
-            case 2:
                 break;
+            case 2:
             case 3:
+                initDashboardProjectManager();
                 break;
             case 4:
                 break;
@@ -47,8 +48,8 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
 
     function initDashboardClient(){
         $scope.dashboardTemplate = 'dashboard/client-dashboard.html';
-        initChartMonthlySpace();
-        initChartCostByItemType();
+        //initChartMonthlySpace();
+        initChartInventoryByItemType();
         // Load data for tables
         getLatestInventoryTransactions();
         getLatestEntries();
@@ -58,43 +59,71 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
     }// initDashboardClient
 
     function initDashboardAdmin(){
-        getTotalInventory();
-        getInventoryValue();
-        getCurrentRent();
         $scope.dashboardTemplate = 'dashboard/admin-dashboard.html';
-        initChartTransactions( 'weekly' );
-        //initChartCostByItemType();
-        // Load data for tables
-        //getLatestInventoryTransactions();
-        //getLatestEntries();
-        // Create DataTables
-        //showLatestTransactionsDataTable();
-        //showLatestEntriesDataTable()
+
+        // Initialize charts with empty data
+        $scope.inventoryByItemData = [];
+        $scope.inventoryByItemOpts = {};
+        $scope.monthlySpaceData = [];
+        $scope.monthlySpaceOpts = {};
+        addMonthlySpaceTooltip();
+        getPendingEntryRequests();
+        initPendingEntryRequestsDataTable();
+        getPendingWithdrawalRequests();
+        initPendingWithdrawalRequestsDataTable();
+        
+        InventoryItemService.getStats( function( stats ){
+            console.log( stats );
+            $scope.totalInventory = stats.total_number_items;
+            $scope.inventoryValue = stats.inventory_value;
+            $scope.currentRent = stats.current_rent;
+            initChartInventoryByItemType( stats.inventory_by_type );
+            initChartMonthlyOccupation( stats.occupation_by_month );
+        }); 
+
     }// initDashboardAdmin
 
-    function getTotalInventory(){
-        InventoryItemService.getTotalInventory( function( totalInventory ){
-            $scope.totalInventory = totalInventory;
+    function initDashboardProjectManager(){
+        $scope.dashboardTemplate = 'dashboard/pm-dashboard.html';
+
+        // Initialize charts with empty data
+        $scope.inventoryByItemData = [];
+        $scope.inventoryByItemOpts = {};
+        getPendingEntryRequests();
+        initPendingEntryRequestsDataTable();
+        
+        InventoryItemService.getStatsPM( function( stats ){
+            console.log( stats );
+            $scope.totalInventory = stats.total_number_items;
+            $scope.currentRent = stats.current_rent;
+            $scope.numberProjects = stats.total_number_projects;
+            initChartInventoryByItemType( stats.inventory_by_type );
+        }); 
+
+    }// initDashboardProjectManager
+
+    function fetchStats(){
+        InventoryItemService.getStats( function( stats ){
+            console.log( stats );
+            $scope.totalInventory = stats.total_number_items;
+            $scope.inventoryValue = stats.inventory_value;
+            $scope.currentRent = stats.current_rent;
         }); 
     }
 
-    function getInventoryValue(){
-        InventoryItemService.getInventoryValue( function( inventoryValue ){
-            $scope.inventoryValue = inventoryValue;
-        }); 
-    }
+    function initChartMonthlyOccupation( occupationData ){
+        var monthlySpaceData = [];
+        var ticks = [];
 
-    function getCurrentRent(){
-        InventoryItemService.getCurrentRent( function( currentRent ){
-            $scope.currentRent = currentRent;
-        }); 
-    }
-
-    function initChartTransactions( span ){
+        $.each( occupationData, function(i, val){
+            monthlySpaceData.push( [i+1, val.count] );
+            ticks.push( [i+1, val.mon] );
+        });
         $scope.monthlySpaceData = [{
-            data: [[1, 10], [2, 12], [3, 15], [4, 14],[5, 19],[6, 20],[7, 20],[8, 22],[9, 23],[10, 21],[11, 21],[12, 25]],
+            data: monthlySpaceData,
             label: "# ubicaciones"
         }];
+
         $scope.monthlySpaceOpts = {
             series: {
                 lines: {
@@ -124,7 +153,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
             },  
             colors: ["#3f51b5", "#009688", "#2196f3"],
             xaxis: {
-                ticks: [ [1, "Ene"], [2, "Feb"] ],
+                ticks: ticks,
                 font: {
                     family: "Roboto,sans-serif",
                     color: "#888"
@@ -134,137 +163,61 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
                 ticks:7, 
                 tickDecimals: 0,
                 font: {color: "#888"}
-            },
-            conTooltip: function(chart) {
-                function showTooltip(x, y, contents) {
-                    $('<div id="tooltip">' + contents + '</div>').css( {
-                        position: 'absolute',
-                        display: 'none',
-                        top: y - 40,
-                        left: x - 55,
-                        color: "#fff",
-                        padding: '5px 10px',
-                        'border-radius': '3px',
-                        'background-color': 'rgba(0,0,0,0.6)'
-                    }).appendTo("body").fadeIn(200);
-                }// showToolTip
-
-                var previousPoint = null;
-                chart.bind("plothover.conApp", function (event, pos, item) {
-                    if (item) {
-                        if (previousPoint != item.dataIndex) {
-                            previousPoint = item.dataIndex;
-
-                            $("#tooltip").remove();
-                            var x = item.datapoint[0].toFixed(0),
-                                y = item.datapoint[1].toFixed(0);
-
-                            var month = item.series.xaxis.ticks[item.dataIndex].label;
-
-                            showTooltip(item.pageX, item.pageY,
-                                        item.series.label + " en " + month + ": " + y);
-                        }
-                    }
-                    else {
-                        $("#tooltip").remove();
-                        previousPoint = null;
-                    }
-                });
             }
         };
-    }// initChartTransactions
+    }// initChartMonthlyOccupation
 
-    function initChartMonthlySpace(){
-        $scope.monthlySpaceData = [{
-            data: [[1, 10], [2, 12], [3, 15], [4, 14],[5, 19],[6, 20],[7, 20],[8, 22],[9, 23],[10, 21],[11, 21],[12, 25]],
-            label: "# ubicaciones"
-        }];
-        $scope.monthlySpaceOpts = {
-            series: {
-                lines: {
-                    show: true,
-                    lineWidth: 1,
-                    fill: true, 
-                    fillColor: { colors: [ { opacity: 0.1 }, { opacity: 0.13 } ] }
-                },
-                points: {
-                    show: true, 
-                    lineWidth: 2,
-                    radius: 3
-                },
-                shadowSize: 0,
-                stack: true
-            },
-            grid: {
-                hoverable: true, 
-                clickable: true, 
-                tickColor: "#f9f9f9",
-                borderWidth: 0
-            },
-            legend: {
-                // show: false
-                backgroundOpacity: 0,
-                labelBoxBorderColor: "#fff"
-            },  
-            colors: ["#3f51b5", "#009688", "#2196f3"],
-            xaxis: {
-                ticks: [[1, "Ene"], [2, "Feb"], [3, "Mar"], [4,"Abr"], [5,"May"], [6,"Jun"], [7,"Jul"], [8,"Ago"], [9,"Sep"], [10,"Oct"], [11,"Nov"], [12,"Dic"]],
-                font: {
-                    family: "Roboto,sans-serif",
-                    color: "#888"
+    function addMonthlySpaceTooltip(){
+        $scope.monthlySpaceOpts['conTooltip'] = function(chart) {
+            console.log( 'hi' );
+            function showTooltip(x, y, contents) {
+                $('<div id="tooltip">' + contents + '</div>').css( {
+                    position: 'absolute',
+                    display: 'none',
+                    top: y - 40,
+                    left: x - 55,
+                    color: "#fff",
+                    padding: '5px 10px',
+                    'border-radius': '3px',
+                    'background-color': 'rgba(0,0,0,0.6)'
+                }).appendTo("body").fadeIn(200);
+            }// showToolTip
+
+            var previousPoint = null;
+            chart.bind("plothover.conApp", function (event, pos, item) {
+                if (item) {
+                    if (previousPoint != item.dataIndex) {
+                        previousPoint = item.dataIndex;
+
+                        $("#tooltip").remove();
+                        var x = item.datapoint[0].toFixed(0),
+                            y = item.datapoint[1].toFixed(0);
+
+                        var month = item.series.xaxis.ticks[item.dataIndex].label;
+
+                        showTooltip(item.pageX, item.pageY,
+                                    item.series.label + " en " + month + ": " + y);
+                    }
                 }
-            },
-            yaxis: {
-                ticks:7, 
-                tickDecimals: 0,
-                font: {color: "#888"}
-            },
-            conTooltip: function(chart) {
-                function showTooltip(x, y, contents) {
-                    $('<div id="tooltip">' + contents + '</div>').css( {
-                        position: 'absolute',
-                        display: 'none',
-                        top: y - 40,
-                        left: x - 55,
-                        color: "#fff",
-                        padding: '5px 10px',
-                        'border-radius': '3px',
-                        'background-color': 'rgba(0,0,0,0.6)'
-                    }).appendTo("body").fadeIn(200);
-                }// showToolTip
+                else {
+                    $("#tooltip").remove();
+                    previousPoint = null;
+                }
+            });
+        } 
+    }
 
-                var previousPoint = null;
-                chart.bind("plothover.conApp", function (event, pos, item) {
-                    if (item) {
-                        if (previousPoint != item.dataIndex) {
-                            previousPoint = item.dataIndex;
+    function initChartInventoryByItemType( data ){
 
-                            $("#tooltip").remove();
-                            var x = item.datapoint[0].toFixed(0),
-                                y = item.datapoint[1].toFixed(0);
-
-                            var month = item.series.xaxis.ticks[item.dataIndex].label;
-
-                            showTooltip(item.pageX, item.pageY,
-                                        item.series.label + " en " + month + ": " + y);
-                        }
-                    }
-                    else {
-                        $("#tooltip").remove();
-                        previousPoint = null;
-                    }
-                });
-            }
-        };
-    }// initChartMonthlySpace
-
-    function initChartCostByItemType(){
-        $scope.costByItemTypeData = [
-            { label: "Tipo A - $45.00",  data: 45, color: "#90a4ae"},
-            { label: "Tipo B - $67.00",  data: 67, color: "#7986cb"},
-            { label: "Tipo C - $23.00",  data: 23, color: "#9575cd"}
-        ];
-        $scope.costByItemTypeOpts = {
+        $scope.inventoryByItemData = []
+        $.each(data, function( type, numItems ){
+            var charData = {};
+            charData['label'] = type;
+            charData['data'] = numItems;
+            $scope.inventoryByItemData.push( charData );
+        })
+        
+        $scope.inventoryByItemOpts = {
             series: {
                 pie: {
                     innerRadius: 0.3,
@@ -288,7 +241,48 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
                 defaultTheme: false
             }
         };
-    }// initChartCostByItemType
+    }// initChartInventoryByItemType
+
+    function getPendingEntryRequests(){
+        InventoryItemService.getPendingEntryRequests( function( pendingInventoryItems ){
+            $scope.pendingInventoryItems = pendingInventoryItems;
+        });
+    }// getPendingEntryRequests
+
+    function initPendingEntryRequestsDataTable(){
+        $scope.dtPendingEntryRequestsOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('it')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false);
+        // $scope.dtPendingEntryRequestsColumnDefs = [
+        //     //DTColumnDefBuilder.newColumnDef(5).notSortable()
+        // ];
+        DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+    }// initPendingEntryRequestsDataTable
+
+    function getPendingWithdrawalRequests(){
+        InventoryItemService.getPendingWithdrawalRequests( function( withdrawRequests ){
+            console.log( withdrawRequests );
+            $scope.withdrawRequests = withdrawRequests;
+        });
+    }// getPendingWithdrawalRequests
+
+    function initPendingWithdrawalRequestsDataTable(){
+        $scope.dtPendingWithdrawalRequestsOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('it')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false);
+        $scope.dtPendingWithdrawalRequestsColumnDefs = [
+            DTColumnDefBuilder.newColumnDef(3).notSortable()
+        ];
+        DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+    }// initPendingWithdrawalRequestsDataTable
 
     function showLatestTransactionsDataTable(){
         $scope.dtLatestTransactionsOptions = DTOptionsBuilder.newOptions()
@@ -357,234 +351,234 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
   var rickshawLine2 = [{"x":0,"y":16},{"x":1,"y":23},{"x":2,"y":17},{"x":3,"y":16},{"x":4,"y":22},{"x":5,"y":25},{"x":6,"y":21},{"x":7,"y":22},{"x":8,"y":12},{"x":9,"y":13}];
 
 
-  // rickshaw 1
-  $scope.rickshaw1options = {
-    renderer: 'area',
-    stroke: false,
-    height: 179
-  };
-  $scope.rickshaw1features = {
-    hover: {
-      xFormatter: function(x) {
-        return x;
-      },
-      yFormatter: function(y) {
-        return y;
-      }
-    }
-  };
-  $scope.rickshaw1series = [ {
-      data: rickshawLine1,
-      color: '#42a5f5',
-      name: 'Visits'
-    }, {    
-      data: rickshawLine2,
-      color: '#90caf9',
-      name: 'Views'
-    } ];
+  // // rickshaw 1
+  // $scope.rickshaw1options = {
+  //   renderer: 'area',
+  //   stroke: false,
+  //   height: 179
+  // };
+  // $scope.rickshaw1features = {
+  //   hover: {
+  //     xFormatter: function(x) {
+  //       return x;
+  //     },
+  //     yFormatter: function(y) {
+  //       return y;
+  //     }
+  //   }
+  // };
+  // $scope.rickshaw1series = [ {
+  //     data: rickshawLine1,
+  //     color: '#42a5f5',
+  //     name: 'Visits'
+  //   }, {    
+  //     data: rickshawLine2,
+  //     color: '#90caf9',
+  //     name: 'Views'
+  //   } ];
 
 
-  // rickshaw 2
-  $scope.rickshaw2options = {
-    renderer: 'bar',
-    height: 179
-  };
-  $scope.rickshaw2features = {
-    hover: {
-      xFormatter: function(x) {
-        return x;
-      },
-      yFormatter: function(y) {
-        return y;
-      }
-    }
-  };
-  $scope.rickshaw2series = [ {
-      data: rickshawLine1,
-      color: '#26a69a',
-      name: 'Visits'
-    }, {    
-      data: rickshawLine2,
-      color: '#80cbc4',
-      name: 'Views'
-    } ];
+  // // rickshaw 2
+  // $scope.rickshaw2options = {
+  //   renderer: 'bar',
+  //   height: 179
+  // };
+  // $scope.rickshaw2features = {
+  //   hover: {
+  //     xFormatter: function(x) {
+  //       return x;
+  //     },
+  //     yFormatter: function(y) {
+  //       return y;
+  //     }
+  //   }
+  // };
+  // $scope.rickshaw2series = [ {
+  //     data: rickshawLine1,
+  //     color: '#26a69a',
+  //     name: 'Visits'
+  //   }, {    
+  //     data: rickshawLine2,
+  //     color: '#80cbc4',
+  //     name: 'Views'
+  //   } ];
 
 
-  // rickshaw 3
-  $scope.rickshawSeries = [[], []];
+  // // rickshaw 3
+  // $scope.rickshawSeries = [[], []];
 
-  // Create random data
-  $scope.randomData = new Rickshaw.Fixtures.RandomData(50);
-  for (var i = 0; i < 40; i++) {
-    $scope.randomData.addData($scope.rickshawSeries);
-  }
+  // // Create random data
+  // $scope.randomData = new Rickshaw.Fixtures.RandomData(50);
+  // for (var i = 0; i < 40; i++) {
+  //   $scope.randomData.addData($scope.rickshawSeries);
+  // }
 
-  $scope.rickshaw3options = {
-    interpolation: 'cardinal',
-    renderer: 'area',
-    height: 254
-  };
-  $scope.rickshaw3features = {
-    hover: {}
-  };
-  $scope.rickshaw3series = [ {
-      data: $scope.rickshawSeries[0],
-      color: '#4db6ac',
-      name: 'HDD'
-    }, {
-      data: $scope.rickshawSeries[1],
-      color: '#b2dfdb',
-      name: 'CPU'
-    } ];
+  // $scope.rickshaw3options = {
+  //   interpolation: 'cardinal',
+  //   renderer: 'area',
+  //   height: 254
+  // };
+  // $scope.rickshaw3features = {
+  //   hover: {}
+  // };
+  // $scope.rickshaw3series = [ {
+  //     data: $scope.rickshawSeries[0],
+  //     color: '#4db6ac',
+  //     name: 'HDD'
+  //   }, {
+  //     data: $scope.rickshawSeries[1],
+  //     color: '#b2dfdb',
+  //     name: 'CPU'
+  //   } ];
 
-  // Live Update
-  $interval(function () {
-    $scope.randomData.removeData($scope.rickshawSeries);
-    $scope.randomData.addData($scope.rickshawSeries);
+  // // Live Update
+  // $interval(function () {
+  //   $scope.randomData.removeData($scope.rickshawSeries);
+  //   $scope.randomData.addData($scope.rickshawSeries);
     
-    $scope.$broadcast('rickshaw::resize');
-  }, 1000);
+  //   $scope.$broadcast('rickshaw::resize');
+  // }, 1000);
 
 
 
-  // flot 1
-  $scope.flot1data = [{
-      data: [[1, 50], [2, 58], [3, 45], [4, 62],[5, 55],[6, 65],[7, 61],[8, 70],[9, 65],[10, 50],[11, 53],[12, 49]],
-      label: "Entradas"
-    }, {
-      data: [[1, 25], [2, 31], [3, 23], [4, 48],[5, 38],[6, 40],[7, 47],[8, 55],[9, 43],[10,30],[11,37],[12, 29]],
-      label: "Salidas"
-    }];
-  $scope.flot1opts = {
-    series: {
-      lines: {
-        show: true,
-        lineWidth: 1,
-        fill: true, 
-        fillColor: { colors: [ { opacity: 0.1 }, { opacity: 0.13 } ] }
-      },
-      points: {
-        show: true, 
-        lineWidth: 2,
-        radius: 3
-      },
-      shadowSize: 0,
-      stack: true
-    },
-    grid: {
-      hoverable: true, 
-      clickable: true, 
-      tickColor: "#f9f9f9",
-      borderWidth: 0
-    },
-    legend: {
-      // show: false
-      backgroundOpacity: 0,
-      labelBoxBorderColor: "#fff"
-    },  
-    colors: ["#3f51b5", "#009688", "#2196f3"],
-    xaxis: {
-      ticks: [[1, "Jan"], [2, "Feb"], [3, "Mar"], [4,"Apr"], [5,"May"], [6,"Jun"], 
-                 [7,"Jul"], [8,"Aug"], [9,"Sep"], [10,"Oct"], [11,"Nov"], [12,"Dec"]],
-      font: {
-        family: "Roboto,sans-serif",
-        color: "#ccc"
-      }
-    },
-    yaxis: {
-      ticks:7, 
-      tickDecimals: 0,
-      font: {color: "#ccc"}
-    },
+  // // flot 1
+  // $scope.flot1data = [{
+  //     data: [[1, 50], [2, 58], [3, 45], [4, 62],[5, 55],[6, 65],[7, 61],[8, 70],[9, 65],[10, 50],[11, 53],[12, 49]],
+  //     label: "Entradas"
+  //   }, {
+  //     data: [[1, 25], [2, 31], [3, 23], [4, 48],[5, 38],[6, 40],[7, 47],[8, 55],[9, 43],[10,30],[11,37],[12, 29]],
+  //     label: "Salidas"
+  //   }];
+  // $scope.flot1opts = {
+  //   series: {
+  //     lines: {
+  //       show: true,
+  //       lineWidth: 1,
+  //       fill: true, 
+  //       fillColor: { colors: [ { opacity: 0.1 }, { opacity: 0.13 } ] }
+  //     },
+  //     points: {
+  //       show: true, 
+  //       lineWidth: 2,
+  //       radius: 3
+  //     },
+  //     shadowSize: 0,
+  //     stack: true
+  //   },
+  //   grid: {
+  //     hoverable: true, 
+  //     clickable: true, 
+  //     tickColor: "#f9f9f9",
+  //     borderWidth: 0
+  //   },
+  //   legend: {
+  //     // show: false
+  //     backgroundOpacity: 0,
+  //     labelBoxBorderColor: "#fff"
+  //   },  
+  //   colors: ["#3f51b5", "#009688", "#2196f3"],
+  //   xaxis: {
+  //     ticks: [[1, "Jan"], [2, "Feb"], [3, "Mar"], [4,"Apr"], [5,"May"], [6,"Jun"], 
+  //                [7,"Jul"], [8,"Aug"], [9,"Sep"], [10,"Oct"], [11,"Nov"], [12,"Dec"]],
+  //     font: {
+  //       family: "Roboto,sans-serif",
+  //       color: "#ccc"
+  //     }
+  //   },
+  //   yaxis: {
+  //     ticks:7, 
+  //     tickDecimals: 0,
+  //     font: {color: "#ccc"}
+  //   },
 
-    conTooltip: function(chart) {
-      function showTooltip(x, y, contents) {
-        $('<div id="tooltip">' + contents + '</div>').css( {
-          position: 'absolute',
-          display: 'none',
-          top: y - 40,
-          left: x - 55,
-          color: "#fff",
-          padding: '5px 10px',
-          'border-radius': '3px',
-          'background-color': 'rgba(0,0,0,0.6)'
-        }).appendTo("body").fadeIn(200);
-      }
+  //   conTooltip: function(chart) {
+  //     function showTooltip(x, y, contents) {
+  //       $('<div id="tooltip">' + contents + '</div>').css( {
+  //         position: 'absolute',
+  //         display: 'none',
+  //         top: y - 40,
+  //         left: x - 55,
+  //         color: "#fff",
+  //         padding: '5px 10px',
+  //         'border-radius': '3px',
+  //         'background-color': 'rgba(0,0,0,0.6)'
+  //       }).appendTo("body").fadeIn(200);
+  //     }
 
-      var previousPoint = null;
-      chart.bind("plothover.conApp", function (event, pos, item) {
-        if (item) {
-          if (previousPoint != item.dataIndex) {
-            previousPoint = item.dataIndex;
+  //     var previousPoint = null;
+  //     chart.bind("plothover.conApp", function (event, pos, item) {
+  //       if (item) {
+  //         if (previousPoint != item.dataIndex) {
+  //           previousPoint = item.dataIndex;
 
-            $("#tooltip").remove();
-            var x = item.datapoint[0].toFixed(0),
-                y = item.datapoint[1].toFixed(0);
+  //           $("#tooltip").remove();
+  //           var x = item.datapoint[0].toFixed(0),
+  //               y = item.datapoint[1].toFixed(0);
 
-            var month = item.series.xaxis.ticks[item.dataIndex].label;
+  //           var month = item.series.xaxis.ticks[item.dataIndex].label;
 
-            showTooltip(item.pageX, item.pageY,
-                        item.series.label + " of " + month + ": " + y);
-          }
-        }
-        else {
-          $("#tooltip").remove();
-          previousPoint = null;
-        }
-      });
-    }
-  };
-
-
-  // flot 2
-  $scope.flot2data = [
-    { label: "Unitario",  data: 45, color: "#90a4ae"},
-    { label: "Paquete",  data: 67, color: "#7986cb"},
-    { label: "Granel",  data: 23, color: "#9575cd"}
-  ];
-  $scope.flot2opts = {
-    series: {
-      pie: {
-        innerRadius: 0.5,
-        show: true
-      }
-    },
-    grid: {
-      hoverable: true
-    },
-    legend: {
-      backgroundOpacity: 0,
-      labelBoxBorderColor: "#fff"
-    },
-    tooltip: true,
-    tooltipOpts: {
-      content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
-      shifts: {
-        x: 20,
-        y: 0
-      },
-      defaultTheme: false
-    }
-  };
+  //           showTooltip(item.pageX, item.pageY,
+  //                       item.series.label + " of " + month + ": " + y);
+  //         }
+  //       }
+  //       else {
+  //         $("#tooltip").remove();
+  //         previousPoint = null;
+  //       }
+  //     });
+  //   }
+  // };
 
 
+  // // flot 2
+  // $scope.flot2data = [
+  //   { label: "Unitario",  data: 45, color: "#90a4ae"},
+  //   { label: "Paquete",  data: 67, color: "#7986cb"},
+  //   { label: "Granel",  data: 23, color: "#9575cd"}
+  // ];
+  // $scope.flot2opts = {
+  //   series: {
+  //     pie: {
+  //       innerRadius: 0.5,
+  //       show: true
+  //     }
+  //   },
+  //   grid: {
+  //     hoverable: true
+  //   },
+  //   legend: {
+  //     backgroundOpacity: 0,
+  //     labelBoxBorderColor: "#fff"
+  //   },
+  //   tooltip: true,
+  //   tooltipOpts: {
+  //     content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+  //     shifts: {
+  //       x: 20,
+  //       y: 0
+  //     },
+  //     defaultTheme: false
+  //   }
+  // };
 
-  // jvectormap 1
-  $scope.jvmap1opts = {
-    map: 'world_mill_en',
-    zoom: 2,
-    series: {
-      regions: [{
-        values: gdpData,
-        scale: ['#e3f2fd', '#2196f3'],
-        normalizeFunction: 'polynomial'
-      }]
-    },
-    backgroundColor: '#fff',
-    onRegionTipShow: function(e, el, code){
-      el.html(el.html()+' (GDP - '+gdpData[code]+')');
-    }
-  };
+
+
+  // // jvectormap 1
+  // $scope.jvmap1opts = {
+  //   map: 'world_mill_en',
+  //   zoom: 2,
+  //   series: {
+  //     regions: [{
+  //       values: gdpData,
+  //       scale: ['#e3f2fd', '#2196f3'],
+  //       normalizeFunction: 'polynomial'
+  //     }]
+  //   },
+  //   backgroundColor: '#fff',
+  //   onRegionTipShow: function(e, el, code){
+  //     el.html(el.html()+' (GDP - '+gdpData[code]+')');
+  //   }
+  // };
 
 
 }]);

@@ -1,9 +1,9 @@
 conAngular
-    .controller('SupplierController', ['$scope', '$state', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
+    .controller('SupplierController', ['$scope', '$state', '$stateParams', '$location', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, $stateParams, $location, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
         
         (function initController() {
-            getAllSuppliers();
-            initSupplierDataTable();
+            var currentPath = $location.path();
+            initSupplier( currentPath );
             fetchNewNotifications();
         })();
 
@@ -24,11 +24,37 @@ conAngular
             });
         }// registerSupplier
 
+        $scope.editSupplier = function(){
+            SupplierService.edit( $scope.supplierId, $scope.supplierName, function ( response ){
+                if( response.errors ) {
+                    ErrorHelper.display( response.errors );
+                    return;
+                }
+                Materialize.toast('¡Proveedor actualizado exitosamente!', 4000, 'green');
+                $state.go('/view-suppliers', {}, { reload: true });
+            });
+        }
+
 
 
         /******************
         * PRIVATE FUNCTIONS
         *******************/
+
+        function initSupplier( currentPath ){
+
+            switch( currentPath ){
+                case '/view-suppliers':
+                    getAllSuppliers();
+                    initSupplierDataTable();
+                    break;
+            }
+
+            if( currentPath.indexOf( '/edit-supplier/' ) > -1 ){
+                getSupplier( $stateParams.supplierId );
+            }
+
+        }// initSupplier
 
         function getAllSuppliers(){
             SupplierService.getAll( function( suppliers ){
@@ -56,5 +82,14 @@ conAngular
                 NotificationHelper.updateNotifications( numUnreadNotifications );
             });
         }
+
+        function getSupplier( id ){
+            SupplierService.byId( id, function( supplier ){
+               $scope.supplierName = supplier.name;
+               $scope.supplierId = supplier.id;
+            });
+        }// getSupplier
+
+
 
     }]);

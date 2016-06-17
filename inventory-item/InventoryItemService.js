@@ -24,9 +24,6 @@ conAngular
         service.getStatuses = getStatuses;
         service.getStatus = getStatus;
         service.getItemState = getItemState;
-        service.getTotalInventory = getTotalInventory;
-        service.getInventoryValue = getInventoryValue;
-        service.getCurrentRent = getCurrentRent;
         service.getInStock = getInStock;
         service.getOutOfStock = getOutOfStock;
         service.requestEntry = requestEntry;
@@ -36,6 +33,8 @@ conAngular
         service.requestWithdrawal = requestWithdrawal;
         service.getPendingWithdrawalRequests = getPendingWithdrawalRequests;
         service.getWithdrawRequest = getWithdrawRequest;
+        service.getStats = getStats;
+        service.getStatsPM = getStatsPM;
         return service;
 
         // Public 
@@ -465,39 +464,6 @@ conAngular
             callback( status );
         }// getStatus
 
-        function getTotalInventory( callback ) {
-            var serviceUrl = $rootScope.apiUrl  + 'inventory_items/total_number_items';
-            $http.get ( serviceUrl )
-               .success(function ( response ) {
-                    callback( response.total_number_items );
-               })
-               .error(function ( response ) {
-                    callback( response );
-               });
-        }// getTotalInventory
-
-        function getInventoryValue( callback ) {
-            var serviceUrl = $rootScope.apiUrl  + 'inventory_items/inventory_value';
-            $http.get ( serviceUrl )
-               .success(function ( response ) {
-                    callback( response.inventory_value );
-               })
-               .error(function ( response ) {
-                    callback( response );
-               });
-        }// getInventoryValue
-
-        function getCurrentRent( callback ) {
-            var serviceUrl = $rootScope.apiUrl  + 'inventory_items/current_rent';
-            $http.get ( serviceUrl )
-               .success(function ( response ) {
-                    callback( response.current_rent );
-               })
-               .error(function ( response ) {
-                    callback( response );
-               });
-        }// getCurrentRent
-
         function getInStock( callback ) {
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
             $http ({
@@ -638,5 +604,27 @@ conAngular
                     callback( response );
                 });
         }// getWithdrawRequest
+
+        function getStats( callback ) {
+            var serviceUrl = $rootScope.apiUrl  + 'inventory_items/get_stats/';
+            $http.get ( serviceUrl )
+               .success(function ( response ) {
+                    callback( response.stats );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getStats
+
+        function getStatsPM( callback ) {
+            var serviceUrl = $rootScope.apiUrl  + 'inventory_items/get_stats_pm_ae/';
+            $http.get ( serviceUrl )
+               .success(function ( response ) {
+                    callback( response.stats );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getStats
 
     }]);

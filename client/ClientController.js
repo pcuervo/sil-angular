@@ -58,13 +58,9 @@ conAngular
         *******************/
 
         function getAllClients(){
-
             ClientService.getAll( function( clients ){
-
                 $scope.clients = clients;
-                
             }); 
-
         }// getAllClients
 
         function getAllClientUsers(){

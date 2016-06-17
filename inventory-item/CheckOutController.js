@@ -431,7 +431,6 @@ conAngular
 
         function getPendingWithdrawalRequests(){
             InventoryItemService.getPendingWithdrawalRequests( function( withdrawRequests ){
-                console.log( withdrawRequests );
                 $scope.withdrawRequests = withdrawRequests;
             });
         }// getPendingWithdrawalRequests
@@ -445,7 +444,7 @@ conAngular
                     .withOption('order', [])
                     .withOption('searching', false);
             $scope.dtPendingWithdrawalRequestsColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(6).notSortable()
+                DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initPendingWithdrawalRequestsDataTable

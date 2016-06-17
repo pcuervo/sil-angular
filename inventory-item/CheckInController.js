@@ -395,7 +395,6 @@ conAngular
         $scope.printBarcode = function( divId ){
 
             var barcodeEl = $(divId).html();
-
             var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
             barcodeWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>' + $scope.barcode + '</title>');
             barcodeWindow.document.write('<style>');
@@ -717,7 +716,7 @@ conAngular
 
             $scope.dtLatestEntriesOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDisplayLength(20)
+                    .withDisplayLength(10)
                     .withDOM('it')
                     .withOption('responsive', true)
                     .withOption('order', [])
@@ -725,9 +724,7 @@ conAngular
             $scope.dtLatestEntriesColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(7).notSortable(),
-                DTColumnDefBuilder.newColumnDef(6).withOption('orderData', '5'),
-                DTColumnDefBuilder.newColumnDef(5).withOption('type', 'nullable').notVisible()
+                DTColumnDefBuilder.newColumnDef(7).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 

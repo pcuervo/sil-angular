@@ -8,14 +8,17 @@
             <tr>
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Fecha creación</th>
-                <th class="[ center-align ]">Editar</th>
+                <th class="[ center-align ]">Acciones</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="s in suppliers">
-            <td>{{ s.name }}</td>
-            <td class="[ center-align ][ hide-on-small-only ]">{{ s.created_at | date:'dd/MM/yyyy' }}</td>
-            <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-supplier/{{s.id}}"><i class="[ fa fa-edit ]"></i></a></td>
+                <td>{{ s.name }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ s.created_at | date:'dd/MM/yyyy' }}</td>
+                <td class="[ center-align ]">
+                    <a class="[ btn waves-effect ]" href="#/edit-supplier/{{s.id}}"><i class="[ fa fa-edit ]"></i></a>
+                    <button class="[ btn waves-effect ][ red ]" ng-click="delete( s.id )"><i class="[ fa fa-times ]"></i></button>
+                </td>
             </tr>
         </tbody>
     </table>

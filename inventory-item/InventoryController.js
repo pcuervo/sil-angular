@@ -80,6 +80,11 @@ conAngular
 
             var barcodeEl = $(divId).html();
 
+            console.log( $scope.selectedPMText )
+            if( 'undefined' == typeof $scope.selectedPMText ){
+                console.log('wasa');
+            }
+
             var barcodeWindow = window.open('', 'my div', 'height=400,width=600');
             barcodeWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>' + $scope.barcode + '</title>');
             barcodeWindow.document.write('<style>');
@@ -88,10 +93,10 @@ conAngular
             barcodeWindow.document.write('</head><body>');
             barcodeWindow.document.write('<table><tr><td>'+barcodeEl+'</td><td></td></tr>');
             barcodeWindow.document.write('<tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
-            barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.selectedProjectText + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.item.project + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
-            barcodeWindow.document.write('<tr><td>PM</td><td> ' + $scope.selectedPMText + '</td></tr>');
-            barcodeWindow.document.write('<tr><td>Ejecutivo de cuenta</td><td>' + $scope.selectedAEText + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>PM</td><td> ' + $scope.pm + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>Ejecutivo de cuenta</td><td>' + $scope.ae + '</td></tr>');
             if( 'undefined' != typeof $scope.serialNumber ){
                 barcodeWindow.document.write('<tr><td>Número de serie</td><td>' + $scope.serialNumber + '</td></tr>');
             }
