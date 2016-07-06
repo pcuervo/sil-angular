@@ -32,7 +32,7 @@ conAngular
             initDeliverySummaryDataTable();
             $scope.address = $('#address').val();
             var deliveryDate = getDateTime( $scope.deliveryDate, $scope.deliveryTime );
-            if( 'undefined' == typeof $scope.deliveryGuy ) $scope.deliveryGuy = -1;
+            if( 'undefined' == typeof $scope.deliveryGuy || '' == $scope.deliveryGuy ) $scope.deliveryGuy = -1;
 
             DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.deliveryCompany, $scope.selectedItems, function( delivery ){
 
@@ -68,7 +68,7 @@ conAngular
             $scope.address = $('#address').val();
             $scope.address_summary = $scope.address;
             var deliveryDate = getDateTime( this.deliveryDate, this.deliveryTime );
-            if( 'undefined' == typeof $scope.deliveryGuy ) $scope.deliveryGuy = -1;
+            if( 'undefined' == typeof $scope.deliveryGuy || '' == $scope.deliveryGuy  ) $scope.deliveryGuy = -1;
             DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, this.recipientName, this.recipientPhone, this.additionalComments, deliveryDate, this.deliveryCompany, $scope.selectedItems, function( delivery ){
 
                 $scope.delivery = delivery;

@@ -31,6 +31,36 @@
     </div>
 </div>
 
+<div class="[ card-panel ]" ng-if="2 == role || 3 == role">
+    <div class="[ row ]">
+        <div class="[ col s12  ]">
+            <h4 class="[ center-align ]">Solicitudes de entrada pendientes</h4>
+            <table datatable="ng" dt-options="dtPendingEntryRequestsOptions" dt-column-defs="dtPendingEntryRequestsColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th class="[ center-align ]">Nombre</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Proyecto</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Project Manager</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Ejecutivo de Cuenta</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in pendingInventoryItems">
+                        <td>{{ item.name }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.project }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.pm }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.ae }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.entry_date | date:'yyyy-MM-dd h:mm:ss a' }}</td>
+                    </tr>
+                </tbody>
+            </table>  
+        </div>
+    </div>
+</div>
+
 <div class="[ card-panel ]">
     <div class="[ row ]">
         <div class="[ col s12 ]">
@@ -75,6 +105,3 @@
         </div>
     </div>
 </div>
-
-
-

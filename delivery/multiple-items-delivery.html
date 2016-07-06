@@ -42,12 +42,14 @@
             <div class="[ col s12 m4 ][ mt-10 ]"> 
                 <select name="deliveryGuy" ng-model="deliveryGuy" data-parsley-error-message="¡El repartidor es obligatorio!">
                     <option value="" disabled selected>Selecciona el repartidor</option>
+                    <option value="">No hay</option>
                     <option ng:repeat="user in deliveryUsers" value="{{user.id}}">{{ user.first_name + ' ' + user.last_name }}</option>
                 </select>
             </div>
             <div class="[ col s12 m4 ][ mt-10 ]"> 
                 <select name="deliveryCompany" ng-model="deliveryCompany" data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option value="">No hay</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>

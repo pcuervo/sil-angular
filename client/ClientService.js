@@ -9,6 +9,7 @@ conAngular
         service.getContacts = getContacts;
         service.getInventoryItems = getInventoryItems;
         service.updateUser = updateUser;
+        service.getClient = getClient;
         return service;
 
 
@@ -128,6 +129,18 @@ conAngular
                     callback ( response );
                });
         }// update
+
+        function getClient( id, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'client_contacts/' + id;
+            $http.get(serviceUrl)
+               .success(function ( response ) {
+                    console.log( response );
+                    callback( response.user );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getClient
 
     }]);
 

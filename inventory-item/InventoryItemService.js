@@ -5,6 +5,8 @@ conAngular
         service.create = create;
         service.getAll = getAll;
         service.getLatestEntries = getLatestEntries;
+        service.getLatestEntriesByPM = getLatestEntriesByPM;
+        service.getLatestEntriesByAE = getLatestEntriesByAE;
         service.getPendingEntries = getPendingEntries;
         service.getPendingWithdrawals = getPendingWithdrawals;
         service.byBarcode = byBarcode;
@@ -66,6 +68,42 @@ conAngular
                     callback( response );
                });
         }// getLatestEntries
+
+        function getLatestEntriesByPM( userId, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { 
+                    recent:     true, 
+                    pm_id:      userId  
+                } 
+            })
+           .success(function ( response ) {
+                callback( response.inventory_items );
+           })
+           .error(function ( response ) {
+                callback( response );
+           });
+        }// getLatestEntriesByPM
+
+        function getLatestEntriesByAE( userId, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { 
+                    recent:     true, 
+                    ae_id:      userId  
+                } 
+            })
+           .success(function ( response ) {
+                callback( response.inventory_items );
+           })
+           .error(function ( response ) {
+                callback( response );
+           });
+        }// getLatestEntriesByAE
 
         function getAll( callback ) {
             var serviceUrl = $rootScope.apiUrl  + 'inventory_items/';

@@ -278,6 +278,7 @@ conAngular
                     return;
                 }
                 $scope.item = item;
+                console.log( item );
                 $scope.hasItem = true;
                 $scope.exitDate = new Date();
 
@@ -430,7 +431,6 @@ conAngular
 
         $scope.getRackLocationLink = function( id, locations ){
             var links = '';
-
             $('#'+id+' .js-location-links').empty();
             if( locations.length == 0 ) $('#'+id+' .js-location-links').append( '-' );;
 
@@ -470,6 +470,7 @@ conAngular
                 case '/check-in':
                     getLatestEntries();
                     initLatestEntriesDataTable();
+                    if( 2 == $scope.role || 3 == $scope.role ) getPendingEntryRequests();
                     break;
                 case '/add-bundle-item':
                     $scope.parts = [];
@@ -705,11 +706,20 @@ conAngular
 
         function getLatestEntries(){
 
-            InventoryItemService.getLatestEntries( function( latestInventoryItems ){
-                console.log( latestInventoryItems );
-                $scope.latestInventoryItems = latestInventoryItems;
-            });
+            if( 1 == $rootScope.globals.currentUser.role || 4  == $rootScope.globals.currentUser.role ){
+                InventoryItemService.getLatestEntries( function( latestInventoryItems ){
+                    $scope.latestInventoryItems = latestInventoryItems;
+                });
+                return;
+            }
 
+            if( 2 == $rootScope.globals.currentUser.role  ){
+                InventoryItemService.getLatestEntriesByPM( $rootScope.globals.currentUser.id, function( latestInventoryItems ){
+                    $scope.latestInventoryItems = latestInventoryItems;
+                });
+            }
+
+            
         }// getLatestEntries
 
         function initLatestEntriesDataTable(){
@@ -801,7 +811,7 @@ conAngular
                     return;
                 }
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/check-in', {}, { reload: true });
+                $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
             });
         }// withdrawUnitItem
 
@@ -813,7 +823,7 @@ conAngular
                     return;
                 }
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/check-in', {}, { reload: true });
+                $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
             });
         }// withdrawUnitItem
 
@@ -827,8 +837,9 @@ conAngular
                     Materialize.toast( response.errors, 4000, 'red');
                     return;
                 }
+                console.log(response);
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/check-in', {}, { reload: true });
+                $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
             });
         }// withdrawUnitItem
 

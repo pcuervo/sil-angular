@@ -1748,6 +1748,66 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         }
     })
 
+    // Rent
+    .state('/rent-dashboard', {
+      url: "/rent-dashboard",
+      templateUrl: "rent/rent-dashboard.html",
+      controller: "RentController",
+      data: {
+        pageTitle: 'Información de renta',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Rentas',
+            href: '#/rent-dashboard'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+            return $ocLazyLoad.load([{
+                name: 'conAngular',
+                insertBefore: '#ngInsertBefore', 
+                files: conAssets('dataTables')
+            }, {
+                name: 'conAngular',
+                serie: true, // used for synchronous load chart scripts
+                insertBefore: '#ngInsertBefore',
+                files: conAssets('sparkline,flot,rickshaw,jvectormap')
+            }]);
+        }]
+      }
+    })
+
+    .state('/view-rent', {
+        url: "/view-rent/:clientId",
+        templateUrl: "rent/view-rent.html",
+        controller: "RentController",
+        data: {
+            pageTitle: 'Información de renta por cliente',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Información de renta por cliente'
+            }]
+        }, 
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore', 
+                    files: conAssets('dataTables')
+                }, {
+                    name: 'conAngular',
+                    serie: true, // used for synchronous load chart scripts
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('sparkline,flot,rickshaw,jvectormap')
+                }]);
+            }]
+        }
+    });
+
 }]);
 
 /* Init global settings and run the app */
@@ -1756,7 +1816,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     // API URL
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/'
-    $rootScope.apiUrl = stage;
+    $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view

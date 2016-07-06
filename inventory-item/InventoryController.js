@@ -183,7 +183,7 @@ conAngular
         }// initInventory
 
         function fetchInventory(){
-            if( 1 === $scope.role ){
+            if( 1 === $scope.role || 4 == $scope.role ){
                 InventoryItemService.getAll( function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
                     console.log( inventoryItems );
