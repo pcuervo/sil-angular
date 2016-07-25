@@ -10,16 +10,18 @@
                     <tr>
                         <th></th>
                         <th class="[ center-align ]">Artículo</th>
-                        <th class="[ center-align ]">Tipo de mercancía</th>
-                        <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
+                        <th class="[ center-align ]">Cantidad</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="i in withdrawItems">
                         <td><img ng-src="{{ i.item_img }}" /></td>
                         <td>{{ i.name }}</td>
-                        <td class="[ center-align ]">{{ i.item_type }}</td>
-                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.quantity }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.item_type }}</td>
+                        <td class="[ center-align ]">
+                            <input class="[ center-align ][ quantities ]" type="text" ng-model="i.quantity" ng-readonly="'BulkItem' != i.actable_type">
+                        </td>
                     </tr>
                 </tbody>
             </table>  

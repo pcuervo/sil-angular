@@ -25,6 +25,7 @@ conAngular.controller('RentController', [ '$rootScope', '$scope', '$location', '
 
         if( currentPath.indexOf('view-rent') > -1 ){
             getClient( $stateParams.clientId );
+            fetchClientStats( $stateParams.clientId );
         }
     }// initDashboard
 
@@ -38,12 +39,27 @@ conAngular.controller('RentController', [ '$rootScope', '$scope', '$location', '
         WarehouseService.stats( function( stats ){
             console.log( stats );
             $scope.stats = stats;
-            // initChartInventoryByItemType( stats.inventory_by_type );
             initChartMonthlyRent( stats.rent_by_month );
         });
 
         InventoryItemService.getStats( function( stats ){
             console.log( stats );
+            initChartInventoryByItemType( stats.inventory_by_type );
+            initChartInventoryByHighValue( stats.total_number_items, stats.total_high_value_items );
+        });
+    }
+
+    function fetchClientStats( clientContactId ){
+        $scope.inventoryByItemData = [];
+        $scope.inventoryByItemOpts = {};
+        $scope.monthlySpaceData = [];
+        $scope.monthlySpaceOpts = {};
+        addMonthlySpaceTooltip();
+
+        ClientService.stats( clientContactId, function( stats ){
+            console.log( stats );
+            $scope.stats = stats;
+            initChartMonthlyRent( stats.rent_by_month );
             initChartInventoryByItemType( stats.inventory_by_type );
             initChartInventoryByHighValue( stats.total_number_items, stats.total_high_value_items );
         });
@@ -113,7 +129,6 @@ conAngular.controller('RentController', [ '$rootScope', '$scope', '$location', '
         var ticks = [];
 
         $.each( occupationData, function(i, val){
-            console.log( val );
             monthlySpaceData.push( [i+1, val.rent] );
             ticks.push( [i+1, val.date] );
         });
@@ -167,7 +182,6 @@ conAngular.controller('RentController', [ '$rootScope', '$scope', '$location', '
 
     function addMonthlySpaceTooltip(){
         $scope.monthlySpaceOpts['conTooltip'] = function(chart) {
-            console.log( 'hi' );
             function showTooltip(x, y, contents) {
                 $('<div id="tooltip">' + contents + '</div>').css( {
                     position: 'absolute',

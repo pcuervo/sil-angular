@@ -368,14 +368,15 @@ conAngular
 
         }// authorizeEntry
 
-        function authorizeWithdrawal( id, pickupCompanyContact, additionalComments, callback ) {
+        function authorizeWithdrawal( id, pickupCompanyContact, additionalComments, quantities, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/authorize_withdrawal';
             $http.post( serviceUrl, 
                 {  
                     id:                     id, 
                     pickup_company_contact: pickupCompanyContact,
-                    additional_comments:    additionalComments
+                    additional_comments:    additionalComments,
+                    quantities:             quantities
                 }
             )
             .success(function( response ) {

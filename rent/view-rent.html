@@ -3,6 +3,13 @@
 <div class="[ row ][ mb-10 ]">
     <div class="[ col s12 m4 ]">
         <div class="card-panel stats-card blue white-text">
+            <i class="fa fa-user"></i>
+            <span class="count">{{ client_contact.client.name }}</span>
+            <div class="name">{{ client_contact.first_name + ' ' + client_contact.last_name }}</div>
+        </div>
+    </div>
+    <div class="[ col s12 m4 ]">
+        <div class="card-panel stats-card blue white-text">
             <i class="fa fa-dollar"></i>
             <span class="count">{{ client_contact.current_month_rent | currency : symbol : fractionSize }}</span>
             <div class="name">Renta del mes</div>
@@ -14,58 +21,6 @@
             <span class="count">-</span>
             <div class="name">---</div>
         </div>
-    </div>
-    <div class="[ col s12 m4 ]">
-        <div class="card-panel stats-card blue white-text">
-            <i class="fa fa-question"></i>
-            <span class="count">-</span>
-            <div class="name">---</div>
-        </div>
-    </div>
-
-    <div class="[ col s12 ]">
-        <div class="card">
-            <div class="content orders-card">
-                <h4>{{ stats.total_occupied_locations }} de {{ stats.total_locations }} ubicaciones</h4>
-                <div class="row">
-                    <div class="col s6">
-                        <small>Ocupación de almacén</small>
-                    </div>
-                    <span class="[ col s6 ][ right-align ]">{{ stats.warehouse_occupation_percentage }} %</span>
-                </div>
-                <div class="progress small">
-                    <div class="determinate" style="width: {{ stats.warehouse_occupation_percentage }}%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Resumen renta clientes</h4>
-    <div class="[ row ]">
-        <table datatable="ng" dt-options="dtClientsOptions" dt-column-defs="dtClientsColumnDefs" class="[ row-border hover ][ col sm-12 ]">
-            <thead>
-                <tr>
-                    <th class="[ center-align ]">Contacto cliente</th>
-                    <th class="[ center-align ][ hide-on-small-and-down ]">Cliente</th>
-                    <th class="[ center-align ][ hide-on-small-and-down ]">Renta mes actual</th>
-                    <th class="[ center-align ]">Multiplicador de descuento</th>
-                    <th class="[ center-align ]">Detalle renta</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="c in clientUsers">
-                    <td>{{ c.first_name + ' ' + c.last_name }}</td>
-                    <td class="[ center-align ]">{{ c.client.name }}</td>
-                    <td class="[ center-align ]">{{ c.current_month_rent | currency : symbol : fractionSize }}</td>
-                    <td class="[ center-align ]">{{ c.discount }}</td>
-                    <td class="[ center-align ]">
-                        <a href="#/view-rent/{{c.id}}" class="[ btn ]" ng-click="updateDiscount( c.id )"><i class="[ fa fa-eye ]"></i></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 </div>
 

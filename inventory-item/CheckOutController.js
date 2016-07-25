@@ -73,13 +73,6 @@ conAngular
             });
         }
 
-        // $scope.authorizeWithdrawal = function( itemId ){
-        //     InventoryItemService.authorizeWithdrawal( itemId, function( response ){
-        //         Materialize.toast(response.success, 4000, 'green');
-        //         getPendingWithdrawals(); 
-        //     }); 
-        // }
-
         $scope.printSummary = function(){
             window.print();
         }
@@ -93,7 +86,12 @@ conAngular
         }
 
         $scope.authorizeWithdrawal = function(){
-            InventoryItemService.authorizeWithdrawal( $scope.withdrawRequest.id, $scope.pickupCompanyContact, $scope.additionalComments, function( response ){
+            var quantities = [];
+            $('.quantities').each( function(i, quantityInput){
+                quantities.push( $(quantityInput).val() );
+            });
+            console.log( quantities );
+            InventoryItemService.authorizeWithdrawal( $scope.withdrawRequest.id, $scope.pickupCompanyContact, $scope.additionalComments, quantities, function( response ){
                 console.log( response );
                 Materialize.toast( "Has aprobado la salida exitosamente. Se le ha enviado una notificación al usuario que la solicitó.", 4000, 'green');
                 $state.go('/check-out', {}, { reload: true });
