@@ -3,7 +3,7 @@
 	<div class="[ col m6 s12 ]">
 		<div class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
 			<i class="fa fa-dollar"></i>
-			<span class="[ count ]">$100</span>
+			<span class="[ count ]">${{ currentRent }}</span>
 			<div class="name">Renta mensual actual</div>
 		</div>
 	</div>
@@ -15,65 +15,62 @@
 		</div>
 	</div>
 	<div class="[ col m6 s12 ]"> 
-        <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/add-unit-item"><i class="[ fa fa-indent ][ left ]"></i>Programar Entrada</a>
+        <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/add-unit-item"><i class="[ fa fa-outdent ][ left ]"></i>Programar Salida</a>
     </div>
     <div class="[ col m6 s12 ]"> 
-        <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/add-bundle-item"><i class="[ fa fa-indent ][ left ]"></i>Programar Salida</a>
+        <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/add-bundle-item"><i class="[ fa fa-motorcycle ][ left ]"></i>Programar Envío</a>
     </div>
 </div>
 
 <div class="row">
-	<div class="col s12 l7">
-		<div class="card">
-			<div class="title">
-				<h5>Ocupación de espacio por mes</h5>
-				<a class="close" href="#">
-					<i class="mdi-content-clear"></i>
-				</a>
-				<a class="minimize" href="#">
-					<i class="mdi-navigation-expand-less"></i>
-				</a>
-			</div>
-			<div class="content">
-				<flot dataset="monthlySpaceData" options="monthlySpaceOpts" style="display: block; height: 300px"></flot>
-			</div>
-		</div>
-	</div>
-
-	<div class="col s12 l5">
-		<div class="card">
-			<div class="title">
-				<h5>Inventario por tipo</h5>
-				<a class="close" href="#">
-					<i class="mdi-content-clear"></i>
-				</a>
-				<a class="minimize" href="#">
-					<i class="mdi-navigation-expand-less"></i>
-				</a>
-			</div>
-			<div class="content">
-				<flot dataset="inventoryByItemData" options="inventoryByItemOpts" style="display: block; height: 300px"></flot>
-			</div>
-		</div>
-  	</div>
+    <div class="col s12 l6">
+        <div class="card">
+            <div class="title">
+                <h5>Historial de renta</h5>
+            </div>
+            <div class="content">
+                <flot dataset="monthlySpaceData" options="monthlySpaceOpts" style="display: block; height: 300px"></flot>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l3">
+        <div class="card">
+            <div class="title">
+                <h5>Inventario por tipo</h5>
+            </div>
+            <div class="content">
+                <flot dataset="inventoryByItemData" options="inventoryByItemOpts" style="display: block; height: 300px"></flot>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l3">
+        <div class="card">
+            <div class="title">
+                <h5>Alto Valor vs. Otros</h5>
+            </div>
+            <div class="content">
+                <flot dataset="inventoryByHighValue" options="inventoryByHighValueOpts" style="display: block; height: 300px"></flot>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="[ row ]">
-    <div class="[ col s12 m6 ]">
+	<div class="[ col s12  ]">
 		<div class="[ card-panel ]">
-			<h4 class="[ center-align ]">Entradas programadas</h4>
+			<h4 class="[ center-align ]">Salidas programadas</h4>
 			<table datatable="ng" dt-options="dtLatestEntriesOptions" dt-column-defs="dtLatestEntriesColumnDefs" class="row-border hover">
 	            <thead>
 		            <tr>
-		                <th class="[ center-align ]">Entrada</th>
+		                <th class="[ center-align ]">Salida</th>
 		                <th class="[ center-align ]">Nombre</th>
 		                <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
-		                <th class="[ center-align ][ hide-on-small-only ]">Fecha entrada</th>
+		                <th class="[ center-align ][ hide-on-small-only ]">Fecha salida</th>
 		            </tr>
 		        </thead>
 		        <tbody>
 		            <tr ng-repeat="item in latestInventoryItems">
-		                <td class="[ center-align ][ green lighten-3 ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i></td>
+		                <td class="[ center-align ][ red lighten-3 ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i></td>
 		                <td>{{ item.name }}</td>
 		                <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
 		                <td class="[ center-align ][ hide-on-small-only ]">{{ item.created_at | date:'dd/MM/yyyy' }}</td>
@@ -82,9 +79,9 @@
 	        </table>
 		</div>
 	</div>
-	<div class="[ col s12 m6 ]">
+	<div class="[ col s12  ]">
 		<div class="[ card-panel ]">
-			<h4 class="[ center-align ]">Salidas programadas</h4>
+			<h4 class="[ center-align ]">Envíos programados</h4>
 			<table datatable="ng" dt-options="dtLatestEntriesOptions" dt-column-defs="dtLatestEntriesColumnDefs" class="row-border hover">
 	            <thead>
 		            <tr>
@@ -117,10 +114,8 @@
 		                <th class="[ center-align ]">Tipo</th>
 		                <th class="[ center-align ]">Nombre</th>
 		                <th class="[ center-align ][ hide-on-small-only ]">Cantidad</th>
-		                <th class="[ center-align ][ hide-on-med-and-down ]">Estatus</th>
 		                <th class="[ center-align ][ hide-on-small-only ]">Entregó / Recogió</th>
 		                <th class="[ center-align ][ hide-on-small-only ]">Fecha entrada / salida</th>
-		                <!-- <th class="[ center-align ]">Ver</th> -->
 		            </tr>
 		        </thead>
 		        <tbody>
@@ -128,7 +123,6 @@
 		                <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]"><i class="[ {{ getItemTypeIcon( it.inventory_item.actable_type ) }} ]"></i><span class="[ hide ]">{{ it.inventory_item.actable_type }}</span></td>
 		                <td>{{ it.inventory_item.name }}</td>
 		                <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
-		                <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.inventory_item.status }}</td>
 		                <td class="[ center-align ][ hide-on-small-only ]">{{ it.deliver_pickup_contact }}</td>
 		                <td class="[ center-align ][ hide-on-small-only ]">{{ it.entry_exit_date | date:'dd/MM/yyyy' }}</td>
 		                <!-- <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-inventory-transaction/{{it.id}}"><i class="[ ion-eye ]"></i></a></td> -->

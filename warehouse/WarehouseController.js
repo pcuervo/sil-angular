@@ -656,15 +656,23 @@ conAngular
                     $scope.parts = item.parts;
                     return;
                 }
-                if( 'BulkItem' === item.actable_type ) $scope.quantity = item.quantity;
+                if( 'BulkItem' === item.actable_type ){
+                    $scope.quantity = item.quantity;
+                    InventoryItemService.isReentryWithPendingLocation( item.id, function( response ){
+                        if( 'undefined' != typeof response.quantity ) $scope.quantity = response.quantity;
+                    });
+                } 
 
             }); 
         }// getItem
 
         function getItemsWithPendingLocation(){
             InventoryItemService.withPendingLocation( function( locations ){
-                console.log( locations );
                 $scope.pending_locations = locations;
+            }); 
+
+            InventoryItemService.reentryWithPendingLocation( function( locations ){
+                $scope.reentryPendingLocations = locations;
             }); 
         }// getItemsWithPendingLocation
 

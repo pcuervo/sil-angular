@@ -170,6 +170,16 @@
                 <label for="recipient-phone">Teléfono de quien va a recibir</label>
             </div>
         </div>
+        <div class="[ col s12 m4 offest-m2 ]">    
+            <label class="[ fs-12 ]" for="">Fecha de envío (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" name="deliveryDate" ng-model="deliveryDate" disabled>
+        </div>
+        <div class="[ col s12 m4 ][ mt-5 ]"> 
+            <div class="input-field">
+                <input id="clockpicker" class="clockpicker" type="text" ng-model="deliveryTime" data-donetext="OK" disabled>
+                <label for="clockpicker">Hora</label>
+            </div>
+        </div>
         <div class="[ col s12 m8 offset-m2 ]"> 
             <div class="input-field">
                 <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments" disabled></textarea>

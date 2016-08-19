@@ -22,6 +22,8 @@ conAngular
         service.authorizeEntry = authorizeEntry;
         service.authorizeWithdrawal = authorizeWithdrawal;
         service.withPendingLocation = withPendingLocation;
+        service.reentryWithPendingLocation = reentryWithPendingLocation;
+        service.isReentryWithPendingLocation = isReentryWithPendingLocation;
         service.search = search;
         service.getStatuses = getStatuses;
         service.getStatus = getStatus;
@@ -401,6 +403,36 @@ conAngular
 
         }// withPendingLocation
 
+        function reentryWithPendingLocation( callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/reentry_with_pending_location';
+            $http.get ( serviceUrl )
+               .success(function ( response ) {
+                    callback( response.inventory_items );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+
+        }// reentryWithPendingLocation
+
+        function isReentryWithPendingLocation( itemId, callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/is_reentry_with_pending_location';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { id: itemId  } 
+                })
+               .success(function ( response ) {
+                    callback( response );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+
+        }// isReentryWithPendingLocation
+
         function search( projectId, clientContactId, pmId, aeId, status, itemType, storageType, keyword, serialNumber, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
@@ -421,6 +453,7 @@ conAngular
                     }
                 })
                .success(function ( response ) {
+                    console.log( response );
                     callback( response.inventory_items );
                })
                .error(function ( response ) {

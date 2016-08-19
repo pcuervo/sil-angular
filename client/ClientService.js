@@ -147,7 +147,6 @@ conAngular
             var serviceUrl = $rootScope.apiUrl + 'client_contacts/stats/' + clientContactId;
             $http.get(serviceUrl)
             .success(function ( response ) {
-                console.log( response );
                 callback( response.stats );
            })
            .error(function ( response ) {

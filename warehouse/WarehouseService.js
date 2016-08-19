@@ -58,7 +58,6 @@ conAngular
                     units: units
                 })
                .success(function ( response ) {
-                    console.log( response );
                     callback ( response.warehouse_rack );
                })
                .error(function ( response ) {
@@ -85,7 +84,6 @@ conAngular
                     units:  units
                 })
                .success(function ( response ) {
-                    console.log( response );
                     callback ( response.warehouse_location );
                })
                .error(function ( response ) {
@@ -117,7 +115,6 @@ conAngular
                 }
             )
             .success(function( response ) {
-                console.log( response );
                 callback( response );
             })
             .error(function( response ) {
@@ -136,7 +133,6 @@ conAngular
                 }
             )
             .success(function( response ) {
-                console.log( response );
                 callback( response );
             })
             .error(function( response ) {
@@ -154,7 +150,6 @@ conAngular
                 }
             )
             .success(function( response ) {
-                console.log( response );
                 callback( response );
             })
             .error(function( response ) {
@@ -210,7 +205,6 @@ conAngular
             var serviceUrl = $rootScope.apiUrl + 'warehouse_transactions/';
             $http.get( serviceUrl )
                .success(function ( response ) {
-                    console.log( response );
                     callback( response.warehouse_transactions );
                })
                .error(function ( response ) {

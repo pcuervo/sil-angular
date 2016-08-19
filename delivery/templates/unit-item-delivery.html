@@ -65,13 +65,13 @@
     <div class="[ row ]" >
         <h4 class="[ center-align ]">Datos de envío</h4>
         <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="singleItemDelivery()" data-parsley-item>
-            <div class="[ col s12 m4 ][ mt-10 ]"> 
+            <div class="[ col s12 m4 ][ mt-10 ]" ng-if="2 != role && 3 != role && 6 != role"> 
                 <select name="deliveryGuy" ng-model="deliveryGuy" required data-parsley-error-message="¡El repartidor es obligatorio!">
                     <option value="" disabled selected>Selecciona el repartidor</option>
                     <option ng:repeat="user in deliveryUsers" value="{{user.id}}">{{ user.first_name + ' ' + user.last_name }}</option>
                 </select>
             </div>
-            <div class="[ col s12 m4 ][ mt-10 ]"> 
+            <div class="[ col s12 m4 ][ mt-10 ]" ng-if="2 != role && 3 != role && 6 != role"> 
                 <select name="deliveryCompany" ng-model="deliveryCompany" data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
@@ -169,6 +169,22 @@
             <div class="input-field">
                 <input id="recipient-phone" type="text" name="recipientPhone" ng-model="recipientPhone" disabled>
                 <label for="recipient-phone">Teléfono de quien va a recibir</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 offest-m2 ]">    
+            <label class="[ fs-12 ]" for="">Fecha de envío (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" name="deliveryDate" ng-model="deliveryDate" disabled>
+        </div>
+        <div class="[ col s12 m4 ][ mt-5 ]"> 
+            <div class="input-field">
+                <input id="clockpicker" class="clockpicker" type="text" ng-model="deliveryTime" data-donetext="OK" disabled>
+                <label for="clockpicker">Hora</label>
+            </div>
+        </div>
+        <div class="[ col s12 ]"> 
+            <div class="input-field">
+                <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments" disabled></textarea>
+                <label for="textarea1">Observaciones adicionales</label>
             </div>
         </div>
         <div class="[ col s12 m8 offset-m2 ]"> 

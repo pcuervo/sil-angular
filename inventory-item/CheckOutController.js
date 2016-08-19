@@ -251,11 +251,13 @@ conAngular
 
                     if( '' == $withdrawQuantityInput.val() || '' == $withdrawUnitsInput.val() ) return 1;
 
+
+
                     locations.push({
-                        location: location.location,
-                        location_id:  location.location_id,
-                        quantity:     parseInt( $withdrawQuantityInput.val() ),
-                        units:        parseInt( $withdrawUnitsInput.val() )      
+                        location:       location.location,
+                        location_id:    location.location_id,
+                        quantity:       parseInt( $withdrawQuantityInput.val() ),
+                        units:          parseInt( $withdrawUnitsInput.val() )      
                     })
                     withdrawQuantity += parseInt( $withdrawQuantityInput.val() );
                 });
@@ -355,7 +357,7 @@ conAngular
                 }
                 $scope.item = item;
                 $scope.exitDate = new Date();
-                $scope.locations = '-';
+                $scope.locations = '';
                 $.each( item.locations, function(i, loc){
                     console.log( loc );
                     $scope.locations += loc.location + ', ';

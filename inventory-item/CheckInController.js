@@ -732,7 +732,6 @@ conAngular
                     .withOption('order', [])
                     .withOption('searching', false);
             $scope.dtLatestEntriesColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
                 DTColumnDefBuilder.newColumnDef(7).notSortable()
             ];

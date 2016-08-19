@@ -193,7 +193,7 @@ conAngular
             }
             if( 2 === $scope.role ){ 
                 $scope.selectedPM = $rootScope.globals.currentUser.id;
-                InventoryItemService.search( '', '', $scope.selectedPM, '', '', '', '', '', function( inventoryItems ){
+                InventoryItemService.search( '', '', $scope.selectedPM, '', '', '', '', '', '', function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
                     LoaderHelper.hideLoader();
                 });
@@ -201,7 +201,7 @@ conAngular
             }
             if( 3 === $scope.role ){ 
                 $scope.selectedAE = $rootScope.globals.currentUser.id;
-                InventoryItemService.search( '', '', '', $scope.selectedAE, '', '', '', '', function( inventoryItems ){
+                InventoryItemService.search( '', '', '', $scope.selectedAE, '', '', '', '', '',function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
                     LoaderHelper.hideLoader();
                 });
@@ -209,7 +209,7 @@ conAngular
             }
             if( 6 === $scope.role ){ 
                 $scope.selectedClient = $rootScope.globals.currentUser.id;
-                InventoryItemService.search( '', $scope.selectedClient, '', '', '', '', '', '', function( inventoryItems ){
+                InventoryItemService.search( '', $scope.selectedClient, '', '', '', '', '', '', '', function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
                     LoaderHelper.hideLoader();
                 });
@@ -224,7 +224,6 @@ conAngular
                 .withOption('responsive', true)
                 .withOption('order', []);
             $scope.dtColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
                 DTColumnDefBuilder.newColumnDef(8).notSortable()
             ];

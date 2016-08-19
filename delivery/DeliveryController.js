@@ -2,6 +2,7 @@ conAngular
     .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, SupplierService,  DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
         
         (function initController() {
+            $scope.role = $rootScope.globals.currentUser.role;
             var currentPath = $location.path();
             initDeliveries( currentPath );
             fetchNewNotifications();
@@ -391,7 +392,7 @@ conAngular
         }
 
         function fetchLatestDeliveries(){
-            DeliveryService.all( function( deliveries ){
+            DeliveryService.all( $scope.role, function( deliveries ){
                 console.log(deliveries)
                 $scope.latestDeliveries = deliveries;
             });

@@ -26,12 +26,12 @@ conAngular
                });
         }// get
 
-        function all( callback ){
+        function all( role, callback ){
             var serviceUrl = $rootScope.apiUrl + 'deliveries/';
             $http ({
                 url: serviceUrl, 
                 method: "GET",
-                params: { recent: true  } 
+                params: { recent: true, user_role: role  } 
                 })
                .success(function ( response ) {
                     callback( response.deliveries );

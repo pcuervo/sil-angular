@@ -3,7 +3,6 @@ conAngular.controller('NotificationController', ['$scope', '$rootScope', '$state
     (function initController() {
         fetchUnreadNotifications();
         fetchReadNotifications();
-        markAllAsRead();
     })();
 
     $scope.$on('$includeContentLoaded', function() {
@@ -52,6 +51,7 @@ conAngular.controller('NotificationController', ['$scope', '$rootScope', '$state
             $scope.unreadNotifications = unreadNotifications;
             NotificationHelper.updateNotifications( 0 );
             if( 0 == unreadNotifications.length ) $('.notification-text').text('No tienes notificaciones nuevas.')
+            markAllAsRead();
         });
     }
 
