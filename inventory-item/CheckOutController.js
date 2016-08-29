@@ -148,6 +148,9 @@ conAngular
                     getPendingWithdrawalRequests();
                     initPendingWithdrawalRequestsDataTable();
                     break;
+                case '/express-withdrawal':
+                    fetchSuppliers();
+                    break;
             }
 
             getProjectManagers();
