@@ -1,0 +1,68 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Editar usuario cliente</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateClientUser()" data-parsley-validate>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input type="email" id="email" ng-model="client.email" required data-parsley-type-message="¡El correo no es válido!">
+                    <label for="email">Email</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input type="text" id="firstName" ng-model="client.first_name" required>
+                    <label for="firstName">Nombre</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input type="text" id="lastName" ng-model="client.last_name" required>
+                    <label for="lastName">Apellido(s)</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="disscount" ng-model="client.discount" required>
+                    <label for="disscount">Descuento (1 = 100%)</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="cellphone" ng-model="client.business_unit" required>
+                    <label for="cellphone">Celular</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="phone" ng-model="client.phone" required>
+                    <label for="phone">Teléfono</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input type="text" id="extension" ng-model="client.phone_ext" required>
+                    <label for="extension">Extensión</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]">editar</button>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+<script>
+  $('[data-parsley-validate]').parsley();
+</script>
+
+
+
+
+

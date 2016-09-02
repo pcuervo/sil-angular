@@ -1257,6 +1257,30 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/edit-client-user', {
+        url: "/edit-client-user/:userId",
+            templateUrl: "client/edit-client-user.html",
+            controller: "ClientController",
+            data: {
+                pageTitle: 'Editar',
+                crumbs: [{
+                    title: '<i class="fa fa-dashboard"></i> Dashboard',
+                    href: '#/dashboard'
+            }, {
+                title: 'Editar usuario cliente',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
     .state('/view-client-users', {
         url: "/view-client-users",
             templateUrl: "client/view-client-users.html",

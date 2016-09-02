@@ -115,12 +115,18 @@ conAngular
            });
         }
 
-        function updateUser( id, discount, callback ){
+        function updateUser( id, discount, email, firstName, lastName, businessUnit, phone, phoneExt, callback ){
             var serviceUrl = $rootScope.apiUrl + 'client_contacts/update';
             $http.post(serviceUrl, {
                     id: id,
                     client_contact: {
-                        discount: discount
+                        email:          email,
+                        first_name:     firstName,
+                        last_name:      lastName,
+                        business_unit:  businessUnit,
+                        phone:          phone,
+                        phone_ext:      phoneExt,
+                        discount:       discount
                     }
                 })
                .success(function ( response ) {
@@ -153,6 +159,7 @@ conAngular
                 callback( response );
            });
         }
+
 
     }]);
 

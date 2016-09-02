@@ -1,11 +1,9 @@
 conAngular
-    .controller('ClientController', ['$scope', '$state', 'ClientService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, ClientService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
+    .controller('ClientController', ['$scope', '$state', '$stateParams', 'ClientService', 'NotificationService', '$location', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, $stateParams, ClientService, NotificationService, $location, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
         
         (function initController() {
-            getAllClients();
-            getAllClientUsers();
-            initClientDataTable();
-            initClientUserDataTable();
+            var currentPath = $location.path();
+            initClients( currentPath );
             fetchNewNotifications();
         })();
 
@@ -53,9 +51,36 @@ conAngular
 
         }// getClientName
 
+        $scope.updateClientUser = function(){
+
+            ClientService.updateUser( $scope.client.id, $scope.client.discount, $scope.client.email,  $scope.client.first_name,  $scope.client.last_name,  $scope.client.business_unit, $scope.client.phone,  $scope.client.phone_ext, function ( response ){
+
+                    if(response.errors) {
+                        ErrorHelper.display( response.errors );
+                        return;
+                    }
+                    Materialize.toast('¡Cliente "' + response.first_name + ' ' + response.last_name + '" actualizado exitosamente!', 4000, 'green');
+                    $state.go('/view-client-users', {}, { reload: true });
+            });
+        }// registerClient
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
+
+        function initClients( currentPath ){
+
+            if( currentPath.indexOf( '/edit-client-user' ) > -1 ){
+                getClientUser( $stateParams.userId );
+                return;
+            }
+
+            getAllClients();
+            getAllClientUsers();
+            initClientDataTable();
+            initClientUserDataTable();
+
+        }// initClients
 
         function getAllClients(){
             ClientService.getAll( function( clients ){
@@ -72,6 +97,13 @@ conAngular
             }); 
 
         }// getAllClientUsers
+
+        function getClientUser( userId ){
+            ClientService.getClient( userId, function( client ){
+
+                $scope.client = client;
+            }); 
+        }// getClientUser
 
         function initClientDataTable(){
 
