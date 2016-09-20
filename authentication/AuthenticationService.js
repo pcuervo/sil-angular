@@ -17,6 +17,7 @@ conAngular
                     callback(response);
                })
                .error(function (response) {
+                    console.log( response );
                     callback(response);
                });
                
@@ -50,7 +51,7 @@ conAngular
             
             $cookies.remove('globals');
             $cookies.put('loggedIn', false);
-            $http.defaults.headers.common.Authorization = 'Basic ';
+            $http.defaults.headers.common.Authorization = 'Basic';
 
         }
 

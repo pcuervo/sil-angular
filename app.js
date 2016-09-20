@@ -1745,6 +1745,32 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/delivery-request', {
+        url: "/delivery-request",
+        templateUrl: "delivery/delivery-request.html",
+        controller: "DeliveryController",
+        data: {
+            pageTitle: 'Solicitud de Envío',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
+            }, {
+                title: 'Envíos'
+            },
+            {
+                title: 'Envíos'
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables,parsley,geoAutocomplete,gmaps,clockpicker')
+                }]);
+            }]
+        }
+    })
 
     // Settings
     .state('/system-settings', {
@@ -1839,7 +1865,8 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
 
     // API URL
     var test = 'http://localhost:3000/api/';
-    var stage = 'https://sil-api.herokuapp.com/api/'
+    var stage = 'https://sil-api.herokuapp.com/api/';
+    var prod = 'https://sil-prod.herokuapp.com/api/';
     $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
@@ -1848,7 +1875,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     // keep user logged in after page refresh
     $rootScope.globals = $cookies.getObject('globals') || {};
     if ( $rootScope.globals.currentUser ) {
-      $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.authdata; // jshint ignore:line
+      $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.authdata; 
     }
 
     $rootScope.$on('$locationChangeStart', function (event, next, current) {

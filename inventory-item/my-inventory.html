@@ -13,7 +13,7 @@
                 <input id="serialNumber" type="text" ng-model="serialNumber">
                 <label for="serialNumber">Número de serie</label>
             </div>
-            <div class="[ col s12 m4 ][ mt-10 ]" ng-show="role==1">
+            <div class="[ col s12 m4 ][ mt-10 ]" ng-show="role==1 || role ==4">
                 <select name="project" ng-model="selectedProject">
                     <option value="" selected disabled>Proyecto</option>
                     <option value="">Todos</option>
@@ -21,25 +21,25 @@
                 </select>
             </div>
             <div class="[ clear ]" ></div>
-            <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1">
+            <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1 && role !== 4">
                 <select name="pm" ng-model="selectedPM">
                     <option value="" disabled selected>Project Manager</option>
                     <option value="">Todos</option>
-                    <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.first_name + '' + user.last_name}}</option>
+                    <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.first_name + ' ' + user.last_name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1">
+            <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1 && role !== 4">
                 <select name="pm" ng-model="selectedAE">
                     <option value="" disabled selected>Ejecutivo de cuenta</option>
                     <option value="">Todos</option>
-                    <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.first_name + '' + user.last_name}}</option>
+                    <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.first_name + ' ' + user.last_name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1">
-                <select name="pm" ng-model="selectedClient" ng-hide="role !== 1">
+                <select name="pm" ng-model="selectedClient" ng-hide="role !== 1 && role !== 4">
                     <option value="" disabled selected>Clientes</option>
                     <option value="">Todos</option>
-                    <option ng:repeat="user in clientContacts" value="{{user.id}}">{{user.first_name + '' + user.last_name}}</option>
+                    <option ng:repeat="user in clientContacts" value="{{user.id}}">{{user.first_name + ' ' + user.last_name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m4 ][ mt-10 ]">

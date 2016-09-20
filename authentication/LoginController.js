@@ -18,6 +18,7 @@ conAngular
                     return;
                 }
 
+                console.log( response );
                 if( response.errors ){
                     $scope.dataLoading = false;
                     Materialize.toast(response.errors, 4000, 'red');

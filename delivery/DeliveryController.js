@@ -83,6 +83,31 @@ conAngular
             });
         }
 
+        $scope.requestDelivery = function(){
+            
+            $scope.selectedItems = getSelectedDeliveryItems();
+
+            if( 0 == $scope.selectedItems ){
+                Materialize.toast( 'No se pueden enviar 0 piezas, por favor selecciona una cantidad mayor a 0', 4000, 'red');
+                return;
+            }
+
+            $scope.address = $('#address').val();
+            var deliveryDate = getDateTime( $scope.deliveryDate, $scope.deliveryTime );
+
+            DeliveryService.createRequest( $rootScope.globals.currentUser.id, $scope.company, $scope.address, $('#lat').val(), $('#lng').val(),  $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.selectedItems, function( delivery ){
+
+                if( delivery.errors ){
+                    console.log(delivery.errors);
+                    Materialize.toast( 'No se pudo crear la solicitud de envío, revisa la información e intenta nuevamente.', 4000, 'red');
+                    return;
+                }
+
+                Materialize.toast( 'Se ha enviado la solicitud de envío.', 4000, 'green');
+                $state.go('/delivery-dashboard', {}, { reload: true });
+            });
+        }
+
         $scope.printSummary = function(){
             window.print();
         }
@@ -199,6 +224,13 @@ conAngular
                     fetchPendingDeliveries();
                     initPendingDeliveryDataTable();
                     break;
+                case '/delivery-request':
+                    LoaderHelper.showLoader( 'Obteniendo inventario...' );
+                    fetchItemsInStock();
+                    initDeliveryDataTable();
+                    initGeoAutocomplete( '#address', '#map', 19.397260, -99.186684, 12 );
+                    $scope.deliveryDate = new Date();
+                    break;
             }
         }// initDeliveries
 
@@ -212,6 +244,7 @@ conAngular
 
         function fetchItemsInStock(){
              InventoryItemService.getInStock( function( items ){
+                console.log(items);
                 LoaderHelper.hideLoader();
                 $scope.inventoryItems = items;
             });

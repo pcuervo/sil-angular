@@ -1,0 +1,96 @@
+<div class="[ card-panel ]">
+    <div class="[ row ]">
+        <h4 class="[ center-align ]">Inventario en existencia</h4>
+        <form ng-submit="requestDelivery()" data-parsley-validate>
+            <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th class="[ center-align ]">Tipo</th>
+                        <th class="[ center-align ]">Img</th>
+                        <th class="[ center-align ]">Nombre</th>
+                        <th class="[ center-align ]">Tipo de mercancía</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
+                        <th class="[ center-align ]">Cantidad</th>
+                        <th class="[ center-align ]">¿Agregar a envío?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="i in inventoryItems">
+                        <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
+                        <td><img ng-src="{{ i.img }}" alt="{{i.name}}"></td>
+                        <td id="item-name-{{i.id}}">{{ i.name }}</td>
+                        <td id="item-type-{{i.id}}" class="[ center-align ]">{{ i.item_type }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ i.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
+                        <td class="[ center-align ]"><div class="[ input-field ]">
+                            <div class="[ input-field ]">
+                                <input type="text" id="quantity-{{i.id}}" value="{{ i.quantity }}" name="item_quantity" ng-readonly="'BulkItem' != i.actable_type" />
+                                <label for="quantity-{{i.id}}"></label>
+                            </div>
+                        </td>
+                        <td class="[ center-align ]">
+                            <div class="[ input-field ]">
+                                <input class="[ filled-in ]" type="checkbox" id="{{i.id}}" value="{{i.id}}" name="item_id" />
+                                <label for="{{i.id}}"></label>
+                            </div>
+                        </td>
+                        <input id="actable-type-{{i.id}}" type="hidden" value="{{i.actable_type}}">
+                    </tr>
+                </tbody>
+            </table>
+            <div class="[ clear ]"></div>
+            <h4 class="[ center-align ]">Datos de envío</h4>
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input id="company" type="text" name="company" ng-model="company" required>
+                    <label for="company">Empresa donde se entrega</label>
+                </div>
+            </div>
+            <div class="[ col s12 m8 ]"> 
+                <div class="input-field">
+                    <input id="address" type="text" name="address" ng-model="address" required>
+                    <input type='hidden' id='lat' ng-model="latitude" name='latitude' data-geo='lat' />
+                    <input type='hidden' id='lng' ng-model="longitude" name='longitude' data-geo='lng' />
+                </div>
+            </div>
+            <div class="[ col s12 ][ map-container ]"> 
+                <div id="map"></div>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="recipient-name" type="text" name="recipientName" ng-model="recipientName" required>
+                    <label for="recipient-name">Persona que va a recibir</label>
+                </div>
+            </div>
+            <div class="[ col s12 m6 ]"> 
+                <div class="input-field">
+                    <input id="recipient-phone" type="text" name="recipientPhone" ng-model="recipientPhone">
+                    <label for="recipient-phone">Teléfono de quien va a recibir</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m6 ]">    
+                <label class="[ fs-12 ]" for="">Fecha de envío (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="deliveryDate" ng-model="deliveryDate" required>
+            </div>
+            <div class="[ col s12 m6 ][ mt-5 ]"> 
+                <div class="input-field">
+                    <input id="clockpicker" class="clockpicker" type="text" ng-model="deliveryTime" data-donetext="OK">
+                    <label for="clockpicker">Hora</label>
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="input-field">
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+                    <label for="textarea1">Observaciones adicionales</label>
+                </div>
+            </div>
+            <div class="[ col s12 ][ center-align ]" >
+                <button class="[ waves-effect ][ btn red ]">Enviar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('[data-parsley-validate]').parsley();    
+</script>

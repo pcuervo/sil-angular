@@ -23,7 +23,8 @@ conAngular
                     Materialize.toast( 'No se encontró ningún artículo con código de barras: "' + $scope.barcode + '"', 4000, 'red');
                     return;
                 }
-                $scope.item = item;
+                getItem( item.id );
+                //$scope.item = item;
                 $scope.hasItem = true;
                 $scope.exitDate = new Date();
             });
@@ -41,6 +42,22 @@ conAngular
                     break;
                 case 'BundleItem': 
                     withdrawBundleItem( $scope.item.actable_id, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments );
+                    break;
+            }
+
+        }// withdraw
+
+        $scope.withdrawExpress = function( type ){
+
+            switch( type ){
+                case 'UnitItem': 
+                    withdrawUnitItem( this.item.actable_id, this.exitDate, this.pickupCompany, this.pickupCompanyContact, this.returnDate, this.additionalComments );
+                    break;
+                case 'BulkItem': 
+                    withdrawBulkItem( this.item.actable_id, this.item.withdrawQuantity, this.exitDate, this.pickupCompany, this.pickupCompanyContact, this.returnDate, this.additionalComments );
+                    break;
+                case 'BundleItem': 
+                    withdrawBundleItem( this.item.actable_id, this.exitDate, this.pickupCompany, this.pickupCompanyContact, this.returnDate, this.additionalComments );
                     break;
             }
 
@@ -149,6 +166,7 @@ conAngular
                     initPendingWithdrawalRequestsDataTable();
                     break;
                 case '/express-withdrawal':
+                    $scope.isSummary = false;
                     fetchSuppliers();
                     break;
             }
@@ -300,6 +318,7 @@ conAngular
                 }
 
                 Materialize.toast( response.success, 4000, 'green');
+                $scope.removedParts = parts;
                 $scope.isSummary = true;
                 $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
 

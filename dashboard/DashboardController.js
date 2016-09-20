@@ -38,6 +38,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
                 initDashboardProjectManager();
                 break;
             case 4:
+                initDashboardWarehouseAdmin();
                 break;
             case 5:
                 break;
@@ -105,6 +106,19 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         }); 
 
     }// initDashboardAdmin
+
+    function initDashboardWarehouseAdmin(){
+        $scope.dashboardTemplate = 'dashboard/warehouse-admin-dashboard.html';
+
+        // Initialize charts with empty data
+        getItemsWithPendingLocation();
+        initPendingLocationDataTable();
+        getPendingEntryRequests();
+        initPendingEntryRequestsDataTable();
+        getPendingWithdrawalRequests();
+        initPendingWithdrawalRequestsDataTable();
+
+    }// initDashboardWarehouseAdmin
 
     function initDashboardProjectManager(){
         $scope.dashboardTemplate = 'dashboard/pm-dashboard.html';
@@ -443,7 +457,37 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         };
     }// initChartMonthlyRent
 
+    function getPendingEntryRequests(){
+        InventoryItemService.getPendingEntryRequests( function( pendingInventoryItems ){
+            console.log( pendingInventoryItems );
+            $scope.pendingInventoryItems = pendingInventoryItems;
+        });
+    }// getPendingEntryRequests
 
+    function getItemsWithPendingLocation(){
+        InventoryItemService.withPendingLocation( function( locations ){
+            $scope.pendingLocations = locations;
+        }); 
+
+        InventoryItemService.reentryWithPendingLocation( function( locations ){
+            $scope.reentryPendingLocations = locations;
+        }); 
+    }// getItemsWithPendingLocation
+
+    function initPendingLocationDataTable(){
+        $scope.dtPendingLocationOptions = DTOptionsBuilder.newOptions()
+            .withPaginationType('full_numbers')
+            .withDisplayLength( 15 )
+            .withDOM('itp')
+            .withOption('responsive', true)
+            .withOption('order', [])
+            .withOption('searching', false);
+        $scope.dtPendingLocationColumnDefs = [
+            DTColumnDefBuilder.newColumnDef(1).notSortable(),
+            DTColumnDefBuilder.newColumnDef(6).notSortable()
+        ];
+        DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+    }// initPendingLocationDataTable
 
 
   // sparkline 1

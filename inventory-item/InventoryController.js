@@ -173,7 +173,7 @@ conAngular
             switch( currentPath ){
                 case '/my-inventory':
                     LoaderHelper.showLoader( 'Obteniendo inventario...' );
-                    if( 1 === $scope.role ) {
+                    if( 1 === $scope.role || 4 === $scope.role   ) {
                         fetchProjectManagers();
                         fetchAccountExecutives();
                         fetchClientContacts();

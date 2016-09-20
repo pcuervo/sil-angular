@@ -8,6 +8,7 @@ conAngular
         service.update = update;
         service.stats = stats;
         service.pendingApproval = pendingApproval;
+        service.createRequest = createRequest;
         return service;
 
 
@@ -118,6 +119,31 @@ conAngular
                     callback( response );
                });
         }// pendingApproval
+
+        function createRequest( userId, company, address, latitude, longitude, addressee, addresseePhone, additionalComments, deliveryDate, inventoryItems, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'delivery_requests/';
+            $http.post(serviceUrl, {
+                    delivery_request: {
+                        company:                company,
+                        address:                address,
+                        latitude:               latitude,
+                        longitude:              longitude,
+                        addressee:              addressee,
+                        addressee_phone:        addresseePhone,
+                        additional_comments:    additionalComments,
+                        date_time:              deliveryDate, 
+                    },
+                    user_id:            userId,
+                    inventory_items:    inventoryItems
+                })
+               .success(function ( response ) {
+                    console.log( response );
+                    callback ( response.delivery );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// createRequest
 
     }]);
 
