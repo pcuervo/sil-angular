@@ -1817,7 +1817,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         deps: ['$ocLazyLoad', function($ocLazyLoad) {
             return $ocLazyLoad.load([{
                 name: 'conAngular',
-                insertBefore: '#ngInsertBefore', 
+                insertBefore: '#ngInsertBefore',
                 files: conAssets('dataTables')
             }, {
                 name: 'conAngular',
@@ -1841,12 +1841,12 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }, {
                 title: 'Información de renta por cliente'
             }]
-        }, 
+        },
         resolve: {
             deps: ['$ocLazyLoad', function($ocLazyLoad) {
                 return $ocLazyLoad.load([{
                     name: 'conAngular',
-                    insertBefore: '#ngInsertBefore', 
+                    insertBefore: '#ngInsertBefore',
                     files: conAssets('dataTables')
                 }, {
                     name: 'conAngular',
@@ -1867,7 +1867,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = test;
+    $rootScope.apiUrl = stage;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
@@ -1875,7 +1875,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     // keep user logged in after page refresh
     $rootScope.globals = $cookies.getObject('globals') || {};
     if ( $rootScope.globals.currentUser ) {
-      $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.authdata; 
+      $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.authdata;
     }
 
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
