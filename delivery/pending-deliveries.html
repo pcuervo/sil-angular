@@ -19,9 +19,9 @@
                 <td class="[ center-align ]">{{ d.user.first_name + ' ' + d.user.last_name }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.company }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.address }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ d.delivery_items.length }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ d.date_time | date:'dd/MM/yyyy' }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/view-delivery/{{ d.id }}"><i class="[ fa fa-indent ]"></i></a></td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.delivery_request_items.length }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.date_time | date:'dd/MM/yyyy h:mm:ss a' }}</td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/view-delivery-request/{{ d.id }}"><i class="[ fa fa-indent ]"></i></a></td>
             </tr>
         </tbody>
     </table>    

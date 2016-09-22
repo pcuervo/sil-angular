@@ -1,0 +1,74 @@
+<div class="[ card-panel ]">
+    <div class="[ row ]">
+        <form name="delivery-form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" data-parsley-delivery>
+            <h4 class="[ center-align ][ mb-20 ]">Información de envío</h4>
+            <div class="[ col s12 m2 offset-m2 ]"> 
+                <div class="input-field">
+                    <input id="company" type="text" name="company" ng-model="company" required>
+                    <label for="company">Empresa donde se entrega</label>
+                </div>
+            </div>
+            <div class="[ col s12 m6  ]"> 
+                <div class="input-field">
+                    <input id="address" type="text" name="address" ng-model="address">
+                    <label for="address">Dirección</label>
+                </div>
+            </div>
+            <div class="[ col s12 m8 offset-m2 ][ map-container ]"> 
+                <div id="map"></div>
+            </div>
+            <div class="[ col s12 m3 offset-m2 ]"> 
+                <div class="input-field">
+                    <input id="recipient-name" type="text" name="addressee" ng-model="addressee">
+                    <label for="recipient-name">Persona que va a recibir</label>
+                </div>
+            </div>
+            <div class="[ col s12 m2 ]"> 
+                <div class="input-field">
+                    <input id="recipient-phone" type="text" name="addresseePhone" ng-model="addresseePhone">
+                    <label for="recipient-phone">Teléfono de quien va a recibir</label>
+                </div>
+            </div>
+            <div class="[ col s12 m3 ]"> 
+                <div class="input-field">
+                    <input id="date-time" type="text" name="dateTime" ng-model="dateTime">
+                    <label for="date-time">Fecha</label>
+                </div>
+            </div>
+            <div class="[ col s12 m8 offset-m2 ]"> 
+                <div class="input-field">
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="delivery.additional_comments" ></textarea>
+                    <label for="textarea1">Observaciones adicionales</label>
+                </div>
+            </div>
+            <h4 class="[ center-align ][ mb-20 ]">Artículos en envío</h4>
+            <div class="[ col s12 m8 offset-m2 ]"> 
+                <table datatable="ng" dt-options="dtDeliverySummaryOptions" dt-column-defs="dtDeliverySummaryColumnDefs" class="row-border hover">
+                    <thead>
+                        <tr>
+                            <th class="[ center-align ]">Nombre</th>
+                            <th class="[ center-align ]">Tipo de mercancía</th>
+                            <th class="[ center-align ]">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="i in deliveryItems">
+                            <td>{{ i.name }}</td>
+                            <td class="[ center-align ]">{{ i.item_type }}</td>
+                            <td class="[ center-align ]">{{ i.quantity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ center ][ col s12 ]">
+                <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="acceptRequest()"><i class="mdi-navigation-check left"></i>Aprobar</button>
+                <button class="[ waves-effect ][ btn btn-extra ][ red ]" ng-click="rejectRequest()"><i class="mdi-navigation-close left"></i>Rechazar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('[data-parsley-delivery]').parsley();
+</script>

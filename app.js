@@ -1771,6 +1771,29 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/view-delivery-request', {
+        url: "/view-delivery-request/:requestId",
+        templateUrl: "delivery/view-delivery-request.html",
+        controller: "DeliveryController",
+        data: {
+            pageTitle: 'Detalle solicitud de envío',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Detalle artículo'
+            }]
+        }, resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('geoAutocomplete,gmaps,parsley')
+                }]);
+            }]
+        }
+    })
 
     // Settings
     .state('/system-settings', {

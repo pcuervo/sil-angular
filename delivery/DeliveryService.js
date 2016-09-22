@@ -9,6 +9,8 @@ conAngular
         service.stats = stats;
         service.pendingApproval = pendingApproval;
         service.createRequest = createRequest;
+        service.pendingRequests = pendingRequests;
+        service.getRequest = getRequest;
         return service;
 
 
@@ -137,13 +139,35 @@ conAngular
                     inventory_items:    inventoryItems
                 })
                .success(function ( response ) {
-                    console.log( response );
-                    callback ( response.delivery );
+                    callback ( response.delivery_request );
                })
                .error(function ( response ) {
                     callback ( response );
                });
         }// createRequest
+
+        function pendingRequests( callback ){
+            var serviceUrl = $rootScope.apiUrl + 'delivery_requests/';
+            $http.get( serviceUrl )
+               .success(function ( response ) {
+                    callback( response.delivery_requests );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// pendingRequests
+
+        function getRequest( id, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'delivery_requests/' + id;
+            $http.get( serviceUrl )
+               .success(function ( response ) {
+                    console.log( response );
+                    callback( response.delivery_request );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getRequest
 
     }]);
 

@@ -95,10 +95,10 @@ conAngular
             $scope.address = $('#address').val();
             var deliveryDate = getDateTime( $scope.deliveryDate, $scope.deliveryTime );
 
-            DeliveryService.createRequest( $rootScope.globals.currentUser.id, $scope.company, $scope.address, $('#lat').val(), $('#lng').val(),  $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.selectedItems, function( delivery ){
+            DeliveryService.createRequest( $rootScope.globals.currentUser.id, $scope.company, $scope.address, $('#lat').val(), $('#lng').val(),  $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.selectedItems, function( delivery_request ){
 
-                if( delivery.errors ){
-                    console.log(delivery.errors);
+                if( delivery_request.errors ){
+                    console.log(delivery_request.errors);
                     Materialize.toast( 'No se pudo crear la solicitud de envío, revisa la información e intenta nuevamente.', 4000, 'red');
                     return;
                 }
@@ -172,6 +172,13 @@ conAngular
         *******************/
 
         function initDeliveries( currentPath ){
+
+            if( currentPath.indexOf( '/view-delivery-request' ) > -1 ){
+                getDeliveryRequest( $stateParams.requestId );
+                //fetchDeliveryUsers();
+                //initDeliverySummaryDataTable();
+                return;
+            }
 
             if( currentPath.indexOf( '/view-delivery' ) > -1 ){
                 getDelivery( $stateParams.deliveryId );
@@ -349,6 +356,21 @@ conAngular
             });
         }// getDelivery
 
+        function getDeliveryRequest( id ){
+            DeliveryService.getRequest( id, function( delivery ){
+                $scope.delivery = delivery;
+                $scope.company = delivery.company;
+                $scope.address = delivery.address;
+                $scope.addressee = delivery.addressee;
+                $scope.dateTime = delivery.date_time;
+                $scope.addresseePhone = delivery.addressee_phone;
+                $scope.additionalComments = delivery.additional_comments;
+                $scope.deliveryItems = delivery.delivery_request_items;
+                console.log( delivery );
+                initGeoAutocomplete( '#address', '#map', delivery.latitude, delivery.longitude, 15 );
+            });
+        }// getDeliveryRequest
+
         function fetchDeliveryUsers(){
             UserService.getDeliveryUsers( function( users ){
                 $scope.deliveryUsers = users;
@@ -462,7 +484,7 @@ conAngular
         }
 
         function fetchPendingDeliveries(){
-            DeliveryService.pendingApproval( function( deliveries ){
+            DeliveryService.pendingRequests( function( deliveries ){
                 console.log( deliveries )
                 $scope.pendingDeliveries = deliveries;
             });
