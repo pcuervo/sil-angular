@@ -2,7 +2,8 @@
 <!--[if lt IE 7]>  <html class="lt-ie7" data-ng-app="ConApp" ng-class="{'rtl': settings.rtl}"> <![endif]-->
 <!--[if IE 7]>     <html class="lt-ie8" data-ng-app="ConApp" ng-class="{'rtl': settings.rtl}"> <![endif]-->
 <!--[if IE 8]>     <html class="lt-ie9" data-ng-app="ConApp" ng-class="{'rtl': settings.rtl}"> <![endif]-->
-<!--[if gt IE 8]><!--> <html data-ng-app="conAngular" ng-class="{'rtl': settings.rtl}"> <!--<![endif]-->
+<!--[if gt IE 8]><!-->
+<html data-ng-app="conAngular" ng-class="{'rtl': settings.rtl, 'login': ! loggedIn}"  > <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,7 +45,7 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBdZ8jnjkx9BWKkYIn729m1hoUUHjPWZSQ&language=es"></script>
 </head>
 
-<body ng-controller="AppController">
+<body ng-controller="AppController" ng-class="{'login': ! loggedIn}";>
 
     <nav data-ng-include="'navigation/top-navbar.html'" data-ng-controller="NavbarController" class="navbar-top" ng-show="loggedIn">
     </nav>
@@ -66,7 +67,7 @@
     <!-- /Main Content -->
 
     <!-- Footer -->
-    <footer class="[ print-hidden ]">
+    <footer class="[ print-hidden ]" ng-class="{'login': ! loggedIn}";>
         <div class="[ right-align ]">
             &copy; <script>document.write( new Date().getFullYear() );</script><strong> Litobel</strong>
         </div>
