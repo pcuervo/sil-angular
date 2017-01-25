@@ -637,7 +637,7 @@ conAngular
             }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
             var isHighValue = $('#checkbox-high-value:checked').length;
-            UnitItemService.create( $scope.serialNumber, $scope.brand, $scope.model, $scope.itemName, $scope.itemState, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  function ( response ){
+            UnitItemService.create( $scope.serialNumber, $scope.brand, $scope.model, $scope.itemName, $scope.itemState, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, $scope.selectedPM, $scope.selectedAE, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -663,7 +663,7 @@ conAngular
             }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
             var isHighValue = $('#checkbox-high-value:checked').length;
-            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, function ( response ){
+            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -692,7 +692,7 @@ conAngular
             }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
             var isHighValue = $('#checkbox-high-value:checked').length;
-            BundleItemService.create( $scope.itemName, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.parts, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, function ( response ){
+            BundleItemService.create( $scope.itemName, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.parts, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -700,8 +700,6 @@ conAngular
                     $scope.currentStep = 1;
                     return;
                 }
-
-                console.log( response.inventory_item );
 
                 $scope.registeredItemId = response.inventory_item.id;
                 $scope.item = response.inventory_item;

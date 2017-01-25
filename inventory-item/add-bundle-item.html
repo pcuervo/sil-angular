@@ -23,30 +23,20 @@
                 <option ng:repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
             </select>
         </div>
-        <div class="[ col s12 m4 ]" ng-if="role == 2"> 
-            <div class="input-field" ng-show="role == 2">
-                <input id="pm" type="hidden" ng-model="selectedPM" ng-readonly="true"  value="{{projectManagerId}}">
-                <label for="pm">Project Manager: {{projectManagerName}}</label>
-            </div>
-        </div>
-        <div class="[ col s12 m4 ]" ng-if="role != 2"> 
+        
+        <div class="[ col s12 m4 ]">
             <select name="pm" ng-model="selectedPM" required data-parsley-error-message="Escoge un Project Manager" ng-disabled='!validSelectedProject'>
                 <option value="" disabled selected>Selecciona el PM</option>
                 <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.name}}</option>
             </select>
         </div>
-        <div class="[ col s12 m4 ]" ng-if="role == 3"> 
-            <div class="input-field">
-                <input id="ae" type="hidden" ng-model="selectedAE" ng-readonly="true" value="{{accountExecutiveId}}">
-                <label for="ae">Ejecutivo de cuenta: {{accountExecutiveName}}</label>
-            </div>
-        </div>
-        <div class="[ col s12 m4 ]" ng-if="role != 3"> 
+        <div class="[ col s12 m4 ]">
             <select name="ae" ng-model="selectedAE" required data-parsley-error-message="Escoge un Ejecutivo de cuenta" ng-disabled='!validSelectedProject'>
                 <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>
                 <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.name}}</option>
             </select>
         </div>
+
         <div class="[ clear ]"></div>
         <!-- Actualizar cada que se cambie el proyecto -->
         <div class="[ col s12 m6 ]"> 

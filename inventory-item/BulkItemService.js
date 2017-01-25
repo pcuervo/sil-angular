@@ -11,7 +11,7 @@ conAngular
         * PUBLIC FUNCTIONS
         *******************/
 
-        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, callback ) {
+        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, pm, ae, callback ) {
 
             var userId = $rootScope.globals.currentUser.id;
             //var status = $rootScope.globals.currentUser.role == 1 ? 1 : 6;
@@ -19,6 +19,8 @@ conAngular
 
             $http.post(serviceUrl, 
                 { 
+                    pm_id: pm,
+                    ae_id: ae,
                     bulk_item: {
                         name:                       name, 
                         quantity:                   quantity,
