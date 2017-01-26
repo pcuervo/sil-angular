@@ -479,14 +479,6 @@ conAngular
                 {
                     id: 4,
                     name: 'Caducado'
-                },
-                {
-                    id: 5,
-                    name: 'Entrada pendiente'
-                },
-                {
-                    id: 6,
-                    name: 'Salida pendiente'
                 }
             ]
             callback( statuses );

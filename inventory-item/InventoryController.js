@@ -137,7 +137,12 @@ conAngular
             }
         }// registerItem
 
+        $scope.getStatusClass = function( status ){
+            if( 1 == status || 3 == status ) return 'green lighten-3';
+            if( 2 == status ) return 'red lighten-3';
 
+            return 'yellow lighten-3';
+        }// getTransactionTypeClass
 
         /******************
         * PRIVATE FUNCTIONS
@@ -236,7 +241,7 @@ conAngular
                 .withOption('order', []);
             $scope.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(8).notSortable()
+                DTColumnDefBuilder.newColumnDef(7).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 

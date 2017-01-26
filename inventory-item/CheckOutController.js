@@ -33,6 +33,7 @@ conAngular
 
         $scope.withdraw = function( type ){
 
+            LoaderHelper.showLoader( 'Registrando salida...' );
             switch( type ){
                 case 'UnitItem': 
                     withdrawUnitItem( $scope.item.actable_id, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments );
@@ -247,6 +248,7 @@ conAngular
 
             InventoryItemService.withdrawUnitItem( id, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, function( response ){
 
+                LoaderHelper.hideLoader();
                 if( response.errors ){
                     Materialize.toast( response.errors, 4000, 'red');
                     return;
@@ -262,6 +264,7 @@ conAngular
 
         function withdrawBulkItem( id, quantity, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments ){
 
+            LoaderHelper.hideLoader();
             if( $scope.multipleBulkLocations ){
                 var withdrawQuantity = 0;
                 var locations = [];
@@ -309,6 +312,7 @@ conAngular
 
         function withdrawBundleItem( id, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments ){
 
+            LoaderHelper.hideLoader();
             var parts = getBundlePartsToRemove();
             InventoryItemService.withdrawBundleItem( id, parts, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments,  function( response ){
 
