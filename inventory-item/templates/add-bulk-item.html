@@ -12,9 +12,9 @@
             </div>
             <div class="[ col s12 m6 l3 ][ center-align ]">
                 <a href="#" class="[ btn disabled ]"><span class="left-align">4. Programar envío</span></a>
-            </div>   
+            </div>
         </div>
-        
+
     </div>
 </div>
 
@@ -44,75 +44,75 @@
             <div class="[ clear ]"></div>
             <!-- Crear ClientService -->
             <!-- Actualizar cada que se cambie el proyecto -->
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="client-name" type="text" ng-model="clientName" ng-readonly="true">
                     <label for="client-name">Cliente</label>
                 </div>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="client-contact" type="text" name="clientContact" ng-model="clientContact" ng-readonly="true">
                     <label for="client-contact">Contacto cliente</label>
                 </div>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="item-name" type="text" name="itemName" ng-model="itemName" required>
                     <label for="item-name">Nombre (alias)</label>
                 </div>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="quantity" type="number" name="quantity" ng-model="quantity" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0." min="1">
                     <label for="quantity">Cantidad</label>
                 </div>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]">
                 <div class="[ input-field ]">
                     <textarea id="description" class="materialize-textarea" name="description" ng-model="description" data-parsley-trigger="keyup" data-parsley-maxlength="250" data-parsley-maxlength-message = "Este campo debe contener menos de 250 caracteres."></textarea>
                     <label for="description">Descripción</label>
                 </div>
             </div>
             <!-- Revisar si estas opciones serían dinámicas -->
-            <div class="[ col s12 m4 ]"> 
+            <div class="[ col s12 m4 ]">
                 <div class="input-field">
                     <input id="item-type" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
                     <label for="item-type">Tipo de mercancía</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 ]"> 
+            <div class="[ col s12 m4 ]">
                 <div class="input-field">
                     <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="1">
                     <label for="itemValue">Valor</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 ][ mt-10 ]"> 
+            <div class="[ col s12 m4 ][ mt-10 ]">
                 <select name="storageType" ng-model="storageType" ng-change="updateExpirationDate( storageType )" required>
                     <option value="" disabled selected>Tipo de almacenaje</option>
                     <option ng-repeat="value in ['Permanente', 'Temporal', 'Donación']" value="{{value}}">{{value}}</option>
                 </select>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div class="[ col s12 m6 ][ mt-10 ]">
                 <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="delivery-contact" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact">
                     <label for="delivery-contact">¿Quién entregó?</label>
                 </div>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ]">    
+            <div class="[ col s12 m6 ]">
                 <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
                 <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" required>
             </div>
-            <div class="[ col s12 m6 ]">    
+            <div class="[ col s12 m6 ]">
                 <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
                 <input class="datepicker" type="date" ng-model="validityExpirationDate" required>
             </div>
@@ -136,13 +136,13 @@
                     <label for="checkbox-validation">Require validación por parte del PM o Ejecutivo de Cuenta</label>
                 </div>
             </div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]">
                 <div class="input-field">
                     <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
                     <label for="textarea1">Observaciones adicionales</label>
                 </div>
             </div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]">
                 <div class="[ center-align ]">
                     <button class="[ waves-effect ][ btn ]" >Ingresar</button>
                 </div>
@@ -155,7 +155,7 @@
 
 <div class="[ card-panel ]" ng-show="currentStep==2">
     <div class="row">
-        <div class="[ col s12 m6 ][ mt-10 ]"> 
+        <div class="[ col s12 m6 ][ mt-10 ]">
             <div id="editor"></div>
         </div>
     </div>
@@ -179,85 +179,85 @@
                 <label for="ae-name">Ejecutivo de Cuenta</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]"> 
+        <div class="[ col s12 m6 ]">
             <div class="input-field">
                 <input id="input_text" type="text" name="clientName" ng-model="clientName" disabled>
                 <label for="input_disabled">Cliente</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]"> 
+        <div class="[ col s12 m6 ]">
             <div class="input-field">
                 <input id="input_disabled" type="text" name="clientContact" ng-model="clientContact" disabled>
                 <label for="input_disabled">Contacto cliente</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]"> 
+        <div class="[ col s12 m6 ]">
             <div class="input-field">
                 <input id="input_text" type="text" name="itemName" ng-model="itemName" disabled>
                 <label for="input_text">Nombre (alias)</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]"> 
+        <div class="[ col s12 m6 ]">
             <div class="input-field">
                 <input id="input_text" type="text" name="quantity" ng-model="quantity" disabled>
                 <label for="input_text">Cantidad</label>
             </div>
         </div>
         <div class="[ clear ]"></div>
-        <div class="[ col s12 ]"> 
+        <div class="[ col s12 ]">
             <div class="input-field">
                 <textarea class="materialize-textarea" name="description" ng-model="description" disabled></textarea>
                 <label for="textarea1">Descripción</label>
             </div>
         </div>
-        <div class="[ col s12 m4 ]"> 
+        <div class="[ col s12 m4 ]">
             <div class="input-field">
                 <input id="item-type" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
                 <label for="item-type">Tipo de mercancía</label>
             </div>
         </div>
-        <div class="[ col s12 m4 ]"> 
+        <div class="[ col s12 m4 ]">
             <div class="input-field">
                 <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" disabled>
                 <label for="itemValue">Valor</label>
             </div>
         </div>
-        <div class="[ col s12 m4 ]"> 
+        <div class="[ col s12 m4 ]">
             <div class="input-field">
                 <input id="selected-storage-type" type="text" name="selectedStorageType" ng-model="selectedStorageTypeText" disabled>
                 <label for="selected-storage-type">Tipo de almacenaje</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]"> 
+        <div class="[ col s12 m6 ]">
             <div class="input-field">
                 <input id="selected-provider" type="text" name="selectedProvider" ng-model="selectedProviderText" disabled>
                 <label for="selected-provider">Proveedor</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]"> 
+        <div class="[ col s12 m6 ]">
             <div class="input-field">
                 <input id="delivery-contact" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact" disabled>
                 <label for="delivery-contact">¿Quién entregó?</label>
             </div>
         </div>
         <div class="[ clear ]"></div>
-        <div class="[ col s12 m6 ]">    
+        <div class="[ col s12 m6 ]">
             <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
             <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" required disabled>
         </div>
-        <div class="[ col s12 m6 ]">    
+        <div class="[ col s12 m6 ]">
             <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
             <input class="datepicker" type="date" ng-model="validityExpirationDate" disabled>
         </div>
-        <div class="[ col s12 ]"> 
+        <div class="[ col s12 ]">
             <div class="input-field">
                 <textarea id="textarea1" class="materialize-textarea" disabled="" ng-model="additionalComments"></textarea>
                 <label for="textarea1">Observaciones adicionales</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]"> 
+        <div class="[ col s12 m6 ]">
             <div class="row">
-                <div class="[ col s12 ]"> 
+                <div class="[ col s12 ]">
                     <div class="[ card ]">
                         <div class="card-image" id="barcode">
                             <img class="[ js-barcode ]" src="#" alt="">
@@ -267,7 +267,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="[ col s12 ]"> 
+                <div class="[ col s12 ]">
                     <div class="[ card ]">
                         <div class="[ card-image ][ img-mercancia ]">
                             <img ng-src="{{itemImg}}" alt="">
@@ -276,8 +276,8 @@
                 </div>
             </div>
         </div>
-              
-        <div class="[ col s12 m6 ]"> 
+
+        <div class="[ col s12 m6 ]">
             <div class="[ row ]" ng-show="!showMoreActions">
                 <div class="[ col s12  ][ center ]" >
                     <a href="#" class="[ waves-effect ][ btn btn-extra green ]" ng-click="registerItem( 'bulk', itemRequestId )"><i class="[ mdi-navigation-check ][ left ]"></i>Confirmar entrada</a>
@@ -303,25 +303,25 @@
 
 <div class="[ card-panel ]" ng-show="currentStep==3">
     <div class="row">
-        <div class="[ col s12 m6 ][ mt-10 ]"> 
+        <div class="[ col s12 m6 ][ mt-10 ]">
             <div id="editor"></div>
         </div>
     </div>
     <div class="row">
         <h4 class="[ center-align ]">Ubicación el almacén</h4>
-        <div class="[ col s8 m4 offset-m2 ]"> 
+        <div class="[ col s8 m4 offset-m2 ]">
             <div class="input-field">
                 <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
                 <label for="input_text">Nombre (alias)</label>
             </div>
         </div>
-        <div class="[ col s4 m2 ]"> 
+        <div class="[ col s4 m2 ]">
             <div class="input-field">
                 <input id="input_text" type="text" name="quantity" ng-model="quantity" required disabled>
                 <label for="input_text">Cantidad</label>
             </div>
         </div>
-        <div class="[ col s12 m4 ]"> 
+        <div class="[ col s12 m4 ]">
             <p>
                 <input name="radio-location" type="radio" id="single-location" ng-model="locationRadio" ng-click="showLocationForm( locationRadio )" value="same" />
                 <label for="single-location">Mover todo a una ubicación</label>
@@ -332,26 +332,26 @@
         <div class="[ clear ]"></div>
         <form name="location_form" class="[ mt-40 ][ left-align ]" ng-submit="addToLocation()" data-parsley-bulk-same ng-show="sameLocationType  && ! multipleLocationsType">
             <div>
-                <div class="[ col s12 m6 l4 offset-l2 ]"> 
+                <div class="[ col s12 m6 l4 offset-l2 ]">
                     <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
                         <option value="" disabled selected>Selecciona el rack</option>
                         <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
                     </select>
                 </div>
-                <div class="[ col s12 m6 l4 ]" > 
+                <div class="[ col s12 m6 l4 ]" >
                     <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
                         <option value="" disabled selected>Selecciona la ubicación</option>
                         <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
                     </select>
                 </div>
             </div>
-            <div class="[ col s12 m4 offset-m2 ]" ng-show="hasSameLocation"> 
+            <div class="[ col s12 m4 offset-m2 ]" ng-show="hasSameLocation">
                 <div class="input-field">
                     <input id="units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
                     <label for="units">Unidades que ocupa la mercancía:</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 ]"> 
+            <div class="[ col s12 m4 ]">
                 <div class="[ center-align ]">
                     <button class="[ waves-effect ][ btn ]" ng-show="hasSameLocation">Ubicar</button>
                 </div>
@@ -380,11 +380,11 @@
                         <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
                     </select>
                 </div>
-                <div class="[ col s6 m2 ][ input-field ]" > 
+                <div class="[ col s6 m2 ][ input-field ]" >
                     <input id="units-multiple" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
                     <label for="units-multiple">Unidades que ocupa:</label>
                 </div>
-                <div class="[ col s12 m2 ]"> 
+                <div class="[ col s12 m2 ]">
                     <div class="[ center-align ]">
                         <button id="add-to-location" class="[ waves-effect ][ btn ]" href="#">Agregar</button>
                     </div>
@@ -400,7 +400,7 @@
                 <div class="[ col s6 m3 ][ input-field ]">
                     <h5 class="[ center-align ]">Ubicación</h5>
                 </div>
-                <div class="[ col s6 m2 ][ input-field ]" > 
+                <div class="[ col s6 m2 ][ input-field ]" >
                     <h5 class="[ center-align ]">Unidades que ocupa</h5>
                 </div>
                 <div class="[ clear ]"></div>
@@ -414,17 +414,17 @@
                     <div class="[ col s6 m3 ][ input-field ]">
                         <input type="text" ng-readonly="true" value="{{ bl.location }}">
                     </div>
-                    <div class="[ col s6 m2 ][ input-field ]" > 
+                    <div class="[ col s6 m2 ][ input-field ]" >
                         <input type="text" ng-readonly="true" value="{{ bl.units }}">
                     </div>
-                    <div class="[ col s12 m2 ]"> 
+                    <div class="[ col s12 m2 ]">
                         <div class="[ center-align ]">
                             <a id="add-to-location" class="[ waves-effect red ][ btn ]" href="#" ng-click="removeUnitsFromLocation( $index )">Eliminar</a>
                         </div>
                     </div>
                 </div>
                 <div class="[ row ]">
-                    <div class="[ col s12 ][ center-align ]" ng-show="pendingUnitsToLocate==0"> 
+                    <div class="[ col s12 ][ center-align ]" ng-show="pendingUnitsToLocate==0">
                         <div class="[ center-align ]">
                             <a class="[ waves-effect ][ btn ]" ng-click="addToLocation( 'BulkItem' )">Ubicar</a>
                         </div>
@@ -438,8 +438,8 @@
 
 <script>
     $('[data-parsley-validate]').parsley();
-    $('[data-parsley-bulk-same]').parsley();    
-    $('[data-parsley-multiple-locations]').parsley();    
+    $('[data-parsley-bulk-same]').parsley();
+    $('[data-parsley-multiple-locations]').parsley();
 </script>
 
 
