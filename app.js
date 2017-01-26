@@ -899,6 +899,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             deps: ['$ocLazyLoad', function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                 {
+                    serie: true,
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
                     files: conAssets('dataTables')
@@ -1900,7 +1901,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = stage;
+    $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view

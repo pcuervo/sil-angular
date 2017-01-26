@@ -84,10 +84,13 @@ conAngular
         }// getItemTypeIcon
 
         $scope.multipleWithdrawal = function(){
-            var items = getItemToWithdraw();
-            InventoryItemService.multipleWithdrawal( items, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
+            $scope.withdrawnItems = getItemsToWithdraw();
+            InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/check-out', {}, { reload: true });
+                console.log( $scope.withdrawnItems );
+                $scope.isSummary = true;
+                $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
+                //$state.go('/check-out', {}, { reload: true });
             });
         }
 
@@ -96,7 +99,7 @@ conAngular
         }
 
         $scope.requestWithdrawal = function(){
-            var items = getItemToWithdraw();
+            var items = getItemsToWithdraw();
             InventoryItemService.requestWithdrawal( items, $scope.exitDate, $scope.pickupCompany, function( withdrawRequest ){
                 Materialize.toast( "Has solicitado la salida de " + withdrawRequest.withdraw_request_items.length + " artículo(s). Se le ha enviado una notificación al jefe de almacén.", 4000, 'green');
                 $state.go('/check-out', {}, { reload: true });
@@ -217,6 +220,7 @@ conAngular
 
             InventoryItemService.byType( 'UnitItem', 1, function( unitItems ){
                 $scope.unitItems = unitItems;
+                console.log(unitItems);
             }); 
 
         }// getUnitItems
@@ -347,12 +351,14 @@ conAngular
             return parts;
         }
 
-        function getItemToWithdraw(){
+        function getItemsToWithdraw(){
             var items = []
             $('input[type="checkbox"]:checked').each( function(i, partCheckbox){
                 item = {};
                 item['id'] = $(partCheckbox).val();
                 item['inventory_item_id'] = $(partCheckbox).val();
+                item['name'] = $( '#name-'+item['id'] ).text();
+                item['serial_number'] = $( '#serial-number-'+item['id'] ).text();
                 item['quantity'] = $( '#quantity-'+item['id'] ).val();
                 items.push( item );
             });
