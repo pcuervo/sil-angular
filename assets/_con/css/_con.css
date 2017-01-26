@@ -13135,9 +13135,8 @@ html.rtl .spinner-layer .left {
     margin: 0 auto;
     display: block;
   }
-
+  img.print-width--100p { width: 100%!important; }
 }
-
 
 
 /* Login
