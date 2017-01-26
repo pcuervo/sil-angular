@@ -123,6 +123,7 @@ conAngular
         function initWithdrawalOptions( currentPath ){
 
             if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
+                LoaderHelper.showLoader('Obteniendo artículos en existencia...');
                 fetchItemsInStock();
                 initMultipleWithdrawalDataTable();
                 fetchSuppliers();
@@ -375,12 +376,15 @@ conAngular
         }// initCheckOutsDataTable
 
         function getItem( id ){
+
             InventoryItemService.byId( id, function( item ){
+
                 if( item.errors ){
                     $scope.hasItem = false;
                     Materialize.toast( 'No se encontró ningún artículo con id: "' + id + '"', 4000, 'red');
                     return;
                 }
+
                 $scope.item = item;
                 $scope.exitDate = new Date();
                 $scope.locations = '';
@@ -408,7 +412,7 @@ conAngular
 
         function fetchItemsInStock(){
             InventoryItemService.getInStock( function( items ){
-                console.log( items );
+                LoaderHelper.hideLoader();
                 $scope.inventoryItems = items;
             });
         }

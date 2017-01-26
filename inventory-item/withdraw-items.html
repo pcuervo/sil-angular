@@ -8,6 +8,7 @@
                         <th class="[ center-align ]">Tipo</th>
                         <th class="[ center-align ]"></th>
                         <th class="[ center-align ]">Nombre</th>
+                        <th class="[ center-align ]">Número de serie</th>
                         <th class="[ center-align ]">Código de barras</th>
                         <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
                         <th class="[ center-align ]">Cantidad a retirar</th>
@@ -19,6 +20,7 @@
                         <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
                         <td><img ng-src="{{ i.img }}" alt="{{i.name}}"></td>
                         <td>{{ i.name }}</td>
+                        <td>{{ i.serial_number }}</td>
                         <td class="[ center-align ]">{{ i.barcode }}</td>
                         <td class="[ center-align ][ hide-on-small-only ]">{{ i.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
                         <td class="[ center-align ]">
