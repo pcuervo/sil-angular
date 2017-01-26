@@ -13129,7 +13129,7 @@ html.rtl .spinner-layer .left {
   .print-fecha-de-ingreso{ width: 50% !important; }
   .print-fecha-vigencia{ width: 50% !important; }
   .print-observaciones{ width: 100% !important; }
-  .print-barcode{ width: 50% !important; }
+  .print-barcode{ width: 100% !important; }
   .print-barcode-barcode{
     width: 100% !important;
     margin: 0 auto;
