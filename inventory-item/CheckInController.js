@@ -376,6 +376,15 @@ conAngular
             });
         }
 
+        $scope.cancelEntryRequest = function( id ){
+            InventoryItemService.cancelEntryRequest( id, function( response ){
+                console.log( response );
+                Materialize.toast( "Has cancelado la solicitud exitosamente.", 4000, 'green');
+                $state.go('/pending-entry-requests', {}, { reload: true });
+            });
+        }
+
+
         $scope.setRequestType = function( type ){
             this.itemType = $scope.item.item_type;
             $scope.requestType = type;
@@ -542,6 +551,7 @@ conAngular
         }// initCheckIn
 
 		function fetchProjects(){
+            LoaderHelper.showLoader('Cargando proyectos...');
             switch( $scope.role  ){
                 case 2:
                     ProjectService.byUser( $rootScope.globals.currentUser.id, function( projects ){
@@ -549,6 +559,7 @@ conAngular
                         $scope.projectManagerName = $rootScope.globals.currentUser.name;
                         $scope.projectManagerId = $rootScope.globals.currentUser.id;
                         $scope.selectedPM = $rootScope.globals.currentUser.id;
+                        LoaderHelper.hideLoader();
                     });
                     break;
                 case 3:
@@ -557,11 +568,13 @@ conAngular
                         $scope.accountExecutiveName = $rootScope.globals.currentUser.name;
                         $scope.accountExecutiveId = $rootScope.globals.currentUser.id;
                         $scope.selectedAE = $rootScope.globals.currentUser.id;
+                        LoaderHelper.hideLoader();
                     });
                     break;
                 default:
                     ProjectService.getAll( function( projects ){
                         $scope.projects = projects;
+                        LoaderHelper.hideLoader();
                     });
             }
 		}// fetchProjects

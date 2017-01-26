@@ -24,6 +24,14 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         }
     }// getItemTypeIcon
 
+    $scope.cancelWithdrawalRequest = function( id ){
+        InventoryItemService.cancelWithdrawal( id, function( response ){
+            console.log( response );
+            Materialize.toast( "Has cancelado la solicitud exitosamente.", 4000, 'green');
+            $state.go('/pending-withdrawal-requests', {}, { reload: true });
+        });
+    }
+
     /******************
     * PRIVATE FUNCTIONS
     *******************/

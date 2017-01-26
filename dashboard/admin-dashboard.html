@@ -105,7 +105,7 @@
 		                <th class="[ center-align ]">¿Quién solicita?</th>
 		                <th class="[ center-align ][ hide-on-med-and-down ]">Número de artículos</th>
 		                <th class="[ center-align ][ hide-on-small-only ]">Fecha de salida</th>
-		                <th class="[ center-align ]">Sacar</th>
+		                <th class="[ center-align ]">Acciones</th>
 		            </tr>
 		        </thead>
 		        <tbody>
@@ -113,7 +113,10 @@
 		                <td>{{ w.user.first_name + ' ' + w.user.last_name }}</td>
 		                <td class="[ center-align ][ hide-on-med-and-down ]">{{ w.withdraw_request_items.length }}</td>
 		                <td class="[ center-align ][ hide-on-small-only ]">{{ w.exit_date | date:'dd/MM/yyyy' }}</td>
-		                <td class="[ center-align ]"><a class="[ btn waves-effect red ]" href="#/authorize-withdrawal/{{ w.id }}"><i class="[ fa fa-outdent ]"></i></a></td>
+		                <td class="[ center-align ]">
+		                	<a class="[ btn waves-effect red ]" href="#/authorize-withdrawal/{{ w.id }}"><i class="[ fa fa-outdent ]"></i></a>
+		                	<button class="[ btn waves-effect red ]" ng-click="cancelWithdrawalRequest( w.id )"><i class="[ fa fa-times ]"></i></button>
+		                </td>
 		            </tr>
 		        </tbody>
 		    </table>  
