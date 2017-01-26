@@ -21,6 +21,7 @@ conAngular
         service.reentryBundleItem = reentryBundleItem;
         service.authorizeEntry = authorizeEntry;
         service.authorizeWithdrawal = authorizeWithdrawal;
+        service.cancelWithdrawal = cancelWithdrawal;
         service.withPendingLocation = withPendingLocation;
         service.reentryWithPendingLocation = reentryWithPendingLocation;
         service.isReentryWithPendingLocation = isReentryWithPendingLocation;
@@ -39,6 +40,7 @@ conAngular
         service.getWithdrawRequest = getWithdrawRequest;
         service.getStats = getStats;
         service.getStatsPM = getStatsPM;
+        service.cancelEntryRequest = cancelEntryRequest;
         return service;
 
         // Public 
@@ -390,6 +392,23 @@ conAngular
 
         }// authorizeWithdrawal
 
+        function cancelWithdrawal( id,  callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/cancel_withdrawal';
+            $http.post( serviceUrl, 
+                {  
+                    id: id
+                }
+            )
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+
+        }// cancelWithdrawal
+
         function withPendingLocation( callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/with_pending_location';
@@ -690,5 +709,22 @@ conAngular
                     callback( response );
                });
         }// getStats
+
+        function cancelEntryRequest( id,  callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/cancel_item_entry_request';
+            $http.post( serviceUrl, 
+                {  
+                    id: id
+                }
+            )
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+
+        }// cancelWithdrawal
 
     }]);
