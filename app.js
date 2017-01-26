@@ -99,13 +99,23 @@ window.conAssets = function(get) {
             'assets/angulajs-jvectormap/angularjs-jvectormap.js'
         ],
 
+        // dataTables: [
+        //     'assets/dataTables/js/jquery.dataTables.min.js',
+        //     'assets/dataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+        //     'assets/dataTables/extensions/Scroller/js/dataTables.scroller.min.js',
+        //     'assets/angularjs-dataTables/angular-datatables.min.js',
+        //     'assets/angularjs-dataTables/plugins/responsive/angular-datatables.responsive.min.js',
+        //     'assets/angularjs-dataTables/plugins/responsive/angular-datatables.responsive.css'
+        // ],
+
         dataTables: [
-            'assets/dataTables/js/jquery.dataTables.min.js',
             'assets/dataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
             'assets/dataTables/extensions/Scroller/js/dataTables.scroller.min.js',
-            'assets/angularjs-dataTables/angular-datatables.min.js',
-            'assets/angularjs-dataTables/plugins/responsive/angular-datatables.responsive.min.js',
-            'assets/angularjs-dataTables/plugins/responsive/angular-datatables.responsive.css'
+            'https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.js',
+            'https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js',
+            'https://cdn.datatables.net/buttons/1.2.1/js/buttons.print.min.js',
+            'https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js',
+            'assets/angularjs-dataTables/plugins/buttons/angular-datatables.buttons.js'
         ],
 
         fullcalendar: [
@@ -917,7 +927,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 {
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
-                    files: conAssets('')
+                    files: conAssets('dataTables')
                 }]);
             }]
         }

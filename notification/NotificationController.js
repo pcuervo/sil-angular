@@ -24,11 +24,14 @@ conAngular.controller('NotificationController', ['$scope', '$rootScope', '$state
 
     $scope.getNotificationUrl = function( title, id ){
         var url;
+        console.log( title );
         switch( title ){
             case 'Solicitud de entrada':
+            case 'Solicitud de entrada rechazada':
                 url = '#/pending-entry-requests';
                 break;
             case 'Solicitud de salida':
+            case 'Cancelación de solicitud salida':
                 url = '#/pending-withdrawal-requests';
                 break;
             case 'Solicitud de envío':

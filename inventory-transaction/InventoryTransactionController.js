@@ -52,6 +52,7 @@ conAngular
             }
 
             if( 0 !== Object.keys( $stateParams ).length ) {
+                LoaderHelper.showLoader('Cargando movimientos al inventario...');
                 switch( $stateParams.transactionType ){
                     case 'checkIns':
                     case 'checkOuts':
@@ -94,6 +95,7 @@ conAngular
         function getAllInventoryTransactions(){
             InventoryTransactionService.getAll( function( inventoryTransactions ){
                 $scope.inventoryTransactions = inventoryTransactions;
+                LoaderHelper.hideLoader();
             }); 
         }// getAllInventoryTransactions
 
@@ -101,18 +103,29 @@ conAngular
 
             InventoryTransactionService.byType( type, function( inventoryTransactions ){
                 $scope.inventoryTransactions = inventoryTransactions;
+                LoaderHelper.hideLoader();
             }); 
 
         }// getTransactionsByType
 
         function initInventoryTransactionsDataTable(){
-
             $scope.dtInventoryTransactionsOptions = DTOptionsBuilder.newOptions()
-                    .withPaginationType('full_numbers')
-                    .withOption('searching', true)
-                    .withDisplayLength(10)
-                    .withDOM('flitrp')
-                    .withOption('responsive', true);
+                .withPaginationType('full_numbers')
+                .withOption('searching', true)
+                .withDisplayLength(10)
+                .withDOM('pitrp')
+                .withOption('responsive', true)
+                .withButtons([
+                    {
+                        extend: "csvHtml5",
+                        fileName:  "CustomFileName" + ".csv",
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4, 5]
+                        },
+                        exportData: {decodeEntities:true}
+                    }
+                ]);
             $scope.dtInventoryTransactionsColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];

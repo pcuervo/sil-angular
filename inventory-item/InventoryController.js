@@ -25,7 +25,7 @@ conAngular
         }// getStatusLabel
 
         $scope.searchItem = function(){
-
+            LoaderHelper.showLoader('Buscando...');
             if( 6 === $scope.role ){ 
                 $scope.selectedClient = $rootScope.globals.currentUser.id;
             }
@@ -37,7 +37,7 @@ conAngular
             }
             InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedPM, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
                 $scope.inventoryItems = inventoryItems;
-                console.log( inventoryItems );
+                LoaderHelper.hideLoader();
             })
         }// searchItem
 
@@ -200,7 +200,7 @@ conAngular
 
         function fetchInventory(){
             if( 1 === $scope.role || 4 == $scope.role ){
-                InventoryItemService.getAll( function( inventoryItems ){
+                InventoryItemService.getInStock( function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
                     console.log( inventoryItems );
                     LoaderHelper.hideLoader();
@@ -238,15 +238,25 @@ conAngular
                 .withDisplayLength(20)
                 .withDOM('pitp')
                 .withOption('responsive', true)
-                .withOption('order', []);
+                .withOption('order', [])
+                .withButtons([
+                    {
+                        extend: "csvHtml5",
+                        fileName:  "CustomFileName" + ".csv",
+                        exportOptions: {
+                            columns: [2, 3, 4, 5, 6]
+                        },
+                        exportData: {decodeEntities:true}
+                    }
+                ]);
             $scope.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
                 DTColumnDefBuilder.newColumnDef(7).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
-
-
         }// initInventoryDataTable
+
+
 
         function getItem( id ){
             InventoryItemService.byId( id, function( item ){
