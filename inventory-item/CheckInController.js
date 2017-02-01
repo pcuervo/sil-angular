@@ -72,6 +72,10 @@ conAngular
             $scope.selectedItemTypeText = $('[name="itemType"] option:selected').text();
             $scope.selectedStorageTypeText = $('[name="storageType"] option:selected').text();
             $scope.selectedProviderText = $('[name="deliveryCompany"] option:selected').text();
+            if( 'undefined' == typeof $scope.serialNumber ){
+                $scope.serialNumber = $('#serial-number').val();
+            }
+            console.log( $scope.serialNumber );
 		}
 
 		$scope.setActiveStep = function( step ){
@@ -735,6 +739,21 @@ conAngular
 
             if( 2 == $rootScope.globals.currentUser.role  ){
                 InventoryItemService.getLatestEntriesByPM( $rootScope.globals.currentUser.id, function( latestInventoryItems ){
+                    $scope.latestInventoryItems = latestInventoryItems;
+                });
+                return;
+            }
+
+            if( 3 == $rootScope.globals.currentUser.role  ){
+                InventoryItemService.getLatestEntriesByAE( $rootScope.globals.currentUser.id, function( latestInventoryItems ){
+                    $scope.latestInventoryItems = latestInventoryItems;
+                });
+                return
+            }
+
+            console.log('we here?');
+            if( 6 == $rootScope.globals.currentUser.role  ){
+                InventoryItemService.getLatestEntriesByClient( $rootScope.globals.currentUser.id, function( latestInventoryItems ){
                     $scope.latestInventoryItems = latestInventoryItems;
                 });
             }

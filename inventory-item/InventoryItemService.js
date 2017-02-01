@@ -7,6 +7,7 @@ conAngular
         service.getLatestEntries = getLatestEntries;
         service.getLatestEntriesByPM = getLatestEntriesByPM;
         service.getLatestEntriesByAE = getLatestEntriesByAE;
+        service.getLatestEntriesByClient = getLatestEntriesByClient;
         service.getPendingEntries = getPendingEntries;
         service.getPendingWithdrawals = getPendingWithdrawals;
         service.byBarcode = byBarcode;
@@ -108,6 +109,25 @@ conAngular
                 callback( response );
            });
         }// getLatestEntriesByAE
+
+        function getLatestEntriesByClient( userId, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { 
+                    recent:     true, 
+                    client_id:  userId  
+                } 
+            })
+           .success(function ( response ) {
+                console.log( response );
+                callback( response.inventory_items );
+           })
+           .error(function ( response ) {
+                callback( response );
+           });
+        }// getLatestEntriesByClient
 
         function getAll( callback ) {
             var serviceUrl = $rootScope.apiUrl  + 'inventory_items/';

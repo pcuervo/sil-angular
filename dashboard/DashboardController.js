@@ -32,6 +32,17 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         });
     }
 
+    $scope.getWithdrawRequestItems = function( items ){
+        var itemNames = [];
+        console.log( items );
+        $.each( items, function(i, val){
+            val.name + '</a><br>';
+            itemNames.push( i+1 + '. ' + val.name );
+        });
+        console.log( itemNames );
+        return itemNames.join('; ');
+    }
+
     /******************
     * PRIVATE FUNCTIONS
     *******************/
@@ -84,11 +95,9 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         });
 
         // Load data for tables
-        getLatestInventoryTransactions();
-        getLatestEntries();
+        getClientWithdrawRequests( $rootScope.globals.currentUser.id );
         // Create DataTables
-        showLatestTransactionsDataTable();
-        showLatestEntriesDataTable()
+        showWithdrawRequestsDataTable();
     }// initDashboardClient
 
     function initDashboardAdmin(){
@@ -214,7 +223,6 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
 
     function addMonthlySpaceTooltip(){
         $scope.monthlySpaceOpts['conTooltip'] = function(chart) {
-            console.log( 'hi' );
             function showTooltip(x, y, contents) {
                 $('<div id="tooltip">' + contents + '</div>').css( {
                     position: 'absolute',
@@ -368,6 +376,26 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         }); 
     }// getLatestEntries
 
+    function getClientWithdrawRequests( clientId ){
+        ClientService.getWithdrawRequests( clientId, function( withdrawRequests ){
+            console.log( withdrawRequests );
+            $scope.withdrawRequests = withdrawRequests;
+        }); 
+    }// getClientWithdrawRequests
+
+    function showWithdrawRequestsDataTable(){
+
+        $scope.dtWithdrawRequestsOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('it')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false);
+        DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+    }// showWithdrawRequestsDataTable
+
     function fetchNewNotifications(){
         NotificationService.getNumUnread( function( numUnreadNotifications ){
             NotificationHelper.updateNotifications( numUnreadNotifications );
@@ -381,7 +409,6 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         var otherObj = { label: 'Otros', data: totalNumberItems - highValueItems };
         $scope.inventoryByHighValue.push( highValueObj );
         $scope.inventoryByHighValue.push( otherObj );
-        console.log( $scope.inventoryByHighValue );
         
         $scope.inventoryByHighValueOpts = {
             series: {

@@ -62,7 +62,13 @@ conAngular
                         getAllInventoryTransactions();
                 }  
             } 
-            initInventoryTransactionsDataTable();
+            try {
+                initInventoryTransactionsDataTable();
+            }
+            catch(err) {
+                location.reload();
+            }
+            
         }// initInventoryTransactions
 
         function getInventoryTransaction( id ){

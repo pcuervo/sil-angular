@@ -5,8 +5,7 @@ conAngular
             $scope.role = $rootScope.globals.currentUser.role;
             var currentPath = $location.path();
             initWithdrawalOptions( currentPath ); 
-            getCheckOutTransactions();
-            initCheckOutsDataTable();
+            //initCheckOutsDataTable();
             fetchNewNotifications();
         })();
 
@@ -87,7 +86,6 @@ conAngular
             $scope.withdrawnItems = getItemsToWithdraw();
             InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
                 Materialize.toast( response.success, 4000, 'green');
-                console.log( $scope.withdrawnItems );
                 $scope.isSummary = true;
                 $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
                 //$state.go('/check-out', {}, { reload: true });
@@ -111,9 +109,7 @@ conAngular
             $('.quantities').each( function(i, quantityInput){
                 quantities.push( $(quantityInput).val() );
             });
-            console.log( quantities );
             InventoryItemService.authorizeWithdrawal( $scope.withdrawRequest.id, $scope.pickupCompanyContact, $scope.additionalComments, quantities, function( response ){
-                console.log( response );
                 Materialize.toast( "Has aprobado la salida exitosamente. Se le ha enviado una notificación al usuario que la solicitó.", 4000, 'green');
                 $state.go('/check-out', {}, { reload: true });
             });
@@ -121,7 +117,6 @@ conAngular
 
         $scope.cancelWithdrawalRequest = function( id ){
             InventoryItemService.cancelWithdrawal( id, function( response ){
-                console.log( response );
                 Materialize.toast( "Has cancelado la solicitud exitosamente.", 4000, 'green');
                 $state.go('/pending-withdrawal-requests', {}, { reload: true });
             });
@@ -152,6 +147,7 @@ conAngular
             if( currentPath.indexOf( '/authorize-withdrawal' ) > -1 ){
                 fetchSuppliers();
                 getWithdrawRequest( $stateParams.withdrawRequestId );
+                return;
             }
 
             switch( currentPath ){
@@ -169,7 +165,11 @@ conAngular
                     getBundleItems();
                     break;
                 case '/request-exit':
-                    fetchItemsInStock();
+                    if( 6 == $scope.role ){
+                        fetchClientItemsInStock();
+                    }else{
+                        fetchItemsInStock();
+                    }
                     initMultipleWithdrawalDataTable();
                     fetchSuppliers();
                     $scope.exitDate = new Date();
@@ -182,6 +182,16 @@ conAngular
                     $scope.isSummary = false;
                     fetchSuppliers();
                     break;
+                case '/check-out':
+                    if( 6 == $scope.role ){
+                        getCheckOutTransactionsByClient( $rootScope.globals.currentUser.id );
+                    } else {
+                        getCheckOutTransactions();   
+                    }
+                    initCheckOutsDataTable();
+                    break;
+                default:
+                    getCheckOutTransactions();
             }
 
             getProjectManagers();
@@ -220,7 +230,6 @@ conAngular
 
             InventoryItemService.byType( 'UnitItem', 1, function( unitItems ){
                 $scope.unitItems = unitItems;
-                console.log(unitItems);
             }); 
 
         }// getUnitItems
@@ -366,19 +375,24 @@ conAngular
         }
 
         function getCheckOutTransactions(){
-
             InventoryTransactionService.getCheckOuts( function( checkOutTransactions ){
                 $scope.checkOutTransactions = checkOutTransactions;
             }); 
+        }// getCheckOutTransactions
 
+        function getCheckOutTransactionsByClient( clientId ){
+            InventoryTransactionService.getCheckOutsByClient( clientId, function( checkOutTransactions ){
+                console.log( checkOutTransactions );
+                $scope.checkOutTransactions = checkOutTransactions;
+            }); 
         }// getCheckOutTransactions
 
         function initCheckOutsDataTable(){
 
             $scope.dtCheckOutsOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDisplayLength(20)
-                    .withDOM('it')
+                    .withDisplayLength(30)
+                    .withDOM('pitp')
                     .withOption('responsive', true)
                     .withOption('order', [])
                     .withOption('searching', false);
@@ -403,7 +417,6 @@ conAngular
                 $scope.exitDate = new Date();
                 $scope.locations = '';
                 $.each( item.locations, function(i, loc){
-                    console.log( loc );
                     $scope.locations += loc.location + ', ';
                 });
                 $scope.locations = $scope.locations.replace(/,\s*$/, "");
@@ -429,6 +442,14 @@ conAngular
             InventoryItemService.getInStock( function( items ){
                 LoaderHelper.hideLoader();
                 $scope.inventoryItems = items;
+            });
+        }
+
+        function fetchClientItemsInStock(){
+            LoaderHelper.showLoader('Obteniendo artículos en existencia...');
+            ClientService.getInventoryItems( $rootScope.globals.currentUser.id, true, function( inventory_items ){
+                LoaderHelper.hideLoader();
+                $scope.inventoryItems = inventory_items;
             });
         }
 
@@ -502,7 +523,6 @@ conAngular
 
         function getWithdrawRequest( id ){
             InventoryItemService.getWithdrawRequest( id, function( withdrawRequest ){
-                console.log( withdrawRequest );
                 $scope.withdrawRequest = withdrawRequest;
                 $scope.withdrawItems = withdrawRequest.withdraw_request_items;
                 $scope.exitDate = new Date( withdrawRequest.exit_date );

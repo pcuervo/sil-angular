@@ -71,17 +71,23 @@
                 <label for="project">Proyecto</label>
             </div>
         </div>
-        <div class="[ col s12 m4 ]"> 
-            <div class="input-field">
-                <input id="pm" type="text" ng-model="pm" ng-readonly="true">
-                <label for="pm">Project Manager</label>
-            </div>
+        <div class="[ col s12 m4 ]">
+            <select name="selectedPM" ng-model="item.pm_id" required data-parsley-error-message="Escoge un Project Manager">
+                <option value="" disabled selected>Selecciona el PM</option>
+                <option 
+                    ng:repeat="user in projectManagers" 
+                    ng-selected="{{user.id == item.pm_id }}"
+                    value="{{user.id}}">{{user.name}}</option>
+            </select>
         </div>
-        <div class="[ col s12 m4 ]"> 
-            <div class="input-field">
-                <input id="ae" type="text" ng-model="ae" ng-readonly="true">
-                <label for="ae">Ejecutivo de cuenta</label>
-            </div>
+        <div class="[ col s12 m4 ]">
+            <select name="selectedAE" ng-model="item.ae_id" required data-parsley-error-message="Escoge un Ejecutivo de cuenta">
+                <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>
+                <option 
+                    ng:repeat="user in accountExecutives" 
+                    ng-selected="{{user.id == item.ae_id }}"
+                    value="{{user.id}}">{{user.name}}</option>
+            </select>
         </div>
         <div class="[ clear ]"></div>
         <div class="[ col s12 m6 ]"> 

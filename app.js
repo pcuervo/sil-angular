@@ -238,7 +238,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             name: 'conAngular',
             serie: true, // used for synchronous load chart scripts
             insertBefore: '#ngInsertBefore',
-            files: conAssets('sparkline,flot,rickshaw,jvectormap')
+            files: conAssets('sparkline,flot,rickshaw,jvectormap, dataTables')
           }]);
         }]
       }

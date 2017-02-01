@@ -131,13 +131,22 @@
                 </select>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ][ mt-10 ]">
+            <div class="[ col s12 m4 ][ mt-10 ]">
+                <select name="itemState" ng-model="itemState" required>
+                    <option value="" disabled selected>Estado</option>
+                    <option value="1" selected>Nuevo</option>
+                    <option value="2" selected>Como nuevo</option>
+                    <option value="3" selected>Usado</option>
+                    <option value="4" selected>Dañado</option>
+                </select>
+            </div>
+            <div class="[ col s12 m4 ][ mt-10 ]">
                 <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m6 ]">
+            <div class="[ col s12 m4 ]">
                 <div class="input-field">
                     <input id="delivery-contact" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact">
                     <label for="delivery-contact">¿Quién entregó?</label>
@@ -289,13 +298,19 @@
                 <label for="selected-storage-type">Tipo de almacenaje</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]">
+        <div class="[ col s12 m4 ][ print-estado ]">
+            <div class="input-field">
+                <input id="selected-item-state" type="text" name="selectedItemState" ng-model="selectedItemStateText" disabled>
+                <label for="selected-item-state">Estado</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]">
             <div class="input-field">
                 <input id="selected-provider" type="text" name="selectedProvider" ng-model="selectedProviderText" disabled>
                 <label for="selected-provider">Proveedor</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]">
+        <div class="[ col s12 m4 ]">
             <div class="input-field">
                 <input id="delivery-contact" type="text" name="deliveryCompanyContact" ng-model="deliveryCompanyContact" disabled>
                 <label for="delivery-contact">¿Quién entregó?</label>

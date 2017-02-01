@@ -6,11 +6,13 @@ conAngular
         service.all = all;
         service.create = create;
         service.update = update;
+        service.send = send;
         service.stats = stats;
         service.pendingApproval = pendingApproval;
         service.createRequest = createRequest;
         service.pendingRequests = pendingRequests;
         service.getRequest = getRequest;
+        service.approveRequest = approveRequest;
         return service;
 
 
@@ -100,6 +102,23 @@ conAngular
                });
         }// update
 
+        function send( id, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'deliveries/update';
+            $http.post(serviceUrl, {
+                    id: id,
+                    delivery: {
+                        status: 1,
+                    }
+                })
+               .success(function ( response ) {
+                    console.log( response );
+                    callback ( response.delivery_request );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// send
+
         function stats( callback ){
             var serviceUrl = $rootScope.apiUrl + 'deliveries/stats/';
             $http.get( serviceUrl )
@@ -168,6 +187,23 @@ conAngular
                     callback( response );
                });
         }// getRequest
+
+        function approveRequest( requestId, deliveryUserId, supplierId, additionalComments, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'delivery_requests/authorize_delivery';
+            $http.post(serviceUrl, {
+                    id:                     requestId,
+                    delivery_user_id:        deliveryUserId,
+                    supplier_id:            supplierId,
+                    additional_comments:    additionalComments
+                    
+                })
+               .success(function ( response ) {
+                    callback ( response );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// approveRequest
 
     }]);
 

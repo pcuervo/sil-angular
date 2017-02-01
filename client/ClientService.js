@@ -11,6 +11,7 @@ conAngular
         service.updateUser = updateUser;
         service.getClient = getClient;
         service.stats = stats;
+        service.getWithdrawRequests = getWithdrawRequests;
         return service;
 
 
@@ -103,11 +104,14 @@ conAngular
                });
         }// getContacts
 
-        function getInventoryItems( clientContactId, callback ){
-            var serviceUrl = $rootScope.apiUrl + 'client_contacts/inventory_items/' + clientContactId;
-            $http.get(serviceUrl)
-            .success(function ( response ) {
-                console.log( response );
+        function getInventoryItems( clientContactId, inStock, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'client_contacts/inventory_items';
+            $http.post(serviceUrl, 
+            {
+                id: clientContactId,
+                in_stock: inStock
+            })
+           .success(function ( response ) {
                 callback( response.client_contacts );
            })
            .error(function ( response ) {
@@ -159,6 +163,17 @@ conAngular
                 callback( response );
            });
         }
+
+        function getWithdrawRequests( id, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/by_user/' + id;
+            $http.get(serviceUrl)
+               .success(function ( response ) {
+                    callback( response.withdraw_requests );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getWithdrawRequests
 
 
     }]);

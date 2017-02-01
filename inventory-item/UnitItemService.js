@@ -67,7 +67,7 @@ conAngular
 
         }// getAll
 
-        function edit( id, name, serialNumber, brand, model, description, value, storageType, validityExpirationDate, state, isHighValue, isInventoryItem, callback ) {
+        function edit( id, name, serialNumber, brand, model, description, value, storageType, validityExpirationDate, state, isHighValue, isInventoryItem, pm, ae, callback ) {
 
             var userId = $rootScope.globals.currentUser.id;
             var serviceUrl = $rootScope.apiUrl + 'unit_items/update';
@@ -75,6 +75,8 @@ conAngular
                 { 
                     id:                 id,
                     is_inventory_item:  isInventoryItem,
+                    pm_id: pm,
+                    ae_id: ae,
                     unit_item: {
                         name:                       name, 
                         serial_number:              serialNumber, 

@@ -118,11 +118,10 @@ conAngular
                 $('#delivery-img').prop('required', true);
             }
 
-            var isValid = $('[data-parsley-delivery]').parsley(). isValid();
+            var isValid = $('[data-parsley-delivery]').parsley().isValid();
             if( ! isValid ) return;
             var deliveryImgName = 'envio-' + $scope.delivery.id + '.' + $scope.deliveryImgExt;
             DeliveryService.update( $scope.delivery.id, $scope.company, $scope.address, $scope.delivery.latitude, $scope.delivery.longitude, status, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, $scope.deliveryGuy, $scope.deliveryImg, deliveryImgName, function( delivery ){
-
                 switch( status ){
                     case 1: 
                         toastMsg = 'Se ha confirmado el envío y se le ha cambiado el estatus a "enviado". Se le mandará una notificación al usuario que lo solicitó.';
@@ -139,9 +138,20 @@ conAngular
             });
         }
 
+        $scope.send = function( status ){
+            DeliveryService.send( $scope.delivery.id, function( delivery ){
+                toastMsg = 'Se ha marcado el envío como "enviado". Se le mandará una notificación al usuario que lo solicitó.';
+                Materialize.toast( toastMsg, 4000, 'green' );
+                $state.go('/delivery-dashboard', {}, { reload: true });
+            });
+        }
+
         $scope.getStatus = function( statusId ){
             var status;
             switch( parseInt( statusId ) ){
+                case 0:
+                    status = 'Pendiente por enviar';
+                    break;
                 case 1:
                     status = 'Enviado';
                     break;
@@ -167,6 +177,22 @@ conAngular
             $('.materialboxed').materialbox();
         }
 
+        $scope.authorizeRequest = function( id ){
+            if( 'undefined' == typeof $scope.deliveryGuy ){
+                Materialize.toast( 'El repartidor no puede estar vacío, si no hay nadie asignado selecciona "no hay" por favor.', 5000, 'red' );
+                return;
+            }
+            DeliveryService.approveRequest( $scope.delivery.id, $scope.deliveryGuy, $scope.deliveryCompany, $scope.delivery.additional_comments, function( request ){
+                console.log( request );
+                if( request.errors ){
+                    Materialize.toast( 'No se pudo aprobar la solicitud de envío, revisa la información e intenta nuevamente.', 4000, 'red');
+                    return;
+                }
+                Materialize.toast( '¡Se ha aprobado la solicitud de envío! Se le notificará a la persona que lo solicitó.', 4000, 'green');
+                $state.go('/delivery-dashboard', {}, { reload: true });
+            });
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -175,7 +201,8 @@ conAngular
 
             if( currentPath.indexOf( '/view-delivery-request' ) > -1 ){
                 getDeliveryRequest( $stateParams.requestId );
-                //fetchDeliveryUsers();
+                fetchDeliveryUsers();
+                fetchSuppliers();
                 //initDeliverySummaryDataTable();
                 return;
             }
@@ -275,6 +302,7 @@ conAngular
 
         function fetchNewNotifications(){
             NotificationService.getNumUnread( function( numUnreadNotifications ){
+                console.log( numUnreadNotifications );
                 NotificationHelper.updateNotifications( numUnreadNotifications );
             });
         }

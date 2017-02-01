@@ -65,13 +65,15 @@ conAngular
 
         }// getBulkItems
 
-        function edit( id, name, description, value, storageType, validityExpirationDate, state, isHighValue, isInventoryItem, callback ) {
+        function edit( id, name, description, value, storageType, validityExpirationDate, state, isHighValue, isInventoryItem,  pm, ae, callback ) {
 
             var userId = $rootScope.globals.currentUser.id;
             var serviceUrl = $rootScope.apiUrl + 'bulk_items/update';
             $http.post(serviceUrl, 
                 { 
-                    id:                 id,
+                    id:    id,
+                    pm_id: pm,
+                    ae_id: ae,
                     is_inventory_item:  isInventoryItem,
                     bulk_item: {
                         name:                       name, 

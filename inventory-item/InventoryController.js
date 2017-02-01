@@ -67,7 +67,6 @@ conAngular
 
         $scope.getStatus = function( statusId ){
             InventoryItemService.getStatus( statusId, function( status ){
-                console.log( status );
                 $scope.itemStatus = status;
             });
         }
@@ -171,6 +170,7 @@ conAngular
                         $('[name="storageType"]').val( $scope.item.storage_type );
                         $('[name="itemType"]').val( $scope.item.item_type );
                         getItemState( $scope.item.state );
+
                         if( 0 == $scope.item.value ) {
                             $scope.item.value = '';
                         } 
@@ -193,7 +193,15 @@ conAngular
                     fetchInventory();
                     fetchProjects();
                     fetchStatuses();
-                    initInventoryDataTable();
+                    // TODO: FIX TEMPORAL, DATATABLES NO CARGA BIEN 
+                    // EN ALGUNOS CASOS
+                    try{
+                        initInventoryDataTable();
+                    }
+                    catch(err){
+                        console.log(err);
+                        location.reload();
+                    }
                     break;
             }
         }// initInventory
@@ -237,8 +245,6 @@ conAngular
                 .withPaginationType('full_numbers')
                 .withDisplayLength(20)
                 .withDOM('pitp')
-                .withOption('responsive', true)
-                .withOption('order', [])
                 .withButtons([
                     {
                         extend: "csvHtml5",
@@ -248,7 +254,8 @@ conAngular
                         },
                         exportData: {decodeEntities:true}
                     }
-                ]);
+                ])
+                .withOption('responsive', true);
             $scope.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
                 DTColumnDefBuilder.newColumnDef(7).notSortable()
@@ -266,8 +273,11 @@ conAngular
                     return;
                 }
                 $scope.item = item;
-                console.log( item );
+                fillProjectUsersSelects( item.project_id );
+
                 initItem( item );
+                //console.log( item );
+                
                 if( 'BundleItem' == item.actable_type ){
                     initItemPartsDataTable();
                     $scope.itemParts = item.parts;
@@ -299,6 +309,7 @@ conAngular
                 $scope.hasLocations = 1;
                 initItemLocationsDataTable();
             }
+            console.log('done init item');
         }// initItem
 
         function fetchProjects(){
@@ -360,7 +371,7 @@ conAngular
         }// initItemLocationsDataTable
 
         function editUnitItem( id ){
-            UnitItemService.edit( id, $scope.item.name, $scope.item.serial_number, $scope.item.brand, $scope.item.model, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, function ( inventory_item ){
+            UnitItemService.edit( id, $scope.item.name, $scope.item.serial_number, $scope.item.brand, $scope.item.model, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, $scope.item.pm_id, $scope.item.ae_id, function ( inventory_item ){
 
                 LoaderHelper.hideLoader();
                 if( inventory_item.errors ) {
@@ -376,8 +387,7 @@ conAngular
         }// editUnitItem
 
         function editBulkItem( id ){
-            console.log( $scope.item.value );
-            BulkItemService.edit( id, $scope.item.name, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, function ( inventory_item ){
+            BulkItemService.edit( id, $scope.item.name, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, $scope.item.pm_id, $scope.item.ae_id, function ( inventory_item ){
 
                 LoaderHelper.hideLoader();
                 if( inventory_item.errors ) {
@@ -385,7 +395,6 @@ conAngular
                     $scope.currentStep = 1;
                     return;
                 }
-                console.log( inventory_item );
                 Materialize.toast('Se actualizó el artículo: "' + inventory_item.name + '" exitosamente!', 4000, 'green');
                 $state.go('/view-item', { 'itemId' : inventory_item.id }, { reload: true });
             });
@@ -393,8 +402,7 @@ conAngular
         }// editBulkItem
 
         function editBundleItem( id ){
-            console.log( $scope.item.state );
-            BundleItemService.edit( id, $scope.item.name, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, function ( inventory_item ){
+            BundleItemService.edit( id, $scope.item.name, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, $scope.item.pm_id, $scope.item.ae_id, function ( inventory_item ){
 
                 LoaderHelper.hideLoader();
                 if( inventory_item.errors ) {
@@ -424,5 +432,38 @@ conAngular
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initItemPartsDataTable
+
+
+        function fillProjectUsersSelects( projectId ){
+            ProjectService.getProjectUsers( projectId, function ( response ){
+
+                if( response.users.length == 0 ) {
+                    $scope.validSelectedProject = false;
+                    return;
+                }
+
+                $scope.projectManagers = [];
+                $scope.accountExecutives = [];
+                angular.forEach( response.users, function( user ) {
+                    switch( user.role ){
+                        case 2:
+                            if( 2 == $scope.role ) break;
+                            $scope.projectManagers.push( user );
+                            break;
+                        case 3:
+                            if( 3 == $scope.role ) break;
+                            $scope.accountExecutives.push( user );
+                    }
+                })
+
+                if( $scope.projectManagers.length == 0 && 2 != $scope.role  ){
+                    Materialize.toast('El proyecto que seleccionaste no tiene Project Managers relacionados.', 6000, 'red');
+                }
+                if( $scope.accountExecutives.length == 0 && 3!= $scope.role  ){
+                    Materialize.toast('El proyecto que seleccionaste no tiene Ejecutivos de Cuenta relacionados.', 6000, 'red');
+                }
+                console.log('done pms and aes');
+            });
+        }// fillProjectUsersSelects
 
     }]);
