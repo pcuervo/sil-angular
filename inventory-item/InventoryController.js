@@ -143,6 +143,17 @@ conAngular
             return 'yellow lighten-3';
         }// getTransactionTypeClass
 
+        $scope.deleteItem = function( itemId ){
+            var confirmation = confirm( '¿Estás seguro que deseas eliminar el artículo?' );
+            if( confirmation ){
+                InventoryItemService.deleteItem( itemId, function( response ){
+                   Materialize.toast( 'Se ha eliminado el artículo.', 4000, 'red');
+                   $state.go('/my-inventory', {}, { reload: true });
+                });   
+            }
+            
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/

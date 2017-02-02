@@ -2,13 +2,13 @@
     <div class="[ row ]">
         <h4 class="[ center-align ]">Inventario en existencia</h4>
         <form ng-submit="requestDelivery()" data-parsley-validate>
-            <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
+            <table datatable="ng" dt-options="dtDeliveryItemsOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
                 <thead>
                     <tr>
                         <th class="[ center-align ]">Tipo</th>
                         <th class="[ center-align ]">Img</th>
                         <th class="[ center-align ]">Nombre</th>
-                        <th class="[ center-align ]">Tipo de mercancía</th>
+                        <th class="[ center-align ]">Número de serie</th>
                         <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
                         <th class="[ center-align ]">Cantidad</th>
                         <th class="[ center-align ]">¿Agregar a envío?</th>
@@ -18,8 +18,8 @@
                     <tr ng-repeat="i in inventoryItems">
                         <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
                         <td><img ng-src="{{ i.img }}" alt="{{i.name}}"></td>
-                        <td id="item-name-{{i.id}}">{{ i.name }}</td>
-                        <td id="item-type-{{i.id}}" class="[ center-align ]">{{ i.item_type }}</td>
+                        <td id="item-name-{{i.id}}">{{ i.name + ' ' + i.model }}</td>
+                        <td id="item-type-{{i.id}}" class="[ center-align ]">{{ i.serial_number }}</td>
                         <td class="[ center-align ][ hide-on-small-only ]">{{ i.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
                         <td class="[ center-align ]"><div class="[ input-field ]">
                             <div class="[ input-field ]">

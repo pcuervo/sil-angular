@@ -1,4 +1,4 @@
-conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interval', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', 'InventoryTransactionService', 'InventoryItemService', 'ClientService', 'NotificationService', function( $rootScope, $scope, $interval, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, InventoryTransactionService, InventoryItemService, ClientService, NotificationService) {
+conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state', '$interval', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', 'InventoryTransactionService', 'InventoryItemService', 'ClientService', 'DeliveryService', 'NotificationService', function( $rootScope, $scope, $state, $interval, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, InventoryTransactionService, InventoryItemService, ClientService, DeliveryService, NotificationService) {
 
     (function initController() {
         $scope.role = $rootScope.globals.currentUser.role;
@@ -28,7 +28,14 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         InventoryItemService.cancelWithdrawal( id, function( response ){
             console.log( response );
             Materialize.toast( "Has cancelado la solicitud exitosamente.", 4000, 'green');
-            $state.go('/pending-withdrawal-requests', {}, { reload: true });
+            $state.go('/dashboard', {}, { reload: true });
+        });
+    }
+
+    $scope.cancelWithdrawalRequest = function( id ){
+        InventoryItemService.cancelWithdrawal( id, function( response ){
+            Materialize.toast( "Has cancelado la solicitud exitosamente.", 4000, 'green');
+            $state.go('/dashboard', {}, { reload: true });
         });
     }
 
@@ -41,6 +48,14 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         });
         console.log( itemNames );
         return itemNames.join('; ');
+    }
+
+    $scope.cancelEntryRequest = function( id ){
+        InventoryItemService.cancelEntryRequest( id, function( response ){
+            console.log( response );
+            Materialize.toast( "Has cancelado la solicitud exitosamente.", 4000, 'green');
+            $state.go('/pending-entry-requests', {}, { reload: true });
+        });
     }
 
     /******************
@@ -73,6 +88,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
             console.log( client );
         } )
 
+        $scope.hasInventory = true;
         $scope.inventoryByItemData = [];
         $scope.inventoryByItemOpts = {};
         $scope.monthlySpaceData = [];
@@ -81,11 +97,14 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
 
         initChartInventoryByHighValue( 1, 1 );
         ClientService.stats( $rootScope.globals.currentUser.id, function( stats ){
-            console.log( stats );
+            console.log( stats.inventory_by_type );
             $scope.stats = stats;
-            // Initialize charts
+
+            if( Object.keys( stats.inventory_by_type ).length != 0 ){
+                $scope.hasInventory = false;
+                initChartInventoryByItemType( stats.inventory_by_type );
+            }
             initChartMonthlyRent( stats.rent_by_month );
-            initChartInventoryByItemType( stats.inventory_by_type );
             initChartInventoryByHighValue( stats.total_number_items, stats.total_high_value_items );
 
             $scope.currentRent = 0;
@@ -95,7 +114,8 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         });
 
         // Load data for tables
-        getClientWithdrawRequests( $rootScope.globals.currentUser.id );
+        fetchClientWithdrawRequests( $rootScope.globals.currentUser.id );
+        fetchPendingDeliveriesByUser( $rootScope.globals.currentUser.id );
         // Create DataTables
         showWithdrawRequestsDataTable();
     }// initDashboardClient
@@ -144,7 +164,11 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         $scope.inventoryByItemData = [];
         $scope.inventoryByItemOpts = {};
         getPendingEntryRequests();
+        getPendingWithdrawalRequestsByUser( $rootScope.globals.currentUser.id );
+        fetchPendingDeliveriesByUser( $rootScope.globals.currentUser.id );
+        // Init datatables
         initPendingEntryRequestsDataTable();
+        initPendingWithdrawalRequestsDataTable();
         
         InventoryItemService.getStatsPM( function( stats ){
             console.log( stats );
@@ -153,6 +177,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
             $scope.numberProjects = stats.total_number_projects;
             initChartInventoryByItemType( stats.inventory_by_type );
         }); 
+
 
     }// initDashboardProjectManager
 
@@ -305,14 +330,14 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
     function initPendingEntryRequestsDataTable(){
         $scope.dtPendingEntryRequestsOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
-                .withDisplayLength(20)
-                .withDOM('it')
+                .withDisplayLength(50)
+                .withDOM('itp')
                 .withOption('responsive', true)
                 .withOption('order', [])
                 .withOption('searching', false);
-        // $scope.dtPendingEntryRequestsColumnDefs = [
-        //     //DTColumnDefBuilder.newColumnDef(5).notSortable()
-        // ];
+        $scope.dtPendingEntryRequestsColumnDefs = [
+            DTColumnDefBuilder.newColumnDef(5).notSortable()
+        ];
         DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
     }// initPendingEntryRequestsDataTable
 
@@ -323,11 +348,17 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         });
     }// getPendingWithdrawalRequests
 
+    function getPendingWithdrawalRequestsByUser( userId ){
+        InventoryItemService.getPendingWithdrawalRequestsByUser( userId, function( withdrawRequests ){
+            $scope.withdrawRequests = withdrawRequests;
+        });
+    }// getPendingWithdrawalRequestsByUser
+
     function initPendingWithdrawalRequestsDataTable(){
         $scope.dtPendingWithdrawalRequestsOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
-                .withDisplayLength(20)
-                .withDOM('it')
+                .withDisplayLength(5)
+                .withDOM('itp')
                 .withOption('responsive', true)
                 .withOption('order', [])
                 .withOption('searching', false);
@@ -376,12 +407,12 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         }); 
     }// getLatestEntries
 
-    function getClientWithdrawRequests( clientId ){
+    function fetchClientWithdrawRequests( clientId ){
         ClientService.getWithdrawRequests( clientId, function( withdrawRequests ){
             console.log( withdrawRequests );
             $scope.withdrawRequests = withdrawRequests;
         }); 
-    }// getClientWithdrawRequests
+    }// fetchClientWithdrawRequests
 
     function showWithdrawRequestsDataTable(){
 
@@ -524,20 +555,10 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$interva
         DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
     }// initPendingLocationDataTable
 
-
-  // sparkline 1
-  $scope.spark1data = [76,78,87,65,43,35,23,25,12,14,27,35,32,37,31,46,43,32,36,57,78,87,82,75,58,54,70,23,54,67,34,23,87,12,43,65,23,76,32,55];
-  $scope.spark1opts = {
-    type: 'bar',
-    width: '100%',
-    height: 20,
-    barColor: '#2196f3'
-  };
-
-
-  // rickshaw datas
-  var rickshawLine1 = [{"x":0,"y":13},{"x":1,"y":12},{"x":2,"y":24},{"x":3,"y":25},{"x":4,"y":12},{"x":5,"y":16},{"x":6,"y":24},{"x":7,"y":13},{"x":8,"y":12},{"x":9,"y":11}];
-  var rickshawLine2 = [{"x":0,"y":16},{"x":1,"y":23},{"x":2,"y":17},{"x":3,"y":16},{"x":4,"y":22},{"x":5,"y":25},{"x":6,"y":21},{"x":7,"y":22},{"x":8,"y":12},{"x":9,"y":13}];
-
+    function fetchPendingDeliveriesByUser( userId ){
+        DeliveryService.pendingRequestsByUser( userId, function( deliveries ){
+            $scope.pendingDeliveries = deliveries;
+        });
+    }// fetchPendingDeliveriesByUser
 
 }]);

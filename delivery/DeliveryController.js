@@ -1,5 +1,5 @@
 conAngular
-    .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'SupplierService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, SupplierService,  DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
+    .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'SupplierService', 'ClientService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, SupplierService, ClientService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
         
         (function initController() {
             $scope.role = $rootScope.globals.currentUser.role;
@@ -121,7 +121,9 @@ conAngular
             var isValid = $('[data-parsley-delivery]').parsley().isValid();
             if( ! isValid ) return;
             var deliveryImgName = 'envio-' + $scope.delivery.id + '.' + $scope.deliveryImgExt;
+            LoaderHelper.showLoader( 'Enviando...' );
             DeliveryService.update( $scope.delivery.id, $scope.company, $scope.address, $scope.delivery.latitude, $scope.delivery.longitude, status, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, $scope.deliveryGuy, $scope.deliveryImg, deliveryImgName, function( delivery ){
+                LoaderHelper.hideLoader();
                 switch( status ){
                     case 1: 
                         toastMsg = 'Se ha confirmado el envío y se le ha cambiado el estatus a "enviado". Se le mandará una notificación al usuario que lo solicitó.';
@@ -251,16 +253,29 @@ conAngular
                     fetchSuppliers();
                     break;
                 case '/delivery-dashboard':
+                    if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
+                        fetchPendingDeliveriesByUser( $rootScope.globals.currentUser.id );
+                    }else{
+                        fetchPendingDeliveries();
+                    }
                     fetchLatestDeliveries();
                     fetchStats();
                     break;
                 case '/pending-deliveries':
-                    fetchPendingDeliveries();
+                    if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
+                        fetchPendingDeliveriesByUser( $rootScope.globals.currentUser.id );
+                    }else{
+                        fetchPendingDeliveries();
+                    }
                     initPendingDeliveryDataTable();
                     break;
                 case '/delivery-request':
                     LoaderHelper.showLoader( 'Obteniendo inventario...' );
-                    fetchItemsInStock();
+                    if( 6 == $scope.role ){
+                        fetchClientItemsInStock();
+                    }else{
+                        fetchItemsInStock();
+                    }
                     initDeliveryDataTable();
                     initGeoAutocomplete( '#address', '#map', 19.397260, -99.186684, 12 );
                     $scope.deliveryDate = new Date();
@@ -284,11 +299,19 @@ conAngular
             });
         }
 
+        function fetchClientItemsInStock(){
+            LoaderHelper.showLoader('Obteniendo artículos en existencia...');
+            ClientService.getInventoryItems( $rootScope.globals.currentUser.id, true, function( inventory_items ){
+                LoaderHelper.hideLoader();
+                $scope.inventoryItems = inventory_items;
+            });
+        }
+
         function initDeliveryDataTable(){
             $scope.dtDeliveryOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
                 .withDisplayLength(20)
-                .withDOM('pitp')
+                .withDOM('riftp')
                 .withOption('responsive', true)
                 .withOption('order', [])
                 .withOption('searching', false);
@@ -513,10 +536,15 @@ conAngular
 
         function fetchPendingDeliveries(){
             DeliveryService.pendingRequests( function( deliveries ){
-                console.log( deliveries )
                 $scope.pendingDeliveries = deliveries;
             });
         }// fetchPendingDeliveries
+
+        function fetchPendingDeliveriesByUser( userId ){
+            DeliveryService.pendingRequestsByUser( userId, function( deliveries ){
+                $scope.pendingDeliveries = deliveries;
+            });
+        }// fetchPendingDeliveriesByUser
 
         function initPendingDeliveryDataTable(){
             $scope.dtPendingDeliveryOptions = DTOptionsBuilder.newOptions()
@@ -530,7 +558,7 @@ conAngular
                 DTColumnDefBuilder.newColumnDef(5).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
-        }// initDeliveryDataTable
+        }// initPendingDeliveryDataTable
 
         function fetchSuppliers(){
             SupplierService.getAll( function( suppliers ){

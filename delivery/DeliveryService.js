@@ -11,6 +11,7 @@ conAngular
         service.pendingApproval = pendingApproval;
         service.createRequest = createRequest;
         service.pendingRequests = pendingRequests;
+        service.pendingRequestsByUser = pendingRequestsByUser;
         service.getRequest = getRequest;
         service.approveRequest = approveRequest;
         return service;
@@ -175,6 +176,18 @@ conAngular
                     callback( response );
                });
         }// pendingRequests
+
+        function pendingRequestsByUser( userId, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'delivery_requests/by_user/' + userId;
+            $http.get( serviceUrl )
+               .success(function ( response ) {
+                    console.log( response );
+                    callback( response.delivery_requests );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// pendingRequestsByUser
 
         function getRequest( id, callback ){
             var serviceUrl = $rootScope.apiUrl + 'delivery_requests/' + id;

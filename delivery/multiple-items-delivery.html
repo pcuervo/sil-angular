@@ -1,5 +1,5 @@
 <div class="[ card-panel ]">
-    <div class="[ row ]" >
+    <div class="[ row ]" ng-show="!isSummary">
         <h4 class="[ center-align ]">Inventario en existencia</h4>
         <form ng-submit="multipleItemsDelivery()" data-parsley-validate>
             <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">

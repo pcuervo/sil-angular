@@ -28,16 +28,36 @@
         <div class="[ col s12 m6 l4 offset-l4 offset-m3 ]" ng-show="1==role||4==role">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/multiple-items-delivery"><i class="[ fa fa-truck ][ left ]"></i>Envío masivo</a>
         </div>
-<!--         <div class="[ col s12 m6 l4 ]" ng-show="1==role||4==role">
-            <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/single-item-delivery"><i class="[ fa fa-motorcycle ][ left ]"></i>Envío por artículo</a>
-        </div> -->
-<!--         <div class="[ col s12 m6 l4 ]" ng-show="1==role||4==role">
-            <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/view-deliveries"><i class="[ fa fa-eye ][ left ]"></i>Consultar envíos</a>
-        </div> -->
         <div class="[ col s12 m6 l4 offset-m3 offset-l4 ]" ng-show="2==role||3==role||6==role">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/delivery-request"><i class="[ fa fa-truck ][ left ]"></i>Solicitud de envío</a>
         </div>
     </div>
+</div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Solicitudes de envío pendientes</h4>
+    <table datatable="ng" dt-options="dtPendingDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">¿Quién solicita?</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Empresa donde se entrega</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Dirección</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Número de artículos</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrega solicitada</th>
+                <th class="[ center-align ]">Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="d in pendingDeliveries">
+                <td class="[ center-align ]">{{ d.user.first_name + ' ' + d.user.last_name }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.company }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.address }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.delivery_request_items.length }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.date_time | date:'dd/MM/yyyy' }}</td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/view-delivery-request/{{ d.id }}"><i class="[ fa fa-indent ]"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="[ card-panel ]">

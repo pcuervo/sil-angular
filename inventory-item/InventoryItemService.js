@@ -38,10 +38,12 @@ conAngular
         service.getItemRequest = getItemRequest;
         service.requestWithdrawal = requestWithdrawal;
         service.getPendingWithdrawalRequests = getPendingWithdrawalRequests;
+        service.getPendingWithdrawalRequestsByUser = getPendingWithdrawalRequestsByUser;
         service.getWithdrawRequest = getWithdrawRequest;
         service.getStats = getStats;
         service.getStatsPM = getStatsPM;
         service.cancelEntryRequest = cancelEntryRequest;
+        service.deleteItem = deleteItem;
         return service;
 
         // Public 
@@ -697,6 +699,18 @@ conAngular
                 });
         }// getPendingWithdrawalRequests
 
+        function getPendingWithdrawalRequestsByUser( userId, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/by_user/' + userId;
+            $http.get( serviceUrl )
+                .success(function ( response ) {
+                    console.log( response );
+                    callback( response.withdraw_requests );
+                })
+               .error(function ( response ) {
+                    callback( response );
+                });
+        }// getPendingWithdrawalRequestsByUser
+
         function getWithdrawRequest( id, callback ) {
             var serviceUrl = $rootScope.apiUrl + 'withdraw_requests/' + id;
             $http.get( serviceUrl )
@@ -745,6 +759,23 @@ conAngular
                 callback( response );
             });
 
-        }// cancelWithdrawal
+        }// cancelEntryRequest
+
+        function deleteItem( id,  callback ) {
+ 
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/destroy';
+            $http.post( serviceUrl, 
+                {  
+                    id: id
+                }
+            )
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+
+        }// delete
 
     }]);

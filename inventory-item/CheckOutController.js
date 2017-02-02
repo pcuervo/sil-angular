@@ -84,6 +84,10 @@ conAngular
 
         $scope.multipleWithdrawal = function(){
             $scope.withdrawnItems = getItemsToWithdraw();
+            if( 0 == $scope.withdrawnItems ){
+                Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
+                return;
+            }
             InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
                 Materialize.toast( response.success, 4000, 'green');
                 $scope.isSummary = true;
@@ -134,6 +138,10 @@ conAngular
                 initMultipleWithdrawalDataTable();
                 fetchSuppliers();
                 $scope.exitDate = new Date();
+                angular.element('body').on('search.dt', function() {  
+                   var searchTerm = document.querySelector('.dataTables_filter input').value;
+                   console.log('dataTables search : ' + searchTerm); 
+                })
                 return;
             }
 
@@ -456,15 +464,16 @@ conAngular
         function initMultipleWithdrawalDataTable(){
             $scope.dtMultipleWithdrawalOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDisplayLength(20)
+                    .withDisplayLength(500)
                     .withDOM('riftp')
                     .withOption('responsive', true)
                     .withOption('order', [])
+                    .withOption('select', true)
                     .withOption('searching', true);
             $scope.dtMultipleWithdrawalColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(5).notSortable(),
                 DTColumnDefBuilder.newColumnDef(6).notSortable(),
-                DTColumnDefBuilder.newColumnDef(1).notSortable(),
+                DTColumnDefBuilder.newColumnDef(1).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initMultipleWithdrawalDataTable
