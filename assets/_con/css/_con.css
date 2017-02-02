@@ -13136,6 +13136,16 @@ html.rtl .spinner-layer .left {
     display: block;
   }
   .print-width--100p { width: 100% !important; }
+  .print-col {
+    padding: 0 10px;
+    float: left;
+  }
+  .print-col6 { width: 49%; }
+  .print-col4 { width: 33%; }
+  .print-col12 { width: 100%; }
+  .print-col12 { width: 100%; }
+  .print-hidden { display: none; }
+  .print-fz--large { font-size: 12px; }
 }
 
 

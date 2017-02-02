@@ -41,60 +41,60 @@
             </table>
             <div class="[ clear ]"></div>
             <h4 class="[ center-align ]">Datos de envío</h4>
-            <div class="[ col s12 m4 ][ mt-10 ]"> 
+            <div class="[ col s12 m4 ][ mt-10 ]">
                 <select name="deliveryGuy" ng-model="deliveryGuy" data-parsley-error-message="¡El repartidor es obligatorio!">
                     <option value="" disabled selected>Selecciona el repartidor</option>
                     <option value="">No hay</option>
                     <option ng:repeat="user in deliveryUsers" value="{{user.id}}">{{ user.first_name + ' ' + user.last_name }}</option>
                 </select>
             </div>
-            <div class="[ col s12 m4 ][ mt-10 ]"> 
+            <div class="[ col s12 m4 ][ mt-10 ]">
                 <select name="deliveryCompany" ng-model="deliveryCompany" data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option value="">No hay</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m4 ]"> 
+            <div class="[ col s12 m4 ]">
                 <div class="input-field">
                     <input id="company" type="text" name="company" ng-model="company" required>
                     <label for="company">Empresa donde se entrega</label>
                 </div>
             </div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]">
                 <div class="input-field">
                     <input id="address" type="text" name="address" ng-model="address" required>
                     <input type='hidden' id='lat' ng-model="latitude" name='latitude' data-geo='lat' />
                     <input type='hidden' id='lng' ng-model="longitude" name='longitude' data-geo='lng' />
                 </div>
             </div>
-            <div class="[ col s12 ][ map-container ]"> 
+            <div class="[ col s12 ][ map-container ]">
                 <div id="map"></div>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="recipient-name" type="text" name="recipientName" ng-model="recipientName" required>
                     <label for="recipient-name">Persona que va a recibir</label>
                 </div>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="recipient-phone" type="text" name="recipientPhone" ng-model="recipientPhone">
                     <label for="recipient-phone">Teléfono de quien va a recibir</label>
                 </div>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ]">    
+            <div class="[ col s12 m6 ]">
                 <label class="[ fs-12 ]" for="">Fecha de envío (mm/dd/aaaa)</label>
                 <input class="datepicker" type="date" name="deliveryDate" ng-model="deliveryDate" required>
             </div>
-            <div class="[ col s12 m6 ][ mt-5 ]"> 
+            <div class="[ col s12 m6 ][ mt-5 ]">
                 <div class="input-field">
                     <input id="clockpicker" class="clockpicker" type="text" ng-model="deliveryTime" data-donetext="OK">
                     <label for="clockpicker">Hora</label>
                 </div>
             </div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]">
                 <div class="input-field">
                     <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
                     <label for="textarea1">Observaciones adicionales</label>
@@ -106,53 +106,64 @@
         </form>
     </div>
 
-    <div class="[ row ]" ng-show="isSummary">
+    <div class="[ row ][ print-fz--large ]" ng-show="isSummary">
         <h4 class="[ center-align ][ mb-20 ]">Resumen de envío</h4>
-        <div class="[ col s12 m4 offset-m2 ]"> 
-            <div class="input-field">
-                <input id="delivery-guy-text" type="text" name="delivery-guy-text" ng-model="selectedDeliveryGuy" disabled>
-                <label for="delivery-guy-text">Repartidor</label>
+        <span class="[ print-col print-col4 ]">
+            <div class="[ col s12 m4 offset-m2 ]">
+                <div class="input-field">
+                    <input id="delivery-guy-text" type="text" name="delivery-guy-text" ng-model="selectedDeliveryGuy" disabled>
+                    <label for="delivery-guy-text"><span class="[ print-fz--large ]">Repartidor</span></label>
+                </div>
             </div>
-        </div>
-        <div class="[ col s12 m4 ]"> 
-            <div class="input-field">
-                <input id="supplier" type="text" name="delivery.supplier" ng-model="delivery.supplier" disabled>
-                <label for="supplier">Proveedor</label>
+        </span>
+        <span class="[ print-col print-col4 ]">
+            <div class="[ col s12 m4 ]">
+                <div class="input-field">
+                    <input id="supplier" type="text" name="delivery.supplier" ng-model="delivery.supplier" disabled>
+                    <label for="supplier"><span class="[ print-fz--large ]">Proveedor</span></label>
+                </div>
             </div>
-        </div>
-        <div class="[ clear ]"></div>
-        <div class="[ col s12 m2 offset-m2 ]"> 
-            <div class="input-field">
-                <input id="company" type="text" name="company" ng-model="company" disabled>
-                <label for="company">Empresa donde se entrega</label>
+        </span>
+        <span class="[ print-col print-col4 ]">
+            <div class="[ col s12 m2 offset-m2 ]">
+                <div class="input-field">
+                    <input id="company" type="text" name="company" ng-model="company" disabled>
+                    <label for="company"><span class="[ print-fz--large ]">Empresa donde se entrega</span></label>
+                </div>
             </div>
-        </div>
-        <div class="[ col s12 m6 ]"> 
-            <div class="input-field">
-                <input id="address-summary" type="text" name="address" ng-model="address" disabled>
-                <label for="address-summary">Dirección</label>
+        </span>
+        <span class="[ print-col print-col12 ]">
+            <div class="[ col s12 m6 ]">
+                <div class="input-field">
+                    <input id="address-summary" type="text" name="address" ng-model="address" disabled>
+                    <label for="address-summary"><span class="[ print-fz--large ]">Dirección</span></label>
+                </div>
             </div>
-        </div>
-        <div class="[ col s12 m4 offset-m2 ]"> 
-            <div class="input-field">
-                <input id="recipient-name" type="text" name="recipientName" ng-model="recipientName" disabled>
-                <label for="recipient-name">Persona que va a recibir</label>
+        </span>
+        <span class="[ print-col print-col6 ]">
+            <div class="[ col s12 m4 offset-m2 ]">
+                <div class="input-field">
+                    <input id="recipient-name" type="text" name="recipientName" ng-model="recipientName" disabled>
+                    <label for="recipient-name"><span class="[ print-fz--large ]">Persona que va a recibir</span></label>
+                </div>
             </div>
-        </div>
-        <div class="[ col s12 m4 ]"> 
-            <div class="input-field">
-                <input id="recipient-phone" type="text" name="recipientPhone" ng-model="recipientPhone" disabled>
-                <label for="recipient-phone">Teléfono de quien va a recibir</label>
+        </span>
+        <span class="[ print-col print-col6 ]">
+            <div class="[ col s12 m4 ]">
+                <div class="input-field">
+                    <input id="recipient-phone" type="text" name="recipientPhone" ng-model="recipientPhone" disabled>
+                    <label for="recipient-phone"><span class="[ print-fz--large ]">Teléfono de quien va a recibir</span></label>
+                </div>
             </div>
-        </div>
-        <div class="[ col s12 m8 offset-m2 ]"> 
+        </span>
+        <div class="[ col s12 m8 offset-m2 ][ print-col print-col12 ]">
             <div class="input-field">
                 <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments" disabled></textarea>
-                <label for="textarea1">Observaciones adicionales</label>
+                <label for="textarea1"><span class="[ print-fz--large ]">Observaciones adicionales</span></label>
             </div>
         </div>
         <h4 class="[ center-align ][ mb-20 ]">Artículos a enviar</h4>
-        <div class="[ col s12 m8 offset-m2 ]"> 
+        <div class="[ col s12 m8 offset-m2 ]">
             <table datatable="ng" dt-options="dtDeliverySummaryOptions" dt-column-defs="dtDeliverySummaryColumnDefs" class="row-border hover">
                 <thead>
                     <tr>
@@ -171,7 +182,7 @@
             </table>
         </div>
         <div class="[ clear ]"></div>
-        <div class="[ center ][ col s12 ]">
+        <div class="[ center ][ col s12 ][ print-hidden ]">
             <a class="[ waves-effect ][ btn btn-extra ]" href="#/delivery-dashboard"><i class="fa fa-arrow-left left"></i>Ver todos los envíos</a>
             <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión envío</button>
         </div>
@@ -179,5 +190,5 @@
 </div>
 
 <script>
-    $('[data-parsley-validate]').parsley();    
+    $('[data-parsley-validate]').parsley();
 </script>
