@@ -83,7 +83,7 @@ conAngular
                 }
                 WarehouseService.locateItem( $scope.item.id, this.selectedLocation, this.units, quantity, true, $scope.item.actable_type, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
-                    $state.go('/wh-dashboard', {}, { reload: true });
+                   $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
                 });
                 return;
             }
@@ -100,13 +100,13 @@ conAngular
                 }); 
                 WarehouseService.locateBundle( $scope.item.id, partsLocation, $scope.parts.length, true, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
-                    $state.go('/wh-dashboard', {}, { reload: true });
+                   $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
                 });
                 return;
             }
             WarehouseService.locateBulk( $scope.item.id, $scope.bulkLocations, true, function( response ) {
                 Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
-                $state.go('/wh-dashboard', {}, { reload: true });
+               $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
             });
 
         }// addToLocation

@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="[ col s6 m4 ][ mt-10 ]"> 
-            <select name="itemState" ng-model="item.state" required>
+            <select id="unit-item-state" name="itemState" ng-model="item.state" required>
                 <option value="" disabled selected>Estado</option>
                 <option value="1" selected>Nuevo</option>
                 <option value="2" selected>Como nuevo</option>
@@ -89,7 +89,6 @@
                 <option value="" disabled selected>Selecciona el PM</option>
                 <option 
                     ng:repeat="user in projectManagers" 
-                    ng-selected="{{user.id == item.pm_id }}"
                     value="{{user.id}}">{{user.name}}</option>
             </select>
         </div>

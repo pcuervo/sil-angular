@@ -177,22 +177,30 @@ conAngular
                 getItem( $stateParams.itemId );
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
                     if( 'inventory-item/templates/edit-unit-item.html' == template || 'inventory-item/templates/edit-bulk-item.html' == template || 'inventory-item/templates/edit-bundle-item.html' == template ){
+                        
                         $('.js-barcode').JsBarcode( $scope.item.barcode );
                         $('[name="storageType"]').val( $scope.item.storage_type );
                         $('[name="itemType"]').val( $scope.item.item_type );
-                        getItemState( $scope.item.state );
-
+                        $scope.item.state = String( $scope.item.state );
+                        $scope.item.pm_id = String( $scope.item.pm_id );
                         if( 0 == $scope.item.value ) {
                             $scope.item.value = '';
                         } 
+                        // try{
+                        //     initInventoryDataTable();
+                        // }
+                        // catch(err){
+                        //     console.log(err);
+                        //     location.reload();
+                        // }
+                        // break;
                     }
                 });
-
+                return;
             }
 
             switch( currentPath ){
                 case '/my-inventory':
-                    LoaderHelper.showLoader( 'Obteniendo inventario...' );
                     if( 1 === $scope.role || 4 === $scope.role   ) {
                         fetchProjectManagers();
                         fetchAccountExecutives();
@@ -201,7 +209,7 @@ conAngular
                     if( 6 === $scope.role ) {
                         $scope.selectedClient = $rootScope.globals.currentUser.id;
                     }
-                    fetchInventory();
+                    //fetchInventory();
                     fetchProjects();
                     fetchStatuses();
                     // TODO: FIX TEMPORAL, DATATABLES NO CARGA BIEN 
@@ -284,10 +292,10 @@ conAngular
                     return;
                 }
                 $scope.item = item;
+                initItem( item );
                 fillProjectUsersSelects( item.project_id );
 
-                initItem( item );
-                //console.log( item );
+                console.log( item );
                 
                 if( 'BundleItem' == item.actable_type ){
                     initItemPartsDataTable();
@@ -298,6 +306,7 @@ conAngular
                     $scope.quantity = item.quantity;
                     $scope.itemQuantity = item.quantity;
                 }
+
             });
         }// getItem
 
@@ -305,6 +314,8 @@ conAngular
             $scope.project = item.project;
             $scope.pm = item.pm;
             $scope.ae = item.ae;
+            $scope.pm_id = item.pm_id;
+            $scope.ae_id = item.ae_id;
             $scope.clientName = item.client;
             $scope.clientContact = item.client_contact;
             $scope.description = item.description;
@@ -320,7 +331,6 @@ conAngular
                 $scope.hasLocations = 1;
                 initItemLocationsDataTable();
             }
-            console.log('done init item');
         }// initItem
 
         function fetchProjects(){
@@ -359,7 +369,7 @@ conAngular
             });
         }
 
-        function fetchNewNotifications(){
+        function fetchNewNotifications(){   
             NotificationService.getNumUnread( function( numUnreadNotifications ){
                 NotificationHelper.updateNotifications( numUnreadNotifications );
             });
@@ -473,7 +483,6 @@ conAngular
                 if( $scope.accountExecutives.length == 0 && 3!= $scope.role  ){
                     Materialize.toast('El proyecto que seleccionaste no tiene Ejecutivos de Cuenta relacionados.', 6000, 'red');
                 }
-                console.log('done pms and aes');
             });
         }// fillProjectUsersSelects
 

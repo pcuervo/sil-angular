@@ -151,7 +151,6 @@ conAngular
         }// initProjectDataTable
 
         function initProjectUsersDataTable(){
-
             $scope.dtProjectUsersOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(20)
@@ -163,7 +162,6 @@ conAngular
                 DTColumnDefBuilder.newColumnDef(2).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
-
         }// initProjectUsersDataTable
 
         function getProject( id ){

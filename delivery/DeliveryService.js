@@ -14,6 +14,7 @@ conAngular
         service.pendingRequestsByUser = pendingRequestsByUser;
         service.getRequest = getRequest;
         service.approveRequest = approveRequest;
+        service.byDeliveryMan = byDeliveryMan;
         return service;
 
 
@@ -218,5 +219,15 @@ conAngular
                });
         }// approveRequest
 
+        function byDeliveryMan( callback ){
+            var serviceUrl = $rootScope.apiUrl + 'deliveries/by_delivery_man';
+            $http.post(serviceUrl, {})
+               .success(function ( response ) {
+                    callback( response.deliveries );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// byDeliveryMan
     }]);
 

@@ -195,6 +195,14 @@ conAngular
             });
         }
 
+        $scope.removeItemToDeliver = function( itemId ){
+            var itemToRemove = $('[data-id="' + itemId + '"]')
+            var itemName = itemToRemove.data('name');
+            $('#check-'+itemId).attr('checked', false);
+            itemToRemove.remove();
+            Materialize.toast( 'Se quitó el artículo "' + itemName + '" de la lista de artículos a retirar.', 4000, 'red');
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -205,7 +213,7 @@ conAngular
                 getDeliveryRequest( $stateParams.requestId );
                 fetchDeliveryUsers();
                 fetchSuppliers();
-                //initDeliverySummaryDataTable();
+                initDeliverySummaryDataTable();
                 return;
             }
 
@@ -234,6 +242,7 @@ conAngular
             switch( currentPath ){
                 case '/multiple-items-delivery':
                     LoaderHelper.showLoader( 'Obteniendo inventario...' );
+                    initItemsWithdrawal();
                     fetchItemsInStock();
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
@@ -258,8 +267,14 @@ conAngular
                     }else{
                         fetchPendingDeliveries();
                     }
-                    fetchLatestDeliveries();
-                    fetchStats();
+                    if( 5 == $scope.role ){
+                        fetchByDeliveryMan( $rootScope.globals.currentUser.id );
+                    }else{
+                        fetchLatestDeliveries();
+                        fetchStats();
+                    }
+                    
+                    
                     break;
                 case '/pending-deliveries':
                     if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
@@ -276,6 +291,7 @@ conAngular
                     }else{
                         fetchItemsInStock();
                     }
+                    initItemsWithdrawal();
                     initDeliveryDataTable();
                     initGeoAutocomplete( '#address', '#map', 19.397260, -99.186684, 12 );
                     $scope.deliveryDate = new Date();
@@ -314,7 +330,8 @@ conAngular
                 .withDOM('riftp')
                 .withOption('responsive', true)
                 .withOption('order', [])
-                .withOption('searching', false);
+                .withOption('select', true)
+                .withOption('searching', true);
             $scope.dtDeliveryColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
@@ -401,7 +418,7 @@ conAngular
                 console.log( delivery );
                 $scope.supplier = delivery.supplier;
                 initGeoAutocomplete( '#address', '#map', delivery.latitude, delivery.longitude, 15 );
-                 $(document).on('change', '#deliveryImg', function(){ 
+                $(document).on('change', '#deliveryImg', function(){ 
                     getDeliveryImg();
                 });
             });
@@ -429,18 +446,29 @@ conAngular
         }// fetchDeliveryUsers
 
         function getSelectedDeliveryItems(){
-            var id, type, quantity, item, items = [];
-            $('input[type="checkbox"]:checked').each( function(i, itemCheckbox){
+            // var id, type, quantity, item, items = [];
+            // $('input[type="checkbox"]:checked').each( function(i, itemCheckbox){
+            //     item = {};
+            //     id = $(itemCheckbox).val();
+
+            //     if( 0 == parseInt( $('#quantity-'+id).val() ) ) return 0;
+
+            //     item['item_id'] = id;
+            //     item['actable_type'] = $('#actable-type-'+id).val();
+            //     item['quantity'] = $('#quantity-'+id).val();
+            //     item['name'] = $('#item-name-'+id).html();
+            //     item['item_type'] = $('#item-type-'+id).html();
+            //     items.push( item );
+            // });
+            // return items;
+            var items = []
+            $('.js-added-items div').each(function(i, addedItem){
                 item = {};
-                id = $(itemCheckbox).val();
-
-                if( 0 == parseInt( $('#quantity-'+id).val() ) ) return 0;
-
-                item['item_id'] = id;
-                item['actable_type'] = $('#actable-type-'+id).val();
-                item['quantity'] = $('#quantity-'+id).val();
-                item['name'] = $('#item-name-'+id).html();
-                item['item_type'] = $('#item-type-'+id).html();
+                item['id'] = $(addedItem).data('id');
+                item['item_id'] = $(addedItem).data('id');
+                item['name'] = $(addedItem).data('name');
+                item['serial_number'] = $(addedItem).data('serial-number');
+                item['quantity'] = $(addedItem).data('quantity');
                 items.push( item );
             });
             return items;
@@ -499,10 +527,15 @@ conAngular
 
         function fetchLatestDeliveries(){
             DeliveryService.all( $scope.role, function( deliveries ){
-                console.log(deliveries)
                 $scope.latestDeliveries = deliveries;
             });
         }// fetchLatestDeliveries
+
+        function fetchByDeliveryMan(){
+            DeliveryService.byDeliveryMan( function( deliveries ){
+                $scope.latestDeliveries = deliveries;
+            });
+        }// fetchByDeliveryMan
 
         function getDeliveryImg(){
             var imgId = 'deliveryImg';
@@ -565,5 +598,38 @@ conAngular
                 $scope.suppliers = suppliers;
             });
         }// fetchSuppliers
+
+        function initItemsWithdrawal(){
+            $(document).click('input[type="checkbox"]', function(e){
+                var target = $( e.target );
+                if ( ! target.is( ":checkbox" ) ) return; 
+        
+                var itemId = target.val();
+                if( ! target.is(':checked') ){
+                    $scope.removeItemToDeliver( itemId );
+                } else {
+                    addItemToDeliver( itemId );
+                }
+            });
+
+            $('.js-added-items').click('a', function(e){
+                e.preventDefault();
+                var target = $( e.target );
+                if ( ! target.is( "a" ) ) return; 
+
+                itemId = e.target.id.replace('remove-', '');
+                $scope.removeItemToDeliver( itemId );
+            });
+        }
+
+        function addItemToDeliver( itemId ){
+            console.log( 'adding item: ' + itemId );
+            var itemName = $( '#name-'+itemId ).text();
+            var itemSerialNumber = $( '#serial-number-'+itemId ).text();
+            var itemQuantity = $( '#quantity-'+itemId ).val();
+            var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '"><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m5 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><p class="[ col s12 m2 ]"><a id="remove-' + itemId + '" href="#" ng-click="removeItemToDeliver( ' + itemId + ' )" class="[ btn red ]"><i class="[ fa fa-times ]"></i></a></p><hr></div>';
+            $('.js-added-items').append( itemHtml );
+            Materialize.toast( 'Se agregó el artículo "' + itemName + '" a lista de artículos a retirar.', 4000, 'green');
+        }
 
 }]);

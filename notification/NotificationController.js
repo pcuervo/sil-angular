@@ -24,7 +24,6 @@ conAngular.controller('NotificationController', ['$scope', '$rootScope', '$state
 
     $scope.getNotificationUrl = function( title, id ){
         var url;
-        console.log( title );
         switch( title ){
             case 'Solicitud de entrada':
             case 'Solicitud de entrada rechazada':
@@ -42,6 +41,15 @@ conAngular.controller('NotificationController', ['$scope', '$rootScope', '$state
                 break;
             case 'Aprobación de salida':
                 url = '#/check-out';
+                break;
+            case 'Nuevo envío':
+                url = '#/delivery-dashboard';
+                break;
+            case 'Envío rechazado':
+                url = '#/delivery-dashboard';
+                break;
+            case 'Envío entregado':
+                url = '#/delivery-dashboard';
                 break;
             default:
                 url = '#/view-item/'+id;

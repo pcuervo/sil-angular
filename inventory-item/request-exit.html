@@ -5,6 +5,35 @@
     <h4 class="[ center-align ]">Solicitud de salida</h4>
     <div class="[ row ]">
         <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="requestWithdrawal()" data-parsley-entry>
+            <div class="[ col s12 m5 offset-m1 ][ mt-20 ]"> 
+                <select name="pickupCompany" ng-model="pickupCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                    <option value="" disabled selected>Selecciona el proveedor</option>
+                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m5  ]">    
+                <label class="[ fs-12 ]" for="">Fecha de salida (mm/dd/aaaa)</label>
+                <input class="datepicker" type="date" name="exitDate" ng-model="exitDate" required>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]"> 
+                <h4 class="[ center-align ]">Artículos a retirar</h4>
+                <div class="[ withdraw-items-titles ][ row ]">
+                    <p class="[ col s12 m3 ]">Nombre</p>
+                    <p class="[ col s12 m5 ]">Número de serie</p>
+                    <p class="[ col s12 m2 ]">Cantidad</p>
+                    <p class="[ col s12 m2 ]">Eliminar</p>
+                </div>
+                <div class="[ js-added-items ][ row ]">
+                    
+                </div>
+            </div>
+            <div class="[ col s12 ]"> 
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]" >Solicitar salida</button>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
             <table datatable="ng" dt-options="dtMultipleWithdrawalOptions" dt-column-defs="dtMultipleWithdrawalColumnDefs" class="[ row-border hover ]" >
                 <thead>
                     <tr>
@@ -41,23 +70,6 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="[ clear ]"></div>
-            <div class="[ col s12 m5 offset-m1 ][ mt-20 ]"> 
-                <select name="pickupCompany" ng-model="pickupCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
-                    <option value="" disabled selected>Selecciona el proveedor</option>
-                    <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
-                </select>
-            </div>
-            <div class="[ col s12 m5  ]">    
-                <label class="[ fs-12 ]" for="">Fecha de salida (mm/dd/aaaa)</label>
-                <input class="datepicker" type="date" name="exitDate" ng-model="exitDate" required>
-            </div>
-            <div class="[ clear ]"></div>
-            <div class="[ col s12 ]"> 
-                <div class="[ center-align ]">
-                    <button class="[ waves-effect ][ btn ]" >Solicitar salida</button>
-                </div>
-            </div>
         </form>
     </div><!-- row -->
 </div><!-- step 1 Captura -->

@@ -26,7 +26,7 @@
             <li class="active">
                 <a href="#/dashboard" class="waves-effect waves-blue"><i class="fa fa-dashboard"></i> Dashboard {{roleName}}</a>
             </li>
-            <li>
+            <li ng-if="( role != 5 )">
                 <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-th"></i> Inventario<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
                 <ul>
                     <li><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Ver movimientos</a>

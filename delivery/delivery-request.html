@@ -2,42 +2,6 @@
     <div class="[ row ]">
         <h4 class="[ center-align ]">Inventario en existencia</h4>
         <form ng-submit="requestDelivery()" data-parsley-validate>
-            <table datatable="ng" dt-options="dtDeliveryItemsOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
-                <thead>
-                    <tr>
-                        <th class="[ center-align ]">Tipo</th>
-                        <th class="[ center-align ]">Img</th>
-                        <th class="[ center-align ]">Nombre</th>
-                        <th class="[ center-align ]">Número de serie</th>
-                        <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
-                        <th class="[ center-align ]">Cantidad</th>
-                        <th class="[ center-align ]">¿Agregar a envío?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="i in inventoryItems">
-                        <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
-                        <td><img ng-src="{{ i.img }}" alt="{{i.name}}"></td>
-                        <td id="item-name-{{i.id}}">{{ i.name + ' ' + i.model }}</td>
-                        <td id="item-type-{{i.id}}" class="[ center-align ]">{{ i.serial_number }}</td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ i.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
-                        <td class="[ center-align ]"><div class="[ input-field ]">
-                            <div class="[ input-field ]">
-                                <input type="text" id="quantity-{{i.id}}" value="{{ i.quantity }}" name="item_quantity" ng-readonly="'BulkItem' != i.actable_type" />
-                                <label for="quantity-{{i.id}}"></label>
-                            </div>
-                        </td>
-                        <td class="[ center-align ]">
-                            <div class="[ input-field ]">
-                                <input class="[ filled-in ]" type="checkbox" id="{{i.id}}" value="{{i.id}}" name="item_id" />
-                                <label for="{{i.id}}"></label>
-                            </div>
-                        </td>
-                        <input id="actable-type-{{i.id}}" type="hidden" value="{{i.actable_type}}">
-                    </tr>
-                </tbody>
-            </table>
-            <div class="[ clear ]"></div>
             <h4 class="[ center-align ]">Datos de envío</h4>
             <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
@@ -84,9 +48,56 @@
                     <label for="textarea1">Observaciones adicionales</label>
                 </div>
             </div>
+            <div class="[ col s12 ]"> 
+                <h4 class="[ center-align ]">Artículos a enviar</h4>
+                <div class="[ withdraw-items-titles ][ row ]">
+                    <p class="[ col s12 m3 ]">Nombre</p>
+                    <p class="[ col s12 m5 ]">Número de serie</p>
+                    <p class="[ col s12 m2 ]">Cantidad</p>
+                    <p class="[ col s12 m2 ]">Eliminar</p>
+                </div>
+                <div class="[ js-added-items ][ row ]">
+                    
+                </div>
+            </div>
             <div class="[ col s12 ][ center-align ]" >
                 <button class="[ waves-effect ][ btn red ]">Enviar</button>
             </div>
+            <table datatable="ng" dt-options="dtDeliveryItemsOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th class="[ center-align ]">Tipo</th>
+                        <th class="[ center-align ]">Img</th>
+                        <th class="[ center-align ]">Nombre</th>
+                        <th class="[ center-align ]">Número de serie</th>
+                        <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
+                        <th class="[ center-align ]">Cantidad</th>
+                        <th class="[ center-align ]">¿Agregar a envío?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="i in inventoryItems">
+                        <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
+                        <td><img ng-src="{{ i.img }}" alt="{{i.name}}"></td>
+                        <td id="name-{{i.id}}">{{ i.name + ' ' + i.model }}</td>
+                        <td id="serial-number-{{i.id}}" class="[ center-align ]">{{ i.serial_number }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ i.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
+                        <td class="[ center-align ]"><div class="[ input-field ]">
+                            <div class="[ input-field ]">
+                                <input type="text" id="quantity-{{i.id}}" value="{{ i.quantity }}" name="item_quantity" ng-readonly="'BulkItem' != i.actable_type" />
+                                <label for="quantity-{{i.id}}"></label>
+                            </div>
+                        </td>
+                        <td class="[ center-align ]">
+                            <div class="[ input-field ]">
+                                <input class="[ filled-in ]" type="checkbox" id="{{i.id}}" value="{{i.id}}" name="item_id" />
+                                <label for="{{i.id}}"></label>
+                            </div>
+                        </td>
+                        <input id="actable-type-{{i.id}}" type="hidden" value="{{i.actable_type}}">
+                    </tr>
+                </tbody>
+            </table>
         </form>
     </div>
 </div>

@@ -29,13 +29,13 @@
             </div>
             <div class="[ col s12 m2 offset-m2 ]"> 
                 <div class="input-field">
-                    <input id="company" type="text" name="company" ng-model="company" required ng-readonly="role == 2 || role == 3 || role == 6">
+                    <input id="company" type="text" name="company" ng-model="company" required ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="company">Empresa donde se entrega</label>
                 </div>
             </div>
             <div class="[ col s12 m6  ]"> 
                 <div class="input-field">
-                    <input id="address" type="text" name="address" ng-model="address" ng-readonly="role == 2 || role == 3 || role == 6">
+                    <input id="address" type="text" name="address" ng-model="address" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="address">Dirección</label>
                 </div>
             </div>
@@ -44,19 +44,19 @@
             </div>
             <div class="[ col s12 m4 offset-m2 ]"> 
                 <div class="input-field">
-                    <input id="recipient-name" type="text" name="addressee" ng-model="addressee" ng-readonly="role == 2 || role == 3 || role == 6">
+                    <input id="recipient-name" type="text" name="addressee" ng-model="addressee" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="recipient-name">Persona que va a recibir</label>
                 </div>
             </div>
             <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
-                    <input id="recipient-phone" type="text" name="addresseePhone" ng-model="addresseePhone" ng-readonly="role == 2 || role == 3 || role == 6">
+                    <input id="recipient-phone" type="text" name="addresseePhone" ng-model="addresseePhone" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="recipient-phone">Teléfono de quien va a recibir</label>
                 </div>
             </div>
             <div class="[ col s12 m8 offset-m2 ]"> 
                 <div class="input-field">
-                    <textarea id="textarea1" class="materialize-textarea" ng-model="delivery.additional_comments" ng-readonly="role == 2 || role == 3 || role == 6" ></textarea>
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="delivery.additional_comments" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3" ></textarea>
                     <label for="textarea1">Observaciones adicionales</label>
                 </div>
             </div>

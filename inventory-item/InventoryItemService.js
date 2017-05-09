@@ -217,6 +217,7 @@ conAngular
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/' + id;
             $http.get ( serviceUrl )
                .success(function ( response ) {
+                    console.log( response );
                     callback( response.inventory_item );
                })
                .error(function ( response ) {

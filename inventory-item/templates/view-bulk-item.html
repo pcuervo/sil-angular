@@ -3,10 +3,10 @@
     <div class="[ col s12 ]"> 
         <div class="[ center-align ]">
             <a href="#/edit-item/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="1 == role || 4 == role"><i class="[ fa fa-edit ][ left ]"></i>Editar</a>
-            <button class="[ waves-effect ][ btn ]" ng-click="printBarcode('#barcode')"><i class="[ fa fa-print ][ left ]"></i> Código de barras</button>
+            <button class="[ waves-effect ][ btn ]" ng-click="printBarcode('#barcode')"  ng-show="1 == role || 4 == role"><i class="[ fa fa-print ][ left ]"></i> Código de barras</button>
             <a href="#/new-delivery/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="1==itemStatus || 3==itemStatus"><i class="[ fa fa-motorcycle ][ left ]"></i>Crear envío</a>
             <a href="#/re-entry/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="2==itemStatus"><i class="[ fa fa-indent ][ left ]"></i>Reingresar</a>
-            <a href="#/locate-item/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="! hasLocations"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar</a>
+            <a href="#/locate-item/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="! hasLocations && ( 1==role || 4==role )"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar</a>
             <button ng-click="deleteItem(item.id)" class="[ waves-effect ][ btn red ]" ng-show="1 == role || 4 == role"><i class="[ fa fa-edit ][ left ]"></i>Eliminar</button>
         </div>
     </div>

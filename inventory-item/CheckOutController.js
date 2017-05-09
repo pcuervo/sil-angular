@@ -84,15 +84,16 @@ conAngular
 
         $scope.multipleWithdrawal = function(){
             $scope.withdrawnItems = getItemsToWithdraw();
+            //return;
             if( 0 == $scope.withdrawnItems ){
                 Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
                 return;
             }
+            console.log( $scope.withdrawnItems );
             InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
                 Materialize.toast( response.success, 4000, 'green');
                 $scope.isSummary = true;
                 $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
-                //$state.go('/check-out', {}, { reload: true });
             });
         }
 
@@ -126,6 +127,14 @@ conAngular
             });
         }
 
+        $scope.removeItemToWithdraw = function( itemId ){
+            var itemToRemove = $('[data-id="' + itemId + '"]')
+            var itemName = itemToRemove.data('name');
+            $('#check-'+itemId).attr('checked', false);
+            itemToRemove.remove();
+            Materialize.toast( 'Se quitó el artículo "' + itemName + '" de la lista de artículos a retirar.', 4000, 'red');
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -133,6 +142,8 @@ conAngular
         function initWithdrawalOptions( currentPath ){
 
             if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
+                initItemsWithdrawal();
+                
                 LoaderHelper.showLoader('Obteniendo artículos en existencia...');
                 fetchItemsInStock();
                 initMultipleWithdrawalDataTable();
@@ -141,7 +152,8 @@ conAngular
                 angular.element('body').on('search.dt', function() {  
                    var searchTerm = document.querySelector('.dataTables_filter input').value;
                    console.log('dataTables search : ' + searchTerm); 
-                })
+                });
+
                 return;
             }
 
@@ -178,6 +190,7 @@ conAngular
                     }else{
                         fetchItemsInStock();
                     }
+                    initItemsWithdrawal();
                     initMultipleWithdrawalDataTable();
                     fetchSuppliers();
                     $scope.exitDate = new Date();
@@ -370,13 +383,13 @@ conAngular
 
         function getItemsToWithdraw(){
             var items = []
-            $('input[type="checkbox"]:checked').each( function(i, partCheckbox){
+            $('.js-added-items div').each(function(i, addedItem){
                 item = {};
-                item['id'] = $(partCheckbox).val();
-                item['inventory_item_id'] = $(partCheckbox).val();
-                item['name'] = $( '#name-'+item['id'] ).text();
-                item['serial_number'] = $( '#serial-number-'+item['id'] ).text();
-                item['quantity'] = $( '#quantity-'+item['id'] ).val();
+                item['id'] = $(addedItem).data('id');
+                item['inventory_item_id'] = $(addedItem).data('id');
+                item['name'] = $(addedItem).data('name');
+                item['serial_number'] = $(addedItem).data('serial-number');
+                item['quantity'] = $(addedItem).data('quantity');
                 items.push( item );
             });
             return items;
@@ -553,4 +566,37 @@ conAngular
                 // getWithdrawState( item.state );
             });
         }// getWithdrawRequest
+
+        function addItemToWithdraw( itemId ){
+            console.log( 'adding item: ' + itemId );
+            var itemName = $( '#name-'+itemId ).text();
+            var itemSerialNumber = $( '#serial-number-'+itemId ).text();
+            var itemQuantity = $( '#quantity-'+itemId ).val();
+            var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '"><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m5 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><a id="remove-' + itemId + '" href="#" ng-click="removeItemToWithdraw( ' + itemId + ' )" class="[ btn red ][ col s12 m2 ]"><i class="[ fa fa-times ]"></i></a><hr></div>';
+            $('.js-added-items').append( itemHtml );
+            Materialize.toast( 'Se agregó el artículo "' + itemName + '" a lista de artículos a retirar.', 4000, 'green');
+        }
+
+        function initItemsWithdrawal(){
+            $(document).click('input[type="checkbox"]', function(e){
+                var target = $( e.target );
+                if ( ! target.is( "input" ) ) return; 
+        
+                var itemId = target.val();
+                if( ! target.is(':checked') ){
+                    $scope.removeItemToWithdraw( itemId );
+                } else {
+                    addItemToWithdraw( itemId );
+                }
+            });
+
+            $('.js-added-items').click('a', function(e){
+                e.preventDefault();
+                var target = $( e.target );
+                if ( ! target.is( "a" ) ) return; 
+
+                itemId = e.target.id.replace('remove-', '');
+                $scope.removeItemToWithdraw( itemId );
+            });
+        }
 }]);

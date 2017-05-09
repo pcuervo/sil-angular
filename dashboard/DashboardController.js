@@ -75,6 +75,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
                 initDashboardWarehouseAdmin();
                 break;
             case 5:
+                $state.go('/delivery-dashboard', {}, { reload: true });
                 break;
             default:
                 initDashboardClient();
