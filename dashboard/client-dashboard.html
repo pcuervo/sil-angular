@@ -1,19 +1,33 @@
 
 <div class="row">
-	<div class="[ col m6 s12 ]">
+<!-- 	<div class="[ col m6 s12 ]">
 		<div class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
 			<i class="fa fa-dollar"></i>
 			<span class="[ count ]">${{ currentRent }}</span>
 			<div class="name">Renta mensual actual</div>
 		</div>
-	</div>
-	<div class="[ col m6 s12 ]">
+	</div> -->
+    <div class="[ col m6 s12 ]">
+        <div class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
+            <i class="fa fa-briefcase"></i>
+            <span class="[ count ]">{{ client_contact.client.name }}</span>
+            <div class="name">Cliente</div>
+        </div>
+    </div>
+    <div class="[ col m6 s12 ]">
+        <div class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
+            <i class="fa fa-th"></i>
+            <span class="[ count ]">{{ stats.total_number_items }}</span>
+            <div class="name">Artículos en inventario</div>
+        </div>
+    </div>
+<!-- 	<div class="[ col m6 s12 ]">
 		<div class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
 			<i class="ion-pound"></i>
 			<span class="[ count ]">22</span>
 			<div class="name">Ubicaciones ocupadas</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="[ col m6 s12 ]"> 
         <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/request-exit"><i class="[ fa fa-outdent ][ left ]"></i>Programar Salida</a>
     </div>
@@ -23,18 +37,7 @@
 </div>
 
 <div class="row">
-    <div class="col s12 l6">
-        <div class="card">
-            <div class="title">
-                <h5>Historial de renta</h5>
-            </div>
-            <div class="content">
-                <flot dataset="monthlySpaceData" options="monthlySpaceOpts" style="display: block; height: 300px" ng-show="hasInventory"></flot>
-                <p ng-show="!hasInventory">No hay artículos en tu inventarios por el momento.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col s12 m6 l3">
+    <div class="col s12 m6">
         <div class="card">
             <div class="title">
                 <h5>Inventario por tipo</h5>
@@ -45,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="col s12 m6 l3">
+    <div class="col s12 m6">
         <div class="card">
             <div class="title">
                 <h5>Alto Valor vs. Otros</h5>
@@ -64,21 +67,21 @@
         <thead>
             <tr>
                 <th class="[ center-align ]">¿Quién solicita?</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Empresa donde se entrega</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Dirección</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Proveedor que recoge</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Número de artículos</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrega solicitada</th>
-                <th class="[ center-align ]">Ver</th>
+                <th class="[ center-align ]">Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="d in pendingDeliveries">
-                <td class="[ center-align ]">{{ d.user.first_name + ' ' + d.user.last_name }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.company }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.address }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ d.delivery_request_items.length }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ d.date_time | date:'dd/MM/yyyy' }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/view-delivery-request/{{ d.id }}"><i class="[ fa fa-indent ]"></i></a></td>
+            <tr ng-repeat="w in withdrawRequests">
+                <td class="[ center-align ]">{{ w.user.first_name + ' ' + w.user.last_name }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ w.pickup_company }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ w.withdraw_request_items.length }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ w.exit_date | date:'dd/MM/yyyy' }}</td>
+                <td class="[ center-align ]">
+                    <button class="[ btn waves-effect red ]" ng-click="cancelWithdrawalRequest( w.id )"><i class="[ fa fa-times ]"></i></button>
+                </td>
             </tr>
         </tbody>
     </table>

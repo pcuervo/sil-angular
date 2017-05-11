@@ -85,24 +85,25 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
     function initDashboardClient(){
         $scope.dashboardTemplate = 'dashboard/client-dashboard.html';
 
-        ClientService.getClient( $rootScope.globals.currentUser.id, function( client){
-            console.log( client );
+        ClientService.getClient( $rootScope.globals.currentUser.id, function( client_contact ){
+            $scope.client_contact = client_contact;
         } )
 
         $scope.hasInventory = true;
+        $scope.inventoryByHighValue = [];
+        $scope.inventoryByHighValueOpts = {};
         $scope.inventoryByItemData = [];
         $scope.inventoryByItemOpts = {};
         $scope.monthlySpaceData = [];
         $scope.monthlySpaceOpts = {};
         addMonthlySpaceTooltip();
 
-        initChartInventoryByHighValue( 1, 1 );
         ClientService.stats( $rootScope.globals.currentUser.id, function( stats ){
-            console.log( stats.inventory_by_type );
+            console.log( stats );
             $scope.stats = stats;
 
             if( Object.keys( stats.inventory_by_type ).length != 0 ){
-                $scope.hasInventory = false;
+                //$scope.hasInventory = false;
                 initChartInventoryByItemType( stats.inventory_by_type );
             }
             initChartMonthlyRent( stats.rent_by_month );
@@ -172,7 +173,6 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
         initPendingWithdrawalRequestsDataTable();
         
         InventoryItemService.getStatsPM( function( stats ){
-            console.log( stats );
             $scope.totalInventory = stats.total_number_items;
             $scope.currentRent = stats.current_rent;
             $scope.numberProjects = stats.total_number_projects;
@@ -410,7 +410,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
 
     function fetchClientWithdrawRequests( clientId ){
         ClientService.getWithdrawRequests( clientId, function( withdrawRequests ){
-            console.log( withdrawRequests );
+            console.log( withdrawRequests)
             $scope.withdrawRequests = withdrawRequests;
         }); 
     }// fetchClientWithdrawRequests
@@ -435,7 +435,8 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
     }
 
     function initChartInventoryByHighValue( totalNumberItems, highValueItems ){
-        console.log(totalNumberItems - highValueItems );
+        console.log(totalNumberItems );
+        console.log( highValueItems );
         $scope.inventoryByHighValue = []
         var highValueObj = { label: 'Alto Valor', data: highValueItems };
         var otherObj = { label: 'Otros', data: totalNumberItems - highValueItems };
