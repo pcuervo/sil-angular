@@ -160,6 +160,7 @@ conAngular
 
         function initInventory( currentPath ){
             $scope.role = $rootScope.globals.currentUser.role;
+            console.log( $scope.role );
             if( currentPath.indexOf( '/view-item' ) > -1 ){
                 getItem( $stateParams.itemId );
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
