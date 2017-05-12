@@ -208,9 +208,11 @@ conAngular
                         fetchClientContacts();
                     }
                     if( 6 === $scope.role ) {
+                        LoaderHelper.showLoader('Cargando inventario...');
                         $scope.selectedClient = $rootScope.globals.currentUser.id;
+                        fetchInventory();
                     }
-                    //fetchInventory();
+
                     fetchProjects();
                     fetchStatuses();
                     // TODO: FIX TEMPORAL, DATATABLES NO CARGA BIEN 

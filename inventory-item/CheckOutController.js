@@ -578,7 +578,7 @@ conAngular
         }
 
         function initItemsWithdrawal(){
-            $(document).click('input[type="checkbox"]', function(e){
+            $(document).unbind().on('click', '.withdraw-items input[type="checkbox"]', function(e){
                 var target = $( e.target );
                 if ( ! target.is( "input" ) ) return; 
         

@@ -600,7 +600,7 @@ conAngular
         }// fetchSuppliers
 
         function initItemsWithdrawal(){
-            $(document).click('input[type="checkbox"]', function(e){
+            $(document).unbind().click('input[type="checkbox"]', function(e){
                 var target = $( e.target );
                 if ( ! target.is( ":checkbox" ) ) return; 
         
