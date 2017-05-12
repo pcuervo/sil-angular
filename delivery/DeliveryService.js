@@ -33,19 +33,23 @@ conAngular
                });
         }// get
 
-        function all( role, callback ){
+        function all( role, status, callback ){
             var serviceUrl = $rootScope.apiUrl + 'deliveries/';
             $http ({
                 url: serviceUrl, 
                 method: "GET",
-                params: { recent: true, user_role: role  } 
-                })
-               .success(function ( response ) {
-                    callback( response.deliveries );
-               })
-               .error(function ( response ) {
-                    callback( response );
-               });
+                params: { 
+                    recent: true, 
+                    user_role: role, 
+                    status: status  
+                } 
+            })
+           .success(function ( response ) {
+                callback( response.deliveries );
+           })
+           .error(function ( response ) {
+                callback( response );
+           });
         }// all
 
         function create( userId, deliveryUserId, company, address, latitude, longitude, status, addressee, addresseePhone, additionalComments, deliveryDate, deliveryCompanyId, inventoryItems, callback ) {
@@ -219,9 +223,11 @@ conAngular
                });
         }// approveRequest
 
-        function byDeliveryMan( callback ){
+        function byDeliveryMan( status, callback ){
             var serviceUrl = $rootScope.apiUrl + 'deliveries/by_delivery_man';
-            $http.post(serviceUrl, {})
+            $http.post(serviceUrl, {
+                status: status
+            })
                .success(function ( response ) {
                     callback( response.deliveries );
                })

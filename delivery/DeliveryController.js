@@ -263,14 +263,14 @@ conAngular
                     break;
                 case '/delivery-dashboard':
                     if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
-                        fetchPendingDeliveriesByUser( $rootScope.globals.currentUser.id );
+                        fetchPendingDeliveryRequestsByUser( $rootScope.globals.currentUser.id );
                     }else{
-                        fetchPendingDeliveries();
+                        fetchPendingDeliveryRequests();
                     }
                     if( 5 == $scope.role ){
                         fetchByDeliveryMan( $rootScope.globals.currentUser.id );
                     }else{
-                        fetchLatestDeliveries();
+                        fetchDeliveries();
                         fetchStats();
                     }
                     
@@ -278,9 +278,9 @@ conAngular
                     break;
                 case '/pending-deliveries':
                     if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
-                        fetchPendingDeliveriesByUser( $rootScope.globals.currentUser.id );
+                        fetchPendingDeliveryRequestsByUser( $rootScope.globals.currentUser.id );
                     }else{
-                        fetchPendingDeliveries();
+                        fetchPendingDeliveryRequests();
                     }
                     initPendingDeliveryDataTable();
                     break;
@@ -525,15 +525,22 @@ conAngular
             map.setZoom( zoom );
         }
 
-        function fetchLatestDeliveries(){
-            DeliveryService.all( $scope.role, function( deliveries ){
-                $scope.latestDeliveries = deliveries;
+        function fetchDeliveries(){
+            DeliveryService.all( $scope.role, 'pending', function( deliveries ){
+                $scope.pendingDeliveries = deliveries;
             });
-        }// fetchLatestDeliveries
+            DeliveryService.all( $scope.role, 'completed', function( deliveries ){
+                $scope.completedDeliveries = deliveries;
+            });
+        }// fetchDeliveries
 
         function fetchByDeliveryMan(){
-            DeliveryService.byDeliveryMan( function( deliveries ){
-                $scope.latestDeliveries = deliveries;
+            DeliveryService.byDeliveryMan( 'pending', function( deliveries ){
+                console.log( deliveries )
+                $scope.pendingDeliveries = deliveries;
+            });
+            DeliveryService.byDeliveryMan( 'completed', function( deliveries ){
+                $scope.completedDeliveries = deliveries;
             });
         }// fetchByDeliveryMan
 
@@ -567,17 +574,17 @@ conAngular
             return date;
         }
 
-        function fetchPendingDeliveries(){
+        function fetchPendingDeliveryRequests(){
             DeliveryService.pendingRequests( function( deliveries ){
-                $scope.pendingDeliveries = deliveries;
+                $scope.pendingDeliveryRequests = deliveries;
             });
-        }// fetchPendingDeliveries
+        }// fetchPendingDeliveryRequests
 
-        function fetchPendingDeliveriesByUser( userId ){
+        function fetchPendingDeliveryRequestsByUser( userId ){
             DeliveryService.pendingRequestsByUser( userId, function( deliveries ){
-                $scope.pendingDeliveries = deliveries;
+                $scope.pendingDeliveryRequests = deliveries;
             });
-        }// fetchPendingDeliveriesByUser
+        }// fetchPendingDeliveryRequestsByUser
 
         function initPendingDeliveryDataTable(){
             $scope.dtPendingDeliveryOptions = DTOptionsBuilder.newOptions()
