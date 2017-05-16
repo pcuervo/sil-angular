@@ -61,7 +61,7 @@
 		                <th class="[ center-align ][ hide-on-small-only ]">Project Manager</th>
 		                <th class="[ center-align ][ hide-on-small-only ]">Ejecutivo de Cuenta</th>
 		                <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
-		                <th class="[ center-align ]">Cancelar</th>
+		                <th class="[ center-align ]">Acciones</th>
 		            </tr>
 		        </thead>
 		        <tbody>
@@ -73,6 +73,7 @@
 		                <td class="[ center-align ][ hide-on-small-only ]">{{ item.entry_date | date:'yyyy-MM-dd ' }}</td>
 		                <td class="[ center-align ]">
 		                	<button class="[ btn waves-effect red ]" ng-click="cancelEntryRequest( item.id )"><i class="[ fa fa-times ]"></i></button>
+		                	<a href="#/authorize-entry/{{ item.id }}" class="[ btn waves-effect ]" ><i class="[ fa fa-eye ]"></i></a>
 		                </td>
 		            </tr>
 		        </tbody>
@@ -89,7 +90,7 @@
                 <th class="[ center-align ]">¿Quién solicita?</th>
                 <th class="[ center-align ][ hide-on-med-and-down ]">Número de artículos</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Fecha de salida</th>
-                <th class="[ center-align ]">Cancelar</th>
+                <th class="[ center-align ]">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -99,6 +100,7 @@
                 <td class="[ center-align ][ hide-on-small-only ]">{{ w.exit_date | date:'dd/MM/yyyy' }}</td>
                 <td class="[ center-align ]">
                     <button class="[ btn waves-effect red ]" ng-click="cancelWithdrawalRequest( w.id )"><i class="[ fa fa-times ]"></i></button>
+                    <a href="#/authorize-withdrawal/{{ w.id }}" class="[ btn waves-effect ]" ><i class="[ fa fa-eye ]"></i></a>
                 </td>
             </tr>
         </tbody>
@@ -125,7 +127,7 @@
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.address }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ d.delivery_request_items.length }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ d.date_time | date:'dd/MM/yyyy' }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect green ]" href="#/view-delivery-request/{{ d.id }}"><i class="[ fa fa-eye ]"></i></a></td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-delivery-request/{{ d.id }}"><i class="[ fa fa-eye ]"></i></a></td>
             </tr>
         </tbody>
     </table>

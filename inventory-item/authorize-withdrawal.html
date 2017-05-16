@@ -5,7 +5,7 @@
     <h4 class="[ center-align ]">Autorizar salida</h4>
     <div class="[ row ]">
         <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="authorizeWithdrawal()" data-parsley-entry>
-            <table datatable="ng" dt-options="dtPendingEntryRequestsOptions" dt-column-defs="dtPendingEntryRequestsColumnDefs" class="row-border hover">
+            <table datatable="ng" dt-options="dtAuthorizeWithdrawalsOptions" dt-column-defs="dtAuthorizeWithdrawalsColumnDefs" class="row-border hover">
                 <thead>
                     <tr>
                         <th></th>
@@ -32,26 +32,27 @@
                 <input class="datepicker" type="date" name="exitDate" ng-model="exitDate" ng-readonly="true">
             </div>
             <div class="[ col s12 m4 ][ mt-20 ]"> 
-                <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
+                <select name="deliveryCompany" ng-model="deliveryCompany" required data-parsley-error-message="¡El proveedor es obligatorio!" ng-readonly="1 != role && 4 != role">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
-                    <input id="pickup-contact-unit" type="text" name="pickupCompanyContact" ng-model="pickupCompanyContact">
+                    <input id="pickup-contact-unit" type="text" name="pickupCompanyContact" ng-model="pickupCompanyContact" ng-readonly="1 != role && 4 != role">
                     <label for="pickup-contact-unit">¿Quién se lo lleva?</label>
                 </div>
             </div>
             <div class="[ col s12 ]"> 
                 <div class="input-field">
-                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments" ng-readonly="1 != role && 4 != role"></textarea>
                     <label for="textarea1">Observaciones adicionales</label>
                 </div>
             </div>
             <div class="[ clear ]"></div>
             <div class="[ col s12 ][ center-align ]" >
-                <button class="[ waves-effect ][ btn red ]">Dar salida</button>
+                <button class="[ waves-effect ][ btn ]" ng-show="1 == role || 4 == role">Dar salida</button>
+                <a class="[ btn waves-effect red ]" ng-click="cancelWithdrawalRequest( withdrawRequest.id )"><i class="[ fa fa-times ][ left ]"></i>Cancelar</a>
             </div>
         </form>
     </div><!-- row -->

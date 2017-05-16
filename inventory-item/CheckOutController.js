@@ -103,7 +103,9 @@ conAngular
 
         $scope.requestWithdrawal = function(){
             var items = getItemsToWithdraw();
+            LoaderHelper.showLoader('Solicitando salida...');
             InventoryItemService.requestWithdrawal( items, $scope.exitDate, $scope.pickupCompany, function( withdrawRequest ){
+                LoaderHelper.hideLoader();
                 Materialize.toast( "Has solicitado la salida de " + withdrawRequest.withdraw_request_items.length + " artículo(s). Se le ha enviado una notificación al jefe de almacén.", 4000, 'green');
                 $state.go('/check-out', {}, { reload: true });
             });
@@ -167,6 +169,7 @@ conAngular
             if( currentPath.indexOf( '/authorize-withdrawal' ) > -1 ){
                 fetchSuppliers();
                 getWithdrawRequest( $stateParams.withdrawRequestId );
+                initAuthorizeWithdrawalsDataTable();
                 return;
             }
 
@@ -517,6 +520,20 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initPendingWithdrawalsDataTable
 
+        function initAuthorizeWithdrawalsDataTable(){
+            $scope.dtAuthorizeWithdrawalsOptions = DTOptionsBuilder.newOptions()
+                    .withPaginationType('full_numbers')
+                    .withDisplayLength(20)
+                    .withDOM('it')
+                    .withOption('responsive', true)
+                    .withOption('order', [])
+                    .withOption('searching', false);
+            $scope.dtAuthorizeWithdrawalsColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initAuthorizeWithdrawalsDataTable
+
         function getPendingWithdrawalRequests(){
             InventoryItemService.getPendingWithdrawalRequests( function( withdrawRequests ){
                 $scope.withdrawRequests = withdrawRequests;
@@ -572,7 +589,7 @@ conAngular
             var itemName = $( '#name-'+itemId ).text();
             var itemSerialNumber = $( '#serial-number-'+itemId ).text();
             var itemQuantity = $( '#quantity-'+itemId ).val();
-            var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '"><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m5 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><a id="remove-' + itemId + '" href="#" ng-click="removeItemToWithdraw( ' + itemId + ' )" class="[ btn red ][ col s12 m2 ]"><i class="[ fa fa-times ]"></i></a><hr></div>';
+            var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '"><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m5 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><span class="[ col s12 m2 ]"><a id="remove-' + itemId + '" href="#" ng-click="removeItemToWithdraw( ' + itemId + ' )" class="[ btn red ]"><i class="[ fa fa-times ]"></i></span></a></div><hr>';
             $('.js-added-items').append( itemHtml );
             Materialize.toast( 'Se agregó el artículo "' + itemName + '" a lista de artículos a retirar.', 4000, 'green');
         }

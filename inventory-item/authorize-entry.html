@@ -2,7 +2,8 @@
 
 <div class="[ card-panel ]" ng-if="0 == currentStep">
 
-    <h4 class="[ center-align ]">Autorizar entrada</h4>
+    <h4 class="[ center-align ]" ng-show="1 == role || 4 == role">Autorizar entrada</h4>
+    <h4 class="[ center-align ]" ng-show="1 != role && 4 != role">Solicitud de entrada</h4>
     <div class="[ row ]">
         <form name="entry_form" class="[ mt-40 ][ left-align ]" data-parsley-entry>
             <div class="[ col s12 m3 offset-m1 ]" >
@@ -77,7 +78,7 @@
                 <input class="datepicker" type="date" name="expirationDate" ng-model="validityExpirationDate" ng-readonly="true">
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]" ng-show="1 == role || 4 == role"> 
                 <div class="[ center-align ]">
                     <p class="[ center-align ]">Selecciona el tipo de entrada:</p>
                     <button class="[ waves-effect ][ btn ]" ng-click="setRequestType( 'UnitItem' )"><i class="[ fa fa-square ][ left ]" ></i>Unitaria</button>
