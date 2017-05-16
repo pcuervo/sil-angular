@@ -518,7 +518,8 @@ conAngular
                 markerOptions: {
                     position: latLng,
                     map: "mapId"
-                }
+                },
+                componentRestrictions: {country: 'mx' }
             });
             var map = $(addressId).geocomplete("map");
             map.setCenter( latLng );
