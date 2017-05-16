@@ -53,7 +53,7 @@ conAngular
 
         $scope.updateClientUser = function(){
 
-            ClientService.updateUser( $scope.client.id, $scope.client.discount, $scope.client.email,  $scope.client.first_name,  $scope.client.last_name,  $scope.client.business_unit, $scope.client.phone,  $scope.client.phone_ext, function ( response ){
+            ClientService.updateUser( $scope.client.id, $scope.client.discount, $scope.client.email,  $scope.client.first_name,  $scope.client.last_name,  $scope.client.business_unit, $scope.client.phone,  $scope.client.phone_ext, $scope.password, $scope.passwordConfirmation, function ( response ){
 
                     if(response.errors) {
                         ErrorHelper.display( response.errors );
@@ -93,6 +93,7 @@ conAngular
             ClientService.getAllUsers( function( clientUsers ){
 
                 $scope.clientUsers = clientUsers;
+                console.log( clientUsers );
                 
             }); 
 
@@ -100,7 +101,7 @@ conAngular
 
         function getClientUser( userId ){
             ClientService.getClient( userId, function( client ){
-
+                console.log( userId );
                 $scope.client = client;
             }); 
         }// getClientUser

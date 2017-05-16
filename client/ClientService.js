@@ -119,7 +119,7 @@ conAngular
            });
         }
 
-        function updateUser( id, discount, email, firstName, lastName, businessUnit, phone, phoneExt, callback ){
+        function updateUser( id, discount, email, firstName, lastName, businessUnit, phone, phoneExt, password, passwordConfirmation, callback ){
             var serviceUrl = $rootScope.apiUrl + 'client_contacts/update';
             $http.post(serviceUrl, {
                     id: id,
@@ -130,7 +130,9 @@ conAngular
                         business_unit:  businessUnit,
                         phone:          phone,
                         phone_ext:      phoneExt,
-                        discount:       discount
+                        discount:       discount,
+                        password:       password,
+                        password_confirmation: passwordConfirmation
                     }
                 })
                .success(function ( response ) {
