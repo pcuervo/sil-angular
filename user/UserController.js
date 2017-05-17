@@ -13,6 +13,9 @@ conAngular
                 return;
             }
             if( 0 !== Object.keys($stateParams).length ) {
+                $scope.isPM = false;
+                $scope.isAE = false;
+                $scope.canDelete = true;
                 getUser( $stateParams.userId ); 
                 return;
             }
@@ -106,7 +109,13 @@ conAngular
 
         }// getUserRole
 
-        
+        $scope.deleteUser = function(){
+
+            UserService.deleteUser( $scope.user.id, $scope.selectedPM, $scope.selectedAE, function ( response ){
+                Materialize.toast(response.success, 4000, 'green');
+                $state.go('/view-users', {}, { reload: true });
+            });
+        }// changePassword
 
         /******************
         * PRIVATE FUNCTIONS
@@ -121,7 +130,6 @@ conAngular
         }// getAllUsers
 
         function getUser( id ){
-
             UserService.get( id, function( user ){
                 console.log( user );
                 $scope.user = user;
@@ -130,6 +138,18 @@ conAngular
                 $scope.lastName = user.last_name;
                 $scope.role = $scope.getUserRole( user.role );
                 $scope.id = id;
+
+                if( 3 == user.role ){
+                    $scope.canDelete = false;
+                    $scope.isAE = true;
+                    fetchAccountExecutives();
+                }
+                if( 2 == user.role ){
+                    $scope.canDelete = false;
+                    $scope.isPM = true;
+                    fetchProjectManagers();
+                }
+
                 if( '/images/thumb/missing.png' != user.avatar_thumb ){
                     $scope.avatarUrl = user.avatar_thumb;
                     return;
@@ -142,7 +162,7 @@ conAngular
         function initUsersDataTable(){
             $scope.dtUsersOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDisplayLength(10)
+                    .withDisplayLength(30)
                     .withDOM('pit')
                     .withOption('responsive', true)
                     .withOption('order', [])
@@ -171,5 +191,18 @@ conAngular
             }
 
         }// getUserImg
+
+        function fetchProjectManagers(){
+            UserService.getProjectManagers( function ( projectManagers ){
+                $scope.projectManagers = projectManagers;
+            });
+        }
+
+        function fetchAccountExecutives(){
+            UserService.getAccountExecutives( function ( accountExecutives ){
+                console.log( accountExecutives );
+                $scope.accountExecutives = accountExecutives;
+            });
+        }
 
     }]);

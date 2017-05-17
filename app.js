@@ -176,7 +176,7 @@ var conAngular =
         "oc.lazyLoad",
         "ngSanitize",
         "ngCookies",
-        "datatables",
+        "datatables"
     ]);
 
 // Config ocLazyLoader
@@ -1889,6 +1889,15 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                     files: conAssets('sparkline,flot,rickshaw,jvectormap')
                 }]);
             }]
+        }
+    })
+    // Ayuda
+    .state('/help', {
+        url: "/help",
+        templateUrl: "help/help.html",
+        controller: "HelpController",
+        data: {
+            pageTitle: 'Help'
         }
     });
 
