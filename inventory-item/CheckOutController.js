@@ -144,7 +144,9 @@ conAngular
         function initWithdrawalOptions( currentPath ){
 
             if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
-                initItemsWithdrawal();
+                if( ! $rootScope.globals.initMultipleWithdrawal ){
+                    initItemsWithdrawal();
+                }
                 
                 LoaderHelper.showLoader('Obteniendo artículos en existencia...');
                 fetchItemsInStock();
@@ -193,7 +195,9 @@ conAngular
                     }else{
                         fetchItemsInStock();
                     }
-                    initItemsWithdrawal();
+                    if( ! $rootScope.globals.initMultipleWithdrawal ){
+                        initItemsWithdrawal();
+                    }
                     initMultipleWithdrawalDataTable();
                     fetchSuppliers();
                     $scope.exitDate = new Date();
@@ -595,7 +599,8 @@ conAngular
         }
 
         function initItemsWithdrawal(){
-            $(document).unbind().on('click', '.withdraw-items input[type="checkbox"]', function(e){
+            $rootScope.globals.initMultipleWithdrawal = true;
+            $(document).on('click', '.withdraw-items input[type="checkbox"]', function(e){
                 var target = $( e.target );
                 if ( ! target.is( "input" ) ) return; 
         

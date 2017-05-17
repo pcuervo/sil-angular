@@ -1910,7 +1910,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = stage;
+    $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
@@ -1920,6 +1920,8 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     if ( $rootScope.globals.currentUser ) {
       $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.authdata;
     }
+    $rootScope.globals.initMultipleDelivery = false;
+    $rootScope.globals.initMultipleWithdrawal = false;
 
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
 
