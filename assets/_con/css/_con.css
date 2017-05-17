@@ -13105,7 +13105,7 @@ html.rtl .spinner-layer .left {
         #Remisión de salida
   \*-------------------------------------------*/
 
-  .pcuervo-print .row .col.s12 { width: 33%; }
+  .pcuervo-print .row .col.s12 { width: 50%; }
   .pcuervo-print .btn { display: none; }
 
   .print--cliente{ width: 50% !important; }
