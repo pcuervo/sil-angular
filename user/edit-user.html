@@ -42,6 +42,34 @@
     </div>
 </div>
 
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Eliminar usuario</h4>
+    <div class="[ row ]">
+        <div class="[ col s12 m8 offset-m2 ]"> 
+            <p>Esta acción no se puede revertir. En caso de querer eliminar un project manager o ejecutivo de cuenta, deberás seleccionar a quien se le pasa el inventario del usuario actual.</p>
+        </div>
+        <div class="clear"></div>
+        <div class="[ col s12 m4 offset-m4 ]" ng-show="isPM">
+            <select name="pm" ng-model="selectedPM" data-parsley-error-message="Escoge un Project Manager" ng-change="canDelete=true">
+                <option value="" disabled selected>Selecciona el PM</option>
+                <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.first_name + ' ' +user.last_name}}</option>
+            </select>
+        </div>
+        <div class="[ col s12 m4 offset-m4 ]" ng-show="isAE">
+            <select name="ae" ng-model="selectedAE" required data-parsley-error-message="Escoge un Ejecutivo de cuenta" ng-change="canDelete=true">
+                <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>
+                <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.first_name + ' ' +user.last_name}}</option>
+            </select>
+        </div>
+        <div class="clear"></div>
+        <div class="[ col s12 ]"> 
+            <div class="[ center-align ]">
+                <button class="[ waves-effect ][ btn red ]" ng-disabled="! canDelete" ng-click="deleteUser()">eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
   $('[data-parsley-validate]').parsley();
 </script>

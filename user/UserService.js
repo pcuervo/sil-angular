@@ -12,6 +12,7 @@ conAngular
         service.getDeliveryUsers = getDeliveryUsers
         service.getRole = getRole
         service.changePassword = changePassword
+        service.deleteUser = deleteUser
         return service;
 
 
@@ -169,6 +170,26 @@ conAngular
                });
 
         }// changePassword
+
+        function deleteUser( id, pm, ae, callback ){
+
+            var serviceUrl = $rootScope.apiUrl + 'users/delete';
+            $http.post(serviceUrl, 
+            {
+                id: id,
+                pm: pm,
+                ae: ae
+            })
+           .success(function ( response ) {
+                console.log( response );
+                callback( response );
+           })
+           .error(function ( response ) {
+                console.log( response );
+                callback( response );
+            });
+
+        }// deleteUser
 
     }]);
 

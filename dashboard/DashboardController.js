@@ -8,6 +8,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
     })();
 
 
+
     /******************
     * PUBLIC FUNCTIONS
     *******************/

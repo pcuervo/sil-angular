@@ -242,7 +242,10 @@ conAngular
             switch( currentPath ){
                 case '/multiple-items-delivery':
                     LoaderHelper.showLoader( 'Obteniendo inventario...' );
-                    initItemsWithdrawal();
+                    if( ! $rootScope.globals.initMultipleDelivery ){
+                        initItemsWithdrawal();
+                    }
+                    
                     fetchItemsInStock();
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
@@ -291,7 +294,9 @@ conAngular
                     }else{
                         fetchItemsInStock();
                     }
-                    initItemsWithdrawal();
+                    if( ! $rootScope.globals.initMultipleDelivery ){
+                        initItemsWithdrawal();
+                    }
                     initDeliveryDataTable();
                     initGeoAutocomplete( '#address', '#map', 19.397260, -99.186684, 12 );
                     $scope.deliveryDate = new Date();
@@ -519,7 +524,7 @@ conAngular
                     position: latLng,
                     map: "mapId"
                 },
-                componentRestrictions: {country: 'mx' }
+                componentRestrictions: { country: 'mx' }
             });
             var map = $(addressId).geocomplete("map");
             map.setCenter( latLng );
@@ -608,9 +613,11 @@ conAngular
         }// fetchSuppliers
 
         function initItemsWithdrawal(){
-            $(document).unbind().click('input[type="checkbox"]', function(e){
+            $rootScope.globals.initMultipleDelivery = true;
+            $(document).on('click', '.delivery-items input[type="checkbox"]', function(e){
+                e.stopPropagation();
                 var target = $( e.target );
-                if ( ! target.is( ":checkbox" ) ) return; 
+                if ( ! target.is( "input" ) ) return; 
         
                 var itemId = target.val();
                 if( ! target.is(':checked') ){
