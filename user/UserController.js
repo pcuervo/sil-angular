@@ -111,7 +111,7 @@ conAngular
 
         $scope.deleteUser = function(){
 
-            UserService.deleteUser( $scope.user.id, $scope.selectedPM, $scope.selectedAE, function ( response ){
+            UserService.deleteUser( $scope.user.id, $scope.selectedPM, $scope.selectedAE, $scope.selectedWHAdmin, function ( response ){
                 Materialize.toast(response.success, 4000, 'green');
                 $state.go('/view-users', {}, { reload: true });
             });
@@ -139,15 +139,20 @@ conAngular
                 $scope.role = $scope.getUserRole( user.role );
                 $scope.id = id;
 
+                if( 2 == user.role ){
+                    $scope.canDelete = false;
+                    $scope.isPM = true;
+                    fetchProjectManagers();
+                }
                 if( 3 == user.role ){
                     $scope.canDelete = false;
                     $scope.isAE = true;
                     fetchAccountExecutives();
                 }
-                if( 2 == user.role ){
+                if( 4 == user.role ){
                     $scope.canDelete = false;
-                    $scope.isPM = true;
-                    fetchProjectManagers();
+                    $scope.isWH = true;
+                    fetchWarehouseAdmins();
                 }
 
                 if( '/images/thumb/missing.png' != user.avatar_thumb ){
@@ -202,6 +207,13 @@ conAngular
             UserService.getAccountExecutives( function ( accountExecutives ){
                 console.log( accountExecutives );
                 $scope.accountExecutives = accountExecutives;
+            });
+        }
+
+        function fetchWarehouseAdmins(){
+            UserService.getWarehouseAdmins( function ( warehouseAdmins ){
+                console.log( warehouseAdmins );
+                $scope.warehouseAdmins = warehouseAdmins;
             });
         }
 
