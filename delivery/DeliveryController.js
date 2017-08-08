@@ -295,6 +295,7 @@ conAngular
                         fetchItemsInStock();
                     }
                     if( ! $rootScope.globals.initMultipleDelivery ){
+                        console.log('init');
                         initItemsWithdrawal();
                     }
                     initDeliveryDataTable();
@@ -582,6 +583,7 @@ conAngular
 
         function fetchPendingDeliveryRequests(){
             DeliveryService.pendingRequests( function( deliveries ){
+                console.log( deliveries );
                 $scope.pendingDeliveryRequests = deliveries;
             });
         }// fetchPendingDeliveryRequests

@@ -260,6 +260,7 @@ conAngular
             }
 
             if( currentPath.indexOf('locate-item') > -1 ){
+                LoaderHelper.showLoader('Cargando información del artículo...');
                 getItem( $stateParams.itemId ); 
                 fetchWarehouseRacks();
                 return;
@@ -285,8 +286,9 @@ conAngular
                     $scope.isFloor = false;
                     break;
                 case '/wh-dashboard':
+                    LoaderHelper.showLoader('Cargando ubicaciones...');
                     fetchStats();
-                    fetchWarehouseRacks();
+                    //fetchWarehouseRacks();
                     getItemsWithPendingLocation();
                     initRacksDataTable( 5 ); 
                     initPendingLocationDataTable();
@@ -639,6 +641,7 @@ conAngular
 
         function getItem( id ){
             InventoryItemService.byId( id, function( item ){
+                LoaderHelper.hideLoader();
                 var currentPath = $location.path();
                 $scope.item = item;
                 $scope.itemName = item.name;
@@ -657,9 +660,11 @@ conAngular
                     return;
                 }
                 if( 'BulkItem' === item.actable_type ){
+                    LoaderHelper.showLoader('Cargando cantidad a reubicar...');
                     $scope.quantity = item.quantity;
                     InventoryItemService.isReentryWithPendingLocation( item.id, function( response ){
                         if( 'undefined' != typeof response.quantity ) $scope.quantity = response.quantity;
+                        LoaderHelper.hideLoader();
                     });
                 } 
 
@@ -772,6 +777,7 @@ conAngular
         function fetchStats(){
             WarehouseService.stats( function( stats ){
                 $scope.stats = stats;
+                LoaderHelper.hideLoader();
             });
         }
 
