@@ -3,6 +3,8 @@ conAngular.controller('NavbarController', ['$scope', '$rootScope', '$cookies', f
     $scope.$on('$includeContentLoaded', function() {
 
         $rootScope.$watch('loggedIn', function() {
+            if( 'undefined' == typeof $rootScope.globals.currentUser ) return;
+            
             if( $rootScope.loggedIn ) {
                 $scope.role = $rootScope.globals.currentUser.role;
                 $('#my-account span').text( $rootScope.globals.currentUser.name );

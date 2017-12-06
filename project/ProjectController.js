@@ -73,13 +73,27 @@ conAngular
         }// getUserRole
 
         $scope.removeUserFromProject = function( projectId, userId ){
-            console.log( projectId );
-            console.log( userId );
             ProjectService.removeUser( projectId, userId, function( response ){
                 Materialize.toast( response.success , 4000, 'green');
                 $state.go('/add-user-to-project', { projectId: $scope.project.id }, { reload: true });
             });
         }// removeUserFromProject
+
+        $scope.update = function(){
+            console.log($scope.project.litobel_id);
+            ProjectService.update( $scope.project.id, $scope.project.litobel_id, $scope.project.name, function ( response ){
+                    console.log( response );
+                    if(response.errors) {
+                        ErrorHelper.display( response.errors );
+                        return;
+                    }
+                
+                    Materialize.toast('¡Proyecto "' + $scope.project.name + '" actualizado exitosamente!', 4000, 'green');
+                    $state.go('/view-projects', {}, { reload: true });
+
+            });
+
+        }// update
 
         /******************
         * PRIVATE FUNCTIONS
@@ -92,14 +106,12 @@ conAngular
                 initProjectUsersDataTable()
                 return;
             }
-
             if( currentPath.indexOf( '/add-user-to-project' ) > -1 ){
                 getProject( $stateParams.projectId );
                 getProjectManagersAndAccountExecutives();
                 initProjectUsersDataTable()
                 return;
             }
-
             switch( currentPath ){
                 case '/view-projects':
                     getAllProjects();

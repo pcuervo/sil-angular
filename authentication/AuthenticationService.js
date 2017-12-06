@@ -6,6 +6,7 @@ conAngular
         service.logout = logout;
         service.setCredentials = setCredentials;
         service.clearCredentials = clearCredentials;
+        service.isLoggedIn = isLoggedIn;
 
         return service;
 
@@ -65,6 +66,20 @@ conAngular
                     ErrorHelper.display( response.errors );
                });
         }
+
+        function isLoggedIn(token, callback) {
+            var serviceUrl = $rootScope.apiUrl  + 'sessions/is_active';
+            $http.post(serviceUrl, { 
+                auth_token: token
+            })
+           .success(function (response) {
+                console.log( response );
+                callback(response);
+           })
+           .error(function (response) {
+                callback(response);
+           });
+        }// login
 
     }]);
 

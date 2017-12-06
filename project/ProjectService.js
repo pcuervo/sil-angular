@@ -10,6 +10,7 @@ conAngular
         service.register = register;
         service.addUsers = addUsers;
         service.removeUser = removeUser;
+        service.update = update;
 
         return service;
 
@@ -123,5 +124,22 @@ conAngular
                 callback ( response );
            });
         }// removeUser
+
+        function update( id, litobelId, projectName, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'projects/update';
+            $http.post(serviceUrl, {
+                    id: id,
+                    project: {
+                        litobel_id: litobelId,
+                        name:       projectName
+                    }
+                })
+               .success(function ( response ) {
+                    callback ( response );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// update
 
     }]);

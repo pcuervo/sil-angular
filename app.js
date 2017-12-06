@@ -1910,7 +1910,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = test;
+    $rootScope.apiUrl = prod;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
@@ -1925,12 +1925,27 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
 
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
 
-        // redirect to login page if not logged in and trying to access a restricted page
         var restrictedPage = $.inArray($state.get(), ['/login']) === -1;
         $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
-        var loggedIn = $rootScope.loggedIn;
 
-        if (restrictedPage && !loggedIn ) {
+        if( typeof $rootScope.globals.currentUser != 'undefined' ){
+            AuthenticationService.isLoggedIn( $rootScope.globals.currentUser.authdata, function( response ){
+
+                console.log( response );
+                if( response.errors ){
+                    Materialize.toast('¡Tu sesión ha expirado, por favor ingresa nuevamente!', 4000, 'red');
+                    event.preventDefault();
+                    $state.go('/login');
+                    return;
+                }
+                
+                $rootScope.loggedIn = true;
+            } );
+        } else {
+            $rootScope.loggedIn = false;
+        }
+
+        if (restrictedPage && ! $rootScope.loggedIn ) {
             event.preventDefault();
             $state.go('/login');
         }
