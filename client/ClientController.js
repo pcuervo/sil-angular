@@ -64,6 +64,19 @@ conAngular
             });
         }// registerClient
 
+        $scope.updateClient = function(){
+
+            ClientService.updateClient( $scope.client.id, $scope.client.name, function ( response ){
+
+                    if(response.errors) {
+                        ErrorHelper.display( response.errors );
+                        return;
+                    }
+                    Materialize.toast('¡Cliente "' + response.name + '" actualizado exitosamente!', 4000, 'green');
+                    $state.go('/view-clients', {}, { reload: true });
+            });
+        }// registerClient
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -72,6 +85,11 @@ conAngular
 
             if( currentPath.indexOf( '/edit-client-user' ) > -1 ){
                 getClientUser( $stateParams.userId );
+                return;
+            }
+
+            if( currentPath.indexOf( '/edit-client' ) > -1 ){
+                getClient( $stateParams.clientId );
                 return;
             }
 
@@ -105,6 +123,13 @@ conAngular
                 $scope.client = client;
             }); 
         }// getClientUser
+
+        function getClient( client ){
+            ClientService.getClientById( client, function( client ){
+                console.log( client );
+                $scope.client = client;
+            }); 
+        }// getClient
 
         function initClientDataTable(){
 

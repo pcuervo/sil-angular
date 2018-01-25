@@ -9,7 +9,9 @@ conAngular
         service.getContacts = getContacts;
         service.getInventoryItems = getInventoryItems;
         service.updateUser = updateUser;
+        service.updateClient = updateClient;
         service.getClient = getClient;
+        service.getClientById = getClientById;
         service.stats = stats;
         service.getWithdrawRequests = getWithdrawRequests;
         return service;
@@ -143,6 +145,20 @@ conAngular
                });
         }// update
 
+        function updateClient( id, name, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'clients/update';
+            $http.post(serviceUrl, {
+                    id: id,
+                    client: { name: name }
+                })
+               .success(function ( response ) {
+                    callback ( response.client );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// update
+
         function getClient( id, callback ){
             var serviceUrl = $rootScope.apiUrl + 'client_contacts/' + id;
             $http.get(serviceUrl)
@@ -154,6 +170,17 @@ conAngular
                     callback( response );
                });
         }// getClient
+
+        function getClientById( id, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'clients/' + id;
+            $http.get(serviceUrl)
+               .success(function ( response ) {
+                    callback( response.client );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getClientById
 
         function stats( clientContactId, callback ){
             var serviceUrl = $rootScope.apiUrl + 'client_contacts/stats/' + clientContactId;

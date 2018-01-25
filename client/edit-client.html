@@ -1,0 +1,64 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Editar cliente</h4>
+    <div class="[ row ]">
+        <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateClient()" data-parsley-validate>
+            <div class="[ col s12 m4 offset-m4 ]"> 
+                <div class="input-field">
+                    <input type="text" id="name" ng-model="client.name" required>
+                    <label for="name">Nombre de cliente</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ]">
+                <div class="[ center-align ]">
+                    <button class="[ waves-effect ][ btn ]">actualizar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="[ card-panel ][ hide ]">
+    <h4 class="[ center-align ]">Eliminar cliente</h4>
+    <div class="[ row ]">
+        <div class="[ col s12 m8 offset-m2 ]"> 
+            <p>Esta acción no se puede revertir. En caso de querer eliminar un project manager, ejecutivo de cuenta o jefe de almacén, deberás seleccionar a quien se le asignará su inventario.</p>
+        </div>
+        <div class="clear"></div>
+        <div class="[ col s12 m4 offset-m4 ]" ng-show="isPM">
+            <select name="pm" ng-model="selectedPM" data-parsley-error-message="Escoge un Project Manager" ng-change="canDelete=true">
+                <option value="" disabled selected>Selecciona el PM</option>
+                <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.first_name + ' ' +user.last_name}}</option>
+            </select>
+        </div>
+        <div class="[ col s12 m4 offset-m4 ]" ng-show="isAE">
+            <select name="ae" ng-model="selectedAE" required data-parsley-error-message="Escoge un Ejecutivo de cuenta" ng-change="canDelete=true">
+                <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>
+                <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.first_name + ' ' +user.last_name}}</option>
+            </select>
+        </div>
+        <div class="[ col s12 m4 offset-m4 ]" ng-show="isWH">
+            <select name="wh" ng-model="selectedWHAdmin" required data-parsley-error-message="Escoge un jefe de almacén" ng-change="canDelete=true">
+                <option value="" disabled selected>Selecciona el jefe de almacén</option>
+                <option ng:repeat="user in warehouseAdmins" value="{{user.id}}">{{user.first_name + ' ' +user.last_name}}</option>
+            </select>
+        </div>
+        <div class="clear"></div>
+        <div class="[ col s12 ]"> 
+            <div class="[ center-align ]">
+                <button class="[ waves-effect ][ btn red ]" ng-disabled="! canDelete" ng-click="deleteUser()">eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  $('[data-parsley-validate]').parsley();
+</script>
+
+
+
+
+

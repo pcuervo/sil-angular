@@ -18,7 +18,6 @@ conAngular
                     callback(response);
                })
                .error(function (response) {
-                    console.log( response );
                     callback(response);
                });
                
@@ -46,13 +45,12 @@ conAngular
         }
  
         function clearCredentials() {
-
             $rootScope.globals = {};
             $rootScope.loggedIn = false;
             
             $cookies.remove('globals');
             $cookies.put('loggedIn', false);
-            $http.defaults.headers.common.Authorization = 'Basic';
+            //$http.defaults.headers.common.Authorization = 'Basic';
 
         }
 
@@ -60,7 +58,7 @@ conAngular
             var serviceUrl = $rootScope.apiUrl  + 'sessions/destroy/';
             $http.post(serviceUrl,  { id: authToken })
                .success(function (response) {
-                    console.log(response);
+                    location.reload();
                })
                .error(function (response) {
                     ErrorHelper.display( response.errors );
@@ -73,7 +71,6 @@ conAngular
                 auth_token: token
             })
            .success(function (response) {
-                console.log( response );
                 callback(response);
            })
            .error(function (response) {

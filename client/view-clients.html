@@ -16,7 +16,7 @@
                     <tr ng-repeat="c in clients">
                     <td>{{ c.name }}</td>
                     <td class="[ hide-on-small-only ]">{{ c.created_at | date:'dd/MM/yyyy' }}</td>
-                    <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-user"><i class="[ fa fa-edit ]"></i></a></td>
+                    <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/edit-client/{{c.id}}"><i class="[ fa fa-edit ]"></i></a></td>
                     </tr>
                 </tbody>
             </table>

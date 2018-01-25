@@ -80,19 +80,15 @@ conAngular
         }// removeUserFromProject
 
         $scope.update = function(){
-            console.log($scope.project.litobel_id);
             ProjectService.update( $scope.project.id, $scope.project.litobel_id, $scope.project.name, function ( response ){
                     console.log( response );
                     if(response.errors) {
                         ErrorHelper.display( response.errors );
                         return;
                     }
-                
                     Materialize.toast('¡Proyecto "' + $scope.project.name + '" actualizado exitosamente!', 4000, 'green');
                     $state.go('/view-projects', {}, { reload: true });
-
             });
-
         }// update
 
         /******************

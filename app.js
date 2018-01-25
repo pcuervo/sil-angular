@@ -1245,6 +1245,30 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/edit-client', {
+        url: "/edit-client/:clientId",
+            templateUrl: "client/edit-client.html",
+            controller: "ClientController",
+            data: {
+                pageTitle: 'Editar',
+                crumbs: [{
+                    title: '<i class="fa fa-dashboard"></i> Dashboard',
+                    href: '#/dashboard'
+            }, {
+                title: 'Editar cliente',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
     .state('/add-client-user', {
         url: "/add-client-user",
             templateUrl: "client/add-client-user.html",
@@ -1910,7 +1934,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = prod;
+    $rootScope.apiUrl = test;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
