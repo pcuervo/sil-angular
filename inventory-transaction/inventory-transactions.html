@@ -1,14 +1,21 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
-<!-- <div class="[ card-panel ]">
-    <div class="[ alert alert-border-left ]">
-        <strong>PENDIENTE:</strong>
-        <ol>
-            <li>Crear búsqueda avanzada (si es necesario)</li>
-            <li>Agregar single de movimiento al inventario</li>
-        </ol>
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Movimientos al inventario</h4>
+    <div class="[ row ]">
+        <p>Buscar movimientos por artículo:</p>
+        <form ng-submit="searchTransactions()" data-parsley-search>
+            <div class="[ col s12 m6 offset-m3 ][ input-field ]">
+                <input id="transaction-keyword" type="text" ng-model="keyword" required data-parsley-error-message="¡Este campo es obligatorio!" >
+                <label for="transaction-keyword">Ingrea palabras clave, número de serie o código de barras</label>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ][ center-align  ]">
+                <button class="[ waves-effect ][ btn ]"><i class="[ mdi-action-search ][ left ]"></i> Buscar</button>
+            </div>
+        </form>
     </div>
-</div> -->
+</div>
 
 <div class="[ card-panel ]">
     <div>
@@ -21,25 +28,25 @@
             <tr>
                 <th class="[ center-align ]">Tipo</th>
                 <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Cantidad</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Estatus</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Entregó / Recogió</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Cantidad movimiento</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Status</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Fecha entrada / salida (A-M-D) </th>
-                <th class="[ center-align ]">Ver</th>
+                <!-- <th class="[ center-align ]">Ver</th> -->
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="it in inventoryTransactions">
-                <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]"><i class="[ {{ getItemTypeIcon( it.inventory_item.actable_type ) }} ]"></i><span class="[ hide ]">{{ it.inventory_item.actable_type }}</span></td>
-                <td>{{ it.inventory_item.name }}</td>
+                <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }} <i class="[ {{ getItemTypeIcon( it.inventory_item.actable_type ) }} ]"></i><!-- <span class="[ hide ]">{{ it.inventory_item.actable_type }}</span> --></td>
+                <td class="[ center-align ]">{{ it.inventory_item.name }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.inventory_item.status }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ it.deliver_pickup_contact }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ it.entry_exit_date | date:'yyyy/MM/dd' }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-inventory-transaction/{{it.id}}"><i class="[ ion-eye ]"></i></a></td>
+                <!-- <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-inventory-transaction/{{it.id}}"><i class="[ ion-eye ]"></i></a></td> -->
             </tr>
         </tbody>
     </table>
-    
 </div>
 
+<script>
+  $('[data-parsley-search]').parsley();
+</script>

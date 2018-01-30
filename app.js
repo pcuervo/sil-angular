@@ -928,7 +928,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 {
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
-                    files: conAssets('dataTables')
+                    files: conAssets('parsley,dataTables')
                 }]);
             }]
         }

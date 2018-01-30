@@ -8,6 +8,7 @@ conAngular
         service.getCheckOuts = getCheckOuts;
         service.getTypeClass = getTypeClass;
         service.getCheckOutsByClient = getCheckOutsByClient;
+        service.search = search;
         return service;
 
         /******************
@@ -83,10 +84,16 @@ conAngular
             return 'green lighten-3';
         }// getTypeClass
 
+        function search( keyword, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/search';
+            $http.post( serviceUrl, { keyword: keyword } )
+           .success(function ( response ) {
+                callback( response.inventory_transactions );
+           })
+           .error(function ( response ) {
+                callback( response );
+           });
 
-
-        /******************
-        * PRIVATE FUNCTIONS
-        *******************/
+        }// search
 
     }]);

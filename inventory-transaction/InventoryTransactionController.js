@@ -1,5 +1,5 @@
 conAngular
-    .controller('InventoryTransactionController', ['$scope', '$state', '$stateParams', 'InventoryTransactionService', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$location', function($scope, $state, $stateParams, InventoryTransactionService, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $location){
+    .controller('InventoryTransactionController', ['$scope', '$rootScope', '$state', '$stateParams', 'InventoryTransactionService', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$location', function($scope, $rootScope, $state, $stateParams, InventoryTransactionService, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $location){
 
         // Constants
         
@@ -40,6 +40,22 @@ conAngular
             return 'green lighten-3';
         }// getTransactionTypeClass
 
+        $scope.getTransactionConcept = function( concept ){
+            if( 'CheckOutTransaction' == concept ) return 'Salida';
+
+            return 'Entrada';
+        }
+
+        $scope.searchTransactions = function(){
+            LoaderHelper.showLoader('Buscando...');
+            InventoryTransactionService.search( $scope.keyword, function( inventoryTransactions ){
+                if(! inventoryTransactions.length){
+                    Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
+                }
+                $scope.inventoryTransactions = inventoryTransactions;
+                LoaderHelper.hideLoader();
+            })
+        }// searchItem
 
         /******************
         * PRIVATE FUNCTIONS
@@ -53,14 +69,19 @@ conAngular
 
             if( 0 !== Object.keys( $stateParams ).length ) {
                 LoaderHelper.showLoader('Cargando movimientos al inventario...');
-                switch( $stateParams.transactionType ){
-                    case 'checkIns':
-                    case 'checkOuts':
-                        getTransactionsByType( $stateParams.transactionType ); 
-                        break;
-                    default:
-                        getAllInventoryTransactions();
-                }  
+                if( $rootScope.globals.currentUser.role == 6 ){
+                    getAllInventoryTransactions();
+                } else {
+                    LoaderHelper.hideLoader();
+                }
+                // switch( $stateParams.transactionType ){
+                //     case 'checkIns':
+                //     case 'checkOuts':
+                //         getTransactionsByType( $stateParams.transactionType ); 
+                //         break;
+                //     default:
+                //         getAllInventoryTransactions();
+                // }  
             } 
             try {
                 initInventoryTransactionsDataTable();
@@ -79,7 +100,6 @@ conAngular
         }
 
         function initTransaction( transaction ){
-            console.log( transaction );
             getSupplier( transaction.delivery_pickup_company );
             $scope.transactionDate = transaction.entry_exit_date;
             $scope.itemName = transaction.inventory_item.name;
@@ -101,6 +121,7 @@ conAngular
         function getAllInventoryTransactions(){
             InventoryTransactionService.getAll( function( inventoryTransactions ){
                 $scope.inventoryTransactions = inventoryTransactions;
+                console.log(inventoryTransactions);
                 LoaderHelper.hideLoader();
             }); 
         }// getAllInventoryTransactions
@@ -127,14 +148,11 @@ conAngular
                         fileName:  "CustomFileName" + ".csv",
                         exportOptions: {
                             //columns: ':visible'
-                            columns: [1, 2, 3, 4, 5]
+                            columns: [0, 1, 2, 3, 4]
                         },
                         exportData: {decodeEntities:true}
                     }
                 ]);
-            $scope.dtInventoryTransactionsColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(6).notSortable()
-            ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
         }// initInventoryTransactionsDataTable

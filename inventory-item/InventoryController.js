@@ -25,6 +25,10 @@ conAngular
         }// getStatusLabel
 
         $scope.searchItem = function(){
+            if( $scope.searchIsInvalid() ){
+                Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
+                return;
+            }
             LoaderHelper.showLoader('Buscando...');
             if( 6 === $scope.role ){ 
                 $scope.selectedClient = $rootScope.globals.currentUser.id;
@@ -36,10 +40,27 @@ conAngular
                 $scope.selectedAE = $rootScope.globals.currentUser.id;
             }
             InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedPM, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+                if(! inventoryItems.length){
+                    Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
+                }
                 $scope.inventoryItems = inventoryItems;
                 LoaderHelper.hideLoader();
             })
         }// searchItem
+
+        $scope.searchIsInvalid = function(){
+            if( 'undefined' !== typeof $scope.keyword ) return false;
+            if( 'undefined' !== typeof $scope.serialNumber ) return false;
+            if( 'undefined' !== typeof $scope.selectedProject ) return false;
+            if( 'undefined' !== typeof $scope.selectedPM ) return false;
+            if( 'undefined' !== typeof $scope.selectedAE ) return false;
+            if( 'undefined' !== typeof $scope.selectedClient ) return false;
+            if( 'undefined' !== typeof $scope.itemType ) return false;
+            if( 'undefined' !== typeof $scope.selectedStatus ) return false;
+            if( 'undefined' !== typeof $scope.storageType ) return false;
+
+            return true;
+        }
 
         $scope.getItemTypeIcon = function( type ){
             switch( type ){
