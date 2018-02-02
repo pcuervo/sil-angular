@@ -13201,3 +13201,20 @@ footer.login{
 @media only screen and (min-width : 992px) {
   .card-panel.login{ width: 30%;  }
 }
+
+
+  /*-------------------------------------------*\
+        #Racks + de 12
+  \*-------------------------------------------*/
+
+  .rack-card-panel{
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+
+  .rack-container > .col{
+    min-width: 200px;
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+  }

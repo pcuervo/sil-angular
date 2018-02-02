@@ -1,6 +1,6 @@
 conAngular
     .controller('WarehouseController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'WarehouseService', 'InventoryItemService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function( $scope, $rootScope, $state, $stateParams, $location, WarehouseService, InventoryItemService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions ){
-        
+
         /******************
         * CONSTANTS
         *******************/
@@ -10,7 +10,7 @@ conAngular
 
         (function initController() {
             var currentPath = $location.path();
-            initWarehouseOptions( currentPath ); 
+            initWarehouseOptions( currentPath );
             fetchNewNotifications();
         })();
 
@@ -72,10 +72,10 @@ conAngular
             LoaderHelper.showLoader( 'Agregando artículo a ubicación...' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
                 switch( $scope.item.actable_type ){
-                    case 'UnitItem': 
+                    case 'UnitItem':
                         var quantity = 1;
                         break;
-                    case 'BulkItem': 
+                    case 'BulkItem':
                         var quantity = this.quantity;
                         break;
                     default:
@@ -97,7 +97,7 @@ conAngular
                         locationId: location.id,
                         units:      $('#units-' + i).val()
                     }
-                }); 
+                });
                 WarehouseService.locateBundle( $scope.item.id, partsLocation, $scope.parts.length, true, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                    $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
@@ -180,7 +180,7 @@ conAngular
         $scope.changeRack = function( rackId ){
             getRackRelocation( rackId );
         }// changeRack
- 
+
         $scope.deleteRack = function( rackId ){
             WarehouseService.deleteRack( rackId, function(){
                 Materialize.toast('¡Se ha eliminado el rack!', 4000, 'red');
@@ -195,7 +195,7 @@ conAngular
                 $scope.units = 100000;
                 $scope.isFloor = true;
                 return;
-            }   
+            }
 
             $scope.rows = '';
             $scope.units = '';
@@ -244,24 +244,24 @@ conAngular
 
             if( currentPath.indexOf('view-racks') > -1 ){
                 fetchWarehouseRacks();
-                initRacksDataTable( 10 ); 
+                initRacksDataTable( 10 );
                 return;
             }
 
             if( currentPath.indexOf('view-rack') > -1 ){
-                getRack( $stateParams.rackId ); 
+                getRack( $stateParams.rackId );
                 initRackItemsDataTable();
                 return;
             }
 
             if( currentPath.indexOf('view-location') > -1 || currentPath.indexOf('edit-location') > -1  ){
-                getLocation( $stateParams.locationId ); 
+                getLocation( $stateParams.locationId );
                 return;
             }
 
             if( currentPath.indexOf('locate-item') > -1 ){
                 LoaderHelper.showLoader('Cargando información del artículo...');
-                getItem( $stateParams.itemId ); 
+                getItem( $stateParams.itemId );
                 fetchWarehouseRacks();
                 return;
             }
@@ -276,7 +276,7 @@ conAngular
 
             if( currentPath.indexOf('view-warehouse-transactions') > -1 ){
                 fetchWarehouseTransactions();
-                initWarehouseTransactionsDataTable(); 
+                initWarehouseTransactionsDataTable();
                 return;
             }
 
@@ -290,11 +290,11 @@ conAngular
                     fetchStats();
                     //fetchWarehouseRacks();
                     getItemsWithPendingLocation();
-                    initRacksDataTable( 5 ); 
+                    initRacksDataTable( 5 );
                     initPendingLocationDataTable();
                     break;
             }
-    
+
         }// initWarehouseOptions
 
         function getRack( id ){
@@ -305,7 +305,7 @@ conAngular
                 $scope.warehouse_locations = rack.locations;
                 $scope.rack = rack;
                 getItemsByRack( id );
-            }); 
+            });
         }// getRack
 
         function getRackRelocation( id ){
@@ -315,19 +315,19 @@ conAngular
                 displayRack( rack.locations, rack.rack_info.columns, hasLocations );
                 $scope.warehouse_locations = rack.locations;
                 getItemsByRack( id );
-            }); 
+            });
         }// getRackRelocation
 
         function getItemsByRack( id ){
             WarehouseService.getItems( id, function( items ){
                 console.log( items );
                 $scope.items = items;
-            }); 
+            });
         }
 
         function displayRack( locations, columns, hasLocations ){
             var rackHTML = [];
-            $('.js-rack').empty();    
+            $('.js-rack').empty();
             switch( columns ){
                 case 7:
                     rackHTML = getRackHTMLSevenCol( locations, columns, hasLocations )
@@ -364,19 +364,19 @@ conAngular
                                 <h5>' + location.name + '</h5> \
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
-                            <div class="content"> \
+                            <div class="[ content ][ text-center ]"> \
                                 <p>Disponibilidad</p> \
-                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
                 if( hasLocations ){
                     rackHTML[currentRow] += '\
-                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
                 } else {
                     rackHTML[currentRow] += '\
                         <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
                 }
-                                
+
                 rackHTML[ currentRow ] += '\
                             </div> \
                         </div> \
@@ -431,31 +431,31 @@ conAngular
                                 <h5>' + location.name + '</h5> \
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
-                            <div class="content"> \
+                            <div class="[ content ][ text-center ]"> \
                                 <p>Capacidad</p> \
-                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
                 if( hasLocations ){
                     rackHTML[currentRow] += '\
-                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
                 } else {
                     rackHTML[currentRow] += '\
                         <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
                 }
 
                 rackHTML[ currentRow ] += '\
                             </div> \
                         </div> \
                     </div>';
-                
+
                 if( ( parseInt( i )+1 ) % 7 == 0){
-                    rackHTML[ currentRow ] += '<div class="[ col s6 ]"><div class="[ card ][ minimized ]"><div class="[ title ][ black ]"><h5>-</h5></div></div></div>';    
+                    rackHTML[ currentRow ] += '<div class="[ col s6 ]"><div class="[ card ][ minimized ]"><div class="[ title ][ black ]"><h5>-</h5></div></div></div>';
                     rackHTML[ currentRow ] += '</div></div>';
                     currentRow += 1;
-                    rackHTML[ currentRow ] = '<div class="[ clear ]"></div>';      
-                    j += 1;         
-                } 
+                    rackHTML[ currentRow ] = '<div class="[ clear ]"></div>';
+                    j += 1;
+                }
                 if( j % 2 == 1 ) {
                     rackHTML[ currentRow ] += '</div></div>';
                 }
@@ -480,17 +480,17 @@ conAngular
                                 <h5>' + location.name + '</h5> \
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
-                            <div class="content"> \
+                            <div class="[ content ][ text-center ]"> \
                                 <p>Capacidad</p> \
-                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
                 if( hasLocations ){
                     rackHTML[currentRow] += '\
-                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
                 } else {
                     rackHTML[currentRow] += '\
                         <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
                 }
 
                 rackHTML[ currentRow ] += '\
@@ -523,17 +523,17 @@ conAngular
                                 <h5>' + location.name + '</h5> \
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
-                            <div class="content"> \
+                            <div class="[ content ][ text-center ]"> \
                                 <p>Capacidad</p> \
-                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
                 if( hasLocations ){
                     rackHTML[currentRow] += '\
-                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
                 } else {
                     rackHTML[currentRow] += '\
                         <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
                 }
 
                 rackHTML[ currentRow ] += '\
@@ -574,19 +574,19 @@ conAngular
                                 <h5>' + location.name + '</h5> \
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
-                            <div class="content"> \
+                            <div class="[ content ][ text-center ]"> \
                                 <p>Disponibilidad</p> \
-                                <p class="[ h1 ]">' + location.available_units + '/' + location.units + '</p>';
+                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
                 if( hasLocations ){
                     rackHTML[currentRow] += '\
-                        <a class="[ btn ][ col s12 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ col s12 ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
                 } else {
                     rackHTML[currentRow] += '\
                         <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ col s12 ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
                 }
-                                
+
                 rackHTML[ currentRow ] += '\
                             </div> \
                         </div> \
@@ -617,7 +617,7 @@ conAngular
                     $scope.item_location_units += location.item_locations[i].units;
                 });
                 $scope.numItems = $scope.inventory_items.length;
-            }); 
+            });
 
         }// getLocation
 
@@ -627,7 +627,7 @@ conAngular
                 $scope.itemLocation = itemLocation;
                 console.log( itemLocation );
                 $('.js-barcode').JsBarcode( itemLocation.barcode );
-                getRackRelocation( itemLocation.rack_id ); 
+                getRackRelocation( itemLocation.rack_id );
                 $('body').on('click', '.js-location', function(){
                     $scope.itemLocation = itemLocation;
                     console.log( $scope.itemLocation.id );
@@ -636,7 +636,7 @@ conAngular
                     relocateItem( $scope.itemLocation.id, newLocationId );
                 });
                 LoaderHelper.hideLoader();
-            }); 
+            });
         }// getItemLocation
 
         function getItem( id ){
@@ -666,19 +666,19 @@ conAngular
                         if( 'undefined' != typeof response.quantity ) $scope.quantity = response.quantity;
                         LoaderHelper.hideLoader();
                     });
-                } 
+                }
 
-            }); 
+            });
         }// getItem
 
         function getItemsWithPendingLocation(){
             InventoryItemService.withPendingLocation( function( locations ){
                 $scope.pending_locations = locations;
-            }); 
+            });
 
             InventoryItemService.reentryWithPendingLocation( function( locations ){
                 $scope.reentryPendingLocations = locations;
-            }); 
+            });
         }// getItemsWithPendingLocation
 
         function initPendingLocationDataTable(){
@@ -761,7 +761,7 @@ conAngular
                 }
 
                 Materialize.toast('¡Se reubicó el artículo: "' + item_location.inventory_item.name + '" exitosamente!', 4000, 'green');
-                $state.go('/view-location', { 
+                $state.go('/view-location', {
                     locationId: item_location.warehouse_location.id
                  }, { reload: true });
             });
