@@ -138,7 +138,7 @@ conAngular
         }// restrictUnits
 
         $scope.createRack = function(){
-            WarehouseService.createRack( $scope.rackName, $scope.rows, $scope.columns, $scope.units, function( rack ){
+            WarehouseService.createRack( $scope.rackName, $scope.rows, $scope.columns, 1000, function( rack ){
                 Materialize.toast('¡Se ha creado el rack: "' + rack.name + '" exitosamente!', 4000, 'green');
                 $state.go('/view-rack', { 'rackId' : rack.id }, { reload: true });
             });
@@ -328,23 +328,7 @@ conAngular
         function displayRack( locations, columns, hasLocations ){
             var rackHTML = [];
             $('.js-rack').empty();
-            switch( columns ){
-                case 7:
-                    rackHTML = getRackHTMLSevenCol( locations, columns, hasLocations )
-                    break;
-                case 8:
-                    rackHTML = getRackHTMLEightCol( locations, columns, hasLocations )
-                    break;
-                case 9:
-                    rackHTML = getRackHTMLNineCol( locations, columns, hasLocations )
-                    break;
-                case 10:
-                    rackHTML = getRackHTMLTenCol( locations, columns, hasLocations )
-                    break;
-                default:
-                    rackHTML = getRackHTML( locations, columns, hasLocations )
-                    break;
-            }
+            rackHTML = getRackHTML( locations, columns, hasLocations );
             $('.js-rack').append( rackHTML );
             conApp.initCards();
         }// displayRack
@@ -364,13 +348,13 @@ conAngular
                                 <h5>' + location.name + '</h5> \
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
-                            <div class="[ content ][ text-center ]"> \
+                            <div class="[ content ][ center-align ]"> \
                                 <p>Disponibilidad</p> \
                                 <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
                 if( hasLocations ){
                     rackHTML[currentRow] += '\
-                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
+                        <a class="[ btn ][ col-s6 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
+                        <a class="[ btn ][ col-s6 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
                 } else {
                     rackHTML[currentRow] += '\
                         <p>Reubicar aquí</p> \
