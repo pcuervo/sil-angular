@@ -11,6 +11,7 @@ conAngular
         service.addUsers = addUsers;
         service.removeUser = removeUser;
         service.update = update;
+        service.destroy = destroy;
 
         return service;
 
@@ -141,5 +142,16 @@ conAngular
                     callback ( response );
                });
         }// update
+
+        function destroy( id, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'projects/destroy';
+            $http.post(serviceUrl, { id: id })
+               .success(function ( response ) {
+                    callback ( response );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// destroy
 
     }]);

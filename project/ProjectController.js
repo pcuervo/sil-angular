@@ -91,12 +91,22 @@ conAngular
             });
         }// update
 
+        $scope.destroyProject = function(projectId){
+            ProjectService.destroy( projectId, function ( response ){
+                console.log(response);
+                // Materialize.toast( response.success , 4000, 'green');
+                // $state.go('/add-user-to-project', { projectId: $scope.project.id }, { reload: true });
+            });
+        }// addUsersToProject
+
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
 
         function initProjects( currentPath ){
             if( currentPath.indexOf( '/edit-project' ) > -1 ){
+                $scope.showDeleteBtn = false;
                 getProject( $stateParams.projectId );
                 getProjectManagersAndAccountExecutives();
                 initProjectUsersDataTable()
@@ -176,12 +186,17 @@ conAngular
             ProjectService.get( id, function( project ){
                 if( project.errors ){
                     Materialize.toast( 'No se encontró ningún proyecto con id: "' + id + '"', 4000, 'red');
+                    $state.go('/view-projects', {}, { reload: true });
                     return;
                 }
                 getAllClients();
                 $scope.project = project;
                 $scope.clientId = project.client_id;
                 $scope.projectUsers = project.users;
+
+                console.log(project);
+
+                if( ! project.has_inventory ) $scope.showDeleteBtn = true;
             });
         }// getProject
 
