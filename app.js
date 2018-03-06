@@ -99,15 +99,6 @@ window.conAssets = function(get) {
             'assets/angulajs-jvectormap/angularjs-jvectormap.js'
         ],
 
-        // dataTables: [
-        //     'assets/dataTables/js/jquery.dataTables.min.js',
-        //     'assets/dataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
-        //     'assets/dataTables/extensions/Scroller/js/dataTables.scroller.min.js',
-        //     'assets/angularjs-dataTables/angular-datatables.min.js',
-        //     'assets/angularjs-dataTables/plugins/responsive/angular-datatables.responsive.min.js',
-        //     'assets/angularjs-dataTables/plugins/responsive/angular-datatables.responsive.css'
-        // ],
-
         dataTables: [
             'assets/dataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
             'assets/dataTables/extensions/Scroller/js/dataTables.scroller.min.js',
@@ -1922,6 +1913,52 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         controller: "HelpController",
         data: {
             pageTitle: 'Help'
+        }
+    })
+    .state('/add-item-type', {
+        url: "/add-item-type",
+            templateUrl: "inventory-item/add-item-type.html",
+            controller: "InventoryController",
+            data: {
+                pageTitle: 'Agregar tipo de mercancía',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Agregar tipo de mercancía',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
+    .state('/view-item-types', {
+        url: "/view-item-types",
+            templateUrl: "inventory-item/view-item-types.html",
+            controller: "InventoryController",
+            data: {
+                pageTitle: 'Ver tipos de mercancía',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Ver tipos de mercancía',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
         }
     });
 

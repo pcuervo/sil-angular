@@ -155,7 +155,7 @@ conAngular
                     editBundleItem( id );
                     break;
             }
-        }// registerItem
+        }// editItem
 
         $scope.getStatusClass = function( status ){
             if( 1 == status || 3 == status ) return 'green lighten-3';
@@ -175,13 +175,44 @@ conAngular
             
         }
 
+        $scope.createItemType = function(){
+            console.log('we are here!');
+            InventoryItemService.createItemType( $scope.itemTypeName, function( response ){
+                if( response.errors ){
+                    $scope.hasItem = false;
+                    Materialize.toast( 'Ya existe el tipo de mercancía: "' + $scope.itemTypeName + '"', 4000, 'red');
+                    return;
+                }
+               Materialize.toast( 'Se creó el tipo de mercancía ' + $scope.itemTypeName + '.', 4000, 'green');
+               $state.go('/view-item-types', {}, { reload: true });
+            });   
+            
+        }
+
+        $scope.destroyItemType = function( itemTypeId ){
+            var confirmation = confirm( '¿Estás seguro que deseas eliminar el tipo de mercancía?' );
+            if( confirmation ){
+                InventoryItemService.destroyItemType( itemTypeId, function( response ){
+                   Materialize.toast( 'Se ha eliminado el tipo de mercancía.', 4000, 'red');
+                   $state.go('/view-item-types', {}, { reload: true });
+                });   
+            }
+            
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
 
         function initInventory( currentPath ){
             $scope.role = $rootScope.globals.currentUser.role;
-            console.log( $scope.role );
+
+            if( currentPath.indexOf( '/view-item' ) > -1 ){
+                initItemTypesDT();
+                fetchItemTypes();
+                return;
+            }
+
             if( currentPath.indexOf( '/view-item' ) > -1 ){
                 getItem( $stateParams.itemId );
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
@@ -510,5 +541,23 @@ conAngular
                 }
             });
         }// fillProjectUsersSelects
+
+        function fetchItemTypes(){
+            InventoryItemService.getItemTypes( function( itemTypes ){
+                $scope.itemTypes = itemTypes;
+            });
+        }// fetchItemTypes
+
+        function initItemTypesDT(){
+            $scope.dtItemTypesOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(20)
+                .withDOM('pitp')
+                .withOption('responsive', true);
+            $scope.dtItemTypesColumn = [
+                DTColumnDefBuilder.newColumnDef(1).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initItemTypesDT
 
     }]);

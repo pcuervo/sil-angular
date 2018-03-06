@@ -25,7 +25,7 @@
                     <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m5 ]" ng-if="role != 3"> 
+            <div class="[ col s12 m5 offset-m1 ]" ng-if="role != 3"> 
                 <select name="ae" ng-model="selectedAE" required data-parsley-error-message="Escoge un Ejecutivo de cuenta" ng-disabled='!validSelectedProject' ng-change="selectAE( selectedAE )">
                     <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>
                     <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.name}}</option>
@@ -60,7 +60,7 @@
             <div class="[ col s12 m5 offset-m1 ][ mt-10 ]"> 
                 <select name="itemType" ng-model="itemType" required ng-change="updateExpirationDate( itemType )">
                     <option value="" disabled selected>Tipo de mercancía</option>
-                    <option ng-repeat="value in ['Laptop', 'Desktop', 'Impresora', 'Celular', 'Pantalla', 'POP', 'POS', 'Promocional', 'Mobiliario', 'Perecedero', 'Dispositivos de red']" value="{{value}}">{{value}}</option>
+                    <option ng:repeat="it in itemTypes" value="{{it.name}}">{{it.name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m5 ][ mt-10 ]"> 

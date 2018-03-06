@@ -6,8 +6,6 @@
             <div class="[ burg2 ]"></div>
             <div class="[ burg3 ]"></div>
         </a>
-        <!-- Sidebar toggle -->
-
         <!-- Logo -->
         <a href="#" class="[ brand-logo ]">
             <img src="assets/_con/images/litobel-header.jpg">
@@ -94,9 +92,18 @@
                     </li>
                 </ul>
             </li>
-            <li ng-show="( role == 1 )">
-                <a href="#/rent-dashboard" class="waves-effect waves-blue"><i class="fa fa-dollar"></i> Renta</a>
+            <li ng-show="role == 1">
+                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-cubes"></i> Tipos de mercancía <span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+                <ul>
+                    <li><a class="waves-effect waves-blue" href="#/view-item-types"><i class="ion-eye"></i>Ver tipos de mercancía</a>
+                    </li>
+                    <li><a class="waves-effect waves-blue" href="#/add-item-type"><i class="mdi-content-add-box"></i>Agregar tipo de mercancía</a>
+                    </li>
+                </ul>
             </li>
+            <!-- <li ng-show="( role == 1 )">
+                <a href="#/rent-dashboard" class="waves-effect waves-blue"><i class="fa fa-dollar"></i> Renta</a>
+            </li> -->
         </ul>
 
     </div><!-- nano-content -->

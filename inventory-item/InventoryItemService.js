@@ -44,6 +44,9 @@ conAngular
         service.getStatsPM = getStatsPM;
         service.cancelEntryRequest = cancelEntryRequest;
         service.deleteItem = deleteItem;
+        service.createItemType = createItemType;
+        service.getItemTypes = getItemTypes;
+        service.destroyItemType = destroyItemType;
         return service;
 
         // Public 
@@ -763,7 +766,6 @@ conAngular
         }// cancelEntryRequest
 
         function deleteItem( id,  callback ) {
- 
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/destroy';
             $http.post( serviceUrl, 
                 {  
@@ -776,7 +778,39 @@ conAngular
             .error(function( response ) {
                 callback( response );
             });
-
         }// delete
 
+        function createItemType( name, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'item_types/';
+            $http.post( serviceUrl, { name: name } )
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+        }// create
+    
+        function getItemTypes( callback ) {
+            var serviceUrl = $rootScope.apiUrl  + 'item_types/';
+            $http.get ( serviceUrl )
+               .success(function ( response ) {
+                    console.log(response)
+                    callback( response.item_types );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getItemTypes
+
+        function destroyItemType( id,  callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'item_types/destroy';
+            $http.post( serviceUrl, { id: id })
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+        }// delete
     }]);
