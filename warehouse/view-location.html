@@ -10,8 +10,8 @@
     </div>
     <div class="[ col s12 m3 ]">
         <div class="card-panel stats-card blue white-text">
-            <span class="count">{{ item_location_units }}/{{ units }}</span>
-            <div class="name">Unidades ocupadas</div>
+            <span class="count">{{ item_location_quantity }}</span>
+            <div class="name">Cantidad total</div>
         </div>
     </div>
     <div class="[ col s12 m3 ]">
@@ -38,9 +38,10 @@
                 <tr>
                     <th class="[ center-align ]">Entrada</th>
                     <th class="[ center-align ]">Nombre</th>
+                    <th class="[ center-align ]">Número de serie</th>
+                    <th class="[ center-align ]">Cantidad</th>
                     <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
                     <th class="[ center-align ][ hide-on-med-and-down ]">Proyecto</th>
-                    <th class="[ center-align ][ hide-on-med-and-down ]">Contacto Cliente</th>
                     <th class="[ center-align ]">Reubicar</th>
                 </tr>
             </thead>
@@ -48,9 +49,10 @@
                 <tr ng-repeat="item in inventory_items">
                     <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i></td>
                     <td><a href="#/view-item/{{item.id}}">{{ item.name }}</a></td>
+                    <td class="[ center-align ]">{{ item.serial_number }}</td>
+                    <td class="[ center-align ]">{{ item.quantity }}</td>
                     <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
                     <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.project }}</td>
-                    <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.client_contact }}</td>
                     <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/relocate/{{locationId}}/{{item.id}}"><i class="[ fa fa-location-arrow ]"></i></a></td>
                 </tr>
             </tbody>

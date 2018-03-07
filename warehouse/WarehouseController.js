@@ -263,6 +263,7 @@ conAngular
             }
 
             if( currentPath.indexOf('view-rack') > -1 ){
+                LoaderHelper.showLoader('Cargando rack...');
                 getRack( $stateParams.rackId );
                 initRackItemsDataTable();
                 return;
@@ -314,7 +315,6 @@ conAngular
         function getRack( id ){
             WarehouseService.getRack( id, function( rack ){
                 var hasLocations = true;
-                console.log( rack );
                 displayRack( rack.locations, rack.rack_info.columns, hasLocations );
                 $scope.warehouse_locations = rack.locations;
                 $scope.rack = rack;
@@ -334,8 +334,8 @@ conAngular
 
         function getItemsByRack( id ){
             WarehouseService.getItems( id, function( items ){
-                console.log( items );
                 $scope.items = items;
+                LoaderHelper.hideLoader();
             });
         }
 
@@ -607,12 +607,13 @@ conAngular
                 $scope.status = location.status;
                 $scope.units = location.units;
                 $scope.totalUnits = location.units;
-                $scope.item_location_units = 0;
+                $scope.item_location_quantity = 0;
                 $scope.numItems = 0;
                 $scope.inventory_items = [];
+                console.log(location.inventory_items);
                 $.each( location.inventory_items, function(i, val){
                     $scope.inventory_items.push( val.inventory_item );
-                    $scope.item_location_units += location.item_locations[i].units;
+                    $scope.item_location_quantity += location.item_locations[i].quantity;
                 });
                 $scope.numItems = $scope.inventory_items.length;
             });
