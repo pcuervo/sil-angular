@@ -338,7 +338,7 @@ conAngular
                         extend: "csvHtml5",
                         fileName:  "CustomFileName" + ".csv",
                         exportOptions: {
-                            columns: [2, 3, 4, 5, 6]
+                            columns: [2, 3, 4, 5]
                         },
                         exportData: {decodeEntities:true}
                     }
@@ -346,7 +346,7 @@ conAngular
                 .withOption('responsive', true);
             $scope.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(7).notSortable()
+                DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initInventoryDataTable
