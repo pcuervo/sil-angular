@@ -1960,7 +1960,23 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 }]);
             }]
         }
-    });
+    })
+    .state('/edit-item-type', {
+        url: "/edit-item-type/:itemTypeId",
+        templateUrl: "inventory-item/edit-item-type.html",
+        controller: "InventoryController",
+        data: { pageTitle: 'Editar tipo de mercancía'},
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    }); 
 
 }]);
 

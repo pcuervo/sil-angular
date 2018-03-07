@@ -6,19 +6,22 @@
         <thead>
             <tr>
                 <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ]">Ubicaciones disponibles</th>
-                <th class="[ center-align ]">Fecha de creación</th>
-                <th class="[ center-align ]">Ver detalle</th>
+                <th class="[ center-align ]">Filas</th>
+                <th class="[ center-align ]">Columnas</th>
+                <th class="[ center-align ]">Ubicaciones totales</th>
+                <th class="[ center-align ]">Acciones</th>
             </tr>
         </thead>
         <tbody>
             <tr id="{{r.id}}" ng-repeat="r in racks">
-                <td>{{ r.name }}</td>
-                <td class="[ center-align ]">{{ r.available_locations + ' de ' + r.total_locations }}</td>
-                <td class="[ center-align ]">{{ r.created_at | date:'dd/MM/yyyy' }}</td>
+                <td class="[ center-align ]">{{ r.name }}</td>
+                <td class="[ center-align ]">{{ r.row }}</td>
+                <td class="[ center-align ]">{{ r.column }}</td>
+                <td class="[ center-align ]">{{ r.total_locations }}</td>
                 <td class="[ center-align ]">
                     <a class="[ btn waves-effect ]" href="#/view-rack/{{r.id}}"><i class="[ fa fa-eye ]"></i></a>
-                    <a class="[ btn waves-effect ][ red ]" ng-click="deleteRack( r.id )" ng-if="r.is_empty"><i class="[ fa fa-times ]"></i></a>
+                    <a class="[ btn waves-effect ][ red ]" ng-click="deleteRack( r.id )" ng-if="r.is_empty"><i class="[ fa fa-times ][ left ]"></i>Eliminar</a>
+                    <a class="[ btn waves-effect ][ red ]" ng-click="emptyRack( r.id )" ng-if="! r.is_empty"><i class="[ mdi-action-flip-to-back ][ left ]"></i>Vaciar</a>
                 </td>
             </tr>
         </tbody>

@@ -196,8 +196,15 @@ conAngular
                    Materialize.toast( 'Se ha eliminado el tipo de mercancía.', 4000, 'red');
                    $state.go('/view-item-types', {}, { reload: true });
                 });   
-            }
-            
+            }   
+        }
+
+        $scope.editItemType = function(){
+            console.log($scope.itemType.name);
+            InventoryItemService.editItemType( $scope.itemType.id, $scope.itemType.name, function( response ){
+               Materialize.toast( 'Se ha editado el tipo de mercancía correctamente', 4000, 'green');
+               $state.go('/view-item-types', {}, { reload: true });
+            });   
         }
 
         /******************
@@ -207,7 +214,8 @@ conAngular
         function initInventory( currentPath ){
             $scope.role = $rootScope.globals.currentUser.role;
 
-            if( currentPath.indexOf( '/view-item' ) > -1 ){
+            if( currentPath.indexOf( '/view-item-types' ) > -1 ){
+                LoaderHelper.showLoader('Cargando tipos de mercancía')
                 initItemTypesDT();
                 fetchItemTypes();
                 return;
@@ -223,6 +231,12 @@ conAngular
                         getItemState( $scope.item.state );
                     }
                 });
+                return;
+            }
+
+            if( currentPath.indexOf( '/edit-item-type' ) > -1 ){
+                getItemType( $stateParams.itemTypeId );
+                
                 return;
             }
 
@@ -545,6 +559,7 @@ conAngular
         function fetchItemTypes(){
             InventoryItemService.getItemTypes( function( itemTypes ){
                 $scope.itemTypes = itemTypes;
+                LoaderHelper.hideLoader();
             });
         }// fetchItemTypes
 
@@ -559,5 +574,17 @@ conAngular
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initItemTypesDT
+
+        function getItemType( id ){
+            InventoryItemService.getItemType( id, function( itemType ){
+                if( itemType.errors ){
+                    $scope.hasItem = false;
+                    Materialize.toast( 'No se encontró el tipo de mercancía', 4000, 'red');
+                    $state.go('/view-item-types', {}, { reload: true });
+                    return;
+                }
+                $scope.itemType = itemType;
+            });
+        }// getItemType
 
     }]);

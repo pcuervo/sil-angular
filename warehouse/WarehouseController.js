@@ -182,11 +182,24 @@ conAngular
         }// changeRack
 
         $scope.deleteRack = function( rackId ){
-            WarehouseService.deleteRack( rackId, function(){
-                Materialize.toast('¡Se ha eliminado el rack!', 4000, 'red');
-                $('#'+rackId).remove();
-            });
+            var confirmation = confirm( '¿Estás seguro que deseas eliminar el rack?' );
+            if( confirmation ){
+                WarehouseService.deleteRack( rackId, function(){
+                    Materialize.toast('¡Se ha eliminado el rack!', 4000, 'red');
+                    $('#'+rackId).remove();
+                });
+            }
         }// deleteRack
+
+        $scope.emptyRack = function( rackId ){
+            var confirmation = confirm( '¿Estás seguro que deseas vaciar el rack? Este proceso no afecta el inventario, solo sus ubicaciones.' );
+            if( confirmation ){
+                WarehouseService.emptyRack( rackId, function(){
+                    Materialize.toast('¡Se ha vaciado el rack!', 4000, 'red');
+                    $state.go('/view-racks', {}, { reload: true });
+                });
+            }
+        }// emptyRack
 
         $scope.updateRows = function( column ){
             var columnText = $('[name="columns"] option:selected').text();
@@ -243,6 +256,7 @@ conAngular
         function initWarehouseOptions( currentPath ){
 
             if( currentPath.indexOf('view-racks') > -1 ){
+                LoaderHelper.showLoader('Cargando racks...');
                 fetchWarehouseRacks();
                 initRacksDataTable( 10 );
                 return;
@@ -714,6 +728,7 @@ conAngular
         function fetchWarehouseRacks(){
             WarehouseService.getRacks( function( racks ){
                 $scope.racks = racks;
+                LoaderHelper.hideLoader();
             });
         }// fetchWarehouseRacks
 

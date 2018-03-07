@@ -47,6 +47,8 @@ conAngular
         service.createItemType = createItemType;
         service.getItemTypes = getItemTypes;
         service.destroyItemType = destroyItemType;
+        service.getItemType = getItemType;
+        service.editItemType = editItemType;
         return service;
 
         // Public 
@@ -813,4 +815,31 @@ conAngular
                 callback( response );
             });
         }// delete
+
+        function getItemType( id, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'item_types/' + id;
+            $http.get ( serviceUrl )
+               .success(function ( response ) {
+                    console.log( response );
+                    callback( response.item_type );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// getItemType
+
+        function editItemType( id, newName,  callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'item_types/update';
+            $http.post( serviceUrl, 
+                { 
+                    id:     id,
+                    name:   newName
+                })
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+        }// editItemType
     }]);

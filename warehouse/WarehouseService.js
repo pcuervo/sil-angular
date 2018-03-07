@@ -16,6 +16,7 @@ conAngular
         service.getItemLocation = getItemLocation;
         service.getWarehouseTransactions = getWarehouseTransactions
         service.deleteRack = deleteRack
+        service.emptyRack = emptyRack
         service.stats = stats
         return service;
 
@@ -233,6 +234,17 @@ conAngular
                     callback( response );
                });
         }// stats
+
+        function emptyRack( id, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'warehouse_racks/empty';
+            $http.post( serviceUrl, { id: id } )
+               .success(function ( response ) {
+                    callback ( response.warehouse_rack );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// emptyRack
 
     }]);
 
