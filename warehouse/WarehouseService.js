@@ -18,9 +18,9 @@ conAngular
         service.deleteRack = deleteRack
         service.emptyRack = emptyRack
         service.stats = stats
+        service.markAsFull = markAsFull
+        service.markAsAvailable = markAsAvailable
         return service;
-
-
 
         /******************
         * PUBLIC FUNCTIONS
@@ -245,6 +245,30 @@ conAngular
                     callback ( response );
                });
         }// emptyRack
+
+        function markAsFull( id, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/mark_as_full';
+            $http.post( serviceUrl, { location_id: id } )
+               .success(function ( response ) {
+                    console.log(response);
+                    callback ( response );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// markAsFull
+
+        function markAsAvailable( id, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/mark_as_available';
+            $http.post( serviceUrl, { location_id: id } )
+               .success(function ( response ) {
+                    console.log(response);
+                    callback ( response );
+               })
+               .error(function ( response ) {
+                    callback ( response );
+               });
+        }// markAsAvailable
 
     }]);
 

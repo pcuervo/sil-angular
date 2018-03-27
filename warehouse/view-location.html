@@ -27,7 +27,9 @@
         </div>
     </div>
     <div class="[ col s12 ][ center-align ]"> 
-        <a class="[ btn ]" href="#/view-rack/{{ rackId }}">Ver rack</a>
+        <a class="[ btn ]" href="#/view-rack/{{ rackId }}">Ir a rack</a>
+        <button class="[ btn red ]" ng-if="status != 3" ng-click="markAsFull()">Marcar como llena</button>
+        <button class="[ btn green ]" ng-if="status == 3" ng-click="markAsAvailable()">Marcar como disponible</button>
     </div>
 </div>
 <div class="[ row ][ card-panel ]">

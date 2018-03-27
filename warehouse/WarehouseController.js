@@ -247,7 +247,19 @@ conAngular
             //return links;
         }
 
+        $scope.markAsFull = function(){
+            WarehouseService.markAsFull( $scope.locationId, function(){
+                Materialize.toast('Ubicación marcada como llena', 4000, 'green');
+                $state.go('/view-location', { locationId: $scope.locationId }, { reload: true });
+            });
+        }
 
+        $scope.markAsAvailable = function(){
+            WarehouseService.markAsAvailable( $scope.locationId, function(){
+                Materialize.toast('Ubicación marcada como disponible', 4000, 'green');
+                $state.go('/view-location', { locationId: $scope.locationId }, { reload: true });
+            });
+        }
 
         /******************
         * PRIVATE FUNCTIONS
