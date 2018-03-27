@@ -62,7 +62,7 @@ conAngular
                     Materialize.toast('¡Cliente "' + response.first_name + ' ' + response.last_name + '" actualizado exitosamente!', 4000, 'green');
                     $state.go('/view-client-users', {}, { reload: true });
             });
-        }// registerClient
+        }// updateClientUser
 
         $scope.updateClient = function(){
 
@@ -76,6 +76,18 @@ conAngular
                     $state.go('/view-clients', {}, { reload: true });
             });
         }// registerClient
+
+        $scope.deleteClientUser = function(){
+            ClientService.deleteUser( $scope.client.id, function ( response ){
+
+                if(response.errors) {
+                    ErrorHelper.display( response.errors );
+                    return;
+                }
+                Materialize.toast('¡Cliente "' + response.first_name + ' ' + response.last_name + '" eliminado exitosamente!', 4000, 'green');
+                $state.go('/view-client-users', {}, { reload: true });
+            });
+        }// deleteClientUser
 
         /******************
         * PRIVATE FUNCTIONS

@@ -4,28 +4,35 @@
     <h4 class="[ center-align ]">Editar usuario</h4>
     <div class="[ row ]">
         <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="updateUser()" data-parsley-validate>
-            <div class="[ col s12 m3 ]"> 
+            <div class="[ col s12 m4 offset-m2 ]"> 
                 <div class="input-field">
                     <input type="text" id="email" ng-model="email" required>
                     <label for="email">Email</label>
                 </div>
             </div>
-            <div class="[ col s12 m3 ]"> 
+            <div class="[ col s12 m4 ]"> 
+                <div class="input-field">
+                    <input type="text" id="role" ng-model="role" ng-readonly="true">
+                    <label for="role">Rol</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 offset-m2 ]"> 
                 <div class="input-field">
                     <input type="text" id="firstName" ng-model="firstName" required>
                     <label for="firstName">Nombre</label>
                 </div>
             </div>
-            <div class="[ col s12 m3 ]"> 
+            <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
                     <input type="text" id="lastName" ng-model="lastName" required>
                     <label for="lastName">Apellido(s)</label>
                 </div>
             </div>
-            <div class="[ col s12 m3 ]"> 
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 m4 offset-m4 ]"> 
                 <div class="input-field">
-                    <input type="text" id="role" ng-model="role" ng-readonly="true">
-                    <label for="role">Rol</label>
+                    <input type="text" id="password" ng-model="password">
+                    <label for="password">Password</label>
                 </div>
             </div>
             <div class="[ clear ]"></div>

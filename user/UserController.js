@@ -53,11 +53,8 @@ conAngular
 
         $scope.updateUser = function(){
 
-            // Add feedback saving
-            console.log('actualizando usuario...');
-
             var userImgName = $scope.firstName.toLowerCase() + '-' + $scope.lastName.toLowerCase() + '.' + $scope.userImgExt;
-            UserService.update( $scope.id, $scope.email, $scope.firstName, $scope.lastName, $scope.userImg, userImgName, function ( response ){
+            UserService.update( $scope.id, $scope.email, $scope.firstName, $scope.lastName, $scope.userImg, userImgName, $scope.password, function ( response ){
 
                     if(response.errors) {
                         console.log(response.errors);

@@ -48,7 +48,7 @@ conAngular
 
         }// register
 
-        function update( id, email, firstName, lastName, image, filename, callback ){
+        function update( id, email, firstName, lastName, image, filename, password, callback ){
 
             var serviceUrl = $rootScope.apiUrl + 'users/update';
             $http.post(serviceUrl, 
@@ -57,9 +57,10 @@ conAngular
                     avatar:     image,
                     filename:   filename,
                     user: {
-                        email:                  email, 
-                        first_name:             firstName,
-                        last_name:              lastName
+                        email:      email, 
+                        first_name: firstName,
+                        last_name:  lastName,
+                        password:   password
                     }
                 })
                .success(function ( response ) {
