@@ -213,6 +213,7 @@ conAngular
 
         function initInventory( currentPath ){
             $scope.role = $rootScope.globals.currentUser.role;
+            console.log($scope.role);
 
             if( currentPath.indexOf( '/view-item-types' ) > -1 ){
                 LoaderHelper.showLoader('Cargando tipos de mercancía')

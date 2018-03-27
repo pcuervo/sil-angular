@@ -92,8 +92,8 @@
                 <td class="[ center-align ]">{{ i.quantity }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.serial_number }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">
-                    <p ng-if="i.locations.length == 0">-</p>
-                    <div ng-repeat="loc in i.locations">
+                    <p ng-if="i.locations.length == 0 || role == 6">-</p>
+                    <div ng-repeat="loc in i.locations" ng-if="role != 6">
                         <a href="#/view-location/{{loc.location_id}}" >{{loc.location}}</a>
                     </div>
                 </td>

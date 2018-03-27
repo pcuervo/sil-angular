@@ -18,16 +18,22 @@
                 </div>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 l4 offset-l2  ][ mt-15 ]"> 
+            <div class="[ col s12 m6 l4  ][ mt-15 ]"> 
                 <select ng-model="projectManagerId">
                     <option value="" disabled selected>Project Manager</option>
                     <option ng:repeat="pm in projectManagers" value="{{pm.id}}">{{pm.first_name + ' ' + pm.last_name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m6 l4  ][ mt-15 ]"> 
+            <div class="[ col s12 m6 l4 ][ mt-15 ]"> 
                 <select ng-model="accountExecutiveId">
                     <option value="" disabled selected>Ejecutivo de cuenta</option>
                     <option ng:repeat="ae in accountExecutives" value="{{ae.id}}">{{ae.first_name + ' ' + ae.last_name}}</option>
+                </select>
+            </div>
+            <div class="[ col s12 m6 l4 ][ mt-15 ]"> 
+                <select ng-model="clientContactId">
+                    <option value="" disabled selected>Clientes</option>
+                    <option ng:repeat="client in clientContacts" value="{{client.id}}">{{client.first_name + ' ' + client.last_name}}</option>
                 </select>
             </div>
             <div class="[ clear ]"></div>

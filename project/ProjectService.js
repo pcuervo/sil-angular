@@ -96,12 +96,13 @@ conAngular
                });
         }// register
 
-        function addUsers( projectId, projectManagerId, accountExecutiveId, callback ){
+        function addUsers( projectId, projectManagerId, accountExecutiveId, clientContactId, callback ){
             var serviceUrl = $rootScope.apiUrl  + 'projects/add_users';
             $http.post(serviceUrl, {
-                project_id:     projectId,
-                new_pm_id:      projectManagerId,
-                new_ae_id:      accountExecutiveId,
+                project_id:         projectId,
+                new_pm_id:          projectManagerId,
+                new_ae_id:          accountExecutiveId,
+                client_contact_id:  clientContactId
             })
            .success(function ( response ) {
                 callback ( response );

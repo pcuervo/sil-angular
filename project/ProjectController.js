@@ -47,10 +47,13 @@ conAngular
         }// fillClientContact
 
         $scope.addUsersToProject = function(){
-            console.log( $scope.project.id );
-            console.log( $scope.projectManagerId );
-            console.log( $scope.accountExecutiveId );
-            ProjectService.addUsers( $scope.project.id, $scope.projectManagerId, $scope.accountExecutiveId, function ( response ){
+            ProjectService.addUsers( $scope.project.id, $scope.projectManagerId, $scope.accountExecutiveId, $scope.clientContactId, function ( response ){
+
+                if(response.errors) {
+                    ErrorHelper.display( response.errors );
+                    return;
+                }
+                
                 Materialize.toast( response.success , 4000, 'green');
                 $state.go('/add-user-to-project', { projectId: $scope.project.id }, { reload: true });
             });
@@ -149,6 +152,9 @@ conAngular
             }); 
             UserService.getAccountExecutives( function( aes ){
                 $scope.accountExecutives = aes;
+            });
+            UserService.getClientContacts( function( cc ){
+                $scope.clientContacts = cc;
             }); 
         }// getProjectManagersAndAccountExecutives
 
