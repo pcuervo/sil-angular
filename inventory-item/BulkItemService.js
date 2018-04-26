@@ -11,17 +11,16 @@ conAngular
         * PUBLIC FUNCTIONS
         *******************/
 
-        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, pm, ae, callback ) {
+        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, pm, ae, serialNumber, brand, model, extraParts, callback ) {
 
             var userId = $rootScope.globals.currentUser.id;
-            //var status = $rootScope.globals.currentUser.role == 1 ? 1 : 6;
-            var serviceUrl = $rootScope.apiUrl + 'users/' + userId + '/bulk_items/';
+            var serviceUrl = $rootScope.apiUrl + 'users/' + userId + '/inventory_items/';
 
             $http.post(serviceUrl, 
                 { 
                     pm_id: pm,
                     ae_id: ae,
-                    bulk_item: {
+                    inventory_item: {
                         name:                       name, 
                         quantity:                   quantity,
                         project_id:                 projectId, 
@@ -33,7 +32,10 @@ conAngular
                         validity_expiration_date:   validityExpirationDate,
                         value:                      itemValue,
                         storage_type:               storageType,
-                        is_high_value:              isHighValue
+                        is_high_value:              isHighValue,
+                        serial_number:              serialNumber, 
+                        brand:                      brand, 
+                        model:                      model, 
                     },
                     item_request_id:            itemRequestId,
                     filename:                   filename,

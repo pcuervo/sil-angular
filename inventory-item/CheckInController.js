@@ -75,7 +75,6 @@ conAngular
             if( 'undefined' == typeof $scope.serialNumber ){
                 $scope.serialNumber = $('#serial-number').val();
             }
-            console.log( $scope.serialNumber );
 		}
 
 		$scope.setActiveStep = function( step ){
@@ -183,14 +182,6 @@ conAngular
 
         }// updateExpirationDate
 
-        $scope.getItemTypeIcon = function( type ){
-            switch( type ){
-                case 'UnitItem': return "[ fa fa-square ]";
-                case 'BulkItem': return "[ fa fa-align-justify ]";
-                case 'BundleItem': return "[ fa fa-th-large ]";
-            }
-        }// getItemTypeIcon
-
         $scope.updateLocations = function( rackId ){
             WarehouseService.getRackAvailableLocations( rackId, function( locations ){
                 $scope.locations = locations;
@@ -226,16 +217,8 @@ conAngular
 
             LoaderHelper.showLoader( 'Ubicando ' + $scope.item.name + ' en almacén' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
-                switch( $scope.item.actable_type ){
-                    case 'UnitItem':
-                        var quantity = 1;
-                        break;
-                    case 'BulkItem':
-                        var quantity = $scope.quantity;
-                        break;
-                    default:
-                        var quantity = $scope.parts.length;
-                }
+                var quantity = $scope.quantity;
+                
                 if( 'undefined' == typeof $scope.units ){
                     $scope.units = this.units;
                 }
@@ -676,13 +659,14 @@ conAngular
 
         function registerBulkItem( itemRequestId ){
 
+            console.log('registering...');
             var status = 1;
             if( $('#checkbox-validation:checked').length ){
                 status = 7;
             }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
             var isHighValue = $('#checkbox-high-value:checked').length;
-            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, function ( response ){
+            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.extraParts, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -691,11 +675,10 @@ conAngular
                     return;
                 }
 
-                console.log( response.inventory_item );
-
                 $scope.registeredItemId = response.inventory_item.id;
                 $scope.item = response.inventory_item;
                 $scope.itemRequestId = itemRequestId;
+                console.log(response);
                 $scope.quantity = parseInt( response.inventory_item.quantity );
                 $scope.showMoreActions = true;
                 Materialize.toast('Entrada a granel: "' + $scope.itemName + '" registrada exitosamente!', 4000, 'green');
@@ -734,6 +717,7 @@ conAngular
 
             if( 1 == $rootScope.globals.currentUser.role || 4  == $rootScope.globals.currentUser.role ){
                 InventoryItemService.getLatestEntries( function( latestInventoryItems ){
+                    console.log(latestInventoryItems);
                     $scope.latestInventoryItems = latestInventoryItems;
                 });
                 return;
@@ -774,7 +758,7 @@ conAngular
                     .withOption('searching', false);
             $scope.dtLatestEntriesColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(7).notSortable()
+                DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 

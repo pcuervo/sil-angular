@@ -69,13 +69,9 @@
             </div>
         </form>
     </div>
-    <div>
-      <p><i class="[ fa fa-square ]"></i> Unitaria - <i class="[ fa fa-th-large ]"></i> Paquete - <i class="[ fa fa-align-justify ]"></i> Granel</p><span class="[ green lighten-3 ]">En existencia</span><span class="[ red lighten-3 ]">Sin existencia</span>
-    </div>
     <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
             <tr>
-                <th class="[ center-align ][ hide-on-small-only ]">Tipo</th>
                 <th class="[ center-align ]"></th>
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ]">Cantidad</th>
@@ -86,38 +82,37 @@
         </thead>
         <tbody>
             <tr ng-repeat="i in inventoryItems">
-                <td class="[ hide-on-small-only ][ {{ getStatusClass( i.status ) }} ][ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }}]"></i><p class="[ hide ]">{{i.actable_type}}</p></td>
-                <td><img ng-src="{{ i.img }}" alt=""></td>
-                <td>{{ i.name + ' ' + i.model  }}</td>
-                <td class="[ center-align ]">{{ i.quantity }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.serial_number }}</td>
+                <td><img ng-src="{{ i.item.img }}" alt=""></td>
+                <td>{{ i.item.name + ' ' + i.item.model  }}</td>
+                <td class="[ center-align ]">{{ i.item.quantity }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.item.serial_number }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">
-                    <p ng-if="i.locations.length == 0 || role == 6">-</p>
-                    <div ng-repeat="loc in i.locations" ng-if="role != 6">
+                    <p ng-if="i.item.locations.length == 0 || role == 6">-</p>
+                    <div ng-repeat="loc in i.item.locations" ng-if="role != 6">
                         <a href="#/view-location/{{loc.location_id}}" >{{loc.location}}</a>
                     </div>
                 </td>
                 <td class="[ center-align ]">
-                    <div ng-if="i.status == 1">
-                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect red ]" href="#/withdraw-item/{{i.id}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-outdent ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.barcode}}" ng-if="'BulkItem' == i.actable_type" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
+                    <div ng-if="i.item.status == 1">
+                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.item.id}}"><i class="[ fa fa-eye ]"></i></a>
+                        <a class="[ btn waves-effect red ]" href="#/withdraw-item/{{i.item.id}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-outdent ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.item.barcode}}" ng-if="'BulkItem' == i.item.actable_type" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
                     </div>
-                    <div ng-if="( i.status == 3 )">
-                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.barcode}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
-                        <a class="[ btn waves-effect red ]" href="#/withdraw-item/{{i.id}}"><i class="[ fa fa-outdent ]" ng-show="1 == role || 4 == role"></i></a>
+                    <div ng-if="( i.item.status == 3 )">
+                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.item.id}}"><i class="[ fa fa-eye ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.item.barcode}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
+                        <a class="[ btn waves-effect red ]" href="#/withdraw-item/{{i.item.id}}"><i class="[ fa fa-outdent ]" ng-show="1 == role || 4 == role"></i></a>
                     </div>
-                    <div ng-if="( i.status == 2 )">
-                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.barcode}}" ng-show="1 == role || 4 == role" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
+                    <div ng-if="( i.item.status == 2 )">
+                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.item.id}}"><i class="[ fa fa-eye ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.item.barcode}}" ng-show="1 == role || 4 == role" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
                     </div>
-                    <div ng-if="( i.status == 4 || i.status == 5 || i.status == 6  )">
-                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
+                    <div ng-if="( i.item.status == 4 || i.item.status == 5 || i.item.status == 6  )">
+                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.item.id}}"><i class="[ fa fa-eye ]"></i></a>
                     </div>
-                    <div ng-if="( i.status == 7 )">
-                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect ]" href="#/validate-entry/{{i.id}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-check ]"></i></a>
+                    <div ng-if="( i.item.status == 7 )">
+                        <a class="[ btn waves-effect ]" href="#/view-item/{{i.item.id}}"><i class="[ fa fa-eye ]"></i></a>
+                        <a class="[ btn waves-effect ]" href="#/validate-entry/{{i.item.id}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-check ]"></i></a>
                     </div>
                 </td>
             </tr>

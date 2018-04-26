@@ -71,17 +71,8 @@ conAngular
 
             LoaderHelper.showLoader( 'Agregando artículo a ubicación...' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
-                switch( $scope.item.actable_type ){
-                    case 'UnitItem':
-                        var quantity = 1;
-                        break;
-                    case 'BulkItem':
-                        var quantity = this.quantity;
-                        break;
-                    default:
-                        var quantity = $scope.parts.length;
-                }
-                WarehouseService.locateItem( $scope.item.id, this.selectedLocation, this.units, quantity, true, $scope.item.actable_type, function( response ) {
+                
+                WarehouseService.locateItem( $scope.item.id, this.selectedLocation, $scope.quantity, true, function( response ) {
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                    $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
                 });
@@ -660,25 +651,17 @@ conAngular
                 if( currentPath.indexOf('locate-item') <= -1 ){
                     $('.js-barcode').JsBarcode( item.barcode );
                 }
-                if( 'UnitItem' === item.actable_type ) return;
 
                 $scope.hasMultipleLocations = false;
                 $scope.multipleLocations = [];
                 $scope.currentLocations = [];
 
-                if( 'BundleItem' === item.actable_type ) {
-                    $scope.parts = item.parts;
-                    return;
-                }
-                if( 'BulkItem' === item.actable_type ){
-                    LoaderHelper.showLoader('Cargando cantidad a reubicar...');
-                    $scope.quantity = item.quantity;
-                    InventoryItemService.isReentryWithPendingLocation( item.id, function( response ){
-                        if( 'undefined' != typeof response.quantity ) $scope.quantity = response.quantity;
-                        LoaderHelper.hideLoader();
-                    });
-                }
-
+                LoaderHelper.showLoader('Cargando cantidad a reubicar...');
+                $scope.quantity = item.quantity;
+                InventoryItemService.isReentryWithPendingLocation( item.id, function( response ){
+                    if( 'undefined' != typeof response.quantity ) $scope.quantity = response.quantity;
+                    LoaderHelper.hideLoader();
+                });
             });
         }// getItem
 

@@ -103,16 +103,14 @@ conAngular
                });
         }// getRackAvailableLocations
 
-        function locateItem( inventoryItemId, warehouseLocationId, units, quantity, isInventoryItem, actableType, callback ){
+        function locateItem( inventoryItemId, warehouseLocationId, quantity, isInventoryItem, callback ){
             var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/locate_item';
             $http.post( serviceUrl, 
                 { 
                     inventory_item_id:      inventoryItemId,
                     warehouse_location_id:  warehouseLocationId,
-                    units:                  units,
                     quantity:               quantity,
                     is_inventory_item:      isInventoryItem,
-                    actable_type:           actableType
                 }
             )
             .success(function( response ) {

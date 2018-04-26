@@ -49,6 +49,7 @@ conAngular
         $scope.searchTransactions = function(){
             LoaderHelper.showLoader('Buscando...');
             InventoryTransactionService.search( $scope.keyword, function( inventoryTransactions ){
+                console.log(inventoryTransactions);
                 if(! inventoryTransactions.length){
                     Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
                 }

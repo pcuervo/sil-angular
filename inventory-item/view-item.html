@@ -1,6 +1,138 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
+    <div class="[ card-panel ]">
+    <div class="[ row ]">
+        <div class="[ col s12 ]"> 
+            <div class="[ center-align ]">
+                <a href="#/edit-item/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="1 == role || 4 == role"><i class="[ fa fa-edit ][ left ]"></i>Editar</a>
+                <button class="[ waves-effect ][ btn ]" ng-click="printBarcode('#barcode')"  ng-show="1 == role || 4 == role"><i class="[ fa fa-print ][ left ]"></i> Código de barras</button>
+                <a href="#/new-delivery/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="(1==item.status || 3==item.status)&&(1 == role || 4 == role)"><i class="[ fa fa-motorcycle ][ left ]"></i>Crear envío</a>
+                <a href="#/re-entry/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="2==itemStatus"><i class="[ fa fa-indent ][ left ]"></i>Reingresar</a>
+                <a href="#/locate-item/{{ item.id }}" class="[ waves-effect ][ btn ]" ng-show="! hasLocations && ( 1 == role || 4 == role ) && 1 == item.status"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar</a>
+                <button ng-click="deleteItem(item.id)" class="[ waves-effect ][ btn red ]" ng-show="1 == role"><i class="[ fa fa-edit ][ left ]"></i>Eliminar</button>
+            </div>
+        </div>
+        <h4 class="[ center-align ]">{{ itemName }}</h4>
+        <div class="[ col s12 m4 offset-m2 l5 offset-l2 ]">
+            <img class="[ col s12 ]" ng-src="{{item.img}}}">
+        </div>
+        <div class="[ col s6 m4 l3 ]"> 
+        	<div class="input-field">
+                <input id="serial-number" type="text" name="serialNumber" ng-model="serialNumber" ng-readonly="true">
+                <label for="serial-number">Número de serie</label>
+            </div>
+            <div class="input-field">
+                <input id="quantity" type="text" name="itemQuantity" ng-model="quantity" ng-readonly="true">
+                <label for="quantity">Cantidad</label>
+            </div>
+            <div class="input-field">
+                <input id="item-state" type="text" name="itemStateLabel" ng-model="itemStateLabel" ng-readonly="true">
+                <label for="item-state">Estado</label>
+            </div>
+            <div class="[ input-field ]">
+                <input id="serial-number" type="text" name="brand" ng-model="brandModel" ng-readonly="true">
+                <label for="serial-number">Marca / Modelo</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 ]"> 
+            <div class="[ input-field ]">
+                <textarea id="description" class="materialize-textarea" name="description" ng-model="description" ng-readonly="true"></textarea>
+                <label for="description">Descripción</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 ]"> 
+            <div class="[ input-field ]">
+                <textarea id="extra-parts" class="materialize-textarea" name="extraParts" ng-model="extraParts" ng-readonly="true"></textarea>
+                <label for="extra-parts">Partes adicionales</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="itemType" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
+                <label for="itemValue">Tipo de mercancía</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" ng-readonly="true">
+                <label for="itemValue">Valor</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="storage-type" type="text" name="storageType" ng-model="storageType" ng-readonly="true">
+                <label for="storage-type">Tipo de almacenaje</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 m6 ]">    
+            <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" ng-readonly="true">
+        </div>
+        <div class="[ col s12 m6 ]">    
+            <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
+            <input class="datepicker" type="date" ng-model="validityExpirationDate" ng-readonly="true">
+        </div>
+        <h4 class="[ center-align ]">Datos de proyecto</h4>
+        <div class="[ col s12 m4 offset-m2 ]"> 
+            <div class="input-field">
+                <input id="project" type="text" ng-model="project" ng-readonly="true">
+                <label for="project">Proyecto</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="client-name" type="text" ng-model="clientName" ng-readonly="true">
+                <label for="client-name">Cliente</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s12 m4 offset-m2 ]"> 
+            <div class="input-field">
+                <input id="pm" type="text" ng-model="pm" ng-readonly="true">
+                <label for="pm">Project Manager</label>
+            </div>
+        </div>
+        <div class="[ col s12 m4 ]"> 
+            <div class="input-field">
+                <input id="ae" type="text" ng-model="ae" ng-readonly="true">
+                <label for="ae">Ejecutivo de cuenta</label>
+            </div>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ col s8 offset-m2 ]" ng-if="hasLocations"> 
+            <h4 class="[ center-align ]">Ubicaciones de artículo</h4>
+            <table datatable="ng" dt-options="dtItemLocationsOptions" dt-column-defs="dtItemLocationsColumnDefs" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th class="[ center-align ]">Rack</th>
+                        <th class="[ center-align ]">Ubicación</th>
+                        <th class="[ center-align ]">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="location in item.locations">
+                        <td class="[ center-align ]">{{ location.rack }}</td>
+                        <td class="[ center-align ]"><a href="#/view-location/{{location.location_id}}">{{ location.location }}</a></td>
+                        <td class="[ center-align ]">{{ location.quantity }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="[ clear ]"></div>
 
-<div class="[ card-panel ]" ng-include src="'inventory-item/templates/view-unit-item.html'" ng-if="'UnitItem'==item.actable_type"></div>
-<div class="[ card-panel ]" ng-include src="'inventory-item/templates/view-bulk-item.html'" ng-if="'BulkItem'==item.actable_type"></div>
-<div class="[ card-panel ]" ng-include src="'inventory-item/templates/view-bundle-item.html'" ng-if="'BundleItem'==item.actable_type"></div>
+        <div class="[ col s12 m6 offset-m3 ]">
+            <div class="[ card ]" id="barcode">
+                <div class="card-image">
+                    <img class="[ js-barcode ][ img-responsive ]" src="#">
+                </div>
+                <div class="[ content ]">
+                    <h5 class="[ center-align ]">{{ item.barcode }}</h5>
+                </div>
+            </div>
+        </div>
+    </div><!-- row -->
+</div>

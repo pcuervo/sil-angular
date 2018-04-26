@@ -62,14 +62,6 @@ conAngular
             return true;
         }
 
-        $scope.getItemTypeIcon = function( type ){
-            switch( type ){
-                case 'UnitItem': return "[ fa fa-square ]";
-                case 'BulkItem': return "[ fa fa-align-justify ]";
-                case 'BundleItem': return "[ fa fa-th-large ]";
-            }
-        }// getItemTypeIcon
-
         $scope.getNameClass = function( type ){
             switch( type ){
                 case 'UnitItem':
@@ -213,7 +205,6 @@ conAngular
 
         function initInventory( currentPath ){
             $scope.role = $rootScope.globals.currentUser.role;
-            console.log($scope.role);
 
             if( currentPath.indexOf( '/view-item-types' ) > -1 ){
                 LoaderHelper.showLoader('Cargando tipos de mercancía')
@@ -226,10 +217,9 @@ conAngular
                 getItem( $stateParams.itemId );
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
                     if( 'inventory-item/templates/view-unit-item.html' == template || 'inventory-item/templates/view-bulk-item.html' == template || 'inventory-item/templates/view-bundle-item.html' == template ){
-                        $('.js-barcode').JsBarcode( $scope.item.barcode );
-                        $('[name="storageType"]').val( $scope.item.storage_type );
-                        $('[name="itemType"]').val( $scope.item.item_type );
-                        getItemState( $scope.item.state );
+                        console.log($scope.item);
+
+                        
                     }
                 });
                 return;
@@ -339,7 +329,7 @@ conAngular
                         extend: "csvHtml5",
                         fileName:  "CustomFileName" + ".csv",
                         exportOptions: {
-                            columns: [2, 3, 4, 5]
+                            columns: [1, , 2, 3, 4]
                         },
                         exportData: {decodeEntities:true}
                     }
@@ -347,7 +337,7 @@ conAngular
                 .withOption('responsive', true);
             $scope.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(6).notSortable()
+                DTColumnDefBuilder.newColumnDef(5).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initInventoryDataTable
@@ -364,23 +354,19 @@ conAngular
                 $scope.item = item;
                 initItem( item );
                 fillProjectUsersSelects( item.project_id );
-
-                console.log( item );
                 
-                if( 'BundleItem' == item.actable_type ){
-                    initItemPartsDataTable();
-                    $scope.itemParts = item.parts;
-                    $scope.hasPartsToWithdraw = false;
-                }
-                if( 'BulkItem' == item.actable_type ){
-                    $scope.quantity = item.quantity;
-                    $scope.itemQuantity = item.quantity;
-                }
+                $scope.quantity = item.quantity;
+
+                if( $('.js-barcode').length ) $('.js-barcode').JsBarcode( $scope.item.barcode );
+                if( $('[name="storageType"]').length ) $('[name="storageType"]').val( $scope.item.storage_type );
+                if( $('[name="itemType"]').length ) $('[name="itemType"]').val( $scope.item.item_type );
+                getItemState( $scope.item.state );
 
             });
         }// getItem
 
         function initItem( item ){
+            console.log(item);
             $scope.project = item.project;
             $scope.pm = item.pm;
             $scope.ae = item.ae;
@@ -393,6 +379,13 @@ conAngular
             $scope.itemState = item.state;
             $scope.itemType = item.item_type;
             $scope.storageType = item.storage_type;
+            $scope.serialNumber = item.serial_number;
+            $scope.quantity = item.quantity;
+            $scope.extraParts = item.extra_parts;
+            $scope.brandModel = '-';
+            if( '' !== item.brand.trim() || '' !== item.model.trim() ){
+                $scope.brandModel = item.brand + ' / ' + item.model;
+            } 
             $scope.getStatus( item.status );
             $scope.itemValue = $filter( 'currency' )( item.value );
             $scope.entryDate = new Date( $filter('date')( item.created_at, 'yyyy-MM-dd' ) );

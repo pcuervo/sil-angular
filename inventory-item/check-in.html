@@ -2,19 +2,13 @@
 
 <div class="[ card-panel ]">
     <div class="[ row ]" ng-if="1 == role || 4 == role">
-        <div class="[ col s12 m6 l4 ]">
-            <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/add-unit-item"><i class="[ fa fa-indent ][ left ]"></i>Unitaria</a>
-        </div>
-        <div class="[ col s12 m6 l4 ]">
-            <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/add-bundle-item"><i class="[ fa fa-indent ][ left ]"></i>Paquete</a>
-        </div>
-        <div class="[ col s12 m6 l4 ]">
-            <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/add-bulk-item"><i class="[ fa fa-indent ][ left ]"></i>Granel</a>
+        <div class="[ col s12 m6 l4 offset-l2 ]">
+            <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/add-bulk-item"><i class="[ fa fa-indent ][ left ]"></i>Nueva Entrada</a>
         </div>
         <div class="[ col s12 m6 l4 ]">
             <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/re-entry/0"><i class="[ ion-arrow-return-right ][ left ]"></i>Reingresos</a>
         </div>
-        <div class="[ col s12 m6 l4 ]">
+        <div class="[ col s12 m6 l4 offset-l2 ]">
             <a class="[ col s12 ][ btn btn-extra green ][ waves-effect ]" href="#/pending-entry-requests"><i class="[ fa fa-hand-o-up ][ left ]"></i>Solicitudes de entrada</a>
         </div>
         <div class="[ col s12 m6 l4 ]" ng-if="1 == role">
@@ -66,40 +60,31 @@
 <div class="[ card-panel ]">
     <div class="[ row ]">
         <div class="[ col s12 ]">
-            <div class="col"></div>
-            <div>
-                <p>Tipo de entradas:</p>
-                <p><i class="[ fa fa-square ]"></i> Unitaria - <i class="[ fa fa-th-large ]"></i> Paquete - <i class="[ fa fa-align-justify ]"></i> Granel</p>
-            </div>
             <h4 class="[ center-align ]">Últimos artículos ingresados</h4>
         
             <table datatable="ng" dt-options="dtLatestEntriesOptions" dt-column-defs="dtLatestEntriesColumnDefs" class="row-border col s12 hover">
                 <thead>
                     <tr>
-                        <th class="[ center-align ]">Tipo</th>
                         <th class="[ hide-on-small-and-down ]"></th>
                         <th class="[ center-align ]">Nombre</th>
                         <th class="[ center-align ][ hide-on-small-only ]">Cantidad</th>
-                        <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
+                        <th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
                         <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
-<!--                         <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th> -->
                         <th class="[ center-align ][ hide-on-med-and-down ]">Rack / Ubicaciones</th>
                         <th class="[ center-align ]" ng-show="( role == 1 )">Ver</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in latestInventoryItems" id="{{ item.id }}">
-                        <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i><p class="[ hide ]">{{item.actable_type}}</p></td>
-                        <td class="[ hide-on-small-and-down ]"><img ng-src="{{ item.img }}" alt=""></td>
+                    <tr ng-repeat="latest in latestInventoryItems" id="{{ latest.item.id }}">
+                        <td class="[ hide-on-small-and-down ]"><img ng-src="{{ latest.item.image_url }}" alt=""></td>
                         <td>
-                            <a href="#/view-item/{{ item.id }}">{{ item.name }}</a>
+                            <a href="#/view-item/{{ latest.item.id }}">{{ latest.item.name }}</a>
                         </td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.quantity }}</td>
-                        <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.created_at | date:'yyyy-MM-dd h:mm:ss a' }}</td>
-<!--                         <td class="[ center-align ][ hide-on-small-only ]">{{ item.created_at | date:'dd/MM/yyyy h:mm:ss a' }}</td> -->
-                        <td class="[ center-align ][ hide-on-med-and-down ][ js-location-links ]">{{ getRackLocationLink( item.id, item.locations ) }}</td>
-                        <td class="[ center-align ]" ng-show="( role == 1 )"><a class="[ btn waves-effect ]" href="#/view-item/{{item.id}}"><i class="[ fa fa-eye ]"></i></a></td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.item.quantity }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.item.serial_number }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.item.created_at | date:'yyyy-MM-dd h:mm:ss a' }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ][ js-location-links ]">{{ getRackLocationLink( latest.item.id, latest.locations ) }}</td>
+                        <td class="[ center-align ]" ng-show="( role == 1 )"><a class="[ btn waves-effect ]" href="#/view-item/{{latest.item.id}}"><i class="[ fa fa-eye ]"></i></a></td>
                     </tr>
                 </tbody>
             </table>
