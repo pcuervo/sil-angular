@@ -49,6 +49,7 @@ conAngular
         service.destroyItemType = destroyItemType;
         service.getItemType = getItemType;
         service.editItemType = editItemType;
+        service.getInStockPaged = getInStockPaged;
         return service;
 
         // Public 
@@ -842,4 +843,19 @@ conAngular
                 callback( response );
             });
         }// editItemType
+
+        function getInStockPaged( page, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { in_stock: true, page: page  } 
+                })
+            .success(function ( response ) {
+                    callback( response );
+            })
+            .error(function ( response ) {
+                    callback( response );
+            });
+        }// getInStock
     }]);

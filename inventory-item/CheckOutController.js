@@ -137,6 +137,11 @@ conAngular
             Materialize.toast( 'Se quitó el artículo "' + itemName + '" de la lista de artículos a retirar.', 4000, 'red');
         }
 
+        $scope.loadMoreItems = function(){
+            console.log($scope.currentPage);
+            fetchInStock($scope.currentPage);
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -149,7 +154,10 @@ conAngular
                 }
                 
                 LoaderHelper.showLoader('Obteniendo artículos en existencia...');
-                fetchItemsInStock();
+                //fetchItemsInStock();
+                $scope.currentPage = 1;
+                $scope.showLoadeMoreBtn = false;
+                fetchInStock($scope.currentPage);
                 initMultipleWithdrawalDataTable();
                 fetchSuppliers();
                 $scope.exitDate = new Date();
@@ -470,6 +478,25 @@ conAngular
             InventoryItemService.getInStock( function( items ){
                 LoaderHelper.hideLoader();
                 $scope.inventoryItems = items;
+            });
+        }
+
+        function fetchInStock(page){
+            LoaderHelper.showLoader('Obteniendo artículos en existencia...');
+            InventoryItemService.getInStockPaged( page, function( itemsRes ){
+                LoaderHelper.hideLoader();
+                $scope.showLoadeMoreBtn = true;
+                if( $scope.currentPage == itemsRes.total_pages ){
+                    $scope.showLoadeMoreBtn = false;
+                }
+                if( typeof $scope.inventoryItems !== 'undefined' ){
+                    console.log('concui');
+                    $scope.inventoryItems = $scope.inventoryItems.concat(itemsRes.inventory_items);
+                } else {
+                    $scope.inventoryItems = itemsRes.inventory_items;
+                }
+                
+                $scope.currentPage++;
             });
         }
 

@@ -45,6 +45,10 @@
             <div class="[ col s12 ][ center-align ]" >
                 <button class="[ waves-effect ][ btn red ]">Dar salida</button>
             </div>
+            <div class="[ clear ]"></div>
+            <div class="[ mt-20 ]" ng-if="showLoadeMoreBtn">
+                <a class="[ waves-effect ][ btn ]" ng-click="loadMoreItems()">Cargar más artículos</a>
+            </div>
             <table datatable="ng" dt-options="dtMultipleWithdrawalOptions" dt-column-defs="dtMultipleWithdrawalColumnDefs" class="row-border hover">
                 <thead>
                     <tr>
