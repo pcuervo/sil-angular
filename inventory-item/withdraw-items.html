@@ -3,13 +3,17 @@
         <h4 class="[ center-align ]">Salida masiva</h4>
         <form class="[ col s12 ]" ng-submit="multipleWithdrawal()" data-parsley-validate>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div class="[ col s12 m2 ]">    
+                <label class="[ fs-12 ]" for="">Folio</label>
+                <input type="text" name="nextFolio" ng-model="nextFolio" ng-readonly="true">
+            </div>
+            <div class="[ col s12 m4 ][ mt-10 ]"> 
                 <select name="pickupCompany" ng-model="pickupCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
                     <input id="pickup-contact-unit" type="text" name="pickupCompanyContact" ng-model="pickupCompanyContact">
                     <label for="pickup-contact-unit">¿Quién se lo lleva?</label>

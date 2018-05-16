@@ -2,7 +2,18 @@
     <div class="[ row ]" ng-show="!isSummary">
         <form ng-submit="multipleItemsDelivery()" data-parsley-validate>
             <h4 class="[ center-align ]">Datos de envío</h4>
-            <div class="[ col s12 m4 ][ mt-10 ]">
+            <div class="[ col s12 m3 offset-m2 ]">    
+                <label class="[ fs-12 ]" for="">Folio</label>
+                <input type="text" name="nextFolio" ng-model="nextFolio" ng-readonly="true">
+            </div>
+            <div class="[ col s12 m5 ]">
+                <div class="input-field">
+                    <input id="company" type="text" name="company" ng-model="company" required>
+                    <label for="company">Empresa donde se entrega</label>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="[ col s12 m4 offset-m2 ][ mt-10 ]">
                 <select name="deliveryGuy" ng-model="deliveryGuy" data-parsley-error-message="¡El repartidor es obligatorio!">
                     <option value="" disabled selected>Selecciona el repartidor</option>
                     <option value="">No hay</option>
@@ -15,12 +26,6 @@
                     <option value="">No hay</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
-            </div>
-            <div class="[ col s12 m4 ]">
-                <div class="input-field">
-                    <input id="company" type="text" name="company" ng-model="company" required>
-                    <label for="company">Empresa donde se entrega</label>
-                </div>
             </div>
             <div class="[ col s12 ]">
                 <div class="input-field">
@@ -77,7 +82,10 @@
             <div class="[ col s12 ][ center-align ]" >
                 <button class="[ waves-effect ][ btn red ]">Enviar</button>
             </div>
-            <div class="clear"></div>
+            <div class="[ clear ]"></div>
+            <div class="[ mt-20 ]" ng-if="showLoadeMoreBtn">
+                <a class="[ waves-effect ][ btn ]" ng-click="loadMoreItems()">Cargar más artículos</a>
+            </div>
             <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
                 <thead>
                     <tr>

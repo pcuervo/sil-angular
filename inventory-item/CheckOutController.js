@@ -32,7 +32,6 @@ conAngular
 
         $scope.withdraw = function( type ){
 
-            LoaderHelper.showLoader( 'Registrando salida...' );
             switch( type ){
                 case 'UnitItem': 
                     withdrawUnitItem( $scope.item.actable_id, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments );
@@ -89,8 +88,15 @@ conAngular
                 Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
                 return;
             }
-            console.log( $scope.withdrawnItems );
-            InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
+
+            var nextFolio = '-';
+            console.log($scope.nextFolio);
+            if( 'undefined' !== $scope.nextFolio ){
+                nextFolio = $scope.nextFolio;
+            }
+            console.log(nextFolio);
+
+            InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, nextFolio,  function( response ){
                 Materialize.toast( response.success, 4000, 'green');
                 $scope.isSummary = true;
                 $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
@@ -151,6 +157,7 @@ conAngular
             if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
                 if( ! $rootScope.globals.initMultipleWithdrawal ){
                     initItemsWithdrawal();
+                    fetchLastFolio();
                 }
                 
                 LoaderHelper.showLoader('Obteniendo artículos en existencia...');
@@ -647,5 +654,22 @@ conAngular
                 itemId = e.target.id.replace('remove-', '');
                 $scope.removeItemToWithdraw( itemId );
             });
+        }
+
+        function fetchLastFolio( id ){
+            InventoryTransactionService.lastCheckoutFolio( function( lastFolio ){
+                $scope.nextFolio = getNextFolio( lastFolio );
+                console.log($scope.nextFolio);
+            }); 
+        }
+
+        function getNextFolio(lastFolio){
+            var numDigits = 7;
+            var splitted = lastFolio.split('-');
+            var lastFolioNum = parseInt( splitted[1] );
+
+            while (lastFolioNum.toString().length < numDigits)  lastFolioNum = "0" + lastFolioNum;
+
+            return 'FS-' + lastFolioNum;
         }
 }]);

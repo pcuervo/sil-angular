@@ -302,8 +302,7 @@ conAngular
 
         }// withdrawBundleItem
 
-        function multipleWithdrawal( items, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, callback ) {
- 
+        function multipleWithdrawal( items, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, folio, callback ) {
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/multiple_withdrawal';
             $http.post( serviceUrl, 
                 { 
@@ -312,7 +311,8 @@ conAngular
                     pickup_company:         pickupCompany,
                     pickup_company_contact: pickupCompanyContact,
                     returnDate:             returnDate,
-                    additional_comments:    additionalComments
+                    additional_comments:    additionalComments,
+                    folio:                  folio
                 }
             )
             .success(function( response ) {
