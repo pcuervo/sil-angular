@@ -49,6 +49,7 @@ conAngular
         service.destroyItemType = destroyItemType;
         service.getItemType = getItemType;
         service.editItemType = editItemType;
+        service.getInStockPaged = getInStockPaged;
         return service;
 
         // Public 
@@ -301,8 +302,7 @@ conAngular
 
         }// withdrawBundleItem
 
-        function multipleWithdrawal( items, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, callback ) {
- 
+        function multipleWithdrawal( items, exitDate, pickupCompany, pickupCompanyContact, returnDate, additionalComments, folio, callback ) {
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/multiple_withdrawal';
             $http.post( serviceUrl, 
                 { 
@@ -311,7 +311,8 @@ conAngular
                     pickup_company:         pickupCompany,
                     pickup_company_contact: pickupCompanyContact,
                     returnDate:             returnDate,
-                    additional_comments:    additionalComments
+                    additional_comments:    additionalComments,
+                    folio:                  folio
                 }
             )
             .success(function( response ) {
@@ -842,4 +843,19 @@ conAngular
                 callback( response );
             });
         }// editItemType
+
+        function getInStockPaged( page, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
+            $http ({
+                url: serviceUrl, 
+                method: "GET",
+                params: { in_stock: true, page: page  } 
+                })
+            .success(function ( response ) {
+                    callback( response );
+            })
+            .error(function ( response ) {
+                    callback( response );
+            });
+        }// getInStock
     }]);

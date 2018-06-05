@@ -95,10 +95,14 @@ conAngular
         }// update
 
         $scope.destroyProject = function(projectId){
+            var deleteProject = confirm('¿Seguro que deseas eliminar el proyecto? Todo el inventario asignado a este proyecto será eliminado también.');
+
+            if( ! deleteProject ) return; 
+
             ProjectService.destroy( projectId, function ( response ){
                 console.log(response);
-                // Materialize.toast( response.success , 4000, 'green');
-                // $state.go('/add-user-to-project', { projectId: $scope.project.id }, { reload: true });
+                Materialize.toast('¡Proyecto borrado exitosamente!' , 4000, 'green');
+                $state.go('/view-projects', {}, { reload: true });
             });
         }// addUsersToProject
 

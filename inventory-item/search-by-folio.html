@@ -1,0 +1,50 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Salidas por folio</h4>
+    <div class="[ row ]">
+        <p>Buscar movimientos por folio:</p>
+        <form ng-submit="searchByFolio()" data-parsley-search>
+            <div class="[ col s12 m6 offset-m3 ][ input-field ]">
+                <input id="folio" type="text" ng-model="folio" required data-parsley-error-message="¡Este campo es obligatorio!" >
+                <label for="folio">Ingresa el folio de salida</label>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ][ center-align  ]">
+                <button class="[ waves-effect ][ btn ]"><i class="[ mdi-action-search ][ left ]"></i> Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Movimientos al inventario</h4>
+    <table datatable="ng" dt-options="dtInventoryTransactionsFolioOptions" dt-column-defs="dtInventoryTransactionsColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">Tipo</th>
+                <th class="[ center-align ]">Folio</th>
+                <th class="[ center-align ]">Nombre</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Cantidad movimiento</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Status</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Fecha entrada / salida (A/M/D) </th>
+                <th class="[ center-align ][ hide-on-small-only ]">Comentarios</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="it in inventoryTransactions">
+                <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }} <i class="[ {{ getItemTypeIcon( it.inventory_item.actable_type ) }} ]"></i></td>
+                <td class="[ center-align ]">{{ it.folio }}</td>
+                <td class="[ center-align ]"><a href="#/view-item/{{it.inventory_item.id }}">{{ it.inventory_item.name }}</a></td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.inventory_item.status }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ it.entry_exit_date | date:'yyyy/MM/dd' }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ it.additional_comments }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+  $('[data-parsley-search]').parsley();
+</script>

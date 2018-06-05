@@ -1,5 +1,5 @@
 conAngular
-    .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'SupplierService', 'ClientService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, SupplierService, ClientService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
+    .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'SupplierService', 'ClientService', 'InventoryTransactionService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, SupplierService, ClientService, InventoryTransactionService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
         
         (function initController() {
             $scope.role = $rootScope.globals.currentUser.role;
@@ -29,6 +29,12 @@ conAngular
                 Materialize.toast( 'No se pueden enviar 0 piezas, por favor selecciona una cantidad mayor a 0', 4000, 'red');
                 return;
             }
+
+            // var nextFolio = '-';
+            // console.log($scope.nextFolio);
+            // if( 'undefined' !== $scope.nextFolio ){
+            //     nextFolio = $scope.nextFolio;
+            // }
 
             initDeliverySummaryDataTable();
             $scope.address = $('#address').val();
@@ -203,6 +209,8 @@ conAngular
             Materialize.toast( 'Se quitó el artículo "' + itemName + '" de la lista de artículos a retirar.', 4000, 'red');
         }
 
+        $scope.loadMoreItems = function(){ fetchInStock($scope.currentPage); }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -241,12 +249,11 @@ conAngular
 
             switch( currentPath ){
                 case '/multiple-items-delivery':
-                    LoaderHelper.showLoader( 'Obteniendo inventario...' );
+                
                     if( ! $rootScope.globals.initMultipleDelivery ){
                         initItemsWithdrawal();
                     }
-                    
-                    fetchItemsInStock();
+                    fetchLastFolio();
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
                     fetchSuppliers();
@@ -318,6 +325,24 @@ conAngular
                 console.log(items);
                 LoaderHelper.hideLoader();
                 $scope.inventoryItems = items;
+            });
+        }
+
+        function fetchInStock(page){
+            LoaderHelper.showLoader('Obteniendo artículos en existencia...');
+            InventoryItemService.getInStockPaged( page, function( itemsRes ){
+                LoaderHelper.hideLoader();
+                $scope.showLoadeMoreBtn = true;
+                if( $scope.currentPage == itemsRes.total_pages ){
+                    $scope.showLoadeMoreBtn = false;
+                }
+                if( typeof $scope.inventoryItems !== 'undefined' ){
+                    $scope.inventoryItems = $scope.inventoryItems.concat(itemsRes.inventory_items);
+                } else {
+                    $scope.inventoryItems = itemsRes.inventory_items;
+                }
+                
+                $scope.currentPage++;
             });
         }
 
@@ -647,6 +672,45 @@ conAngular
             var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '"><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m5 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><p class="[ col s12 m2 ]"><a id="remove-' + itemId + '" href="#" ng-click="removeItemToDeliver( ' + itemId + ' )" class="[ btn red ]"><i class="[ fa fa-times ]"></i></a></p><hr></div>';
             $('.js-added-items').append( itemHtml );
             Materialize.toast( 'Se agregó el artículo "' + itemName + '" a lista de artículos a retirar.', 4000, 'green');
+        }
+
+        function fetchLastFolio( id ){
+            InventoryTransactionService.lastCheckoutFolio( function( lastFolio ){
+                $scope.nextFolio = getNextFolio( lastFolio );
+                console.log($scope.nextFolio);
+            }); 
+        }
+
+        function getNextFolio(lastFolio){
+            var numDigits = 7;
+            var splitted = lastFolio.split('-');
+            var lastFolioNum = parseInt( splitted[1] )+1;
+
+            while (lastFolioNum.toString().length < numDigits)  lastFolioNum = "0" + lastFolioNum;
+
+            return 'FS-' + lastFolioNum;
+        }
+
+        $scope.searchItems = function(){
+            if( $scope.searchIsInvalid() ){
+                Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
+                return;
+            }
+            LoaderHelper.showLoader('Buscando...');
+            InventoryItemService.search( '', '', '', '', 1, '', '', $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+                if( ! inventoryItems.length ){
+                    Materialize.toast( 'No se encontró ningún artículo.', 4000, 'red');
+                }
+                $scope.inventoryItems = inventoryItems;
+                LoaderHelper.hideLoader();
+            })
+        }// searchItems
+
+        $scope.searchIsInvalid = function(){
+            if( 'undefined' !== typeof $scope.keyword ) return false;
+            if( 'undefined' !== typeof $scope.serialNumber ) return false;
+
+            return true;
         }
 
 }]);

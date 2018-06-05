@@ -13108,6 +13108,7 @@ html.rtl .spinner-layer .left {
   .pcuervo-print .row .col.s12 { width: 50%; }
   .pcuervo-print .btn { display: none; }
 
+  .print--folio{ width: 50% !important; }
   .print--cliente{ width: 50% !important; }
   .print--contacto-cliente{ width: 50% !important; }
   .print--proveedor{ width: 50% !important; }

@@ -3,13 +3,17 @@
         <h4 class="[ center-align ]">Salida masiva</h4>
         <form class="[ col s12 ]" ng-submit="multipleWithdrawal()" data-parsley-validate>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ][ mt-10 ]"> 
+            <div class="[ col s12 m3 ]">    
+                <label class="[ fs-12 ]" for="">Folio</label>
+                <input type="text" name="nextFolio" ng-model="nextFolio" ng-readonly="true">
+            </div>
+            <div class="[ col s12 m5 ][ mt-10 ]"> 
                 <select name="pickupCompany" ng-model="pickupCompany" required data-parsley-error-message="¡El proveedor es obligatorio!">
                     <option value="" disabled selected>Selecciona el proveedor</option>
                     <option ng:repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
                 </select>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m4 ]"> 
                 <div class="input-field">
                     <input id="pickup-contact-unit" type="text" name="pickupCompanyContact" ng-model="pickupCompanyContact">
                     <label for="pickup-contact-unit">¿Quién se lo lleva?</label>
@@ -45,30 +49,42 @@
             <div class="[ col s12 ][ center-align ]" >
                 <button class="[ waves-effect ][ btn red ]">Dar salida</button>
             </div>
+            <div class="[ clear ]"></div>
+
+            <h4 class="[ center-align ]"></h4>
+            <div class="[ col s12 m4 offset-m2 ][ input-field ]">
+                <input id="keyword" type="text" ng-model="keyword">
+                <label for="[ keyword ]">Palabras clave</label>
+            </div>
+            <div class="[ col s12 m4 ][ input-field ]">
+                <input id="serialNumber" type="text" ng-model="serialNumber">
+                <label for="serialNumber">Número de serie</label>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ][ center-align  ]">
+                <a href="#" class="[ waves-effect ][ btn ]" ng-click="searchItems()"><i class="[ mdi-action-search ][ left ]"></i> Buscar</a>
+            </div>
+            
             <table datatable="ng" dt-options="dtMultipleWithdrawalOptions" dt-column-defs="dtMultipleWithdrawalColumnDefs" class="row-border hover">
                 <thead>
                     <tr>
-                        <th class="[ center-align ]">Tipo</th>
-                        <th class="[ center-align ]"></th>
+                        <th class="[ center-align ]">Imagen</th>
                         <th class="[ center-align ]">Nombre</th>
                         <th class="[ center-align ]">Número de serie</th>
                         <th class="[ center-align ]">Código de barras</th>
-                        <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
                         <th class="[ center-align ]">Cantidad a retirar</th>
                         <th class="[ center-align ]">¿Sacar?</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="i in inventoryItems" id="{{ i.id }}">
-                        <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
                         <td><img ng-src="{{ i.img }}" alt="{{i.name}}"></td>
                         <td class="[ center-align ]" id="name-{{i.id}}">{{ i.name }}</td>
                         <td class="[ center-align ]" id="serial-number-{{i.id}}">{{ i.serial_number }}</td>
                         <td class="[ center-align ]">{{ i.barcode }}</td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ i.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
                         <td class="[ center-align ]">
                             <div class="[ input-field ]">
-                                <input type="text" id="quantity-{{i.id}}" value="{{ i.quantity }}" name="item_quantity" ng-readonly="'BulkItem' != i.actable_type" />
+                                <input type="text" id="quantity-{{i.id}}" value="{{ i.quantity }}" name="item_quantity" ng-readonly="'BulkItem' !== i.actable_type" />
                                 <label for="quantity-{{i.id}}"></label>
                             </div>
                         </td>
@@ -101,7 +117,7 @@
         </div>
         <div class="clear"></div>
         <div ng-repeat="i in withdrawnItems">
-            <div class="[ col s12 m4 ]">
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="wname" type="text" name="wname" ng-readonly="true">
                     <label for="wname">{{ i.name }}</label>
@@ -113,7 +129,7 @@
                     <label for="wserial">{{ i.serial_number }}</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 ]">
+            <div class="[ col s12 m2 ]">
                 <div class="input-field">
                     <input id="wquantity" type="text" name="wquantity" ng-readonly="true">
                     <label for="wquantity">{{ i.quantity }}</label>
@@ -121,13 +137,17 @@
             </div>
             <div class="clear"></div>
         </div>
-        <div class="[ col s12 m6 ][ print--proveedor ]">
+        <div class="[ col s12 m4 ][ print--folio ]">    
+            <label class="[ fs-12 ]" for="">Folio</label>
+            <input type="text" name="nextFolio" ng-model="nextFolio" ng-readonly="true">
+        </div>
+        <div class="[ col s12 m4 ][ print--proveedor ]">
             <div class="input-field">
                 <input id="selected-pickup-company" type="text" name="pickupCompanyText" ng-model="selectedPickupCompanyText" disabled>
                 <label for="selected-pickup-company">Proveedor</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ][ print--quien-se-lo-lleva ]">
+        <div class="[ col s12 m4 ][ print--quien-se-lo-lleva ]">
             <div class="input-field">
                 <input id="pickup-contact-unit" type="text" name="pickupCompanyContact" ng-model="pickupCompanyContact" disabled>
                 <label for="pickup-contact-unit">¿Quién se lo lleva?</label>
@@ -149,28 +169,6 @@
             </div>
         </div>
         <div class="[ clear ]"></div>
-<!--         <div ng-if="multipleBulkLocations">
-            <div ng-repeat="location in fromLocations track by $index">
-                <div class="[ col s6 m4 ][ print--ubicacion ]">
-                    <div class="input-field">
-                        <input id="input_text" type="text" name="location" ng-model="location.location" disabled>
-                        <label for="input_text">Ubicación</label>
-                    </div>
-                </div>
-                <div class="[ col s6 m4 ][ print--cantidad-retirada ]">
-                    <div class="input-field">
-                        <input class="[ withdraw-quantity ]" type="text" name="withdraw-quantity-{{$index}}" ng-model="location.quantity" disabled>
-                        <label for="withdraw-quantity-{{$index}}">Cantidad retirada</label>
-                    </div>
-                </div>
-                <div class="[ col s6 m4 ][ print--unidades-desocupadas ]">
-                    <div class="input-field">
-                        <input class="[ withdraw-units ]" type="text" name="withdraw-units-{{$index}}" ng-model="location.units" disabled="">
-                        <label for="withdraw-units-{{$index}}">Unidades desocupadas</label>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <div class="[ col s12 ][ center-align ]" >
             <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión salida</button>
         </div>

@@ -9,6 +9,8 @@ conAngular
         service.getTypeClass = getTypeClass;
         service.getCheckOutsByClient = getCheckOutsByClient;
         service.search = search;
+        service.lastCheckoutFolio = lastCheckoutFolio;
+        service.searchByFolio = searchByFolio;
         return service;
 
         /******************
@@ -95,5 +97,28 @@ conAngular
            });
 
         }// search
+
+        function lastCheckoutFolio( callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/last_checkout_folio';
+            $http.get (serviceUrl )
+               .success(function ( response ) {
+                    callback( response.folio );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+
+        }// lastCheckoutFolio
+
+        function searchByFolio( folio, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/by_folio';
+            $http.post( serviceUrl, { folio: folio } )
+            .success(function ( response ) {
+                callback( response.inventory_transactions );
+            })
+            .error(function ( response ) {
+                callback( response );
+            });
+        }// search
 
     }]);

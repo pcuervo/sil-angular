@@ -186,7 +186,29 @@ conAngular.controller('AppController', ['$scope', '$rootScope', '$state', functi
         conApp.initCardTodo();
         conApp.initCardWeather();
     });
-}]);
+}]).directive('onReadFile', function ($parse) {
+    return {
+        restrict: 'A',
+        scope: false,
+        link: function(scope, element, attrs) {
+            console.dir(element);
+            console.log(attrs);
+            console.log(scope);
+            var fn = $parse(attrs.onReadFile);     
+            element.on('change', function(onChangeEvent) {
+                var reader = new FileReader();
+                
+                reader.onload = function(onLoadEvent) {
+                    scope.$apply(function() {
+                        fn(scope, {$fileContent:onLoadEvent.target.result});
+                    });
+                };
+
+                reader.readAsText((onChangeEvent.srcElement || onChangeEvent.target).files[0]);
+            });
+        }
+    }
+});;
 
 // Setup Rounting For All Pages
 conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
@@ -1378,7 +1400,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 return $ocLazyLoad.load([{
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
-                    files: conAssets('parsley')
+                    files: conAssets('parsley, dataTables')
                 }]);
             }]
         }
@@ -1533,6 +1555,53 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                     serie: true,
                     insertBefore: '#ngInsertBefore',
                     files: conAssets('dataTables')
+                }]);
+            }]
+        }
+    })
+    .state('/csv-locate', {
+        url: "/csv-locate",
+            templateUrl: "warehouse/csv-locate.html",
+            controller: "WarehouseController",
+            data: {
+                pageTitle: 'Carga de ubicaciones por CSV',
+                crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Carga CSV',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
+    .state('/rack-contents', {
+        url: "/rack-contents/:rackId",
+        templateUrl: "warehouse/rack-contents.html",
+        controller: "WarehouseController",
+        data: {
+            pageTitle: 'Contenido Rack',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Contenido Rack',
+            }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley,dataTables')
                 }]);
             }]
         }
@@ -1973,6 +2042,23 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
                     files: conAssets('parsley')
+                }]);
+            }]
+        }
+    })
+
+    .state('/search-by-folio', {
+        url: "/search-by-folio",
+        templateUrl: "inventory-item/search-by-folio.html",
+        controller: "InventoryTransactionController",
+        data: { pageTitle: 'Salidas por folio'},
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley, dataTables')
                 }]);
             }]
         }

@@ -1,0 +1,60 @@
+<h4 class="[ center-align ]">Carga de ubicaciones por CSV</h4>
+
+<div class="[ card-panel ]">
+    <p class="[ center-align ][ fs-16 ]">El orden de las columnas debe ser "UPC", "Cantidad" y  "Ubicación".</p>
+</div>
+
+<div class="[ card-panel ]">
+    <div class="[ row ]">
+        <div class="[ col s12 m6 offset-m3 ]">
+            <div class="file-field input-field">
+                <input class="file-path validate" type="text" placeholder="Haz click aquí para subir el archivo" required>
+                <div class="">
+                    <input type="file" id="csvItemLocation" file-reader="fileContent" on-read-file="prepareCSVForLocation($fileContent)"/>
+                </div>
+            </div>
+        </div>
+    </div><!-- row -->
+</div><!-- card-panel -->
+
+<div class="[ card-panel ]" ng-show="fileWasRead">
+    <h4 class="[ center-align ]">Pedidos a actualizar</h4>
+    <table datatable="ng" dt-options="toLocateDtOptions" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">Código de barras</th>
+                <th class="[ center-align ]">Cantidad</th>
+                <th class="[ center-align ]">Ubicación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in itemsToLocate">
+                <td class="[ center-align ]">{{ i.barcode }}</td>
+                <td class="[ center-align ]">{{ i.quantity }}</td>
+                <td class="[ center-align ]">{{ i.location }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="[ center-align ]">
+        <button class="[ btn waves-effect ]" ng-click="locateItemsCSV()">Ubicar artículos</button>
+    </div>
+</div>
+
+<div class="[ card-panel ]" ng-show="hasErrors">
+    <h4 class="[ center-align ]">Detalle errores</h4>
+    <p class="[ fs-16 ]">Pedidos cargados correctamente: {{updatedOrders}}</p>
+    <div class="[ row ]">
+        <table datatable="ng" dt-options="updateOrderDtOptions" class="row-border hover">
+            <thead>
+                <tr>
+                    <th class="[ center-align ]">Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="err in updateErrors">
+                    <td class="[ center-align ]">{{err}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

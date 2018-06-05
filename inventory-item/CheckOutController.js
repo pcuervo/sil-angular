@@ -32,7 +32,6 @@ conAngular
 
         $scope.withdraw = function( type ){
 
-            LoaderHelper.showLoader( 'Registrando salida...' );
             switch( type ){
                 case 'UnitItem': 
                     withdrawUnitItem( $scope.item.actable_id, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments );
@@ -89,8 +88,14 @@ conAngular
                 Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
                 return;
             }
-            console.log( $scope.withdrawnItems );
-            InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, function( response ){
+
+            var nextFolio = '-';
+            console.log($scope.nextFolio);
+            if( 'undefined' !== $scope.nextFolio ){
+                nextFolio = $scope.nextFolio;
+            }
+
+            InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, nextFolio,  function( response ){
                 Materialize.toast( response.success, 4000, 'green');
                 $scope.isSummary = true;
                 $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
@@ -137,27 +142,46 @@ conAngular
             Materialize.toast( 'Se quitó el artículo "' + itemName + '" de la lista de artículos a retirar.', 4000, 'red');
         }
 
-        /******************
-        * PRIVATE FUNCTIONS
-        *******************/
+        $scope.loadMoreItems = function(){
+            console.log($scope.currentPage);
+            fetchInStock($scope.currentPage);
+        }
+
+        $scope.searchItems = function(){
+            if( $scope.searchIsInvalid() ){
+                Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
+                return;
+            }
+            LoaderHelper.showLoader('Buscando...');
+            InventoryItemService.search( '', '', '', '', 1, '', '', $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+                if( ! inventoryItems.length ){
+                    Materialize.toast( 'No se encontró ningún artículo.', 4000, 'red');
+                }
+                $scope.inventoryItems = inventoryItems;
+                LoaderHelper.hideLoader();
+            })
+        }// searchItem
+
+        $scope.searchIsInvalid = function(){
+            if( 'undefined' !== typeof $scope.keyword ) return false;
+            if( 'undefined' !== typeof $scope.serialNumber ) return false;
+
+            return true;
+        }
 
         function initWithdrawalOptions( currentPath ){
 
             if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
-                if( ! $rootScope.globals.initMultipleWithdrawal ){
-                    initItemsWithdrawal();
-                }
-                
-                LoaderHelper.showLoader('Obteniendo artículos en existencia...');
-                fetchItemsInStock();
+                if( ! $rootScope.globals.initMultipleWithdrawal ) initItemsWithdrawal();
+                    
+                fetchLastFolio();
                 initMultipleWithdrawalDataTable();
                 fetchSuppliers();
                 $scope.exitDate = new Date();
+
                 angular.element('body').on('search.dt', function() {  
                    var searchTerm = document.querySelector('.dataTables_filter input').value;
-                   console.log('dataTables search : ' + searchTerm); 
                 });
-
                 return;
             }
 
@@ -473,6 +497,25 @@ conAngular
             });
         }
 
+        function fetchInStock(page){
+            LoaderHelper.showLoader('Obteniendo artículos en existencia...');
+            InventoryItemService.getInStockPaged( page, function( itemsRes ){
+                LoaderHelper.hideLoader();
+                $scope.showLoadeMoreBtn = true;
+                if( $scope.currentPage == itemsRes.total_pages ){
+                    $scope.showLoadeMoreBtn = false;
+                }
+                if( typeof $scope.inventoryItems !== 'undefined' ){
+                    console.log('concui');
+                    $scope.inventoryItems = $scope.inventoryItems.concat(itemsRes.inventory_items);
+                } else {
+                    $scope.inventoryItems = itemsRes.inventory_items;
+                }
+                
+                $scope.currentPage++;
+            });
+        }
+
         function fetchClientItemsInStock(){
             LoaderHelper.showLoader('Obteniendo artículos en existencia...');
             ClientService.getInventoryItems( $rootScope.globals.currentUser.id, true, function( inventory_items ){
@@ -491,9 +534,9 @@ conAngular
                     .withOption('select', true)
                     .withOption('searching', true);
             $scope.dtMultipleWithdrawalColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(4).notSortable(),
                 DTColumnDefBuilder.newColumnDef(5).notSortable(),
-                DTColumnDefBuilder.newColumnDef(6).notSortable(),
-                DTColumnDefBuilder.newColumnDef(1).notSortable()
+                DTColumnDefBuilder.newColumnDef(0).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initMultipleWithdrawalDataTable
@@ -620,5 +663,22 @@ conAngular
                 itemId = e.target.id.replace('remove-', '');
                 $scope.removeItemToWithdraw( itemId );
             });
+        }
+
+        function fetchLastFolio( id ){
+            InventoryTransactionService.lastCheckoutFolio( function( lastFolio ){
+                $scope.nextFolio = getNextFolio( lastFolio );
+                console.log($scope.nextFolio);
+            }); 
+        }
+
+        function getNextFolio(lastFolio){
+            var numDigits = 7;
+            var splitted = lastFolio.split('-');
+            var lastFolioNum = parseInt( splitted[1] )+1;
+
+            while (lastFolioNum.toString().length < numDigits)  lastFolioNum = "0" + lastFolioNum;
+
+            return 'FS-' + lastFolioNum;
         }
 }]);

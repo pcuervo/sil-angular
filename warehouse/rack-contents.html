@@ -1,0 +1,44 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Movimientos al inventario</h4>
+    <div class="[ row ]">
+        <p>Buscar movimientos por artículo:</p>
+        <form ng-submit="searchTransactions()" data-parsley-search>
+            <div class="[ col s12 m6 offset-m3 ][ input-field ]">
+                <input id="transaction-keyword" type="text" ng-model="keyword" required data-parsley-error-message="¡Este campo es obligatorio!" >
+                <label for="transaction-keyword">Ingrea palabras clave, número de serie o código de barras</label>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ][ center-align  ]">
+                <button class="[ waves-effect ][ btn ]"><i class="[ mdi-action-search ][ left ]"></i> Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Contenido del rack</h4>
+    <table datatable="ng" dt-options="dtInventoryTransactionsOptions" dt-column-defs="dtInventoryTransactionsColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">Nombre</th>
+                <th class="[ center-align ]">Número de serie</th>
+                <th class="[ center-align ][ hide-on-small-and-down ]">Ubicación</th>
+                <th class="[ center-align ][ hide-on-small-and-down ]">Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in items">
+                <td>{{ item.name }}</td>
+                <td class="[ center-align ]">{{ item.serial_number }}</td>
+                <td class="[ center-align ][ hide-on-small-and-down ]"><a href="#/view-location/{{item.location_id}}">{{ item.location }}</a></td>
+                <td class="[ center-align ][ hide-on-small-and-down ]">{{ item.quantity }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+  $('[data-parsley-search]').parsley();
+</script>
