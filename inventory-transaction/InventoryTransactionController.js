@@ -56,6 +56,18 @@ conAngular
                 LoaderHelper.hideLoader();
             })
         }// searchItem
+        
+        $scope.searchByFolio = function(){
+            LoaderHelper.showLoader('Buscando...');
+            InventoryTransactionService.searchByFolio( $scope.folio, function( inventoryTransactions ){
+                console.log(inventoryTransactions);
+                if(! inventoryTransactions.length){
+                    Materialize.toast( 'No se encontró ningún movimiento para ese folio.', 4000, 'red');
+                }
+                $scope.inventoryTransactions = inventoryTransactions;
+                LoaderHelper.hideLoader();
+            })
+        }// searchItem
 
         /******************
         * PRIVATE FUNCTIONS
@@ -65,6 +77,12 @@ conAngular
             if( currentPath.indexOf( '/view-inventory-transaction' ) > -1 ){
                 getInventoryTransaction( $stateParams.transactionId );
                 return;
+            }
+
+            switch( currentPath ){
+                case '/search-by-folio':
+                    //initInventoryTransactionsFolioDataTable();
+                    return;
             }
 
             if( 0 !== Object.keys( $stateParams ).length ) {
@@ -156,6 +174,28 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
         }// initInventoryTransactionsDataTable
+
+        function initInventoryTransactionsFolioDataTable(){
+            $scope.dtInventoryTransactionsFolioOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withOption('searching', true)
+                .withDisplayLength(10)
+                .withDOM('pitrp')
+                .withOption('responsive', true)
+                .withButtons([
+                    {
+                        extend: "csvHtml5",
+                        fileName:  "CustomFileName" + ".csv",
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        exportData: {decodeEntities:true}
+                    }
+                ]);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initInventoryTransactionsFolioDataTable
 
         function fetchNewNotifications(){
             NotificationService.getNumUnread( function( numUnreadNotifications ){

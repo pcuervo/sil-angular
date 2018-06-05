@@ -82,10 +82,23 @@
             <div class="[ col s12 ][ center-align ]" >
                 <button class="[ waves-effect ][ btn red ]">Enviar</button>
             </div>
+            
             <div class="[ clear ]"></div>
-            <div class="[ mt-20 ]" ng-if="showLoadeMoreBtn">
-                <a class="[ waves-effect ][ btn ]" ng-click="loadMoreItems()">Cargar más artículos</a>
+
+            <h4 class="[ center-align ]"></h4>
+            <div class="[ col s12 m4 offset-m2 ][ input-field ]">
+                <input id="keyword" type="text" ng-model="keyword">
+                <label for="[ keyword ]">Palabras clave</label>
             </div>
+            <div class="[ col s12 m4 ][ input-field ]">
+                <input id="serialNumber" type="text" ng-model="serialNumber">
+                <label for="serialNumber">Número de serie</label>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ][ center-align  ]">
+                <a href="#" class="[ waves-effect ][ btn ]" ng-click="searchItems()"><i class="[ mdi-action-search ][ left ]"></i> Buscar</a>
+            </div>
+            
             <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
                 <thead>
                     <tr>

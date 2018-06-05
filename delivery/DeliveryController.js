@@ -30,6 +30,12 @@ conAngular
                 return;
             }
 
+            // var nextFolio = '-';
+            // console.log($scope.nextFolio);
+            // if( 'undefined' !== $scope.nextFolio ){
+            //     nextFolio = $scope.nextFolio;
+            // }
+
             initDeliverySummaryDataTable();
             $scope.address = $('#address').val();
             var deliveryDate = getDateTime( $scope.deliveryDate, $scope.deliveryTime );
@@ -203,10 +209,7 @@ conAngular
             Materialize.toast( 'Se quitó el artículo "' + itemName + '" de la lista de artículos a retirar.', 4000, 'red');
         }
 
-        $scope.loadMoreItems = function(){
-            console.log($scope.currentPage);
-            fetchInStock($scope.currentPage);
-        }
+        $scope.loadMoreItems = function(){ fetchInStock($scope.currentPage); }
 
         /******************
         * PRIVATE FUNCTIONS
@@ -246,15 +249,11 @@ conAngular
 
             switch( currentPath ){
                 case '/multiple-items-delivery':
-                    LoaderHelper.showLoader( 'Obteniendo inventario...' );
+                
                     if( ! $rootScope.globals.initMultipleDelivery ){
                         initItemsWithdrawal();
                     }
                     fetchLastFolio();
-                    //fetchItemsInStock();
-                    $scope.currentPage = 1;
-                    $scope.showLoadeMoreBtn = false;
-                    fetchInStock($scope.currentPage);
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
                     fetchSuppliers();
@@ -690,6 +689,28 @@ conAngular
             while (lastFolioNum.toString().length < numDigits)  lastFolioNum = "0" + lastFolioNum;
 
             return 'FS-' + lastFolioNum;
+        }
+
+        $scope.searchItems = function(){
+            if( $scope.searchIsInvalid() ){
+                Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
+                return;
+            }
+            LoaderHelper.showLoader('Buscando...');
+            InventoryItemService.search( '', '', '', '', 1, '', '', $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+                if( ! inventoryItems.length ){
+                    Materialize.toast( 'No se encontró ningún artículo.', 4000, 'red');
+                }
+                $scope.inventoryItems = inventoryItems;
+                LoaderHelper.hideLoader();
+            })
+        }// searchItems
+
+        $scope.searchIsInvalid = function(){
+            if( 'undefined' !== typeof $scope.keyword ) return false;
+            if( 'undefined' !== typeof $scope.serialNumber ) return false;
+
+            return true;
         }
 
 }]);

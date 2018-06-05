@@ -20,6 +20,7 @@ conAngular
         service.stats = stats
         service.markAsFull = markAsFull
         service.markAsAvailable = markAsAvailable
+        service.csvLocate = csvLocate
         return service;
 
         /******************
@@ -269,6 +270,20 @@ conAngular
                     callback ( response );
                });
         }// markAsAvailable
+
+        function csvLocate( token, warehouseData, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/csv_locate';
+            $http.post(serviceUrl, {
+                auth_token: token,
+                warehouse_data: warehouseData
+            })
+            .success(function ( response ) {
+                callback ( response );
+            })
+            .error(function ( response ) {
+                callback ( response );
+            });
+        }// csvLocate
 
     }]);
 

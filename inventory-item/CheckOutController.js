@@ -94,7 +94,6 @@ conAngular
             if( 'undefined' !== $scope.nextFolio ){
                 nextFolio = $scope.nextFolio;
             }
-            console.log(nextFolio);
 
             InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, nextFolio,  function( response ){
                 Materialize.toast( response.success, 4000, 'green');
@@ -148,31 +147,41 @@ conAngular
             fetchInStock($scope.currentPage);
         }
 
-        /******************
-        * PRIVATE FUNCTIONS
-        *******************/
+        $scope.searchItems = function(){
+            if( $scope.searchIsInvalid() ){
+                Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
+                return;
+            }
+            LoaderHelper.showLoader('Buscando...');
+            InventoryItemService.search( '', '', '', '', 1, '', '', $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+                if( ! inventoryItems.length ){
+                    Materialize.toast( 'No se encontró ningún artículo.', 4000, 'red');
+                }
+                $scope.inventoryItems = inventoryItems;
+                LoaderHelper.hideLoader();
+            })
+        }// searchItem
+
+        $scope.searchIsInvalid = function(){
+            if( 'undefined' !== typeof $scope.keyword ) return false;
+            if( 'undefined' !== typeof $scope.serialNumber ) return false;
+
+            return true;
+        }
 
         function initWithdrawalOptions( currentPath ){
 
             if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
-                if( ! $rootScope.globals.initMultipleWithdrawal ){
-                    initItemsWithdrawal();
-                    fetchLastFolio();
-                }
-                
-                LoaderHelper.showLoader('Obteniendo artículos en existencia...');
-                //fetchItemsInStock();
-                $scope.currentPage = 1;
-                $scope.showLoadeMoreBtn = false;
-                fetchInStock($scope.currentPage);
+                if( ! $rootScope.globals.initMultipleWithdrawal ) initItemsWithdrawal();
+                    
+                fetchLastFolio();
                 initMultipleWithdrawalDataTable();
                 fetchSuppliers();
                 $scope.exitDate = new Date();
+
                 angular.element('body').on('search.dt', function() {  
                    var searchTerm = document.querySelector('.dataTables_filter input').value;
-                   console.log('dataTables search : ' + searchTerm); 
                 });
-
                 return;
             }
 
@@ -525,9 +534,9 @@ conAngular
                     .withOption('select', true)
                     .withOption('searching', true);
             $scope.dtMultipleWithdrawalColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(4).notSortable(),
                 DTColumnDefBuilder.newColumnDef(5).notSortable(),
-                DTColumnDefBuilder.newColumnDef(6).notSortable(),
-                DTColumnDefBuilder.newColumnDef(1).notSortable()
+                DTColumnDefBuilder.newColumnDef(0).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initMultipleWithdrawalDataTable
@@ -666,7 +675,7 @@ conAngular
         function getNextFolio(lastFolio){
             var numDigits = 7;
             var splitted = lastFolio.split('-');
-            var lastFolioNum = parseInt( splitted[1] );
+            var lastFolioNum = parseInt( splitted[1] )+1;
 
             while (lastFolioNum.toString().length < numDigits)  lastFolioNum = "0" + lastFolioNum;
 

@@ -261,6 +261,45 @@ conAngular
             });
         }
 
+        $scope.prepareCSVForLocation = function($fileContent){
+            $scope.itemsToLocate = [];
+            LoaderHelper.showLoader('Leyendo CSV...');
+            var lines = $fileContent.split('\n');
+
+            for(var line = 0; line < lines.length; line++){
+                if( 0 === line ) continue;
+
+                var itemToLocate = {};
+                var lineResults= lines[line].split(',');
+
+                itemToLocate['barcode'] = lineResults[0];
+                itemToLocate['quantity'] = lineResults[1];
+                itemToLocate['location'] = lineResults[2];
+
+                $scope.itemsToLocate.push(itemToLocate);
+            }
+            console.log($scope.itemsToLocate);
+            $scope.content = $fileContent;
+            $scope.fileWasRead = true;
+            LoaderHelper.hideLoader();
+        };
+
+        $scope.locateItemsCSV = function(){
+            LoaderHelper.showLoader('Ubicando artículos...');
+            WarehouseService.csvLocate( $scope.userToken, $scope.itemsToLocate, function(response){
+                LoaderHelper.hideLoader();
+                if( response.success ){
+                    Materialize.toast( response.success, 4000, 'green');
+                    $state.go('/csv-locate', {}, { reload: true });
+                }
+
+                $scope.hasErrors = true;
+                $scope.updateErrors = response.errors;
+                $scope.updatedOrders = response.updated_orders;
+                console.log(response);
+            });
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -271,6 +310,13 @@ conAngular
                 LoaderHelper.showLoader('Cargando racks...');
                 fetchWarehouseRacks();
                 initRacksDataTable( 10 );
+                return;
+            }
+            
+            if( currentPath.indexOf('rack-contents') > -1 ){
+                LoaderHelper.showLoader('Cargando contenidos del rack...');
+                initInventoryTransactionsDataTable();
+                getRack( $stateParams.rackId );
                 return;
             }
 
@@ -320,12 +366,19 @@ conAngular
                     initRacksDataTable( 5 );
                     initPendingLocationDataTable();
                     break;
+                case '/csv-locate':
+                    $scope.fileWasRead = false;
+                    $scope.hasErrors = false;
+                    $scope.itemsToLocate = [];
+                    initItemsToLocateDataTable();
+                    break;
             }
 
         }// initWarehouseOptions
 
         function getRack( id ){
             WarehouseService.getRack( id, function( rack ){
+                console.log(rack);
                 var hasLocations = true;
                 displayRack( rack.locations, rack.rack_info.columns, hasLocations );
                 $scope.warehouse_locations = rack.locations;
@@ -335,7 +388,6 @@ conAngular
         }// getRack
 
         function getRackRelocation( id ){
-            console.log( $scope.itemLocation );
             WarehouseService.getRack( id, function( rack ){
                 var hasLocations = false;
                 displayRack( rack.locations, rack.rack_info.columns, hasLocations );
@@ -709,12 +761,23 @@ conAngular
 
         function initRackItemsDataTable(){
             $scope.dtRackItemsOptions = DTOptionsBuilder.newOptions()
-                    .withPaginationType('full_numbers')
-                    .withDisplayLength(10)
-                    .withDOM('itp')
-                    .withOption('responsive', true)
-                    .withOption('order', [])
-                    .withOption('searching', false);
+                .withPaginationType('full_numbers')
+                .withDisplayLength(30)
+                .withDOM('itp')
+                .withOption('responsive', true)
+                .withOption('order', [])
+                .withOption('searching', false)
+                .withButtons([
+                    {
+                        extend: "csvHtml5",
+                        fileName:  "CustomFileName" + ".csv",
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        exportData: {decodeEntities:true}
+                    }
+                ]);
             $scope.dtRackItemsColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
@@ -722,21 +785,6 @@ conAngular
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initRackItemsDataTable
-
-        function initWarehouseTransactionsDataTable(){
-            $scope.dtWarehouseTransactionsOptions = DTOptionsBuilder.newOptions()
-                    .withPaginationType('full_numbers')
-                    .withDisplayLength(20)
-                    .withDOM('itp')
-                    .withOption('responsive', true)
-                    .withOption('order', [])
-                    .withOption('searching', false);
-            $scope.dtWarehouseTransactionsColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(3).notSortable(),
-                DTColumnDefBuilder.newColumnDef(4).notSortable()
-            ];
-            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
-        }// initWarehouseTransactionsDataTable
 
         function fetchWarehouseRacks(){
             WarehouseService.getRacks( function( racks ){
@@ -793,4 +841,48 @@ conAngular
             });
         }
 
+        function initItemsToLocateDataTable(){
+            $scope.toLocateDtOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(30)
+                .withDOM('itp')
+                .withOption('responsive', true)
+                .withOption('order', []);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initInventoryDataTable
+
+        function getTransactionsByType( type ){
+
+            InventoryTransactionService.byType( type, function( inventoryTransactions ){
+                $scope.inventoryTransactions = inventoryTransactions;
+                LoaderHelper.hideLoader();
+            }); 
+
+        }// getTransactionsByType
+
+
+
+
+        function initInventoryTransactionsDataTable(){
+            $scope.dtInventoryTransactionsOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withOption('searching', true)
+                .withDisplayLength(10)
+                .withDOM('pitrp')
+                .withOption('responsive', true)
+                .withButtons([
+                    {
+                        extend: "csvHtml5",
+                        fileName:  "CustomFileName" + ".csv",
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        exportData: {decodeEntities:true}
+                    }
+                ]);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initInventoryTransactionsDataTable
 }]);

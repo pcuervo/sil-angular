@@ -10,6 +10,7 @@ conAngular
         service.getCheckOutsByClient = getCheckOutsByClient;
         service.search = search;
         service.lastCheckoutFolio = lastCheckoutFolio;
+        service.searchByFolio = searchByFolio;
         return service;
 
         /******************
@@ -108,5 +109,16 @@ conAngular
                });
 
         }// lastCheckoutFolio
+
+        function searchByFolio( folio, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/by_folio';
+            $http.post( serviceUrl, { folio: folio } )
+            .success(function ( response ) {
+                callback( response.inventory_transactions );
+            })
+            .error(function ( response ) {
+                callback( response );
+            });
+        }// search
 
     }]);
