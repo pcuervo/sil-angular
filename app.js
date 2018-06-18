@@ -2062,6 +2062,23 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 }]);
             }]
         }
+    })
+
+    .state('/search-deliveries', {
+        url: "/search-deliveries",
+        templateUrl: "delivery/search-deliveries.html",
+        controller: "DeliveryController",
+        data: { pageTitle: 'Envíos por artículo'},
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley, dataTables')
+                }]);
+            }]
+        }
     }); 
 
 }]);

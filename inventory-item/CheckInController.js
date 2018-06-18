@@ -1,5 +1,5 @@
 conAngular
-	.controller('CheckInController', ['$scope', '$rootScope', '$state', '$stateParams', 'ProjectService', 'InventoryItemService', 'UnitItemService', 'BulkItemService', 'BundleItemService', 'WarehouseService', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$interval', '$location', '$filter', function( $scope, $rootScope, $state, $stateParams, ProjectService, InventoryItemService, UnitItemService, BulkItemService, BundleItemService, WarehouseService, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $interval, $location, $filter ){
+	.controller('CheckInController', ['$scope', '$rootScope', '$state', '$stateParams', 'ProjectService', 'InventoryItemService', 'UnitItemService', 'BulkItemService', 'BundleItemService', 'WarehouseService', 'SupplierService', 'NotificationService', 'InventoryTransactionService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$interval', '$location', '$filter', function( $scope, $rootScope, $state, $stateParams, ProjectService, InventoryItemService, UnitItemService, BulkItemService, BundleItemService, WarehouseService, SupplierService, NotificationService, InventoryTransactionService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $interval, $location, $filter ){
 
 		/******************
         * CONSTANTS
@@ -44,7 +44,9 @@ conAngular
             }
 
             var randomNum = Math.floor((Math.random() * 100) + 1);
-            $scope.barCodeVal = FormatHelper.slug( $scope.itemName + ' ' + randomNum );
+            var selectedProjectText = $('[name="project"] option:selected').text();
+            $scope.barCodeVal = generateBarcode( selectedProjectText, $scope.itemName, $scope.itemType );
+            
             $('.js-barcode').JsBarcode( $scope.barCodeVal,
                 {
                     width: 4,
@@ -508,12 +510,15 @@ conAngular
                     $scope.showMoreActions = false;
                     $scope.currentStep = CAPTURE_STEP;
                     $scope.entryDate = new Date();
-                    fetchProjects();
-                    fetchWarehouseRacks();
                     $scope.validSelectedProject = false;
                     $scope.hasLocation = false;
+
+                    fetchLastCheckinFolio();
+                    fetchProjects();
+                    fetchWarehouseRacks();
                     fetchSuppliers();
                     fetchItemTypes();
+
                     break;
                 case '/request-entry':
                     $scope.entryDate = new Date();
@@ -682,7 +687,7 @@ conAngular
             }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
             var isHighValue = $('#checkbox-high-value:checked').length;
-            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, function ( response ){
+            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, $scope.nextFolio, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -690,8 +695,6 @@ conAngular
                     $scope.currentStep = 1;
                     return;
                 }
-
-                console.log( response.inventory_item );
 
                 $scope.registeredItemId = response.inventory_item.id;
                 $scope.item = response.inventory_item;
@@ -1064,5 +1067,31 @@ conAngular
                 $scope.itemTypes = itemTypes;
             });
         }// fetchItemTypes
+
+        function fetchLastCheckinFolio( id ){
+            InventoryTransactionService.lastCheckinFolio( function( lastFolio ){
+                $scope.nextFolio = getNextCheckinFolio( lastFolio );
+            }); 
+        }
+
+        function getNextCheckinFolio(lastFolio){
+            var numDigits = 7;
+            var splitted = lastFolio.split('-');
+            var lastFolioNum = parseInt( splitted[1] )+1;
+
+            while (lastFolioNum.toString().length < numDigits)  lastFolioNum = "0" + lastFolioNum;
+
+            return 'FE-' + lastFolioNum;
+        }
+
+        function generateBarcode(projectName, itemName, itemType){
+            var cleanedProjectName = projectName.replace(new RegExp('-', 'g'), '').substring(0,5).toUpperCase();
+            var cleanedItemName = FormatHelper.slug( itemName ).substring(0,3).toUpperCase();
+            var cleanedItemType = itemType.substring(0,3).toUpperCase();
+            var formattedTimestamp = new Date().getTime().toString().substr(-4);
+
+            var barcode = cleanedProjectName + ' ' + cleanedItemName + ' ' + cleanedItemType + ' ' + formattedTimestamp;
+            return barcode;
+        }
 
 }]);

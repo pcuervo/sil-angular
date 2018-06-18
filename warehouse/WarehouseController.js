@@ -160,14 +160,12 @@ conAngular
         }// getEntryType
 
         $scope.addUnitsToLocation = function(){
-
             var bulkLocation = {
                 locationId:     this.selectedLocation,
                 quantity:       this.unitsToLocate,
                 units:          this.units,
                 rackLocation:   $('[name="rack"] option:selected').first().text() + ' / ' + $('[name="location"] option:selected').first().text()
             }
-            console.log( bulkLocation );
             $scope.bulkLocations.push( bulkLocation );
             this.pendingUnitsToLocate -= this.unitsToLocate;
             $scope.hasMultipleLocations = true;
@@ -378,7 +376,6 @@ conAngular
 
         function getRack( id ){
             WarehouseService.getRack( id, function( rack ){
-                console.log(rack);
                 var hasLocations = true;
                 displayRack( rack.locations, rack.rack_info.columns, hasLocations );
                 $scope.warehouse_locations = rack.locations;
@@ -426,9 +423,7 @@ conAngular
                                 <h5>' + location.name + '</h5> \
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
-                            <div class="[ content ][ center-align ]"> \
-                                <p>Disponibilidad</p> \
-                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
+                            <div class="[ content ][ center-align ]">';
                 if( hasLocations ){
                     rackHTML[currentRow] += '\
                         <a class="[ btn ][ col-s6 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
@@ -766,18 +761,18 @@ conAngular
                 .withDOM('itp')
                 .withOption('responsive', true)
                 .withOption('order', [])
-                .withOption('searching', false)
-                .withButtons([
-                    {
-                        extend: "csvHtml5",
-                        fileName:  "CustomFileName" + ".csv",
-                        exportOptions: {
-                            //columns: ':visible'
-                            columns: [0, 1, 2, 3, 4]
-                        },
-                        exportData: {decodeEntities:true}
-                    }
-                ]);
+                .withOption('searching', false);
+                // .withButtons([
+                //     {
+                //         extend: "csvHtml5",
+                //         fileName:  "CustomFileName" + ".csv",
+                //         exportOptions: {
+                //             //columns: ':visible'
+                //             columns: [0, 1, 2, 3, 4]
+                //         },
+                //         exportData: {decodeEntities:true}
+                //     }
+                // ]);
             $scope.dtRackItemsColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),

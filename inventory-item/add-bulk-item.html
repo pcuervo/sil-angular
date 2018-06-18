@@ -21,11 +21,15 @@
     <h4 class="[ center-align ]">Captura entrada a granel</h4>
     <div class="[ row ]">
         <form name="entry_form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" ng-submit="captureItemData()" data-parsley-validate>
-
+            <div class="[ col s12 m3 ]">    
+                <label class="[ fs-12 ]" for="">Folio</label>
+                <input type="text" name="nextFolio" ng-model="nextFolio" ng-readonly="true">
+            </div>
+            <div class="[ clear ]"></div>
             <div class="[ col s12 m4 ]" >
                 <select name="project" ng-model="selectedProject" required data-parsley-error-message="¡El proyecto es obligatorio!" ng-change="fillProjectData()">
                     <option value="" disabled selected>Selecciona el proyecto</option>
-                    <option ng:repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
+                    <option ng:repeat="project in projects" value="{{project.id}}">{{project.litobel_id + ' | ' + project.name}}</option>
                 </select>
             </div>
 
@@ -41,20 +45,14 @@
                     <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.name}}</option>
                 </select>
             </div>
-
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ]">
+            <div class="[ col s12 m4 offset-m4 ]">
                 <div class="input-field">
                     <input id="client-name" type="text" ng-model="clientName" ng-readonly="true">
                     <label for="client-name">Cliente</label>
                 </div>
             </div>
-            <div class="[ col s12 m6 ]">
-                <div class="input-field">
-                    <input id="client-contact" type="text" name="clientContact" ng-model="clientContact" ng-readonly="true">
-                    <label for="client-contact">Contacto cliente</label>
-                </div>
-            </div>
+            <div class="[ clear ]"></div>
             <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="item-name" type="text" name="itemName" ng-model="itemName" required>
@@ -162,6 +160,11 @@
     </div>
     <div class="row">
         <h4 class="[ center-align ]">Resumen de entrada</h4>
+        <div class="[ col s12 m3 ]">    
+            <label class="[ fs-12 ]" for="">Folio</label>
+            <input type="text" name="nextFolio" ng-model="nextFolio" ng-readonly="true">
+        </div>
+        <div class="[ clear ]"></div>
         <div class="[ col s12 m4 ]">
             <div class="input-field">
                 <input id="selected-project" type="text" name="selectedProject" ng-model="selectedProjectText" disabled>
@@ -180,18 +183,13 @@
                 <label for="selected-ae">Ejecutivo de cuenta</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]">
+        <div class="[ col s12 m4 offset-m4 ]">
             <div class="input-field">
                 <input id="input_text" type="text" name="clientName" ng-model="clientName" disabled>
                 <label for="input_disabled">Cliente</label>
             </div>
         </div>
-        <div class="[ col s12 m6 ]">
-            <div class="input-field">
-                <input id="input_disabled" type="text" name="clientContact" ng-model="clientContact" disabled>
-                <label for="input_disabled">Contacto cliente</label>
-            </div>
-        </div>
+        <div class="[ clear ]"></div>
         <div class="[ col s12 m6 ]">
             <div class="input-field">
                 <input id="input_text" type="text" name="itemName" ng-model="itemName" disabled>

@@ -11,8 +11,8 @@ conAngular
         * PUBLIC FUNCTIONS
         *******************/
 
-        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, pm, ae, callback ) {
-
+        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, pm, ae, folio, callback ) {
+            console.log(folio);
             var userId = $rootScope.globals.currentUser.id;
             //var status = $rootScope.globals.currentUser.role == 1 ? 1 : 6;
             var serviceUrl = $rootScope.apiUrl + 'users/' + userId + '/bulk_items/';
@@ -41,7 +41,8 @@ conAngular
                     entry_date:                 entryDate, 
                     delivery_company:           deliveryCompany, 
                     delivery_company_contact:   deliveryCompanyContact,
-                    additional_comments:        additionalComments
+                    additional_comments:        additionalComments,
+                    folio: folio
                 })
                 .success(function( response ) {
                     callback( response );

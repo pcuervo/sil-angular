@@ -15,6 +15,7 @@ conAngular
         service.getRequest = getRequest;
         service.approveRequest = approveRequest;
         service.byDeliveryMan = byDeliveryMan;
+        service.searchByKeyword = searchByKeyword;
         return service;
 
 
@@ -235,5 +236,21 @@ conAngular
                     callback( response );
                });
         }// byDeliveryMan
+
+        function searchByKeyword( keyword, serialNumber, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'deliveries/by_keyword';
+            $http.post( serviceUrl, 
+                { 
+                    keyword: keyword,
+                    serial_number: serialNumber
+                } 
+            )
+            .success(function ( response ) {
+                callback( response.deliveries );
+            })
+            .error(function ( response ) {
+                callback( response );
+            });
+        }// searchByKeyword
     }]);
 

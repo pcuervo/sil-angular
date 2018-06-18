@@ -1,0 +1,55 @@
+<div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Buscador de envíos por artículo</h4>
+    <div class="[ row ]">
+        <form ng-submit="searchByKeyword()" data-parsley-search>
+            <div class="[ col s12 m6 l4 offset-l2 ][ input-field ]">
+                <input id="keyword" type="text" ng-model="keyword">
+                <label for="keyword">Ingresa palabra clave o código de barras</label>
+            </div>
+            <div class="[ col s12 m6 l4 ][ input-field ]">
+                <input id="serialNumber" type="text" ng-model="serialNumber">
+                <label for="serialNumber">Número de serie</label>
+            </div>
+            <div class="[ clear ]"></div>
+            <div class="[ col s12 ][ center-align  ]">
+                <button class="[ waves-effect ][ btn ]"><i class="[ mdi-action-search ][ left ]"></i> Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Envíos</h4>
+    <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Repartidor</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Proveedor</th>
+                <th class="[ center-align ][ hide-on-small-only ]">Empresa donde se entrega</th>
+                <th class="[ center-align ]">¿Quién solicito?</th>
+                <th class="[ center-align ]">Fecha</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">Número de artículos</th>
+                <th class="[ center-align ]">Status</th>
+                <th class="[ center-align ]">Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="d in deliveries">
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.delivery_guy }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.supplier }}</td>
+                <td class="[ center-align ][ hide-on-small-only ]">{{ d.company }}</td>
+                <td class="[ center-align ]">{{ d.user }}</td>
+                <td class="[ center-align ]">{{ d.created_at | date:'dd/MM/yyyy h:mm:ss a' }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.delivery_items.length }}</td>
+                <td class="[ center-align ]">{{ getStatus( d.status ) }}</td>
+                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-delivery/{{d.id}}"><i class="[ fa fa-eye ]"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+  $('[data-parsley-search]').parsley();
+</script>

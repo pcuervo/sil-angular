@@ -18,15 +18,12 @@
 </div>
 
 <div class="[ card-panel ]">
-    <div>
-      <p>Tipo de movimientos:</p>
-      <p><i class="[ fa fa-square ]"> Unitaria - </i> <i class="[ fa fa-th-large ]"> Paquete - </i> <i class="[ fa fa-align-justify ]"> Granel</i> - <span class="[ green lighten-3 ]">Entradas</span> - <span class="[ red lighten-3 ]">Salidas</span></p>
-    </div>
     <h4 class="[ center-align ]">Movimientos al inventario</h4>
     <table datatable="ng" dt-options="dtInventoryTransactionsOptions" dt-column-defs="dtInventoryTransactionsColumnDefs" class="row-border hover">
         <thead>
             <tr>
                 <th class="[ center-align ]">Tipo</th>
+                <th class="[ center-align ]">Folio</th>
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Cantidad movimiento</th>
                 <th class="[ center-align ][ hide-on-med-and-down ]">Status</th>
@@ -36,7 +33,8 @@
         </thead>
         <tbody>
             <tr ng-repeat="it in inventoryTransactions">
-                <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }} <i class="[ {{ getItemTypeIcon( it.inventory_item.actable_type ) }} ]"></i><!-- <span class="[ hide ]">{{ it.inventory_item.actable_type }}</span> --></td>
+                <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }}</td>
+                <td class="[ center-align ]">{{ it.folio }}</td>
                 <td class="[ center-align ]"><a href="#/view-item/{{it.inventory_item.id }}">{{ it.inventory_item.name }}</a></td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.inventory_item.status }}</td>
