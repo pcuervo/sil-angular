@@ -27,7 +27,9 @@
             <li ng-if="( role != 5 )">
                 <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-th"></i> Inventario<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
                 <ul>
-                    <li><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Movimientos por artículo</a>
+                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Movimientos por artículo</a>
+                    </li>
+                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect" href="#/search-by-folio"><i class="mdi-av-repeat"></i>Movimientos por folio</a>
                     </li>
                     <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
                     </li>

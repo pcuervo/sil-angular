@@ -211,6 +211,22 @@ conAngular
 
         $scope.loadMoreItems = function(){ fetchInStock($scope.currentPage); }
 
+        $scope.searchByKeyword = function(){
+            if( 'undefined' === typeof $scope.keyword && 'undefined' === typeof $scope.serialNumber  ){
+                Materialize.toast( 'Ingresa una palabra clave o número de serie.', 4000, 'red');
+                return;
+            }
+            LoaderHelper.showLoader('Buscando...');
+            DeliveryService.searchByKeyword( $scope.keyword, $scope.serialNumber, function( deliveries ){
+                console.log(deliveries);
+                if(! deliveries.length){
+                    Materialize.toast( 'No se encontró ningún envío.', 4000, 'red');
+                }
+                $scope.deliveries = deliveries;
+                LoaderHelper.hideLoader();
+            })
+        }// searchItem
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -249,7 +265,6 @@ conAngular
 
             switch( currentPath ){
                 case '/multiple-items-delivery':
-                
                     if( ! $rootScope.globals.initMultipleDelivery ){
                         initItemsWithdrawal();
                     }
@@ -283,8 +298,6 @@ conAngular
                         fetchDeliveries();
                         fetchStats();
                     }
-                    
-                    
                     break;
                 case '/pending-deliveries':
                     if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
@@ -308,6 +321,9 @@ conAngular
                     initDeliveryDataTable();
                     initGeoAutocomplete( '#address', '#map', 19.397260, -99.186684, 12 );
                     $scope.deliveryDate = new Date();
+                    break;
+                case '/search-deliveries':
+                    initDeliveryDataTable();
                     break;
             }
         }// initDeliveries
