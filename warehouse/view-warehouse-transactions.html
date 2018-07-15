@@ -5,24 +5,24 @@
         <p><i class="[ fa fa-square ]"></i> Unitaria - <i class="[ fa fa-th-large ]"></i> Paquete - <i class="[ fa fa-align-justify ]"></i> Granel  <span class="[ green lighten-3 ]"> - Entrada</span> - <span class="[ red lighten-3 ]">Salida</span> - <span class="[ yellow lighten-3 ]">Reubicación</span></p>
     </div>
     <h4 class="[ center-align ]">Racks</h4>
-    <table datatable="ng" dt-options="dtWarehouseTransactionsOptions" dt-column-defs="dtWarehouseTransactionsColumnDefs" class="row-border hover">
+    <table datatable="ng" dt-options="dtWarehouseTransactionsOptions" class="row-border hover">
         <thead>
             <tr>
                 <th class="[ center-align ]">Tipo</th>
                 <th class="[ center-align ]">Mercancía</th>
                 <th class="[ center-align ]">Rack</th>
                 <th class="[ center-align ]">Ubicación</th>
-                <th class="[ center-align ]">Unidades</th>
+                <th class="[ center-align ]">Cantidad</th>
                 <th class="[ center-align ]">Fecha de movimiento</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="t in transactions">
-                <td class="[ center-align ][ {{ getTransactionTypeClass( t.concept ) }} ]"><i class="[ {{ getItemTypeIcon( t.actable_type ) }} ]"></i><span class="[ hide ]">{{ t.actable_type }}</span></td>
+                <td class="[ center-align ][ {{ getTransactionTypeClass( t.concept ) }} ]">{{ t.concept }}</td>
                 <td class="[ center-align ]"><a href="#/view-item/{{ t.item_id }}">{{ t.item_name }}</a></td>
                 <td class="[ center-align ]"><a href="#/view-rack/{{t.rack_id}}">{{ t.rack }}</a></td>
                 <td class="[ center-align ]"><a href="#/view-location/{{t.location_id}}">{{ t.location }}</a></td>
-                <td class="[ center-align ]">{{ t.units }}</td>
+                <td class="[ center-align ]">{{ t.quantity }}</td>
                 <td class="[ center-align ]">{{ t.created_at | date:'dd/MM/yyyy' }}</td>
             </tr>
         </tbody>

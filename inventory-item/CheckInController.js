@@ -220,34 +220,16 @@ conAngular
             LoaderHelper.showLoader( 'Ubicando ' + $scope.item.name + ' en almacén' );
             if( $scope.sameLocationType && ! $scope.multipleLocationsType ){
                 var quantity = $scope.quantity;
-                
-                if( 'undefined' == typeof $scope.units ){
-                    $scope.units = this.units;
-                }
 
-                WarehouseService.locateItem( $scope.registeredItemId, $scope.selectedLocation, $scope.units, quantity, true, $scope.item.actable_type, function( response ) {
+
+                WarehouseService.locateItem( $scope.registeredItemId, $scope.selectedLocation, quantity, true, function( response ) {
+                    console.log(response);
                     Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                     $state.go('/check-in', {}, { reload: true });
                 });
                 return;
             }
 
-            if( 'BundleItem' == type )
-            {
-                var partsLocation = [];
-                $.each($scope.currentLocations, function(i, location){
-                    partsLocation[i] = {
-                        partId:      $('#parts-' + i).val(),
-                        locationId: location.id,
-                        units:      $('#units-' + i).val()
-                    }
-                });
-                WarehouseService.locateBundle( $scope.registeredItemId, partsLocation, $scope.parts.length, true, function( response ) {
-                    Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
-                    $state.go('/check-in', {}, { reload: true });
-                });
-                return;
-            }
             WarehouseService.locateBulk( $scope.registeredItemId, $scope.bulkLocations, true, function( response ) {
                 Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
                 $state.go('/check-in', {}, { reload: true });
@@ -327,7 +309,6 @@ conAngular
                 locationId:     $scope.selectedLocation,
                 location:       $('#location option:selected').text(),
                 quantity:       $scope.unitsToLocate,
-                units:          $scope.units,
                 rack:           $('#rack option:selected').text()
             }
 
@@ -340,13 +321,11 @@ conAngular
                 this.selectedLocation = '';
                 this.selectedRack = '';
                 this.unitsToLocate = '';
-                this.units = '';
             }
 
             $scope.selectedLocation = '';
             $scope.selectedRack = '';
             $scope.unitsToLocate = '';
-            $scope.units = '';
         }
 
         $scope.removeUnitsFromLocation = function( bulkLocationId ){
@@ -529,6 +508,11 @@ conAngular
                         $('.js-barcode').JsBarcode( $scope.item.barcode );
                         $('[name="storageType"]').val( $scope.item.storage_type );
                         $('[name="itemType"]').val( $scope.item.item_type );
+                        $scope.item.state = String( $scope.item.state );
+                        $scope.item.pm_id = String( $scope.item.pm_id );
+                        if( 0 == $scope.item.value ) {
+                            $scope.item.value = '';
+                        } 
                     }
                 });
 
@@ -671,7 +655,7 @@ conAngular
             }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
             var isHighValue = $('#checkbox-high-value:checked').length;
-            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.nextFolio, function ( response ){
+            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.extraParts, $scope.nextFolio, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -898,37 +882,57 @@ conAngular
         }
 
         function getItem( id ){
-
             InventoryItemService.byId( id, function( item ){
                 if( item.errors ){
                     $scope.hasItem = false;
                     Materialize.toast( 'No se encontró ningún artículo con id: "' + id + '"', 4000, 'red');
                     return;
                 }
-                initItem( item );
                 $scope.item = item;
+                initItem( item );
+                fillProjectUsersSelects( item.project_id );
+                
+                $scope.quantity = item.quantity;
 
-                switch( item.actable_type ){
-                    case 'UnitItem':
-                        $scope.serialNumber = item.serial_number;
-                        $scope.brand = item.brand;
-                        $scope.model = item.model;
-                        break;
-                    case 'BundleItem':
-                        initItemPartsDataTable();
-                        $scope.itemParts = [];
-                        $scope.hasPartsToWithdraw = false;
-                        $.each( item.parts, function(i, part){
-                            if( part.status == 2 ) return true;
+                if( $('.js-barcode').length ) $('.js-barcode').JsBarcode( $scope.item.barcode );
+                if( $('[name="storageType"]').length ) $('[name="storageType"]').val( $scope.item.storage_type );
+                if( $('[name="itemType"]').length ) $('[name="itemType"]').val( $scope.item.item_type );
+                getItemState( $scope.item.state );
 
-                            $scope.itemParts.push( part );
-                            $scope.hasPartsToWithdraw = true;
-                        });
-                        break;
-                }
             });
-
         }// getItem
+
+        function initItem( item ){
+            console.log(item);
+            $scope.project = item.project;
+            $scope.pm = item.pm;
+            $scope.ae = item.ae;
+            $scope.pm_id = item.pm_id;
+            $scope.ae_id = item.ae_id;
+            $scope.clientName = item.client;
+            $scope.clientContact = item.client_contact;
+            $scope.description = item.description;
+            $scope.itemName = item.name;
+            $scope.itemState = item.state;
+            $scope.itemType = item.item_type;
+            $scope.storageType = item.storage_type;
+            $scope.serialNumber = item.serial_number;
+            $scope.quantity = item.quantity;
+            $scope.extraParts = item.extra_parts;
+            $scope.brandModel = '-';
+            if( '' !== item.brand.trim() || '' !== item.model.trim() ){
+                $scope.brandModel = item.brand + ' / ' + item.model;
+            } 
+            $scope.getStatus( item.status );
+            $scope.itemValue = $filter( 'currency' )( item.value );
+            $scope.entryDate = new Date( $filter('date')( item.created_at, 'yyyy-MM-dd' ) );
+            $scope.validityExpirationDate = new Date( $filter('date')( item.validity_expiration_date, 'yyyy-MM-dd' ) );
+            $scope.hasLocations = false;
+            if( item.locations.length > 0 ){
+                $scope.hasLocations = true;
+                initItemLocationsDataTable();
+            }
+        }// initItem
 
         function getItemRequest( id ){
 

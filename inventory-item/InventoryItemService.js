@@ -50,12 +50,13 @@ conAngular
         service.getItemType = getItemType;
         service.editItemType = editItemType;
         service.getInStockPaged = getInStockPaged;
+        service.edit = edit;
         return service;
 
         // Public 
         function create( name, description, status, userId, projectId, clientId, img, ext, callback ) {
             var deferred = $q.defer();
-            var serviceUrl = $rootScope.apiUrl + 'users/1/inventory_items/';
+            var serviceUrl = $rootScope.apiUrl + 'users/'+userId+'/inventory_items/';
             $http.post(serviceUrl, { 
                 name: name, description: description, status: status, user_id: userId, project_id: projectId, client_id: clientId, item_img: img, item_img_ext: ext })
                 .success(function(response) {
@@ -129,7 +130,6 @@ conAngular
                 } 
             })
            .success(function ( response ) {
-                console.log( response );
                 callback( response.inventory_items );
            })
            .error(function ( response ) {
@@ -156,7 +156,6 @@ conAngular
                 params: { recent: true  } 
                 })
                .success(function ( response ) {
-                    console.log( response );
                     callback( response.inventory_items );
                })
                .error(function ( response ) {
@@ -172,7 +171,6 @@ conAngular
                 params: { recent: true  } 
                 })
                .success(function ( response ) {
-                    console.log( response );
                     callback( response.inventory_items );
                })
                .error(function ( response ) {
@@ -192,7 +190,6 @@ conAngular
                 } 
                 })
                .success(function ( response ) {
-                    console.log( response )
                     callback( response.inventory_items );
                })
                .error(function ( response ) {
@@ -219,7 +216,6 @@ conAngular
         }// byBarcode
 
         function byId( id, callback ) {
- 
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/' + id;
             $http.get ( serviceUrl )
                .success(function ( response ) {
@@ -858,4 +854,32 @@ conAngular
                     callback( response );
             });
         }// getInStock
+
+        function edit( id, userId, name, serialNumber, brand, model, state, value, description, extraParts, storageType, validityExpirationDate, callback ) {
+          var userId = $rootScope.globals.currentUser.id;
+          var serviceUrl = $rootScope.apiUrl + 'inventory_items/update';
+          $http.post(serviceUrl, 
+          { 
+            id: id,
+            inventory_item: {
+              name:                       name, 
+              serial_number:              serialNumber, 
+              brand:                      brand, 
+              model:                      model, 
+              state:                      state,
+              value:                      value,
+              description:                description, 
+              extra_parts:                extraParts, 
+              storage_type:               storageType,
+              validity_expiration_date:   validityExpirationDate
+            }
+          })
+          .success(function( response ) {
+            callback( response.inventory_item );
+          })
+          .error(function( response ) {
+            callback( response );
+          });
+
+        }// edit
     }]);

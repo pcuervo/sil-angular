@@ -148,7 +148,7 @@ conAngular
             $scope.dtOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(20)
-                    .withDOM('it')
+                    .withDOM('pitp')
                     .withOption('responsive', true)
                     .withOption('order', [])
                     .withOption('searching', false);
@@ -164,7 +164,7 @@ conAngular
             $scope.dtClientUserOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(20)
-                    .withDOM('it')
+                    .withDOM('pitp')
                     .withOption('responsive', true)
                     .withOption('order', [])
                     .withOption('searching', false);

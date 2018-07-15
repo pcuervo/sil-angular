@@ -15,35 +15,36 @@
             </div>
         </form>
     </div>
-</div>
-
-<div class="[ card-panel ]">
+    <div class="[ clear ]"></div>
     <h4 class="[ center-align ]">Movimientos al inventario</h4>
-    <table datatable="ng" dt-options="dtInventoryTransactionsOptions" dt-column-defs="dtInventoryTransactionsColumnDefs" class="row-border hover">
-        <thead>
-            <tr>
-                <th class="[ center-align ]">Tipo</th>
-                <th class="[ center-align ]">Folio</th>
-                <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Número de serie</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad del movimiento</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad actual en inventario</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Fecha del movimiento (A/M/D) </th>
-                <th class="[ center-align ][ hide-on-small-only ]">Comentarios</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="it in inventoryTransactions">
-                <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }}</td>
-                <td class="[ center-align ]">{{ it.folio }}</td>
-                <td class="[ center-align ]"><a href="#/view-item/{{it.inventory_item.id }}">{{ it.inventory_item.name }}</a></td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.inventory_item.quantity }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ it.entry_exit_date | date:'yyyy/MM/dd' }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ it.additional_comments }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="[ row ]">
+        <table datatable="ng" dt-options="dtInventoryTransactionsOptions" dt-column-defs="dtInventoryTransactionsColumnDefs" class="row-border hover">
+            <thead>
+                <tr>
+                    <th class="[ center-align ]">Tipo</th>
+                    <th class="[ center-align ]">Folio</th>
+                    <th class="[ center-align ]">Nombre</th>
+                    <th class="[ center-align ][ hide-on-small-only ]">Número de serie</th>
+                    <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad movimiento</th>
+                    <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad real</th>
+                    <th class="[ center-align ][ hide-on-small-only ]">Fecha (A/M/D) </th>
+                    <th class="[ center-align ][ hide-on-small-only ]">Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="it in inventoryTransactions">
+                    <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }}</td>
+                    <td class="[ center-align ]">{{ it.folio }}</td>
+                    <td class="[ center-align ]"><a href="#/view-item/{{it.inventory_item.id }}">{{ it.inventory_item.name }}</a></td>
+                    <th class="[ center-align ]">{{ it.inventory_item.serial_number }}</th>
+                    <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
+                    <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.inventory_item.quantity }}</td>
+                    <td class="[ center-align ][ hide-on-small-only ]">{{ it.entry_exit_date | date:'yyyy/MM/dd' }}</td>
+                    <td class="[ center-align ][ hide-on-small-only ]">{{ it.additional_comments }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>

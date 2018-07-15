@@ -191,9 +191,6 @@ conAngular.controller('AppController', ['$scope', '$rootScope', '$state', functi
         restrict: 'A',
         scope: false,
         link: function(scope, element, attrs) {
-            console.dir(element);
-            console.log(attrs);
-            console.log(scope);
             var fn = $parse(attrs.onReadFile);     
             element.on('change', function(onChangeEvent) {
                 var reader = new FileReader();
@@ -1384,13 +1381,12 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
     })
     .state('/view-rack', {
         url: "/view-rack/:rackId",
-            templateUrl: "warehouse/view-rack.html",
-            controller: "WarehouseController",
-            data: {
-                pageTitle: 'Ver rack',
-                crumbs: [{
-                title: '<i class="fa fa-dashboard"></i> Dashboard',
-                href: '#/dashboard'
+        templateUrl: "warehouse/view-rack.html",
+        controller: "WarehouseController",
+        data: {
+            pageTitle: 'Ver rack',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard'
             }, {
                 title: 'Ver rack',
             }]
@@ -1398,27 +1394,39 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         resolve: {
             deps: ['$ocLazyLoad', function($ocLazyLoad) {
                 return $ocLazyLoad.load([{
+                    serie: true,
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
-                    files: conAssets('parsley, dataTables')
+                    files: conAssets('dataTables')
                 }]);
             }]
         }
     })
     .state('/view-location', {
         url: "/view-location/:locationId",
-            templateUrl: "warehouse/view-location.html",
-            controller: "WarehouseController",
-            data: {
-                pageTitle: 'Ver ubicación',
-                crumbs: [{
+        templateUrl: "warehouse/view-location.html",
+        controller: "WarehouseController",
+        data: {
+            pageTitle: 'Ver ubicación',
+            crumbs: [{
                 title: '<i class="fa fa-dashboard"></i> Dashboard',
                 href: '#/dashboard'
             }, {
                 title: 'Detalle ubicación',
             }]
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    serie: true,
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
         }
     })
+
     .state('/locate-item', {
         url: "/locate-item/:itemId",
             templateUrl: "warehouse/locate-item.html",
@@ -2110,8 +2118,6 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
 
         if( typeof $rootScope.globals.currentUser != 'undefined' ){
             AuthenticationService.isLoggedIn( $rootScope.globals.currentUser.authdata, function( response ){
-
-                console.log( response );
                 if( response.errors ){
                     Materialize.toast('¡Tu sesión ha expirado, por favor ingresa nuevamente!', 4000, 'red');
                     event.preventDefault();

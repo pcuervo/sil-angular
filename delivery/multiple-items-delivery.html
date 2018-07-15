@@ -102,37 +102,33 @@
             <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
                 <thead>
                     <tr>
-                        <th class="[ center-align ]">Tipo</th>
                         <th class="[ center-align ]">Img</th>
                         <th class="[ center-align ]">Nombre</th>
                         <th class="[ center-align ]">Número de serie</th>
                         <th class="[ center-align ]">Código de barras</th>
-                        <th class="[ center-align ][ hide-on-small-only ]">Vigencia / Caducidad</th>
                         <th class="[ center-align ]">Cantidad</th>
                         <th class="[ center-align ]">¿Agregar a envío?</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="i in inventoryItems">
-                        <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( i.actable_type ) }} ]"></i></td>
-                        <td><img ng-src="{{ i.img }}" alt="{{i.name}}"></td>
-                        <td id="name-{{i.id}}"  class="[ center-align ]">{{ i.name }}</td>
-                        <td  class="[ center-align ]" id="serial-number-{{i.id}}">{{ i.serial_number }}</td>
-                        <td class="[ center-align ]">{{ i.barcode }}</td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ i.validity_expiration_date | date:'dd/MM/yyyy' }}</td>
+                        <td><img ng-src="{{ i.item.img }}" alt="{{i.item.name}}"></td>
+                        <td id="name-{{i.item.id}}"  class="[ center-align ]">{{ i.item.name }}</td>
+                        <td  class="[ center-align ]" id="serial-number-{{i.item.id}}">{{ i.item.serial_number }}</td>
+                        <td class="[ center-align ]">{{ i.item.barcode }}</td>
                         <td class="[ center-align ]"><div class="[ input-field ]">
                             <div class="[ input-field ]">
-                                <input type="text" id="quantity-{{i.id}}" value="{{ i.quantity }}" name="item_quantity" ng-readonly="'BulkItem' != i.actable_type" />
-                                <label for="quantity-{{i.id}}"></label>
+                                <input type="text" id="quantity-{{i.item.id}}" value="{{ i.item.quantity }}" name="item_quantity" />
+                                <label for="quantity-{{i.item.id}}"></label>
                             </div>
                         </td>
                         <td class="[ center-align ]">
                             <div class="[ input-field ][ delivery-items ]">
-                                <input class="[ filled-in ]" type="checkbox" id="check-{{i.id}}" value="{{i.id}}" name="item_id" />
-                                <label for="check-{{i.id}}"></label>
+                                <input class="[ filled-in ]" type="checkbox" id="check-{{i.item.id}}" value="{{i.item.id}}" name="item_id" />
+                                <label for="check-{{i.item.id}}"></label>
                             </div>
                         </td>
-                        <input id="actable-type-{{i.id}}" type="hidden" value="{{i.actable_type}}">
+                        <input id="actable-type-{{i.item.id}}" type="hidden" value="{{i.item.actable_type}}">
                     </tr>
                 </tbody>
             </table>

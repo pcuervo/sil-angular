@@ -3,19 +3,20 @@
 <div  class="[ card-panel ]">
 	<div class="row">
 	    <h4 class="[ center-align ]">Ubicación el almacén</h4>
-	    <div class="[ col s8 m4 offset-m2 ]"> 
+	    <div class="[ col s8 m3 offset-m3 ]"> 
 	        <div class="input-field">
 	            <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
 	            <label for="input_text">Nombre (alias)</label>
 	        </div>
 	    </div>
-	    <div class="[ col s4 m2 ]"> 
+	    <div class="[ col s4 m3 ]"> 
 	        <div class="input-field">
 	            <input id="quantity" type="text" name="quantity" ng-model="quantity" required disabled>
 	            <label for="quantity">Cantidad</label>
 	        </div>
-	    </div>
-	    <div class="[ col s12 m4 ]"> 
+		</div>
+		<div class="[ clear ]"></div>
+	    <div class="[ col s12 m6 offset-m3 ][ center-align ]"> 
 	        <p>
 	            <input name="radio-location" type="radio" id="single-location" ng-model="locationRadio" ng-click="showLocationForm(locationRadio)" value="same" />
 	            <label for="single-location">Mover todo a una ubicación</label>

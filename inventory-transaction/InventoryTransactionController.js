@@ -93,14 +93,6 @@ conAngular
                 } else {
                     LoaderHelper.hideLoader();
                 }
-                // switch( $stateParams.transactionType ){
-                //     case 'checkIns':
-                //     case 'checkOuts':
-                //         getTransactionsByType( $stateParams.transactionType ); 
-                //         break;
-                //     default:
-                //         getAllInventoryTransactions();
-                // }  
             } 
             try {
                 initInventoryTransactionsDataTable();
@@ -158,20 +150,9 @@ conAngular
             $scope.dtInventoryTransactionsOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
                 .withOption('searching', true)
-                .withDisplayLength(10)
-                .withDOM('pitrp')
+                .withDisplayLength(30)
                 .withOption('responsive', true)
-                .withButtons([
-                    {
-                        extend: "csvHtml5",
-                        fileName:  "CustomFileName" + ".csv",
-                        exportOptions: {
-                            //columns: ':visible'
-                            columns: [0, 1, 2, 3, 4]
-                        },
-                        exportData: {decodeEntities:true}
-                    }
-                ]);
+                .withDOM('pitrp');
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
         }// initInventoryTransactionsDataTable

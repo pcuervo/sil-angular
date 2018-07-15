@@ -1,11 +1,106 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
-<div class="[ card-panel ]" ng-include src="'inventory-item/templates/edit-unit-item.html'" ng-if="'UnitItem'==item.actable_type"></div>
-<div class="[ card-panel ]" ng-include src="'inventory-item/templates/edit-bulk-item.html'" ng-if="'BulkItem'==item.actable_type"></div>
-<div class="[ card-panel ]" ng-include src="'inventory-item/templates/edit-bundle-item.html'" ng-if="'BundleItem'==item.actable_type"></div>
+<h4 class="[ center-align ]">Editar artículo</h4>
+<div class="[ row ]">
+  <form name="entry_form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" ng-submit="editItem( item.id )" data-parsley-item>
+    <div class="[ col s12 m5 offset-m1 ]"> 
+        <div class="input-field">
+          <input id="project" type="text" ng-model="project" ng-readonly="true">
+          <label for="project">Proyecto</label>
+        </div>
+      </div>
+      <div class="[ col s12 m5 ]"> 
+        <div class="input-field">
+          <input id="client-name" type="text" ng-model="clientName" ng-readonly="true">
+          <label for="client-name">Cliente</label>
+        </div>
+      </div>
+      <div class="[ clear ]"></div>
+      <div class="[ col s6 m3 ]">
+          <div class="input-field">
+              <input id="item-name" type="text" name="itemName" ng-model="item.name" required>
+              <label for="item-name">Nombre (alias)</label>
+          </div>
+      </div>
+      <div class="[ col s6 m3 ]">
+        <div class="input-field">
+            <input id="serial-number" type="text" name="serialNumber" ng-model="item.serial_number" required>
+            <label for="serial-number">Número de serie</label>
+        </div>
+      </div>
+      <div class="[ col s6 m3 ]">
+        <div class="input-field">
+            <input id="brand" type="text" name="brand" ng-model="item.brand" required>
+            <label for="brand">Marca</label>
+        </div>
+      </div>
+      <div class="[ col s6 m3 ]">
+        <div class="input-field">
+            <input id="model" type="text" name="model" ng-model="item.model" required>
+            <label for="model">Modelo</label>
+        </div>
+      </div>
+      <div class="[ col s12 m4 ]"> 
+        <div class="input-field">
+            <input id="itemType" type="text" name="itemType" ng-model="itemType" ng-readonly="true">
+            <label for="itemValue">Tipo de mercancía</label>
+        </div>
+      </div>
+      <div class="[ col s6 m4 ]"> 
+        <label for="itemState">Estado</label>
+        <select name="itemState" ng-model="itemState" required>
+          <option value="1" selected>Nuevo</option>
+          <option value="2" selected>Como nuevo</option>
+          <option value="3" selected>Usado</option>
+          <option value="4" selected>Dañado</option>
+        </select>
+      </div>
+      <div class="[ col s12 m4 ]"> 
+        <div class="input-field">
+            <input id="itemValue" type="text" name="itemValue" ng-model="item.value" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="1">
+            <label for="itemValue">Valor</label>
+        </div>
+      </div>
+      <div class="[ col s12 ]"> 
+          <div class="[ input-field ]">
+              <textarea id="description" class="materialize-textarea" name="description" ng-model="item.description" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
+              <label for="description">Descripción</label>
+          </div>
+      </div>
+      <div class="[ col s12 ]"> 
+        <div class="[ input-field ]">
+            <textarea id="extra_parts" class="materialize-textarea" name="extra_parts" ng-model="item.extra_parts" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
+            <label for="extra_parts">Partes adicionales</label>
+        </div>
+    </div>
+      <div class="[ clear ]"></div>
+      <div class="[ col s12 m4 ]"> 
+        <label for="itemState">Tipo de almacenaje</label>
+        <select id="bulk-storage-type" name="storageType" ng-model="item.storage_type" required>
+            <option value="Permanente">Permanente</option>
+            <option value="Temporal">Temporal</option>
+            <option value="Donación">Donación</option>
+            <option value="Perecedero">Perecedero</option>
+        </select>
+      </div>
+      <div class="[ col s12 m4 ]">    
+        <label class="[ fs-12 ]" for="">Fecha de ingreso (mm/dd/aaaa)</label>
+        <input class="datepicker" type="date" name="entryDate" ng-model="entryDate" ng-readonly="true">
+      </div>
+      <div class="[ col s12 m4 ]">    
+        <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
+        <input class="datepicker" type="date" ng-model="validityExpirationDate" required>
+      </div>
+      <div class="[ clear ]"></div>
+      <div class="[ col s12 ]"> 
+        <div class="[ center-align ]">
+          <a class="[ waves-effect ][ btn ]" href="#/view-item/{{item.id}}">Ver</a>
+          <button class="[ waves-effect ][ btn green ]"><i class="[ fa fa-edit ][ left ]"></i>Editar</button>
+        </div>
+      </div>
+  </form>
+</div><!-- row -->
 
-
-
-
-
-
+<script>
+  $('[data-parsley-item]').parsley();
+</script>

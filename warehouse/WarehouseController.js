@@ -47,8 +47,10 @@ conAngular
         }// getItemTypeIcon
 
         $scope.updateLocations = function( rackId ){
+            LoaderHelper.showLoader('Cargando ubicaciones...');
             WarehouseService.getRackAvailableLocations( rackId, function( locations ){
                 $scope.locations = locations;
+                LoaderHelper.hideLoader();
             } )
         }// updateLocations
 
@@ -56,7 +58,7 @@ conAngular
             WarehouseService.getRackAvailableLocations( rackId, function( locations ){
                 $scope.multipleLocations[index] = locations;
             } )
-        }// updateLocations
+        }// updateLocationSelect
 
         $scope.showLocationDetails = function( locationId ){
             $.each( $scope.locations, function( i, location ){
@@ -289,6 +291,16 @@ conAngular
             });
         }
 
+        // $scope.getTransactionName = function( concept ){
+        //     switch( concept ){
+        //         case 'Entrada': return 'Entrada';
+        //         case 'Salida':
+        //             return 'red lighten-3';
+        //         default:
+        //             return 'yellow lighten-3';
+        //     }
+        // }// getTransactionName
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -312,12 +324,25 @@ conAngular
             if( currentPath.indexOf('view-rack') > -1 ){
                 LoaderHelper.showLoader('Cargando rack...');
                 getRack( $stateParams.rackId );
-                initRackItemsDataTable();
+                try{
+                    initRackItemsDataTable();
+                }
+                catch(err){
+                    console.log(err);
+                    location.reload();
+                }
                 return;
             }
 
             if( currentPath.indexOf('view-location') > -1 || currentPath.indexOf('edit-location') > -1  ){
                 getLocation( $stateParams.locationId );
+                try{
+                    initRackItemsDataTable();
+                }
+                catch(err){
+                    console.log(err);
+                    //location.reload();
+                }
                 return;
             }
 
@@ -659,10 +684,9 @@ conAngular
                 $scope.totalUnits = location.units;
                 $scope.item_location_quantity = 0;
                 $scope.numItems = 0;
-                $scope.inventory_items = [];
+                $scope.inventory_items = location.inventory_items;
                 console.log(location.inventory_items);
                 $.each( location.inventory_items, function(i, val){
-                    $scope.inventory_items.push( val.inventory_item );
                     $scope.item_location_quantity += location.item_locations[i].quantity;
                 });
                 $scope.numItems = $scope.inventory_items.length;
@@ -740,22 +764,19 @@ conAngular
         function initRackItemsDataTable(){
             $scope.dtRackItemsOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
-                .withDisplayLength(30)
-                .withDOM('itp')
-                .withOption('responsive', true)
-                .withOption('order', [])
-                .withOption('searching', false);
-                // .withButtons([
-                //     {
-                //         extend: "csvHtml5",
-                //         fileName:  "CustomFileName" + ".csv",
-                //         exportOptions: {
-                //             //columns: ':visible'
-                //             columns: [0, 1, 2, 3, 4]
-                //         },
-                //         exportData: {decodeEntities:true}
-                //     }
-                // ]);
+                .withDisplayLength(20)
+                .withDOM('pitp')
+                .withButtons([
+                    {
+                        extend: "csvHtml5",
+                        fileName:  "CustomFileName" + ".csv",
+                        exportOptions: {
+                            columns: [1, 2, 3, 4]
+                        },
+                        exportData: {decodeEntities:true}
+                    }
+                ])
+                .withOption('responsive', true);
             $scope.dtRackItemsColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
@@ -773,6 +794,7 @@ conAngular
 
         function fetchWarehouseTransactions(){
             WarehouseService.getWarehouseTransactions( function( transactions ){
+                console.log(transactions);
                 $scope.transactions = transactions;
             });
         }// fetchWarehouseTransactions
@@ -863,4 +885,15 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
         }// initInventoryTransactionsDataTable
+
+        function initWarehouseTransactionsDataTable(){
+            $scope.dtWarehouseTransactionsOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withOption('searching', true)
+                .withDisplayLength(10)
+                .withDOM('pitrp')
+                .withOption('responsive', true);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initWarehouseTransactionsDataTable
 }]);

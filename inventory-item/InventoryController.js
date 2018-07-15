@@ -134,21 +134,6 @@ conAngular
             return true;
         }
 
-        $scope.editItem = function( id, type ){
-            LoaderHelper.showLoader( 'Actualizando artículo...' );
-            switch( type ){
-                case 'UnitItem':
-                    editUnitItem( id );
-                    break;
-                case 'BulkItem':
-                    editBulkItem( id );
-                    break;
-                case 'BundleItem':
-                    editBundleItem( id );
-                    break;
-            }
-        }// editItem
-
         $scope.getStatusClass = function( status ){
             if( 1 == status || 3 == status ) return 'green lighten-3';
             if( 2 == status ) return 'red lighten-3';
@@ -199,6 +184,33 @@ conAngular
             });   
         }
 
+        $scope.editItem = function( id ){
+          var userId = $rootScope.globals.currentUser.id;
+          InventoryItemService.edit( 
+            id, 
+            userId,
+            $scope.item.name, 
+            $scope.item.serial_number, 
+            $scope.item.brand, 
+            $scope.item.model, 
+            $scope.itemState, 
+            $scope.item.value, 
+            $scope.item.description, 
+            $scope.item.extra_parts, 
+            $scope.item.storage_type, 
+            $scope.item.validity_expiration_date, 
+            function ( inventory_item ){
+              LoaderHelper.hideLoader();
+              if( inventory_item.errors ) {
+                ErrorHelper.display( inventory_item.errors );
+                return;
+              }
+              Materialize.toast('Se actualizó el artículo: "' + inventory_item.name + '" exitosamente!', 4000, 'green');
+              $state.go('/view-item', { 'itemId' : inventory_item.id }, { reload: true });
+            }
+          );
+        }// editItem
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -218,43 +230,19 @@ conAngular
                 $scope.$on('$includeContentLoaded', function ( e, template ) {
                     if( 'inventory-item/templates/view-unit-item.html' == template || 'inventory-item/templates/view-bulk-item.html' == template || 'inventory-item/templates/view-bundle-item.html' == template ){
                         console.log($scope.item);
-
-                        
                     }
                 });
                 return;
+            }
+
+            if( currentPath.indexOf( '/edit-item/' ) > -1 ){
+              getItem( $stateParams.itemId );
+              return;
             }
 
             if( currentPath.indexOf( '/edit-item-type' ) > -1 ){
-                getItemType( $stateParams.itemTypeId );
-                
-                return;
-            }
-
-            if( currentPath.indexOf( '/edit-item' ) > -1 ){
-                getItem( $stateParams.itemId );
-                $scope.$on('$includeContentLoaded', function ( e, template ) {
-                    if( 'inventory-item/templates/edit-unit-item.html' == template || 'inventory-item/templates/edit-bulk-item.html' == template || 'inventory-item/templates/edit-bundle-item.html' == template ){
-                        
-                        $('.js-barcode').JsBarcode( $scope.item.barcode );
-                        $('[name="storageType"]').val( $scope.item.storage_type );
-                        $('[name="itemType"]').val( $scope.item.item_type );
-                        $scope.item.state = String( $scope.item.state );
-                        $scope.item.pm_id = String( $scope.item.pm_id );
-                        if( 0 == $scope.item.value ) {
-                            $scope.item.value = '';
-                        } 
-                        // try{
-                        //     initInventoryDataTable();
-                        // }
-                        // catch(err){
-                        //     console.log(err);
-                        //     location.reload();
-                        // }
-                        // break;
-                    }
-                });
-                return;
+              getItemType( $stateParams.itemTypeId );
+              return;
             }
 
             switch( currentPath ){
@@ -329,7 +317,7 @@ conAngular
                         extend: "csvHtml5",
                         fileName:  "CustomFileName" + ".csv",
                         exportOptions: {
-                            columns: [1, , 2, 3, 4]
+                            columns: [1, 2, 3, 4]
                         },
                         exportData: {decodeEntities:true}
                     }
@@ -342,27 +330,28 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initInventoryDataTable
 
-
-
         function getItem( id ){
-            InventoryItemService.byId( id, function( item ){
-                if( item.errors ){
-                    $scope.hasItem = false;
-                    Materialize.toast( 'No se encontró ningún artículo con id: "' + id + '"', 4000, 'red');
-                    return;
-                }
-                $scope.item = item;
-                initItem( item );
-                fillProjectUsersSelects( item.project_id );
-                
-                $scope.quantity = item.quantity;
+          InventoryItemService.byId( id, function( item ){
+            if( item.errors ){
+                $scope.hasItem = false;
+                Materialize.toast( 'No se encontró ningún artículo con id: "' + id + '"', 4000, 'red');
+                return;
+            }
+            $scope.item = item;
+            initItem( item );
+            fillProjectUsersSelects( item.project_id );
+            
+            $scope.quantity = item.quantity;
 
-                if( $('.js-barcode').length ) $('.js-barcode').JsBarcode( $scope.item.barcode );
-                if( $('[name="storageType"]').length ) $('[name="storageType"]').val( $scope.item.storage_type );
-                if( $('[name="itemType"]').length ) $('[name="itemType"]').val( $scope.item.item_type );
-                getItemState( $scope.item.state );
-
-            });
+            if( $('.js-barcode').length ) $('.js-barcode').JsBarcode( $scope.item.barcode );
+            if( $('[name="storageType"]').length ) $('[name="storageType"]').val( $scope.item.storage_type );
+            if( $('[name="itemType"]').length ) $('[name="itemType"]').val( $scope.item.item_type );
+            if( $('[name="itemState"]').length ) {
+              $('[name="itemState"]').val( $scope.item.state );
+            } else {
+              getItemState( $scope.item.state );
+            }
+          });
         }// getItem
 
         function initItem( item ){
@@ -376,7 +365,7 @@ conAngular
             $scope.clientContact = item.client_contact;
             $scope.description = item.description;
             $scope.itemName = item.name;
-            $scope.itemState = item.state;
+            //$scope.itemState = item.state;
             $scope.itemType = item.item_type;
             $scope.storageType = item.storage_type;
             $scope.serialNumber = item.serial_number;
@@ -389,7 +378,7 @@ conAngular
             $scope.getStatus( item.status );
             $scope.itemValue = $filter( 'currency' )( item.value );
             $scope.entryDate = new Date( $filter('date')( item.created_at, 'yyyy-MM-dd' ) );
-            $scope.item.validity_expiration_date = new Date( $filter('date')( item.validity_expiration_date, 'yyyy-MM-dd' ) );
+            $scope.validityExpirationDate = new Date( $filter('date')( item.validity_expiration_date, 'yyyy-MM-dd' ) );
             $scope.hasLocations = false;
             if( item.locations.length > 0 ){
                 $scope.hasLocations = true;
@@ -454,53 +443,6 @@ conAngular
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initItemLocationsDataTable
-
-        function editUnitItem( id ){
-            UnitItemService.edit( id, $scope.item.name, $scope.item.serial_number, $scope.item.brand, $scope.item.model, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, $scope.item.pm_id, $scope.item.ae_id, function ( inventory_item ){
-
-                LoaderHelper.hideLoader();
-                if( inventory_item.errors ) {
-                    ErrorHelper.display( inventory_item.errors );
-                    $scope.currentStep = 1;
-                    return;
-                }
-                console.log( inventory_item );
-                Materialize.toast('Se actualizó el artículo: "' + inventory_item.name + '" exitosamente!', 4000, 'green');
-                $state.go('/view-item', { 'itemId' : inventory_item.id }, { reload: true });
-            });
-
-        }// editUnitItem
-
-        function editBulkItem( id ){
-            BulkItemService.edit( id, $scope.item.name, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, $scope.item.pm_id, $scope.item.ae_id, function ( inventory_item ){
-
-                LoaderHelper.hideLoader();
-                if( inventory_item.errors ) {
-                    ErrorHelper.display( inventory_item.errors );
-                    $scope.currentStep = 1;
-                    return;
-                }
-                Materialize.toast('Se actualizó el artículo: "' + inventory_item.name + '" exitosamente!', 4000, 'green');
-                $state.go('/view-item', { 'itemId' : inventory_item.id }, { reload: true });
-            });
-
-        }// editBulkItem
-
-        function editBundleItem( id ){
-            BundleItemService.edit( id, $scope.item.name, $scope.item.description, $scope.item.value, $scope.item.storage_type, $scope.item.validity_expiration_date, $scope.item.state, $scope.item.is_high_value, true, $scope.item.pm_id, $scope.item.ae_id, function ( inventory_item ){
-
-                LoaderHelper.hideLoader();
-                if( inventory_item.errors ) {
-                    ErrorHelper.display( inventory_item.errors );
-                    $scope.currentStep = 1;
-                    return;
-                }
-                console.log( inventory_item );
-                Materialize.toast('Se actualizó el artículo: "' + inventory_item.name + '" exitosamente!', 4000, 'green');
-                $state.go('/view-item', { 'itemId' : inventory_item.id }, { reload: true });
-            });
-
-        }// editBundleItem
 
         function initItemPartsDataTable(){
             $scope.dtItemPartsOptions = DTOptionsBuilder.newOptions()
