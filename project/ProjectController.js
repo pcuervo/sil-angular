@@ -106,35 +106,54 @@ conAngular
             });
         }// addUsersToProject
 
+        $scope.transferInventory = function(fromProjectId){
+          var toProjectId = $scope.destinationProject;
+
+          if( 'undefined' === typeof toProjectId ){
+            Materialize.toast('Por favor selecciona el proyecto destino.' , 4000, 'red');
+            return;
+          }
+          
+          ProjectService.transferInventory(fromProjectId, toProjectId, function(response){
+            console.log(response);
+            Materialize.toast(response.success , 4000, 'green');
+            //$state.go('/view-projects', {}, { reload: true });
+          });
+        }
 
         /******************
         * PRIVATE FUNCTIONS
         *******************/
 
         function initProjects( currentPath ){
-            if( currentPath.indexOf( '/edit-project' ) > -1 ){
-                $scope.showDeleteBtn = false;
-                getProject( $stateParams.projectId );
-                getProjectManagersAndAccountExecutives();
-                initProjectUsersDataTable()
-                return;
-            }
-            if( currentPath.indexOf( '/add-user-to-project' ) > -1 ){
-                getProject( $stateParams.projectId );
-                getProjectManagersAndAccountExecutives();
-                initProjectUsersDataTable()
-                return;
-            }
-            switch( currentPath ){
-                case '/view-projects':
-                    getAllProjects();
-                    initProjectDataTable();
-                    break;
-                case '/add-project':
-                    getAllClients();
-                    getProjectManagersAndAccountExecutives();
-                    break;
-            }
+          if( currentPath.indexOf( '/edit-project' ) > -1 ){
+            $scope.showDeleteBtn = false;
+            getProject( $stateParams.projectId );
+            getProjectManagersAndAccountExecutives();
+            initProjectUsersDataTable()
+            return;
+          }
+          if( currentPath.indexOf( '/add-user-to-project' ) > -1 ){
+            getProject( $stateParams.projectId );
+            getProjectManagersAndAccountExecutives();
+            initProjectUsersDataTable()
+            return;
+          }
+          if( currentPath.indexOf( '/transfer-inventory' ) > -1 ){
+            getProject( $stateParams.projectId );
+            getAllProjects();
+            return;
+          }
+          switch( currentPath ){
+            case '/view-projects':
+              getAllProjects();
+              initProjectDataTable();
+              break;
+            case '/add-project':
+              getAllClients();
+              getProjectManagersAndAccountExecutives();
+              break;
+          }
         }// initProjects
 
         function getAllClients(){
@@ -144,6 +163,7 @@ conAngular
         }// getAllClients
 
         function getAllProjects(){
+
             ProjectService.getAll( function( projects ){
                 console.log( projects );
                 $scope.projects = projects;
@@ -193,21 +213,21 @@ conAngular
         }// initProjectUsersDataTable
 
         function getProject( id ){
-            ProjectService.get( id, function( project ){
-                if( project.errors ){
-                    Materialize.toast( 'No se encontró ningún proyecto con id: "' + id + '"', 4000, 'red');
-                    $state.go('/view-projects', {}, { reload: true });
-                    return;
-                }
-                getAllClients();
-                $scope.project = project;
-                $scope.clientId = project.client_id;
-                $scope.projectUsers = project.users;
+          ProjectService.get( id, function( project ){
+            if( project.errors ){
+              Materialize.toast( 'No se encontró ningún proyecto con id: "' + id + '"', 4000, 'red');
+              $state.go('/view-projects', {}, { reload: true });
+              return;
+            }
+            getAllClients();
+            $scope.project = project;
+            $scope.clientId = project.client_id;
+            $scope.projectUsers = project.users;
 
-                console.log(project);
+            console.log(project);
 
-                if( ! project.has_inventory ) $scope.showDeleteBtn = true;
-            });
+            if( ! project.has_inventory ) $scope.showDeleteBtn = true;
+          });
         }// getProject
 
         function fetchNewNotifications(){

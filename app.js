@@ -1207,6 +1207,21 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/transfer-inventory', {
+      url: "/transfer-inventory/:projectId",
+      templateUrl: "project/transfer-inventory.html",
+      controller: "ProjectController",
+      data: { pageTitle: 'Agregar usuario a proyecto' },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('parsley')
+          }]);
+        }]
+      }
+    })
 
     // Clients
     .state('/add-client', {

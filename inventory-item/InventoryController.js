@@ -25,27 +25,25 @@ conAngular
         }// getStatusLabel
 
         $scope.searchItem = function(){
-            if( $scope.searchIsInvalid() ){
-                Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
-                return;
+          if( $scope.searchIsInvalid() ){
+            Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
+            return;
+          }
+          LoaderHelper.showLoader('Buscando...');
+          if( 6 === $scope.role ) $scope.selectedClient = $rootScope.globals.currentUser.id;
+
+          if( 2 === $scope.role ) $scope.selectedPM = $rootScope.globals.currentUser.id;
+
+          if( 3 === $scope.role ) $scope.selectedAE = $rootScope.globals.currentUser.id;
+
+          InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedPM, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+            if(! inventoryItems.length){
+                Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
             }
-            LoaderHelper.showLoader('Buscando...');
-            if( 6 === $scope.role ){ 
-                $scope.selectedClient = $rootScope.globals.currentUser.id;
-            }
-            if( 2 === $scope.role ){ 
-                $scope.selectedPM = $rootScope.globals.currentUser.id;
-            }
-            if( 3 === $scope.role ){ 
-                $scope.selectedAE = $rootScope.globals.currentUser.id;
-            }
-            InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedPM, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
-                if(! inventoryItems.length){
-                    Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
-                }
-                $scope.inventoryItems = inventoryItems;
-                LoaderHelper.hideLoader();
-            })
+            $scope.inventoryItems = inventoryItems;
+            console.log(inventoryItems);
+            LoaderHelper.hideLoader();
+          })
         }// searchItem
 
         $scope.searchIsInvalid = function(){
@@ -216,61 +214,57 @@ conAngular
         *******************/
 
         function initInventory( currentPath ){
-            $scope.role = $rootScope.globals.currentUser.role;
+          $scope.role = $rootScope.globals.currentUser.role;
 
-            if( currentPath.indexOf( '/view-item-types' ) > -1 ){
-                LoaderHelper.showLoader('Cargando tipos de mercancía')
-                initItemTypesDT();
-                fetchItemTypes();
-                return;
-            }
+          switch( currentPath ){
+            case '/my-inventory':
+              if( 1 === $scope.role || 4 === $scope.role   ) {
+                fetchProjectManagers();
+                fetchAccountExecutives();
+                fetchClientContacts();
+              }
+              if( 6 === $scope.role ) {
+                LoaderHelper.showLoader('Cargando inventario...');
+                $scope.selectedClient = $rootScope.globals.currentUser.id;
+                fetchInventory();
+              }
+              fetchProjects();
+              fetchStatuses();
+              // TODO: FIX TEMPORAL, DATATABLES NO CARGA BIEN 
+              // EN ALGUNOS CASOS
+              try{
+                  initInventoryDataTable();
+              }
+              catch(err){
+                  location.reload();
+              }
+              break;
+            case '/view-item-types':
+              LoaderHelper.showLoader('Cargando tipos de mercancía')
+              initItemTypesDT();
+              fetchItemTypes();
+              break;
+          }
 
-            if( currentPath.indexOf( '/view-item' ) > -1 ){
-                getItem( $stateParams.itemId );
-                $scope.$on('$includeContentLoaded', function ( e, template ) {
-                    if( 'inventory-item/templates/view-unit-item.html' == template || 'inventory-item/templates/view-bulk-item.html' == template || 'inventory-item/templates/view-bundle-item.html' == template ){
-                        console.log($scope.item);
-                    }
-                });
-                return;
-            }
+          if( currentPath.indexOf( '/view-item/' ) > -1 ){
+            getItem( $stateParams.itemId );
+            $scope.$on('$includeContentLoaded', function ( e, template ) {
+                if( 'inventory-item/templates/view-unit-item.html' == template || 'inventory-item/templates/view-bulk-item.html' == template || 'inventory-item/templates/view-bundle-item.html' == template ){
+                    console.log($scope.item);
+                }
+            });
+            return;
+          }
 
-            if( currentPath.indexOf( '/edit-item/' ) > -1 ){
-              getItem( $stateParams.itemId );
-              return;
-            }
+          if( currentPath.indexOf( '/edit-item/' ) > -1 ){
+            getItem( $stateParams.itemId );
+            return;
+          }
 
-            if( currentPath.indexOf( '/edit-item-type' ) > -1 ){
-              getItemType( $stateParams.itemTypeId );
-              return;
-            }
-
-            switch( currentPath ){
-                case '/my-inventory':
-                    if( 1 === $scope.role || 4 === $scope.role   ) {
-                        fetchProjectManagers();
-                        fetchAccountExecutives();
-                        fetchClientContacts();
-                    }
-                    if( 6 === $scope.role ) {
-                        LoaderHelper.showLoader('Cargando inventario...');
-                        $scope.selectedClient = $rootScope.globals.currentUser.id;
-                        fetchInventory();
-                    }
-
-                    fetchProjects();
-                    fetchStatuses();
-                    // TODO: FIX TEMPORAL, DATATABLES NO CARGA BIEN 
-                    // EN ALGUNOS CASOS
-                    try{
-                        initInventoryDataTable();
-                    }
-                    catch(err){
-                        console.log(err);
-                        location.reload();
-                    }
-                    break;
-            }
+          if( currentPath.indexOf( '/edit-item-type' ) > -1 ){
+            getItemType( $stateParams.itemTypeId );
+            return;
+          }
         }// initInventory
 
         function fetchInventory(){
