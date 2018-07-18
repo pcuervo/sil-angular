@@ -7,7 +7,6 @@ conAngular
             fetchNewNotifications();
         })();
 
-        
         /******************
         * PUBLIC FUNCTIONS
         *******************/
@@ -355,7 +354,7 @@ conAngular
             $scope.ae = item.ae;
             $scope.pm_id = item.pm_id;
             $scope.ae_id = item.ae_id;
-            $scope.clientName = item.client;
+            $scope.clientName = item.client.name;
             $scope.clientContact = item.client_contact;
             $scope.description = item.description;
             $scope.itemName = item.name;

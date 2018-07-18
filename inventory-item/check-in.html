@@ -76,16 +76,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="latest in latestInventoryItems" id="{{ latest.item.id }}">
-                        <td class="[ hide-on-small-and-down ]"><img ng-src="{{ latest.item.image_url }}" alt=""></td>
+                    <tr ng-repeat="latest in latestInventoryItems" id="{{ latest.inventory_item.id }}">
+                        <td class="[ hide-on-small-and-down ]"><img ng-src="{{ latest.inventory_item.image_url }}" alt=""></td>
                         <td>
-                            <a href="#/view-item/{{ latest.item.id }}">{{ latest.item.name }}</a>
+                            <a href="#/view-item/{{ latest.inventory_item.id }}">{{ latest.inventory_item.name }}</a>
                         </td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.item.quantity }}</td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.item.serial_number }}</td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.item.created_at | date:'yyyy-MM-dd h:mm:ss a' }}</td>
-                        <td class="[ center-align ][ hide-on-med-and-down ][ js-location-links ]">{{ getRackLocationLink( latest.item.id, latest.locations ) }}</td>
-                        <td class="[ center-align ]" ng-show="( role == 1 )"><a class="[ btn waves-effect ]" href="#/view-item/{{latest.item.id}}"><i class="[ fa fa-eye ]"></i></a></td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.inventory_item.quantity }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.inventory_item.serial_number }}</td>
+                        <td class="[ center-align ][ hide-on-small-only ]">{{ latest.inventory_item.created_at | date:'yyyy-MM-dd h:mm:ss a' }}</td>
+                        <td class="[ center-align ][ hide-on-med-and-down ][ js-location-links ]">{{ getRackLocationLink( latest.inventory_item.id, latest.inventory_item.locations ) }}</td>
+                        <td class="[ center-align ]" ng-show="( role == 1 )"><a class="[ btn waves-effect ]" href="#/view-item/{{latest.inventory_item.id}}"><i class="[ fa fa-eye ]"></i></a></td>
                     </tr>
                 </tbody>
             </table>

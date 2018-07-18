@@ -146,6 +146,7 @@ conAngular
           }
           switch( currentPath ){
             case '/view-projects':
+              LoaderHelper.showLoader('Cargando proyectos...');
               getAllProjects();
               initProjectDataTable();
               break;
@@ -163,11 +164,10 @@ conAngular
         }// getAllClients
 
         function getAllProjects(){
-
-            ProjectService.getAll( function( projects ){
-                console.log( projects );
-                $scope.projects = projects;
-            }); 
+					ProjectService.getAll( function( projects ){
+						$scope.projects = projects;
+						LoaderHelper.hideLoader();
+					}); 
         }// getAllProjects
 
         function getProjectManagersAndAccountExecutives(){
