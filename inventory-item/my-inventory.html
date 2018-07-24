@@ -82,7 +82,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="i in inventoryItems">
-                <td><img ng-src="{{ i.inventory_item.img }}" alt=""></td>
+                <td><img ng-src="{{ i.inventory_item.img_thumb }}" alt=""></td>
                 <td>{{ i.inventory_item.name + ' ' + i.inventory_item.model  }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.serial_number }}</td>
                 <td class="[ center-align ]">{{ i.inventory_item.quantity }}</td>

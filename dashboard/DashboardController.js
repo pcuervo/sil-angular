@@ -107,13 +107,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
                 //$scope.hasInventory = false;
                 initChartInventoryByItemType( stats.inventory_by_type );
             }
-            initChartMonthlyRent( stats.rent_by_month );
             initChartInventoryByHighValue( stats.total_number_items, stats.total_high_value_items );
-
-            $scope.currentRent = 0;
-            if( stats.rent_by_month.length > 0 ){
-                $scope.currentRent =  stats.rent_by_month[  stats.rent_by_month.length-1 ].rent;
-            }
         });
 
         // Load data for tables

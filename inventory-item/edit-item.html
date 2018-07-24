@@ -30,13 +30,13 @@
       </div>
       <div class="[ col s6 m3 ]">
         <div class="input-field">
-            <input id="brand" type="text" name="brand" ng-model="item.brand" required>
+            <input id="brand" type="text" name="brand" ng-model="item.brand">
             <label for="brand">Marca</label>
         </div>
       </div>
       <div class="[ col s6 m3 ]">
         <div class="input-field">
-            <input id="model" type="text" name="model" ng-model="item.model" required>
+            <input id="model" type="text" name="model" ng-model="item.model">
             <label for="model">Modelo</label>
         </div>
       </div>
@@ -57,7 +57,7 @@
       </div>
       <div class="[ col s12 m4 ]"> 
         <div class="input-field">
-            <input id="itemValue" type="text" name="itemValue" ng-model="item.value" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="1">
+            <input id="itemValue" type="text" name="itemValue" ng-model="item.value" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="0">
             <label for="itemValue">Valor</label>
         </div>
       </div>

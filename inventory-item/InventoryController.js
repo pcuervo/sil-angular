@@ -270,7 +270,6 @@ conAngular
             if( 1 === $scope.role || 4 == $scope.role ){
                 InventoryItemService.getInStock( function( inventoryItems ){
                     $scope.inventoryItems = inventoryItems;
-                    console.log( inventoryItems );
                     LoaderHelper.hideLoader();
                 });
                 return;
