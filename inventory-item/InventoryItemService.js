@@ -17,9 +17,7 @@ conAngular
         service.withdrawBulkItem = withdrawBulkItem;
         service.withdrawBundleItem = withdrawBundleItem;
         service.multipleWithdrawal = multipleWithdrawal;
-        service.reentryUnitItem = reentryUnitItem;
-        service.reentryBulkItem = reentryBulkItem;
-        service.reentryBundleItem = reentryBundleItem;
+        service.reentry = reentry;
         service.authorizeEntry = authorizeEntry;
         service.authorizeWithdrawal = authorizeWithdrawal;
         service.cancelWithdrawal = cancelWithdrawal;
@@ -51,6 +49,8 @@ conAngular
         service.editItemType = editItemType;
         service.getInStockPaged = getInStockPaged;
         service.edit = edit;
+
+        service.quickSearch = quickSearch;
         return service;
 
         // Public 
@@ -317,31 +317,10 @@ conAngular
             .error(function( response ) {
                 callback( response );
             });
-
         }// multipleWithdrawal
 
-        function reentryUnitItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, callback ){
-            var serviceUrl = $rootScope.apiUrl + 'unit_items/re_entry';
-            $http.post( serviceUrl, 
-                { 
-                    id:                         id,
-                    entry_date:                 entryDate,
-                    delivery_company:           deliveryCompany,
-                    delivery_company_contact:   deliveryCompanyContact,
-                    state:                      itemState,
-                    additional_comments:        additionalComments
-                }
-            )
-            .success(function( response ) {
-                callback( response );
-            })
-            .error(function( response ) {
-                callback( response );
-            });
-        }// reentryUnitItem
-
-        function reentryBulkItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, quantity, callback ){
-            var serviceUrl = $rootScope.apiUrl + 'bulk_items/re_entry';
+        function reentry( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, quantity, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/re_entry';
             $http.post( serviceUrl, 
                 { 
                     id:                         id,
@@ -359,29 +338,7 @@ conAngular
             .error(function( response ) {
                 callback( response );
             });
-        }// reentryBulkItem
-
-        function reentryBundleItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, parts, quantity, callback ){
-            var serviceUrl = $rootScope.apiUrl + 'bundle_items/re_entry';
-            $http.post( serviceUrl, 
-                { 
-                    id:                         id,
-                    entry_date:                 entryDate,
-                    delivery_company:           deliveryCompany,
-                    delivery_company_contact:   deliveryCompanyContact,
-                    state:                      itemState,
-                    additional_comments:        additionalComments,
-                    parts:                      parts,
-                    quantity:                   quantity
-                }
-            )
-            .success(function( response ) {
-                callback( response );
-            })
-            .error(function( response ) {
-                callback( response );
-            });
-        }// reentryBundleItem
+        }// reentry
 
         function authorizeEntry( id, callback ) {
  
@@ -882,4 +839,21 @@ conAngular
           });
 
         }// edit
+
+        function quickSearch( keyword, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/quick_search';
+            $http ({
+                url: serviceUrl, 
+                method: "POST",
+                params: { keyword: keyword }
+            })
+            .success(function ( response ) {
+                console.log( response );
+                callback( response.inventory_items );
+            })
+            .error(function ( response ) {
+                callback( response );
+            });
+        }// search
+
     }]);

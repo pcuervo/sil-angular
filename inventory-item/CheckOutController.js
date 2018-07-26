@@ -83,7 +83,6 @@ conAngular
 
         $scope.multipleWithdrawal = function(){
             $scope.withdrawnItems = getItemsToWithdraw();
-            //return;
             if( 0 == $scope.withdrawnItems ){
                 Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
                 return;
@@ -96,6 +95,7 @@ conAngular
             }
 
             InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, nextFolio,  function( response ){
+                console.log(response);
                 Materialize.toast( response.success, 4000, 'green');
                 $scope.isSummary = true;
                 $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
@@ -149,11 +149,12 @@ conAngular
 
         $scope.searchItems = function(){
             if( $scope.searchIsInvalid() ){
-                Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
+                Materialize.toast( 'La búsqueda no puede estar en blanco.', 4000, 'red');
                 return;
             }
             LoaderHelper.showLoader('Buscando...');
-            InventoryItemService.search( '', '', '', '', 1, '', '', $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+            InventoryItemService.quickSearch($scope.keyword, function( inventoryItems ){
+                console.log(inventoryItems);
                 if( ! inventoryItems.length ){
                     Materialize.toast( 'No se encontró ningún artículo.', 4000, 'red');
                 }
@@ -163,6 +164,7 @@ conAngular
         }// searchItem
 
         $scope.searchIsInvalid = function(){
+            console.log($scope.keyword);
             if( 'undefined' !== typeof $scope.keyword ) return false;
             if( 'undefined' !== typeof $scope.serialNumber ) return false;
 
@@ -423,6 +425,7 @@ conAngular
                 item['quantity'] = $(addedItem).data('quantity');
                 items.push( item );
             });
+            console.log(items);
             return items;
         }
 
@@ -473,19 +476,7 @@ conAngular
                 });
                 $scope.locations = $scope.locations.replace(/,\s*$/, "");
 
-                if( 'BundleItem' == item.actable_type ){
-                    $scope.itemParts = [];
-                    $scope.hasPartsToWithdraw = false;
-                    $.each( item.parts, function(i, part){
-                        if( part.status == 2 ) return true;
-
-                        $scope.itemParts.push( part );
-                        $scope.hasPartsToWithdraw = true;
-                    });
-                }
-                if( 'BulkItem' == item.actable_type ){
-                    $scope.multipleBulkLocations = item.locations.length > 0 ? true : false;
-                }
+                $scope.multipleBulkLocations = item.locations.length > 0 ? true : false;
             });
         }// getItem
 

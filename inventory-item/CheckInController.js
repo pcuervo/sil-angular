@@ -253,26 +253,21 @@ conAngular
                 $scope.hasItem = true;
                 $scope.exitDate = new Date();
 
-                if( 'BundleItem' == item.actable_type ){
-                    $scope.hasPartsToReturn = true;
-                    $scope.parts = getBundleMissingParts( item.parts );
-                }
             });
 
         }// searchByBarcode
 
-        $scope.reEntry = function( type ){
-            switch( type ){
-                case 'UnitItem':
-                    reentryUnitItem( $scope.item.actable_id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments );
-                    break;
-                case 'BulkItem':
-                    reentryBulkItem( $scope.item.actable_id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantity );
-                    break;
-                case 'BundleItem':
-                    reentryBundleItem( $scope.item.actable_id, $scope.exitDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments  );
-                    break;
-            }
+        $scope.reEntry = function(){
+            console.log($scope.item);
+            InventoryItemService.reentry( $scope.item.id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantity , function( response ){
+                console.log(response);
+                if( response.errors ){
+                    Materialize.toast( response.errors, 4000, 'red');
+                    return;
+                }
+                Materialize.toast( response.success, 4000, 'green');
+                $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
+            });
         }// reentry
 
         $scope.showLocationForm = function( type ){
@@ -818,18 +813,6 @@ conAngular
 
         function reentryUnitItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments  ){
             InventoryItemService.reentryUnitItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, function( response ){
-
-                if( response.errors ){
-                    Materialize.toast( response.errors, 4000, 'red');
-                    return;
-                }
-                Materialize.toast( response.success, 4000, 'green');
-                $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
-            });
-        }// withdrawUnitItem
-
-        function reentryBulkItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, quantity  ){
-            InventoryItemService.reentryBulkItem( id, entryDate, deliveryCompany, deliveryCompanyContact, itemState, additionalComments, quantity, function( response ){
 
                 if( response.errors ){
                     Materialize.toast( response.errors, 4000, 'red');

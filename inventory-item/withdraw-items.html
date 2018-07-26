@@ -52,13 +52,9 @@
             <div class="[ clear ]"></div>
 
             <h4 class="[ center-align ]"></h4>
-            <div class="[ col s12 m4 offset-m2 ][ input-field ]">
+            <div class="[ col s12 m6 offset-m3 ][ input-field ]">
                 <input id="keyword" type="text" ng-model="keyword">
-                <label for="[ keyword ]">Palabras clave</label>
-            </div>
-            <div class="[ col s12 m4 ][ input-field ]">
-                <input id="serialNumber" type="text" ng-model="serialNumber">
-                <label for="serialNumber">Número de serie</label>
+                <label for="keyword">Palabras clave, número de serie o código de barras</label>
             </div>
             <div class="[ clear ]"></div>
             <div class="[ col s12 ][ center-align  ]">
@@ -77,21 +73,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="i in inventoryItems" id="{{ i.item.id }}">
-                        <td><img ng-src="{{ i.item.img }}" alt="{{i.item.name}}"></td>
-                        <td class="[ center-align ]" id="name-{{i.item.id}}">{{ i.item.name }}</td>
-                        <td class="[ center-align ]" id="serial-number-{{i.item.id}}">{{ i.item.serial_number }}</td>
-                        <td class="[ center-align ]">{{ i.item.barcode }}</td>
+                    <tr ng-repeat="i in inventoryItems" id="{{ i.id }}">
+                        <td><img ng-src="{{ i.item_img_thumb }}" alt="{{i.name}}"></td>
+                        <td class="[ center-align ]" id="name-{{i.id}}">{{ i.name }}</td>
+                        <td class="[ center-align ]" id="serial-number-{{i.id}}">{{ i.serial_number }}</td>
+                        <td class="[ center-align ]">{{ i.barcode }}</td>
                         <td class="[ center-align ]">
                             <div class="[ input-field ]">
-                                <input type="text" id="quantity-{{i.item.id}}" value="{{ i.item.quantity }}" name="item_quantity"/>
-                                <label for="quantity-{{i.item.id}}"></label>
+                                <input type="text" id="quantity-{{i.id}}" value="{{ i.quantity }}" name="item_quantity"/>
+                                <label for="quantity-{{i.id}}"></label>
                             </div>
                         </td>
                         <td class="[ center-align ]">
                             <div class="[ input-field ][ withdraw-items ]">
-                                <input class="[ filled-in ]" type="checkbox" id="check-{{i.item.id}}" value="{{i.item.id}}" name="item_id" />
-                                <label for="check-{{i.item.id}}"></label>
+                                <input class="[ filled-in ]" type="checkbox" id="check-{{i.id}}" value="{{i.id}}" name="item_id" />
+                                <label for="check-{{i.id}}"></label>
                             </div>
                         </td>
                     </tr>
