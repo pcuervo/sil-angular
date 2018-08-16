@@ -66,7 +66,7 @@
 	            <div class="[ col s6 m3 ][ input-field ]">
 	                <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
 	                    <option value="" selected>Selecciona la ubicación</option>
-	                    <option ng:repeat="location in locations" value="{{location.id}}">{{location.name + ' - ' + location.available_units + ' unidades disponbiles'}}</option>
+	                    <option ng:repeat="location in locations" value="{{location.id}}">{{location.name }}</option>
 	                </select>
 	            </div>
 	            <div class="[ col s6 m2 ][ input-field ]" > 

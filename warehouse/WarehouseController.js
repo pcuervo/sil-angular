@@ -158,11 +158,12 @@ conAngular
                 quantity:       this.unitsToLocate,
                 units:          this.units,
                 rackLocation:   $('[name="rack"] option:selected').first().text() + ' / ' + $('[name="location"] option:selected').first().text()
-            }
+            } 
             $scope.bulkLocations.push( bulkLocation );
             this.pendingUnitsToLocate -= this.unitsToLocate;
             $scope.hasMultipleLocations = true;
             this.selectedLocation = '';
+            
             this.selectedRack = '';
             this.unitsToLocate = '';
             this.units = '';

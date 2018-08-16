@@ -423,7 +423,7 @@ conAngular
         function initItemLocationsDataTable(){
             $scope.dtItemLocationsOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
-                .withDisplayLength(20)
+                .withDisplayLength(50)
                 .withDOM('')
                 .withOption('responsive', true)
                 .withOption('order', [])

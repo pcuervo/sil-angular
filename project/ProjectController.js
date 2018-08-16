@@ -113,11 +113,22 @@ conAngular
             Materialize.toast('Por favor selecciona el proyecto destino.' , 4000, 'red');
             return;
           }
-          
+
+          if( $scope.partialTransfer ){
+            var itemsIds = getItemsIds();
+            console.log(itemsIds);
+            ProjectService.transferPartialInventory(fromProjectId, toProjectId, itemsIds, function(response){
+              Materialize.toast(response.success , 4000, 'green');
+              $state.go('/view-projects', {}, { reload: true });
+              return;
+            });
+            return;
+          }
+
+          console.log('aquí?');
           ProjectService.transferInventory(fromProjectId, toProjectId, function(response){
-            console.log(response);
             Materialize.toast(response.success , 4000, 'green');
-            //$state.go('/view-projects', {}, { reload: true });
+            $state.go('/view-projects', {}, { reload: true });
           });
         }
 
@@ -140,8 +151,12 @@ conAngular
             return;
           }
           if( currentPath.indexOf( '/transfer-inventory' ) > -1 ){
+            $scope.partialTransfer = false;
             getProject( $stateParams.projectId );
+            getProjectInventory( $stateParams.projectId );
             getAllProjects();
+            initProjectInventoryDataTable();
+            //initShowInventoryToggle();
             return;
           }
           switch( currentPath ){
@@ -224,11 +239,35 @@ conAngular
             $scope.clientId = project.client_id;
             $scope.projectUsers = project.users;
 
-            console.log(project);
-
             if( ! project.has_inventory ) $scope.showDeleteBtn = true;
           });
         }// getProject
+
+        function getProjectInventory( id ){
+            ProjectService.getInventory( id, function( items ){
+              if( items.errors ){
+                Materialize.toast( 'No se encontró el proyecto.', 4000, 'red');
+                //$state.go('/view-projects', {}, { reload: true });
+                return;
+              }
+              $scope.items = items;
+            });
+          }// getProjectInventory
+
+          function initProjectInventoryDataTable(){
+            $scope.dtProjectInventoryOptions = DTOptionsBuilder.newOptions()
+                    .withPaginationType('full_numbers')
+                    .withDisplayLength(200)
+                    .withDOM('it')
+                    .withOption('responsive', true)
+                    .withOption('order', [])
+                    .withOption('searching', false);
+            $scope.dtProjectInventoryColumn = [
+                DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                DTColumnDefBuilder.newColumnDef(5).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initProjectInventoryDataTable
 
         function fetchNewNotifications(){
             NotificationService.getNumUnread( function( numUnreadNotifications ){
@@ -236,4 +275,22 @@ conAngular
             });
         }
 
+        function initShowInventoryToggle(){
+            $('#partial-transfer').change(function(){
+                console.log($scope.partialTransfer);
+                if( $(this).is(":checked") == true ){
+                    $scope.partialTransfer = true;
+                    return;
+                }
+                $scope.partialTransfer = false;
+            });
+        }
+
+        function getItemsIds(){
+          var ids = [];
+          $('.transferItem :checked').each(function(i, item){
+            ids.push(item.value);
+          });
+          return ids;
+        }
     }]);

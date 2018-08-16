@@ -14,6 +14,8 @@ conAngular
     service.update = update;
     service.destroy = destroy;
     service.transferInventory = transferInventory;
+    service.transferPartialInventory = transferPartialInventory;
+    service.getInventory = getInventory;
 
     return service;
 
@@ -162,7 +164,7 @@ conAngular
         $http.post(serviceUrl, 
           { 
             from_project_id: sourceProjectId, 
-            to_project_id: destinationProjectId 
+            to_project_id: destinationProjectId
           }
         )
         .success(function ( response ) {
@@ -172,6 +174,34 @@ conAngular
             callback ( response );
         });
     }// transferInventory
+    
+    function transferPartialInventory( sourceProjectId, destinationProjectId, itemsIds, callback ){
+        var serviceUrl = $rootScope.apiUrl + 'projects/transfer_inventory_items';
+        $http.post(serviceUrl, 
+          { 
+            from_project_id: sourceProjectId, 
+            to_project_id: destinationProjectId,
+            items_ids: itemsIds
+          }
+        )
+        .success(function ( response ) {
+            callback ( response );
+        })
+        .error(function ( response ) {
+            callback ( response );
+        });
+    }// transferInventory
+
+    function getInventory( projectId, callback ){
+        var serviceUrl = $rootScope.apiUrl + 'projects/inventory';
+        $http.post(serviceUrl, { id: projectId } )
+        .success(function ( response ) {
+            callback ( response.projects );
+        })
+        .error(function ( response ) {
+            callback ( response );
+        });
+    }// getInventory
     
   }]
 );
