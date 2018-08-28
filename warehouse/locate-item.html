@@ -53,7 +53,7 @@
 	        </div>
 	        <div class="[ row ]">
 	            <div class="clear"></div>
-	            <div class="[ col s6 m2 ][ input-field ]">
+	            <div class="[ col s6 m3 ][ input-field ]">
 	                <input id="units-to-locate" type="number" name="units-to-locate" ng-model="unitsToLocate" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ pendingUnitsToLocate }}." min="1" max="{{ pendingUnitsToLocate }}"  required>
 	                <label for="units-to-locate">Cantidad a ubicar</label>
 	            </div>
@@ -64,47 +64,43 @@
 	                </select>
 	            </div>
 	            <div class="[ col s6 m3 ][ input-field ]">
-	                <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+	                <select id="location" name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
 	                    <option value="" selected>Selecciona la ubicación</option>
 	                    <option ng:repeat="location in locations" value="{{location.id}}">{{location.name }}</option>
 	                </select>
 	            </div>
-	            <div class="[ col s6 m2 ][ input-field ]" > 
-	                <input id="mulitple-units" type="number" name="units" ng-model="units" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-range-message="El valor deber ser mayor que 1 y menor que {{ currentLocation.available_units }}." min="1" max="{{ currentLocation.available_units }}" required>
-	                <label for="mulitple-units">Unidades que ocupa:</label>
-	            </div>
-	            <div class="[ col s12 m2 ]"> 
-	                <div class="[ center-align ]">
-	                    <button id="add-to-location" class="[ waves-effect ][ btn ]" href="#"><i class="[ fa fa-plus ]"></i></button>
-	                </div>
-	            </div>
+	            <div class="[ col s12 m3 ][ center-align ]">
+                    <div class="[ center-align ]">
+                        <button id="add-to-location" class="[ waves-effect ][ btn ]" href="#">Agregar</button>
+                    </div>
+                </div>
 	        </div>
 	        <div class="[ row ]" ng-show="hasMultipleLocations">
 	            <div class="[ col s6 m2 ][ input-field ]">
 	                <h5 class="[ center-align ]">Unidades a ubicar</h5>
 	            </div>
-	            <div class="[ col s6 m6 ][ input-field ]">
-	                <h5 class="[ center-align ]">Rack / Ubicación</h5>
-	            </div>
-	            <div class="[ col s6 m2 ][ input-field ]" > 
-	                <h5 class="[ center-align ]">Unidades que ocupa</h5>
-	            </div>
+	            <div class="[ col s6 m3 ][ input-field ]">
+                    <h5 class="[ center-align ]">Rack</h5>
+                </div>
+                <div class="[ col s6 m3 ][ input-field ]">
+                    <h5 class="[ center-align ]">Ubicación</h5>
+                </div>
 	            <div class="[ clear ]"></div>
 	            <div class="[ row ]" ng-repeat="bl in bulkLocations track by $index">
 	                <div class="[ col s6 m2 ][ input-field ]">
-	                    <input type="text" value="{{ bl.quantity }}" >
-	                </div>
-	                <div class="[ col s6 m6 ][ input-field ]">
-	                    <input type="text" value="{{ bl.rackLocation }}  ">
-	                </div>
-	                <div class="[ col s6 m2 ][ input-field ]" > 
-	                    <input type="text" value="{{ bl.units }}" >
-	                </div>
-	                <div class="[ col s12 m2 ]"> 
-	                    <div class="[ center-align ]">
-	                        <a id="add-to-location" class="[ waves-effect red ][ btn ]" href="#"><i class="[ fa fa-times ]"></i></a>
-	                    </div>
-	                </div>
+                        <input type="text" ng-readonly="true" value="{{ bl.quantity }}">
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.rack }} ">
+                    </div>
+                    <div class="[ col s6 m3 ][ input-field ]">
+                        <input type="text" ng-readonly="true" value="{{ bl.location }}">
+                    </div>
+                    <div class="[ col s12 m2 ]">
+                        <div class="[ center-align ]">
+                            <a id="remove-from-location" class="[ waves-effect red ][ btn ]" href="#" ng-click="removeUnitsFromLocation( $index )">Eliminar</a>
+                        </div>
+                    </div>
 	            </div>
 	            <div class="[ col s12 ][ center-align ]" ng-show="pendingUnitsToLocate==0"> 
 	                <div class="[ center-align ]">

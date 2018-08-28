@@ -438,9 +438,6 @@
                 <div class="[ col s6 m3 ][ input-field ]">
                     <h5 class="[ center-align ]">Ubicación</h5>
                 </div>
-                <div class="[ col s6 m2 ][ input-field ]" >
-                    <h5 class="[ center-align ]">Unidades que ocupa</h5>
-                </div>
                 <div class="[ clear ]"></div>
                 <div class="[ row ]" ng-repeat="bl in bulkLocations track by $index" id="bulk-units-{{$index}}">
                     <div class="[ col s6 m2 ][ input-field ]">
@@ -451,9 +448,6 @@
                     </div>
                     <div class="[ col s6 m3 ][ input-field ]">
                         <input type="text" ng-readonly="true" value="{{ bl.location }}">
-                    </div>
-                    <div class="[ col s6 m2 ][ input-field ]" >
-                        <input type="text" ng-readonly="true" value="{{ bl.units }}">
                     </div>
                     <div class="[ col s12 m2 ]">
                         <div class="[ center-align ]">

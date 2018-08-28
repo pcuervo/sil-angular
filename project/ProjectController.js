@@ -1,5 +1,5 @@
 conAngular
-    .controller('ProjectController', ['$scope', '$state', '$stateParams', '$location', 'ClientService', 'ProjectService', 'UserService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $state, $stateParams, $location, ClientService, ProjectService, UserService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
+    .controller('ProjectController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'ClientService', 'ProjectService', 'UserService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, ClientService, ProjectService, UserService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
         
         (function initController() {
             var currentPath = $location.path();
@@ -109,6 +109,8 @@ conAngular
         $scope.transferInventory = function(fromProjectId){
           var toProjectId = $scope.destinationProject;
 
+          $scope.dtInstance.dataTable.fnFilter('');
+
           if( 'undefined' === typeof toProjectId ){
             Materialize.toast('Por favor selecciona el proyecto destino.' , 4000, 'red');
             return;
@@ -116,7 +118,12 @@ conAngular
 
           if( $scope.partialTransfer ){
             var itemsIds = getItemsIds();
-            console.log(itemsIds);
+            
+            if( 0 == itemsIds.length ){
+                Materialize.toast('Escoge al menos un artículo a transferir.' , 4000, 'red');
+                return;
+            }
+
             ProjectService.transferPartialInventory(fromProjectId, toProjectId, itemsIds, function(response){
               Materialize.toast(response.success , 4000, 'green');
               $state.go('/view-projects', {}, { reload: true });
@@ -125,7 +132,6 @@ conAngular
             return;
           }
 
-          console.log('aquí?');
           ProjectService.transferInventory(fromProjectId, toProjectId, function(response){
             Materialize.toast(response.success , 4000, 'green');
             $state.go('/view-projects', {}, { reload: true });
@@ -137,6 +143,8 @@ conAngular
         *******************/
 
         function initProjects( currentPath ){
+          $scope.role = $rootScope.globals.currentUser.role;
+
           if( currentPath.indexOf( '/edit-project' ) > -1 ){
             $scope.showDeleteBtn = false;
             getProject( $stateParams.projectId );
@@ -151,18 +159,26 @@ conAngular
             return;
           }
           if( currentPath.indexOf( '/transfer-inventory' ) > -1 ){
+            $scope.dtInstance = {};
             $scope.partialTransfer = false;
             getProject( $stateParams.projectId );
             getProjectInventory( $stateParams.projectId );
             getAllProjects();
             initProjectInventoryDataTable();
-            //initShowInventoryToggle();
+            
             return;
           }
           switch( currentPath ){
             case '/view-projects':
               LoaderHelper.showLoader('Cargando proyectos...');
-              getAllProjects();
+
+              if( $scope.role != 1 || $scope.role != 4 ){
+                getUserProjects($rootScope.globals.currentUser.id);
+              } else {
+                getAllProjects();
+              }
+              
+              
               initProjectDataTable();
               break;
             case '/add-project':
@@ -185,6 +201,13 @@ conAngular
 					}); 
         }// getAllProjects
 
+        function getUserProjects(userId){
+					ProjectService.byUser( userId, function( projects ){
+						$scope.projects = projects;
+						LoaderHelper.hideLoader();
+					}); 
+        }// getUserProjects
+
         function getProjectManagersAndAccountExecutives(){
             UserService.getProjectManagers( function( pms ){
                 $scope.projectManagers = pms;
@@ -202,10 +225,10 @@ conAngular
             $scope.dtProjectOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(20)
-                    .withDOM('it')
+                    .withDOM('riftp')
                     .withOption('responsive', true)
                     .withOption('order', [])
-                    .withOption('searching', false);
+                    .withOption('searching', true);
             $scope.dtProjectColumn = [
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
@@ -217,7 +240,7 @@ conAngular
             $scope.dtProjectUsersOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(20)
-                    .withDOM('it')
+                    .withDOM('rift')
                     .withOption('responsive', true)
                     .withOption('order', [])
                     .withOption('searching', false);
@@ -258,10 +281,9 @@ conAngular
             $scope.dtProjectInventoryOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
                     .withDisplayLength(200)
-                    .withDOM('it')
+                    .withDOM('rift')
                     .withOption('responsive', true)
-                    .withOption('order', [])
-                    .withOption('searching', false);
+                    .withOption('searching', true);
             $scope.dtProjectInventoryColumn = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
                 DTColumnDefBuilder.newColumnDef(5).notSortable()
@@ -272,17 +294,6 @@ conAngular
         function fetchNewNotifications(){
             NotificationService.getNumUnread( function( numUnreadNotifications ){
                 NotificationHelper.updateNotifications( numUnreadNotifications );
-            });
-        }
-
-        function initShowInventoryToggle(){
-            $('#partial-transfer').change(function(){
-                console.log($scope.partialTransfer);
-                if( $(this).is(":checked") == true ){
-                    $scope.partialTransfer = true;
-                    return;
-                }
-                $scope.partialTransfer = false;
             });
         }
 

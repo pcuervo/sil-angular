@@ -153,20 +153,41 @@ conAngular
         }// getEntryType
 
         $scope.addUnitsToLocation = function(){
+            if( $scope.itemRequestId > 0 ){
+                $scope.unitsToLocate = this.unitsToLocate;
+                $scope.selectedLocation = this.selectedLocation;
+                $scope.units = this.units;
+                $scope.selectedRack = this.selectedRack;
+            }
+
             var bulkLocation = {
-                locationId:     this.selectedLocation,
-                quantity:       this.unitsToLocate,
-                units:          this.units,
-                rackLocation:   $('[name="rack"] option:selected').first().text() + ' / ' + $('[name="location"] option:selected').first().text()
-            } 
+                locationId:     $scope.selectedLocation,
+                location:       $('#location option:selected').text(),
+                quantity:       $scope.unitsToLocate,
+                rack:           $('#rack option:selected').text()
+            }
+
             $scope.bulkLocations.push( bulkLocation );
-            this.pendingUnitsToLocate -= this.unitsToLocate;
+            console.log( $scope.bulkLocations );
+            $scope.pendingUnitsToLocate -= $scope.unitsToLocate;
             $scope.hasMultipleLocations = true;
-            this.selectedLocation = '';
-            
-            this.selectedRack = '';
-            this.unitsToLocate = '';
-            this.units = '';
+
+            if( $scope.itemRequestId > 0 ){
+                this.selectedLocation = '';
+                this.selectedRack = '';
+                this.unitsToLocate = '';
+            }
+
+            $scope.selectedLocation = '';
+            $scope.selectedRack = '';
+            $scope.unitsToLocate = '';
+        }
+
+        $scope.removeUnitsFromLocation = function( bulkLocationId ){
+            console.log( $scope.bulkLocations[bulkLocationId] );
+            $scope.pendingUnitsToLocate += parseInt( $scope.bulkLocations[bulkLocationId].quantity );
+            $scope.bulkLocations.splice( bulkLocationId, 1 );
+            $('#bulk-units-'+bulkLocationId).remove();
         }
 
         $scope.changeRack = function( rackId ){

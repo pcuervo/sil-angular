@@ -169,7 +169,7 @@ conAngular
                     .withOption('order', [])
                     .withOption('searching', false);
             $scope.dtClientUserColumn = [
-                DTColumnDefBuilder.newColumnDef(2).notSortable()
+                DTColumnDefBuilder.newColumnDef(5).notSortable()
             ];
 
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
