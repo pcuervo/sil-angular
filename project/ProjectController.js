@@ -100,7 +100,6 @@ conAngular
             if( ! deleteProject ) return; 
 
             ProjectService.destroy( projectId, function ( response ){
-                console.log(response);
                 Materialize.toast('¡Proyecto borrado exitosamente!' , 4000, 'green');
                 $state.go('/view-projects', {}, { reload: true });
             });

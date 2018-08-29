@@ -103,7 +103,7 @@
             </div>
         </div>
         <div class="[ clear ]"></div>
-        <div class="[ col s8 offset-m2 ]" ng-if="hasLocations"> 
+        <div class="[ col s8 offset-m2 ]" ng-if="hasLocations" ng-show="1 == role || 4 == role"> 
             <h4 class="[ center-align ]">Ubicaciones de artículo</h4>
             <table datatable="ng" dt-options="dtItemLocationsOptions" dt-column-defs="dtItemLocationsColumnDefs" class="row-border hover">
                 <thead>
