@@ -1,5 +1,5 @@
 conAngular
-    .controller('ClientController', ['$scope', '$state', '$stateParams', 'ClientService', 'NotificationService', '$location', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $state, $stateParams, ClientService, NotificationService, $location, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
+    .controller('ClientController', ['$scope', '$rootScope', '$state', '$stateParams', 'ClientService', 'NotificationService', '$location', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, ClientService, NotificationService, $location, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
         
         (function initController() {
             var currentPath = $location.path();
@@ -94,6 +94,7 @@ conAngular
         *******************/
 
         function initClients( currentPath ){
+            $scope.role = $rootScope.globals.currentUser.role;
 
             if( currentPath.indexOf( '/edit-client-user' ) > -1 ){
                 getClientUser( $stateParams.userId );

@@ -172,10 +172,10 @@ conAngular
             case '/view-projects':
               LoaderHelper.showLoader('Cargando proyectos...');
 
-              if( $scope.role != 1 || $scope.role != 4 ){
-                getUserProjects($rootScope.globals.currentUser.id);
-              } else {
+              if( $scope.role == 1 || $scope.role == 4 ){
                 getAllProjects();
+              } else {
+                getUserProjects($rootScope.globals.currentUser.id);
               }
               
               

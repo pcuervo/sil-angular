@@ -227,7 +227,14 @@ conAngular
                 $scope.selectedClient = $rootScope.globals.currentUser.id;
                 fetchInventory();
               }
-              fetchProjects();
+
+              if( 2 === $scope.role || 3 === $scope.role || 6 === $scope.role ){
+                getUserProjects($rootScope.globals.currentUser.id);
+              } else {
+                fetchProjects();
+              }
+            
+              
               fetchStatuses();
               // TODO: FIX TEMPORAL, DATATABLES NO CARGA BIEN 
               // EN ALGUNOS CASOS
@@ -514,5 +521,12 @@ conAngular
                 $scope.itemType = itemType;
             });
         }// getItemType
+
+        function getUserProjects(userId){
+            ProjectService.byUser( userId, function( projects ){
+                $scope.projects = projects;
+                LoaderHelper.hideLoader();
+            }); 
+        }// getUserProjects
 
     }]);

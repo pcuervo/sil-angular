@@ -22,7 +22,7 @@
                     <th class="[ center-align ]">Email</th>
                     <th class="[ center-align ]">Teléfono</th>
                     <th class="[ center-align ]">Celular</th>
-                    <th class="[ center-align ]" ng-hide="role === 1 || role === 4">Editar</th>
+                    <th class="[ center-align ]" ng-show="role === 1 || role === 4">Editar</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
                 <td class="[ center-align ]">{{ c.email }}</td>
                 <td class="[ center-align ]">{{ c.phone }}</td>
                 <td class="[ center-align ]">{{ c.business_unit }}</td>
-                <td class="[ center-align ]" ng-hide="role === 1 || role === 4"><a class="[ btn waves-effect ]" href="#/edit-client-user/{{c.id}}"><i class="[ fa fa-edit ]"></i></a></td>
+                <td class="[ center-align ]" ng-show="role === 1 || role === 4"><a class="[ btn waves-effect ]" href="#/edit-client-user/{{c.id}}"><i class="[ fa fa-edit ]"></i></a></td>
                 </tr>
             </tbody>
         </table>
