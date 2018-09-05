@@ -15,6 +15,7 @@ conAngular
         service.stats = stats;
         service.getWithdrawRequests = getWithdrawRequests;
         service.deleteUser = deleteUser;
+        service.byUser = byUser;
         return service;
 
 
@@ -217,5 +218,17 @@ conAngular
                     callback ( response );
                });
         }// deleteUser
+
+        function byUser( id, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'client_contacts/by_user/' + id;
+            $http.get(serviceUrl)
+               .success(function ( response ) {
+                    console.log( response );
+                    callback( response.client_contact );
+               })
+               .error(function ( response ) {
+                    callback( response );
+               });
+        }// byUser
     }]);
 

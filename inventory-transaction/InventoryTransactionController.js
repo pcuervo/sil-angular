@@ -1,7 +1,5 @@
 conAngular
     .controller('InventoryTransactionController', ['$scope', '$rootScope', '$state', '$stateParams', 'InventoryTransactionService', 'SupplierService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', '$location', function($scope, $rootScope, $state, $stateParams, InventoryTransactionService, SupplierService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions, $location){
-
-        // Constants
         
         (function initController() {
             var currentPath = $location.path();

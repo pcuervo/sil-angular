@@ -258,15 +258,13 @@ conAngular
         }// searchByBarcode
 
         $scope.reEntry = function(){
-            console.log($scope.item);
             InventoryItemService.reentry( $scope.item.id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantity , function( response ){
-                console.log(response);
                 if( response.errors ){
                     Materialize.toast( response.errors, 4000, 'red');
                     return;
                 }
                 Materialize.toast( response.success, 4000, 'green');
-                $state.go('/view-item', { 'itemId' : $scope.item.id }, { reload: true });
+                $state.go('/check-in', {}, { reload: true });
             });
         }// reentry
 
@@ -700,35 +698,16 @@ conAngular
         function getLatestEntries(){
 
             if( 1 == $rootScope.globals.currentUser.role || 4  == $rootScope.globals.currentUser.role ){
-                InventoryItemService.getLatestEntries( function( latestInventoryItems ){
-                    console.log(latestInventoryItems);
-                    $scope.latestInventoryItems = latestInventoryItems;
+                InventoryTransactionService.latest( 'check_in', 10, function( latestTransactions ){
+                    console.log(latestTransactions);
+                    $scope.latestTransactions = latestTransactions;
                 });
                 return;
             }
 
-            if( 2 == $rootScope.globals.currentUser.role  ){
-                InventoryItemService.getLatestEntriesByPM( $rootScope.globals.currentUser.id, function( latestInventoryItems ){
-                    $scope.latestInventoryItems = latestInventoryItems;
-                });
-                return;
-            }
-
-            if( 3 == $rootScope.globals.currentUser.role  ){
-                InventoryItemService.getLatestEntriesByAE( $rootScope.globals.currentUser.id, function( latestInventoryItems ){
-                    $scope.latestInventoryItems = latestInventoryItems;
-                });
-                return
-            }
-
-            console.log('we here?');
-            if( 6 == $rootScope.globals.currentUser.role  ){
-                InventoryItemService.getLatestEntriesByClient( $rootScope.globals.currentUser.id, function( latestInventoryItems ){
-                    $scope.latestInventoryItems = latestInventoryItems;
-                });
-            }
-
-            
+            InventoryTransactionService.latestByUser( $rootScope.globals.currentUser.id, 'check_in', 10, function( latestTransactions ){
+                $scope.latestTransactions = latestTransactions;
+            });            
         }// getLatestEntries
 
         function initLatestEntriesDataTable(){
@@ -740,10 +719,6 @@ conAngular
                     .withOption('responsive', true)
                     .withOption('order', [])
                     .withOption('searching', false);
-            $scope.dtLatestEntriesColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(6).notSortable()
-            ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
         }// initLatestEntriesDataTable

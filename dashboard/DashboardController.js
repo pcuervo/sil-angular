@@ -86,7 +86,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
     function initDashboardClient(){
         $scope.dashboardTemplate = 'dashboard/client-dashboard.html';
 
-        ClientService.getClient( $rootScope.globals.currentUser.id, function( client_contact ){
+        ClientService.byUser( $rootScope.globals.currentUser.id, function( client_contact ){
             console.log(client_contact)
             $scope.client_contact = client_contact;
         } )
