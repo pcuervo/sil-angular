@@ -967,6 +967,22 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/view-folio', {
+        url: "/view-folio/:folio",
+        templateUrl: "inventory-transaction/view-folio.html",
+        controller: "InventoryTransactionController",
+        data: { pageTitle: 'Detalle Folio' },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
+        }
+    })
 
     // Users
     .state('/add-user', {

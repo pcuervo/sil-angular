@@ -78,11 +78,13 @@ conAngular
                 return;
             }
 
-            switch( currentPath ){
-                case '/search-by-folio':
-                    //initInventoryTransactionsFolioDataTable();
-                    return;
+            if( currentPath.indexOf( '/view-folio' ) > -1 ){
+                $scope.folio = $stateParams.folio;
+                getByFolio($scope.folio);
+                initItemsFolioDT();
+                return;
             }
+
 
             if( 0 !== Object.keys( $stateParams ).length ) {
                 LoaderHelper.showLoader('Cargando movimientos al inventario...');
@@ -176,6 +178,32 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
         }// initInventoryTransactionsFolioDataTable
+
+        function getByFolio( folio ){
+            InventoryTransactionService.searchByFolio( folio, function( inventoryTransactions ){
+                console.log(inventoryTransactions);
+                if( ! inventoryTransactions.length ){
+                    Materialize.toast( 'No se encontró ningún movimiento para ese folio.', 4000, 'red');
+                    $state.go('/dashboard', {}, { reload: true });
+                }
+
+                $scope.inventoryTransaction = inventoryTransactions[0];
+                $scope.inventoryTransactions = inventoryTransactions;
+                console.log($scope.inventoryTransaction);
+                LoaderHelper.hideLoader();
+            });
+        }
+
+        function initItemsFolioDT(){
+            $scope.dtFolioItemsDTOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withOption('searching', true)
+                .withDisplayLength(10)
+                .withDOM('pitrp')
+                .withOption('responsive', true);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initItemsFolioDT
 
         function fetchNewNotifications(){
             NotificationService.getNumUnread( function( numUnreadNotifications ){
