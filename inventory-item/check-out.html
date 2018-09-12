@@ -1,83 +1,52 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
 <div class="[ card-panel ]">
-    <div class="[ row ]" ng-if="1 == role || 4 == role">
-        <div class="[ col s12 m6 l4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/express-withdrawal"><i class="[ fa fa-barcode ][ left ]"></i>Rápida</a>
-        </div>
-        <div class="[ col s12 m6 l4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/withdraw-items"><i class="[ fa fa-outdent ][ left ]"></i>Masiva</a>
-        </div>
-        <div class="[ col s12 m6 l4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/pending-withdrawal-requests"><i class="[ fa fa-eye ][ left ]"></i>Solicitudes de salida</a>
-        </div>
+  <div class="[ row ]" ng-if="1 == role || 4 == role">
+    <div class="[ col s12 m6 l4 ]"> 
+      <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/express-withdrawal"><i class="[ fa fa-barcode ][ left ]"></i>Rápida</a>
     </div>
-    <div class="[ row ]" ng-if="2 == role || 3 == role || 6 == role">
-        <div class="[ col s12 m4 offset-m4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/request-exit"><i class="[ fa fa-outdent ][ left ]"></i>Solicitud de salida</a>
-        </div>
+    <div class="[ col s12 m6 l4 ]"> 
+      <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/withdraw-items"><i class="[ fa fa-outdent ][ left ]"></i>Masiva</a>
     </div>
+    <div class="[ col s12 m6 l4 ]"> 
+      <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/pending-withdrawal-requests"><i class="[ fa fa-eye ][ left ]"></i>Solicitudes de salida</a>
+    </div>
+  </div>
+  <div class="[ row ]" ng-if="2 == role || 3 == role || 6 == role">
+    <div class="[ col s12 m4 offset-m4 ]"> 
+      <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/request-exit"><i class="[ fa fa-outdent ][ left ]"></i>Solicitud de salida</a>
+    </div>
+  </div>
 </div>
 
-
 <div class="[ card-panel ]">
-	<div class="[ row ]">
-		<div class="[ col s12 ]">
-			<h4 class="[ center-align ]">Últimos movimientos de salida</h4>
-			<table datatable="ng" dt-options="dtLatestCheckoutOptions" dt-column-defs="dtLatestCheckoutColumnDefs" class="row-border col s12 hover">
-				<thead>
-					<tr>
-						<th class="[ center-align ]">Nombre</th>
-						<th class="[ center-align ][ hide-on-small-only ]">Cantidad</th>
-						<th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
-						<th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
-						<th class="[ center-align ][ hide-on-med-and-down ]" ng-show="( role == 1 )">Folio Salida</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="latest in latestTransactions" id="{{ latest.id }}">
-						<td>
-							<a href="#/view-item/{{ latest.inventory_item.id }}">{{ latest.inventory_item.name }}</a>
-						</td>
-						<td class="[ center-align ][ hide-on-small-only ]">{{ latest.quantity }}</td>
-						<td class="[ center-align ][ hide-on-small-only ]">{{ latest.inventory_item.serial_number }}</td>
-						<td class="[ center-align ][ hide-on-small-only ]">{{ latest.created_at | date:'yyyy-MM-dd h:mm:ss a' }}</td>
-						<td class="[ center-align ][ hide-on-med-and-down ][ js-location-links ]" ng-show="( role == 1 )">
-							<a href="#/view-folio/{{latest.folio}}">{{ latest.folio }}</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
-
-
-
-<div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Salidas recientes</h4>
-    
-    <table datatable="ng" dt-options="dtCheckOutsOptions" dt-column-defs="dtCheckOutsColumnDefs" class="row-border hover">
+  <div class="[ row ]">
+    <div class="[ col s12 ]">
+      <h4 class="[ center-align ]">Últimos movimientos de salida</h4>
+      <table datatable="ng" dt-options="dtLatestCheckoutOptions" dt-column-defs="dtLatestCheckoutColumnDefs" class="row-border col s12 hover">
         <thead>
-            <tr>
-                <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Concepto</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de entrada / salida</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Fecha entrada / salida</th>
-                <th class="[ center-align ]">Ver</th>
-            </tr>
+          <tr>
+            <th class="[ center-align ]">Nombre</th>
+            <th class="[ center-align ][ hide-on-small-only ]">Cantidad</th>
+            <th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
+            <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
+            <th class="[ center-align ][ hide-on-med-and-down ]" ng-show="( role == 1 )">Folio Salida</th>
+          </tr>
         </thead>
-        <tbody>
-            <tr ng-repeat="it in checkOutTransactions">
-            <td>{{ it.name }}</td>
-            <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.concept }}</td>
-            <td class="[ center-align ][ hide-on-med-and-down ]">{{ getTransactionType( it.actable_type ) }}</td>
-            <td class="[ center-align ][ hide-on-small-only ]">{{ it.exit_date | date:'dd/MM/yyyy' }}</td>
-            <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-inventory-transaction/{{it.id}}"><i class="[ ion-eye ]"></i></a></td>
+          <tbody>
+            <tr ng-repeat="latest in latestTransactions" id="{{ latest.id }}">
+              <td>
+                <a href="#/view-item/{{ latest.inventory_item.id }}">{{ latest.inventory_item.name }}</a>
+              </td>
+              <td class="[ center-align ][ hide-on-small-only ]">{{ latest.quantity }}</td>
+              <td class="[ center-align ][ hide-on-small-only ]">{{ latest.inventory_item.serial_number }}</td>
+              <td class="[ center-align ][ hide-on-small-only ]">{{ latest.created_at | date:'yyyy-MM-dd h:mm:ss a' }}</td>
+              <td class="[ center-align ][ hide-on-med-and-down ][ js-location-links ]" ng-show="( role == 1 )">
+                <a href="#/view-folio/{{latest.folio}}">{{ latest.folio }}</a>
+              </td>
             </tr>
-        </tbody>
-    </table>
-    
+          </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-
-
