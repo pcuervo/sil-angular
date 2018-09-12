@@ -2,15 +2,6 @@
 
 <div class="[ card-panel ]">
     <div class="[ row ]" ng-if="1 == role || 4 == role">
-        <!-- <div class="[ col s12 m6 l4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/withdraw-unit-item"><i class="[ fa fa-outdent ][ left ]"></i>Unitaria</a>
-        </div>
-        <div class="[ col s12 m6 l4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/withdraw-bundle-item"><i class="[ fa fa-outdent ][ left ]"></i>Paquete</a>
-        </div>
-        <div class="[ col s12 m6 l4 ]"> 
-            <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/withdraw-bulk-item"><i class="[ fa fa-outdent ][ left ]"></i>Granel</a>
-        </div> -->
         <div class="[ col s12 m6 l4 ]"> 
             <a class="[ col s12 ][ btn btn-extra red ][ waves-effect ]" href="#/express-withdrawal"><i class="[ fa fa-barcode ][ left ]"></i>Rápida</a>
         </div>
@@ -27,6 +18,40 @@
         </div>
     </div>
 </div>
+
+
+<div class="[ card-panel ]">
+	<div class="[ row ]">
+		<div class="[ col s12 ]">
+			<h4 class="[ center-align ]">Últimos movimientos de salida</h4>
+			<table datatable="ng" dt-options="dtLatestCheckoutOptions" dt-column-defs="dtLatestCheckoutColumnDefs" class="row-border col s12 hover">
+				<thead>
+					<tr>
+						<th class="[ center-align ]">Nombre</th>
+						<th class="[ center-align ][ hide-on-small-only ]">Cantidad</th>
+						<th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
+						<th class="[ center-align ][ hide-on-small-only ]">Fecha de entrada</th>
+						<th class="[ center-align ][ hide-on-med-and-down ]" ng-show="( role == 1 )">Folio Salida</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="latest in latestTransactions" id="{{ latest.id }}">
+						<td>
+							<a href="#/view-item/{{ latest.inventory_item.id }}">{{ latest.inventory_item.name }}</a>
+						</td>
+						<td class="[ center-align ][ hide-on-small-only ]">{{ latest.quantity }}</td>
+						<td class="[ center-align ][ hide-on-small-only ]">{{ latest.inventory_item.serial_number }}</td>
+						<td class="[ center-align ][ hide-on-small-only ]">{{ latest.created_at | date:'yyyy-MM-dd h:mm:ss a' }}</td>
+						<td class="[ center-align ][ hide-on-med-and-down ][ js-location-links ]" ng-show="( role == 1 )">
+							<a href="#/view-folio/{{latest.folio}}">{{ latest.folio }}</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
 
 
 <div class="[ card-panel ]">

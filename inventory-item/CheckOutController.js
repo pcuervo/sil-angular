@@ -237,13 +237,17 @@ conAngular
                     fetchSuppliers();
                     break;
                 case '/check-out':
-                    if( 6 == $scope.role ){
-                        getCheckOutTransactionsByClient( $rootScope.globals.currentUser.id );
-                    } else {
-                        getCheckOutTransactions();   
-                    }
-                    initCheckOutsDataTable();
+                    LoaderHelper.showLoader('Cargando entradas recientes...');
+                    getLatestCheckouts();
+                    initLatestCheckoutDataTable();
                     break;
+                    // if( 6 == $scope.role ){
+                    //     getCheckOutTransactionsByClient( $rootScope.globals.currentUser.id );
+                    // } else {
+                    //     getCheckOutTransactions();   
+                    // }
+                    // initCheckOutsDataTable();
+                    // break;
                 default:
                     getCheckOutTransactions();
             }
@@ -672,4 +676,34 @@ conAngular
 
             return 'FS-' + lastFolioNum;
         }
+
+        function getLatestCheckouts(){
+
+            if( 1 == $rootScope.globals.currentUser.role || 4  == $rootScope.globals.currentUser.role ){
+                InventoryTransactionService.latest( 'check_out', 30, function( latestTransactions ){
+                    console.log(latestTransactions);
+                    $scope.latestTransactions = latestTransactions;
+                    LoaderHelper.hideLoader();
+                });
+                return;
+            }
+
+            InventoryTransactionService.latestByUser( $rootScope.globals.currentUser.id, 'check_in', 10, function( latestTransactions ){
+                $scope.latestTransactions = latestTransactions;
+                LoaderHelper.hideLoader();
+            });            
+        }// getLatestCheckouts
+
+        function initLatestCheckoutDataTable(){
+
+            $scope.dtLatestCheckoutOptions = DTOptionsBuilder.newOptions()
+                    .withPaginationType('full_numbers')
+                    .withDisplayLength(30)
+                    .withDOM('it')
+                    .withOption('responsive', true)
+                    .withOption('order', [])
+                    .withOption('searching', false);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initLatestCheckoutDataTable
 }]);

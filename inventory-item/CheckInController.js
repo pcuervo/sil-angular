@@ -447,6 +447,7 @@ conAngular
                     initPendingValidationEntriesDataTable();
                     break;
                 case '/check-in':
+                    LoaderHelper.showLoader('Cargando entradas recientes...');
                     getLatestEntries();
                     initLatestEntriesDataTable();
                     if( 2 == $scope.role || 3 == $scope.role ) getPendingEntryRequests();
@@ -698,15 +699,17 @@ conAngular
         function getLatestEntries(){
 
             if( 1 == $rootScope.globals.currentUser.role || 4  == $rootScope.globals.currentUser.role ){
-                InventoryTransactionService.latest( 'check_in', 10, function( latestTransactions ){
+                InventoryTransactionService.latest( 'check_in', 30, function( latestTransactions ){
                     console.log(latestTransactions);
                     $scope.latestTransactions = latestTransactions;
+                    LoaderHelper.hideLoader();
                 });
                 return;
             }
 
             InventoryTransactionService.latestByUser( $rootScope.globals.currentUser.id, 'check_in', 10, function( latestTransactions ){
                 $scope.latestTransactions = latestTransactions;
+                LoaderHelper.hideLoader();
             });            
         }// getLatestEntries
 
@@ -714,7 +717,7 @@ conAngular
 
             $scope.dtLatestEntriesOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDisplayLength(10)
+                    .withDisplayLength(30)
                     .withDOM('it')
                     .withOption('responsive', true)
                     .withOption('order', [])
