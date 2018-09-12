@@ -68,6 +68,10 @@ conAngular
             })
         }// searchItem
 
+        $scope.printFolio = function(){
+            window.print();
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
