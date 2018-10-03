@@ -76,6 +76,7 @@
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
                 <th class="[ center-align ]">Cantidad</th>
+                <th class="[ center-align ]">Estado</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Ubicaciones</th>
                 <th class="[ center-align ]">Acciones</th>
             </tr>
@@ -86,6 +87,7 @@
                 <td>{{ i.inventory_item.name + ' ' + i.inventory_item.model  }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.serial_number }}</td>
                 <td class="[ center-align ]">{{ i.inventory_item.quantity }}</td>
+                <td class="[ center-align ]">{{ getItemState( i.inventory_item.state ) }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">
                     <p ng-if="i.inventory_item.locations.length == 0 || role == 6">-</p>
                     <div ng-repeat="loc in i.inventory_item.locations" ng-if="role != 6">

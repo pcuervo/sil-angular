@@ -500,6 +500,15 @@ conAngular
                 case 4:
                     state = 'Dañado';
                     break;
+                case 5:
+                    state = 'Incompleto';
+                    break;
+                case 6:
+                    state = 'Necesita mantenimiento';
+                    break;
+                case 7:
+                    state = 'Buen estado';
+                    break;
             }
             callback( state );
         }// getItemState

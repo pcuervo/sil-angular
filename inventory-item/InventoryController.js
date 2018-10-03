@@ -208,6 +208,34 @@ conAngular
           );
         }// editItem
 
+        $scope.getItemState = function( stateId ){
+          var state;
+          switch( stateId ){
+            case 1:
+              state = 'Nuevo';
+              break;
+            case 2:
+              state = 'Como nuevo';
+              break;
+            case 3:
+              state = 'Usado';
+              break;
+            case 4:
+              state = 'Dañado';
+              break;
+            case 5:
+              state = 'Incompleto';
+              break;
+            case 6:
+              state = 'Necesita mantenimiento';
+              break;
+            case 7:
+              state = 'Buen estado';
+              break;
+          }
+          return state;
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
