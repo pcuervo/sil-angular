@@ -10499,14 +10499,15 @@ table.dataTable.no-footer {
   white-space: normal; }
 
 @media print {
-  html { font-size: 8px; }
+  html { font-size:11px; }
   .yaybar, .navbar-top, .chat, .demo-bar, .content-wrap .page-title, .invoice-print {
     display: none; }
   .content-wrap {
     -webkit-transition: none !important;
             transition: none !important;
     margin-left: 0 !important;
-    padding: 0; } }
+    padding: 0; }
+}
 
 /*
  * Products
@@ -13069,6 +13070,12 @@ html.rtl .spinner-layer .left {
   \*-------------------------------------------*/
 
   @page { size: auto;  margin: 0mm; }
+
+  html{ color: #000; }
+  label, input{
+    color: #000 !important;
+    font-size: 120% !important;
+  }
 
   div{ border: 1px solid transparent; }
   .card, .card .content, .card-panel{ box-shadow: none; }

@@ -195,10 +195,10 @@ conAngular.controller('AppController', ['$scope', '$rootScope', '$state', functi
         restrict: 'A',
         scope: false,
         link: function(scope, element, attrs) {
-            var fn = $parse(attrs.onReadFile);     
+            var fn = $parse(attrs.onReadFile);
             element.on('change', function(onChangeEvent) {
                 var reader = new FileReader();
-                
+
                 reader.onload = function(onLoadEvent) {
                     scope.$apply(function() {
                         fn(scope, {$fileContent:onLoadEvent.target.result});
@@ -2122,7 +2122,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 }]);
             }]
         }
-    }); 
+    });
 
 }]);
 
@@ -2133,7 +2133,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = test;
+    $rootScope.apiUrl = stage;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
