@@ -641,8 +641,6 @@ conAngular
         }// registerUnitItem
 
         function registerBulkItem( itemRequestId ){
-
-            console.log('registering...');
             var status = 1;
             if( $('#checkbox-validation:checked').length ){
                 status = 7;
@@ -700,7 +698,6 @@ conAngular
 
             if( 1 == $rootScope.globals.currentUser.role || 4  == $rootScope.globals.currentUser.role ){
                 InventoryTransactionService.latest( 'check_in', 30, function( latestTransactions ){
-                    console.log(latestTransactions);
                     $scope.latestTransactions = latestTransactions;
                     LoaderHelper.hideLoader();
                 });

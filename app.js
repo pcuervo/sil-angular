@@ -177,6 +177,10 @@ conAngular.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
     });
 }]);
 
+conAngular.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.withCredentials = false;
+}])
+
 // App Controller
 conAngular.controller('AppController', ['$scope', '$rootScope', '$state', function($scope, $rootScope, $state) {
     $scope.$on('$viewContentLoaded', function() {

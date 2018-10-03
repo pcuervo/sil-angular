@@ -88,14 +88,20 @@ conAngular
                 return;
             }
 
+            LoaderHelper.showLoader('Salida en progreso...');
             var nextFolio = '-';
-            console.log($scope.nextFolio);
             if( 'undefined' !== $scope.nextFolio ){
                 nextFolio = $scope.nextFolio;
             }
 
             InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, nextFolio,  function( response ){
+                LoaderHelper.hideLoader();
                 console.log(response);
+                if( response.errors ){
+                    Materialize.toast( response.errors, 4000, 'red');
+                    return;
+                }
+
                 Materialize.toast( response.success, 4000, 'green');
                 $scope.isSummary = true;
                 $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();

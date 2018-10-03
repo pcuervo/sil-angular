@@ -845,7 +845,11 @@ conAngular
             $http ({
                 url: serviceUrl, 
                 method: "POST",
-                params: { keyword: keyword }
+                params: 
+                {  
+                    keyword: keyword,
+                    in_stock: true
+                }
             })
             .success(function ( response ) {
                 console.log( response );
