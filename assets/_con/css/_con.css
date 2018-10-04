@@ -13072,7 +13072,7 @@ html.rtl .spinner-layer .left {
   @page { size: auto;  margin: 0mm; }
 
   html{ color: #000; }
-  label, input{
+  label, input, a, h5{
     color: #000 !important;
     font-size: 120% !important;
   }
@@ -13090,7 +13090,7 @@ html.rtl .spinner-layer .left {
 
   .watermark {
     width: 20%; height: auto;
-    margin: 30px auto;
+    margin: 50px auto;
     color: #d0d0d0;
     opacity: 0.3;
   }
@@ -13119,13 +13119,14 @@ html.rtl .spinner-layer .left {
   .pcuervo-print .row .col.s12 { width: 50%; }
   .print-s12 { width: 100% !important; }
   .print-s6 { width: 50% !important; }
+  .print-s4 { width: 33% !important; }
   .pcuervo-print .btn { display: none; }
 
-  .print--folio{ width: 50% !important; }
+  .print--folio{ width: 33% !important; }
   .print--cliente{ width: 50% !important; }
   .print--contacto-cliente{ width: 50% !important; }
-  .print--proveedor{ width: 50% !important; }
-  .print--quien-se-lo-lleva{ width: 50% !important; }
+  .print--proveedor{ width: 33% !important; }
+  .print--quien-se-lo-lleva{ width: 33% !important; }
   .print--fecha-salida{ width: 50% !important; }
   .print--fecha-retorno{ width: 50% !important; }
   .print--observaciones{ width: 100% !important; }
