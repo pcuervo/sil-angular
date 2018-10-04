@@ -1,51 +1,51 @@
-<div class="[ card-panel ]">
+<div class="[ card-panel ][ print-hidden ]">
   <h4 class="[ center-align ]">Detalle folio {{ folio }}</h4>
   <div class="[ row ]">
     <form name="entry_form" class="[ mt-40 ][ left-align ]">
-      <div class="[ col s12 m1 offset-m2 ]"> 
+      <div class="[ col s12 m1 offset-m2 ]">
         <div class="input-field">
           <input class="{{ getTransactionTypeClass( inventoryTransaction.actable_type ) }}" id="item-transaction-type" type="text" name="itemTransactionType" ng-model="itemTransactionType">
           <label for="item-transaction-type"></label>
         </div>
       </div>
-      <div class="[ col s12 m4 ]"> 
+      <div class="[ col s12 m4 ]">
         <div class="input-field " >
           <input id="concept" type="text" name="concept" ng-model="inventoryTransaction.concept" ng-readonly="true">
           <label for="concept">Concepto</label>
         </div>
       </div>
-      <div class="[ col s12 m3 ]"> 
+      <div class="[ col s12 m3 ]">
         <div class="input-field">
           <input id="transaction-date" type="text" name="transactionDate" ng-model="inventoryTransaction.entry_exit_date" ng-readonly="true">
           <label for="transaction-date">Fecha del movimiento</label>
         </div>
       </div>
-      <div class="[ col s12 m4 offset-m2 ]"> 
+      <div class="[ col s12 m4 offset-m2 ]">
         <div class="input-field">
           <input id="supplier" type="text" name="supplier" ng-model="inventoryTransaction.supplier" ng-readonly="true">
           <label for="supplier">Proveedor</label>
         </div>
       </div>
-      <div class="[ col s12 m4 ]"> 
+      <div class="[ col s12 m4 ]">
         <div class="input-field">
           <input id="supplier-contact" type="text" name="supplierContact" ng-model="inventoryTransaction.deliver_pickup_contact" ng-readonly="true">
           <label for="supplier-contact" ng-show=" 'CheckInTransaction' ==  inventoryTransaction.actable_type ">¿Quién entregó?</label>
           <label for="supplier-contact" ng-show=" 'CheckOutTransaction' ==  inventoryTransaction.actable_type ">¿Quién recibió?</label>
         </div>
       </div>
-      <div class="[ col s8 offset-m2 ]"> 
+      <div class="[ col s8 offset-m2 ]">
         <div class="[ input-field ]">
           <textarea id="additional-comments" class="materialize-textarea" name="additionalComments" ng-model="inventoryTransaction.additional_comments" ng-readonly="true"></textarea>
           <label for="additional-comments">Comentarios adicionales</label>
         </div>
       </div>
       <div class="[ clear ]"></div>
-      <div class="[ col s10 offset-m1 ]"> 
+      <div class="[ col s10 offset-m1 ]">
         <h5 class="[ center-align ]">Artículos del movimiento</h5>
         <table datatable="ng" dt-options="dtFolioItemsDTOptions" class="row-border hover">
           <thead>
             <tr>
-              <th class="[ center-align ]"></th>
+              <th class="[ center-align ][ print-hidden ]"></th>
               <th class="[ center-align ]">Nombre</th>
               <th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
               <th class="[ center-align ]">Cantidad</th>
@@ -53,7 +53,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="i in inventoryTransactions">
-              <td><img ng-src="{{ i.inventory_item.img }}" alt=""></td>
+              <td class="[ print-hidden ]"><img ng-src="{{ i.inventory_item.img }}" alt=""></td>
               <td>
                 <a href="#/view-item/{{i.inventory_item.id}}">{{ i.inventory_item.name }}</td></a>
               <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.serial_number }}</td>
@@ -63,7 +63,7 @@
         </table>
       </div>
     </form>
-    <div class="[ center ][ col s12 ]">
+    <div class="[ center ][ col s12 ][ print-hidden ]">
       <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printFolio()"><i class="mdi-action-print left"></i>Imprimir folio</button>
     </div>
   </div><!-- row -->

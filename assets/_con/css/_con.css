@@ -13078,6 +13078,7 @@ html.rtl .spinner-layer .left {
   }
 
   div{ border: 1px solid transparent; }
+  .content-wrap{ background: #fff !important; }
   .card, .card .content, .card-panel{ box-shadow: none; }
 
   .toast-container, .toast{ display: none; }
@@ -13089,15 +13090,18 @@ html.rtl .spinner-layer .left {
 
   .watermark {
     width: 20%; height: auto;
-    margin: 50px auto;
+    margin: 30px auto;
     color: #d0d0d0;
     opacity: 0.3;
-    z-index: -1;
   }
 
   .print--firma{
     width: 33% !important;
     margin: 0 auto !important;
+  }
+
+  .dataTables_paginate{
+    display: none;
   }
 
   /*-------------------------------------------*\
@@ -13113,6 +13117,8 @@ html.rtl .spinner-layer .left {
   \*-------------------------------------------*/
 
   .pcuervo-print .row .col.s12 { width: 50%; }
+  .print-s12 { width: 100% !important; }
+  .print-s6 { width: 50% !important; }
   .pcuervo-print .btn { display: none; }
 
   .print--folio{ width: 50% !important; }
