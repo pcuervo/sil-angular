@@ -13120,6 +13120,7 @@ html.rtl .spinner-layer .left {
   .print-s12 { width: 100% !important; }
   .print-s6 { width: 50% !important; }
   .print-s4 { width: 33% !important; }
+  .print-s3 { width: 25% !important; }
   .pcuervo-print .btn { display: none; }
 
   .print--folio{ width: 33% !important; }

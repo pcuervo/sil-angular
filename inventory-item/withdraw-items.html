@@ -113,22 +113,19 @@
         </div>
         <div class="clear"></div>
         <div ng-repeat="i in withdrawnItems">
-            <div class="[ col s12 m6 print-s4 ]">
+            <div class="[ col s12 m6 print-s6 ]">
                 <div class="input-field">
-                    <input id="wname" type="text" name="wname" ng-readonly="true">
-                    <label for="wname">{{ i.name }}</label>
+                    <input id="wname" type="text" name="wname" value="{{ i.name }}" disabled ng-readonly="true">
                 </div>
             </div>
-            <div class="[ col s12 m4 print-s4 ]">
-                <div class="input-field">
-                    <input id="wserial" type="text" name="wserial" ng-readonly="true">
-                    <label for="wserial">{{ i.serial_number }}</label>
+            <div class="[ col s12 m4 print-s3 ]">
+                <div class="[ input-field ]">
+                    <input id="wserial" type="text" name="wserial" value="{{ i.serial_number }}" disabled ng-readonly="true">
                 </div>
             </div>
-            <div class="[ col s12 m2 print-s4 ]">
-                <div class="input-field">
-                    <input id="wquantity" type="text" name="wquantity" ng-readonly="true">
-                    <label for="wquantity">{{ i.quantity }}</label>
+            <div class="[ col s12 m2 print-s3 ]">
+                <div class="[ input-field ]">
+                    <input id="wquantity" type="text" name="wquantity" value="{{ i.quantity }}" disabled ng-readonly="true">
                 </div>
             </div>
             <div class="clear"></div>
