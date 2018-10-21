@@ -34,7 +34,7 @@
         <tbody>
             <tr ng-repeat="it in inventoryTransactions">
                 <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }}</td>
-                <td class="[ center-align ]">{{ it.folio }}</td>
+                <td class="[ center-align ]"><a href="#/view-folio/{{it.folio}}">{{ it.folio }}</a></td>
                 <td class="[ center-align ]"><a href="#/view-item/{{it.inventory_item.id }}">{{ it.inventory_item.name }}</a></td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ it.inventory_item.status }}</td>

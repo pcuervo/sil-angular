@@ -469,7 +469,6 @@ conAngular
                     $scope.validSelectedProject = false;
                     $scope.hasLocation = false;
 
-                    fetchLastCheckinFolio();
                     fetchProjects();
                     fetchWarehouseRacks();
                     fetchSuppliers();
@@ -647,7 +646,7 @@ conAngular
             }
             var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
             var isHighValue = $('#checkbox-high-value:checked').length;
-            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.extraParts, $scope.nextFolio, function ( response ){
+            BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue,  $scope.selectedPM, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.extraParts, function ( response ){
 
                 LoaderHelper.hideLoader();
                 if( response.errors ) {
@@ -655,6 +654,7 @@ conAngular
                     $scope.currentStep = 1;
                     return;
                 }
+                fetchLastCheckinFolio();
 
                 $scope.registeredItemId = response.inventory_item.id;
                 $scope.item = response.inventory_item;
@@ -1018,7 +1018,7 @@ conAngular
 
         function fetchLastCheckinFolio( id ){
             InventoryTransactionService.lastCheckinFolio( function( lastFolio ){
-                $scope.nextFolio = getNextCheckinFolio( lastFolio );
+                $scope.nextFolio = lastFolio;
             }); 
         }
 
