@@ -21,11 +21,10 @@
         </div>
         <div class="[ col s12 m4 ]"> 
             <div class="input-field">
-                <input id="item-location" type="text" name="itemName" ng-model="itemLocation.units" ng-readonly="true">
-                <label for="item-location">Unidades ocupadas</label>
+                <input id="item-quantity" type="text" name="itemName" ng-model="itemLocation.quantity">
+                <label for="item-quantity">Cantidad en ubicación</label>
             </div>
         </div>
-        <div class="clear"></div>
     </div><!-- row -->
 </div>
 
@@ -40,6 +39,11 @@
                     <option value="" disabled selected>Selecciona el rack</option>
                     <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
                 </select>
+                <div class="clear"></div>
+                <div class="input-field">
+                    <input id="item-quantity-relocate" type="text" name="quantityToRelocate" ng-model="quantityToRelocate">
+                    <label for="item-quantity-relocate">Cantidad a reubicar</label>
+                </div>
             </div>
         </form>
         <h4 class="[ center-align ]">Rack actual: {{ itemLocation.rack_name }}</h4>

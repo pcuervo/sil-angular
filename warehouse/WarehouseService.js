@@ -157,12 +157,14 @@ conAngular
             });
         }// locateBulk
 
-        function relocateItem( itemLocationId, newLocationId, callback ){
+        function relocateItem( itemId, quantityToRelocate, oldLocationId,  newLocationId, callback ){
             var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/relocate_item';
             $http.post( serviceUrl, 
                 { 
-                    item_location_id:   itemLocationId,
-                    new_location_id:    newLocationId
+                    inventory_item_id: itemId,
+                    old_location_id: oldLocationId,
+                    new_location_id: newLocationId,
+                    quantity: quantityToRelocate,
                 }
             )
             .success(function( response ) {

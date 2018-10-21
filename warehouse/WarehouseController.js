@@ -378,7 +378,6 @@ conAngular
             if( currentPath.indexOf('relocate') > -1 ){
                 LoaderHelper.showLoader( 'Reubicando artículo(s)...' );
                 fetchWarehouseRacks();
-                console.log('before getting item_location');
                 getItemLocation( $stateParams.itemId, $stateParams.locationId )
                 return;
             }
@@ -720,15 +719,16 @@ conAngular
             console.log('getting ItemLocation');
             WarehouseService.getItemLocation( itemId, locationId, function( itemLocation ){
                 $scope.itemLocation = itemLocation;
+                $scope.quantityToRelocate = itemLocation.quantity;
                 console.log( itemLocation );
                 $('.js-barcode').JsBarcode( itemLocation.barcode );
                 getRackRelocation( itemLocation.rack_id );
                 $('body').on('click', '.js-location', function(){
-                    $scope.itemLocation = itemLocation;
-                    console.log( $scope.itemLocation.id );
+                    var oldLocationId = itemLocation.location_id;
                     var newLocationId = $(this).data('location');
+                    
+                    relocateItem( itemId, $scope.quantityToRelocate, oldLocationId, newLocationId );
                     LoaderHelper.showLoader('Reubicando artículo(s)...');
-                    relocateItem( $scope.itemLocation.id, newLocationId );
                 });
                 LoaderHelper.hideLoader();
             });
@@ -834,8 +834,9 @@ conAngular
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }//initRacksDataTable
 
-        function relocateItem( itemLocationId, newLocationId ){
-            WarehouseService.relocateItem( itemLocationId, newLocationId, function( item_location ) {
+        function relocateItem( itemId, quantityToRelocate, oldLocationId,  newLocationId ){
+            WarehouseService.relocateItem( itemId, quantityToRelocate, oldLocationId,  newLocationId, function( item_location ) {
+                console.log(item_location);
                 if( item_location.errors ){
                     Materialize.toast( item_location.errors, 4000, 'red' );
                     LoaderHelper.hideLoader();
