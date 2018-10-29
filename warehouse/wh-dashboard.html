@@ -69,7 +69,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="item in pending_locations">
-                <td><img ng-src="{{ item.item_img_thumb }}" alt=""></td>
+                <td class="[ center-align ]"><img ng-src="{{ item.item_img_thumb }}" alt=""></td>
                 <td class="[ center-align ]"><a href="#/view-item/{{item.id}}">{{ item.name }}</a></td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ item.quantity }}</td>
@@ -84,14 +84,10 @@
 </div>
 
 <div class="[ card-panel ]">
-    <div>
-      <p><i class="[ fa fa-square ]"></i> Unitaria - <i class="[ fa fa-th-large ]"></i> Paquete - <i class="[ fa fa-align-justify ]"></i> Granel</p>
-    </div>
     <h4 class="[ center-align ]">Artículos reingresados con ubicación pendiente</h4>
     <table datatable="ng" dt-options="dtPendingLocationOptions" dt-column-defs="dtPendingLocationColumnDefs" class="row-border hover">
         <thead>
             <tr>
-                <th class="[ center-align ]">Tipo</th>
                 <th></th>
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
@@ -102,9 +98,8 @@
         </thead>
         <tbody>
             <tr ng-repeat="item in reentryPendingLocations">
-                <td class="[ center-align ]"><i class="[ {{ getItemTypeIcon( item.actable_type ) }} ]"></i><p class="[ hide ]">{{item.actable_type}}</p></td>
-                <td><img ng-src="{{ item.item_img_thumb }}" alt=""></td>
-                <td> {{ item.name }}</td>
+                <td><img class="[ center-align ]" ng-src="{{ item.item_img_thumb }}" alt=""></td>
+                <td><a href="#/view-item/{{item.id}}">{{ item.name }}</a></td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ item.quantity }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">{{ item.validity_expiration_date | date:'dd/MM/yyyy' }}</td>

@@ -721,7 +721,7 @@ conAngular
             WarehouseService.getItemLocation( itemId, locationId, function( itemLocation ){
                 $scope.itemLocation = itemLocation;
                 $scope.quantityToRelocate = itemLocation.quantity;
-                console.log( itemLocation );
+                console.log( $scope.quantityToRelocate );
                 $('.js-barcode').JsBarcode( itemLocation.barcode );
                 getRackRelocation( itemLocation.rack_id );
                 $('body').on('click', '.js-location', function(){
@@ -779,7 +779,7 @@ conAngular
                 .withOption('searching', false);
             $scope.dtPendingLocationColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(6).notSortable()
+                DTColumnDefBuilder.newColumnDef(5).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initPendingLocationDataTable
@@ -837,7 +837,6 @@ conAngular
 
         function relocateItem( itemId, quantityToRelocate, oldLocationId,  newLocationId ){
             WarehouseService.relocateItem( itemId, quantityToRelocate, oldLocationId,  newLocationId, function( item_location ) {
-                console.log(item_location);
                 if( item_location.errors ){
                     Materialize.toast( item_location.errors, 4000, 'red' );
                     LoaderHelper.hideLoader();
@@ -848,6 +847,7 @@ conAngular
                 $state.go('/view-location', {
                     locationId: item_location.warehouse_location.id
                  }, { reload: true });
+                location.reload();
             });
             return;
         }
