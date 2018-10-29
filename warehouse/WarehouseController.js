@@ -9,6 +9,7 @@ conAngular
         var STATUS_FULL = 3;
 
         (function initController() {
+            $scope.role = $rootScope.globals.currentUser.role;
             var currentPath = $location.path();
             initWarehouseOptions( currentPath );
             fetchNewNotifications();

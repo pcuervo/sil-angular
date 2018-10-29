@@ -27,24 +27,24 @@
             <li ng-if="( role != 5 )">
                 <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-th"></i> Inventario<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
                 <ul>
-                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Movimientos por artículo</a>
+                    <li ng-show="( role == 1 || role == 4 || role == 7 )"><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Movimientos por artículo</a>
                     </li>
-                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect" href="#/search-by-folio"><i class="mdi-av-repeat"></i>Movimientos por folio</a>
+                    <li ng-show="( role == 1 || role == 4 || role == 7 )"><a class="waves-effect" href="#/search-by-folio"><i class="mdi-av-repeat"></i>Movimientos por folio</a>
                     </li>
-                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
+                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 7 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
                     </li>
-                    <li ><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i>  Entradas</a>
+                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4)"><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i>  Entradas</a>
                     </li>
                     <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
                     </li>
                 </ul>
             </li>
-            <li ng-show="( role == 1 || role == 4 )">
+            <li ng-show="( role == 1 || role == 4 || role == 7 )">
                 <a class="yay-sub-toggle waves-effect waves-blue"><i class="mdi-action-view-quilt"></i> Almacén<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
                 <ul>
                     <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/view-warehouse-transactions"><i class="mdi-av-repeat"></i> Movimientos</a>
                     </li>
-                    <li><a class="waves-effect waves-blue" href="#/wh-dashboard"><i class="fa fa-location-arrow"></i> Ubicaciones</a>
+                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/wh-dashboard"><i class="fa fa-location-arrow"></i> Ubicaciones</a>
                     </li>
                     <li><a class="waves-effect waves-blue" href="#/view-racks"><i class="mdi-action-view-module"></i> Racks</a>
                     </li>

@@ -73,6 +73,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
                 initDashboardProjectManager();
                 break;
             case 4:
+            case 7:
                 initDashboardWarehouseAdmin();
                 break;
             case 5:

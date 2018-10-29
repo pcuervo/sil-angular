@@ -20,14 +20,14 @@
                 <td class="[ center-align ]">{{ r.total_locations }}</td>
                 <td class="[ center-align ]">
                     <a class="[ btn waves-effect ]" href="#/view-rack/{{r.id}}"><i class="[ fa fa-eye ]"></i></a>
-                    <a class="[ btn waves-effect ][ red ]" ng-click="deleteRack( r.id )" ng-if="r.is_empty"><i class="[ fa fa-times ][ left ]"></i>Eliminar</a>
-                    <a class="[ btn waves-effect ][ red ]" ng-click="emptyRack( r.id )" ng-if="! r.is_empty"><i class="[ mdi-action-flip-to-back ][ left ]"></i>Vaciar</a>
+                    <a class="[ btn waves-effect ][ red ]" ng-click="deleteRack( r.id )" ng-if="r.is_empty && role != 7"><i class="[ fa fa-times ][ left ]"></i>Eliminar</a>
+                    <a class="[ btn waves-effect ][ red ]" ng-click="emptyRack( r.id )" ng-if="! r.is_empty && role != 7"><i class="[ mdi-action-flip-to-back ][ left ]"></i>Vaciar</a>
                 </td>
             </tr>
         </tbody>
     </table>
     <div class="clear"></div>
-    <div class="[ row ]">
+    <div class="[ row ]" ng-if="role != 7">
         <div class="[ col s12 ][ center-align ]">
             <a class="[ btn ]" href="#/add-rack"><i class="[ fa fa-plus ][ left ]"></i>Agregar rack</a>
         </div>
