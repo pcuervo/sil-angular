@@ -21,7 +21,7 @@
         </div>
         <div class="[ col s12 m4 ]">
             <div class="input-field">
-                <input id="item-quantity" type="text" name="itemName" ng-model="itemLocation.quantity">
+                <input id="item-quantity" type="text" name="itemName" ng-model="itemLocation.quantity" ng-readonly="true">
                 <label for="item-quantity">Cantidad en ubicación</label>
             </div>
         </div>
@@ -39,17 +39,17 @@
                     <option value="" disabled selected>Selecciona el rack</option>
                     <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
                 </select>
-                <div class="clear"></div>
+                <div class="[ clear ]"></div>
                 <div class="input-field">
                     <input id="item-quantity-relocate" type="text" name="quantityToRelocate" ng-model="quantityToRelocate">
                     <label for="item-quantity-relocate">Cantidad a reubicar</label>
                 </div>
             </div>
         </form>
+        <div class="[ clear ]"></div>
         <div class="[ rack-card-panel ]">
             <h4 class="[ center-align ]">Rack actual: {{ itemLocation.rack_name }}</h4>
-            <div class="[ row ][ rack-container ][ js-rack ]">
-            </div><!--f row -->
+            <div class="[ row ][ rack-container ][ js-rack ]"></div><!--f row -->
         </div>
     </div>
 </div>
