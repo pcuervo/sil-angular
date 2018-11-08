@@ -27,11 +27,12 @@
             <div class="[ col s12 m4 l3 offset-l1 ][ mt-15 ]"> 
                 <select name="role" ng-model="role" required >
                     <option value="" disabled selected>Rol</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">Project Manager</option>
-                    <option value="3">Ejecutivo de cuenta</option>
+                    <option ng-show="role == 1" value="1">Administrador</option>
+                    <option ng-show="role == 1" value="2">Project Manager</option>
+                    <option ng-show="role == 1" value="3">Ejecutivo de cuenta</option>
                     <option value="4">Jefe de almacén</option>
                     <option value="5">Repartidor</option>
+                    <option value="7">Almacenista</option>
                 </select>
             </div>
             <div class="[ col s12 m4 l3 ]"> 

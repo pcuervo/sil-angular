@@ -131,13 +131,14 @@ conAngular
         });
     }// removeUser
 
-    function update( id, litobelId, projectName, callback ){
+    function update( id, litobelId, projectName, clientId, callback ){
         var serviceUrl = $rootScope.apiUrl + 'projects/update';
         $http.post(serviceUrl, {
                 id: id,
                 project: {
                     litobel_id: litobelId,
-                    name:       projectName
+                    name:       projectName,
+                    client_id: clientId
                 }
             })
             .success(function ( response ) {

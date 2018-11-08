@@ -821,7 +821,7 @@ conAngular
             });
         }// getInStock
 
-        function edit( id, userId, name, serialNumber, brand, model, state, value, description, extraParts, storageType, validityExpirationDate, callback ) {
+        function edit( id, userId, name, serialNumber, brand, model, state, value, description, extraParts, storageType, validityExpirationDate, imgBase64, filename, callback ) {
           var userId = $rootScope.globals.currentUser.id;
           var serviceUrl = $rootScope.apiUrl + 'inventory_items/update';
           $http.post(serviceUrl, 
@@ -838,7 +838,9 @@ conAngular
               extra_parts:                extraParts, 
               storage_type:               storageType,
               validity_expiration_date:   validityExpirationDate
-            }
+            },
+            filename: filename,
+            item_img: imgBase64
           })
           .success(function( response ) {
             callback( response.inventory_item );

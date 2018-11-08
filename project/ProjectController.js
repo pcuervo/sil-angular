@@ -83,7 +83,7 @@ conAngular
         }// removeUserFromProject
 
         $scope.update = function(){
-            ProjectService.update( $scope.project.id, $scope.project.litobel_id, $scope.project.name, function ( response ){
+            ProjectService.update( $scope.project.id, $scope.project.litobel_id, $scope.project.name, $scope.project.client_id, function ( response ){
                     console.log( response );
                     if(response.errors) {
                         ErrorHelper.display( response.errors );
@@ -146,7 +146,9 @@ conAngular
 
           if( currentPath.indexOf( '/edit-project' ) > -1 ){
             $scope.showDeleteBtn = false;
+            getAllClients();
             getProject( $stateParams.projectId );
+            
             getProjectManagersAndAccountExecutives();
             initProjectUsersDataTable()
             return;
@@ -256,12 +258,16 @@ conAngular
               $state.go('/view-projects', {}, { reload: true });
               return;
             }
-            getAllClients();
+            //getAllClients();
+            getClientContacts( project.client_id );
+
             $scope.project = project;
             $scope.clientId = project.client_id;
             $scope.projectUsers = project.users;
+            console.log(project);
 
             if( ! project.has_inventory ) $scope.showDeleteBtn = true;
+            if( $('[name="projectClient"]').length ) $('[name="projectClient"]').val( project.client_id );
           });
         }// getProject
 
@@ -302,5 +308,12 @@ conAngular
             ids.push(item.value);
           });
           return ids;
+        }
+
+        function getClientContacts(clientId){
+            ClientService.getContacts( clientId, function ( clientContacts ){
+                console.log(clientContacts)
+                $scope.clientContacts = clientContacts;
+            });
         }
     }]);

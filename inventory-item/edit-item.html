@@ -3,6 +3,9 @@
 <h4 class="[ center-align ]">Editar artículo</h4>
 <div class="[ row ]">
   <form name="entry_form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" ng-submit="editItem( item.id )" data-parsley-item>
+    <div class="[ col s12 m4 offset-m4 ]">
+        <img class="[ col s12 ]" ng-src="{{item.img}}}">
+    </div>
     <div class="[ col s12 m5 offset-m1 ]"> 
         <div class="input-field">
           <input id="project" type="text" ng-model="project" ng-readonly="true">
@@ -91,6 +94,23 @@
         <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
         <input class="datepicker" type="date" ng-model="validityExpirationDate" required>
       </div>
+      <div class="clear"></div>
+      <div class="[ col s12 m4 offset-m2 ]">
+        <div class="file-field input-field">
+          <input class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen">
+          <div class="">
+            <span>Cambiar imagen</span>
+            <input type="file" id="editItemImg" ng-model="editItemImg" />
+          </div>
+        </div>
+      </div>
+      <div class="[ col s12 m3 ]">
+        <div class="[ card ]">
+            <div class="[ card-image ][ preview-img ]">
+                <img src="#" alt="">
+            </div>
+        </div>
+      </div>
       <div class="[ clear ]"></div>
       <div class="[ col s12 ]"> 
         <div class="[ center-align ]">
@@ -98,6 +118,7 @@
           <button class="[ waves-effect ][ btn green ]"><i class="[ fa fa-edit ][ left ]"></i>Editar</button>
         </div>
       </div>
+      <div class="clear"></div>
   </form>
 </div><!-- row -->
 

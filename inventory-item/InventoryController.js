@@ -182,7 +182,14 @@ conAngular
         }
 
         $scope.editItem = function( id ){
+          LoaderHelper.showLoader('Editando artículo...');
           var userId = $rootScope.globals.currentUser.id;
+
+          var itemImgName = '';
+          if( 'undefined' !== typeof $scope.itemName ){
+            itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
+          }
+
           InventoryItemService.edit( 
             id, 
             userId,
@@ -196,6 +203,8 @@ conAngular
             $scope.item.extra_parts, 
             $scope.item.storage_type, 
             $scope.item.validity_expiration_date, 
+            $scope.itemImg,
+            itemImgName,
             function ( inventory_item ){
               LoaderHelper.hideLoader();
               if( inventory_item.errors ) {
@@ -291,15 +300,37 @@ conAngular
           }
 
           if( currentPath.indexOf( '/edit-item/' ) > -1 ){
+            $scope.itemImg = '';
             getItem( $stateParams.itemId );
+            $(document).on('change', '#editItemImg', function(){ 
+              LoaderHelper.showLoader('Cargando vista previa...');
+              getItemImg();
+            });
             return;
           }
 
           if( currentPath.indexOf( '/edit-item-type' ) > -1 ){
             getItemType( $stateParams.itemTypeId );
+            
             return;
           }
         }// initInventory
+
+
+        function getItemImg(){
+            console.log('no loader?');
+            var imgId = 'editItemImg';
+            var fileInput = document.getElementById( imgId );
+            file = fileInput.files[0];
+            fr = new FileReader();
+            fr.readAsDataURL(file);
+            fr.onload = function(){
+                $('.preview-img img').attr('src', fr.result);
+                $scope.itemImg = fr.result;
+                $scope.itemImgExt = file.name.split('.').pop().toLowerCase();
+                LoaderHelper.hideLoader();
+            }
+        }// getItemImg
 
         function fetchInventory(){
             if( 1 === $scope.role || 4 == $scope.role ){
