@@ -187,9 +187,9 @@ conAngular
                 fetchSuppliers();
                 $scope.exitDate = new Date();
 
-                angular.element('body').on('search.dt', function() {  
-                   var searchTerm = document.querySelector('.dataTables_filter input').value;
-                });
+                // angular.element('body').on('search.dt', function() {  
+                //    var searchTerm = document.querySelector('.dataTables_filter input').value;
+                // });
                 return;
             }
 

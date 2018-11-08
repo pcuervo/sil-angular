@@ -202,8 +202,8 @@ conAngular
             $scope.dtFolioItemsDTOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
                 .withOption('searching', true)
-                .withDisplayLength(10)
-                .withDOM('pitrp')
+                .withDisplayLength(1000)
+                .withDOM('itr')
                 .withOption('responsive', true);
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
 
