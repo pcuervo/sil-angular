@@ -686,7 +686,7 @@ conAngular
         function getLatestCheckouts(){
 
             if( 1 == $rootScope.globals.currentUser.role || 4  == $rootScope.globals.currentUser.role ){
-                InventoryTransactionService.latest( 'check_out', 30, function( latestTransactions ){
+                InventoryTransactionService.latest( 'check_out', 20, function( latestTransactions ){
                     console.log(latestTransactions);
                     $scope.latestTransactions = latestTransactions;
                     LoaderHelper.hideLoader();

@@ -714,6 +714,7 @@ conAngular
             }
             LoaderHelper.showLoader('Buscando...');
             InventoryItemService.search( '', '', '', '', 1, '', '', $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+                console.log(inventoryItems);
                 if( ! inventoryItems.length ){
                     Materialize.toast( 'No se encontró ningún artículo.', 4000, 'red');
                 }
