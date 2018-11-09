@@ -1,6 +1,6 @@
 conAngular
     .controller('DeliveryController', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'InventoryItemService', 'NotificationService', 'UserService', 'ProjectService', 'DeliveryService', 'SupplierService', 'ClientService', 'InventoryTransactionService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder', 'DTDefaultOptions', function($scope, $rootScope, $state, $stateParams, $location, InventoryItemService, NotificationService, UserService, ProjectService, DeliveryService, SupplierService, ClientService, InventoryTransactionService, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder, DTDefaultOptions){
-        
+
         (function initController() {
             $scope.role = $rootScope.globals.currentUser.role;
             var currentPath = $location.path();
@@ -21,7 +21,7 @@ conAngular
         }// getItemTypeIcon
 
         $scope.multipleItemsDelivery = function(){
-            
+
             $scope.selectedDeliveryGuy = $('[name="deliveryGuy"] option:selected').text();
             $scope.selectedItems = getSelectedDeliveryItems();
 
@@ -62,7 +62,7 @@ conAngular
         }
 
         $scope.singleItemDelivery = function(){
-            
+
             $scope.selectedDeliveryGuy = $('[name="deliveryGuy"] option:selected').text();
             $scope.selectedItems = getDeliveryItem();
 
@@ -90,7 +90,7 @@ conAngular
         }
 
         $scope.requestDelivery = function(){
-            
+
             $scope.selectedItems = getSelectedDeliveryItems();
 
             if( 0 == $scope.selectedItems ){
@@ -115,12 +115,17 @@ conAngular
         }
 
         $scope.printSummary = function(){
+            $('textarea').each(function () {
+                $(this).addClass('print-hidden');
+                var text = $(this).val();
+                $(this).after('<p class="[ well print-content print-only ]">' + text + '</p>');
+            });
             window.print();
         }
 
         $scope.deliver = function( status ){
 
-            if( 2 == status ){  
+            if( 2 == status ){
                 $('#delivery-img').prop('required', true);
             }
 
@@ -131,13 +136,13 @@ conAngular
             DeliveryService.update( $scope.delivery.id, $scope.company, $scope.address, $scope.delivery.latitude, $scope.delivery.longitude, status, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, $scope.deliveryGuy, $scope.deliveryImg, deliveryImgName, function( delivery ){
                 LoaderHelper.hideLoader();
                 switch( status ){
-                    case 1: 
+                    case 1:
                         toastMsg = 'Se ha confirmado el envío y se le ha cambiado el estatus a "enviado". Se le mandará una notificación al usuario que lo solicitó.';
                         break;
-                    case 2: 
+                    case 2:
                         toastMsg = 'Se ha entregado el envío en su totalidad.';
                         break;
-                    case 3: 
+                    case 3:
                         toastMsg = 'Se ha cancelado el envío.';
                         break;
                 }
@@ -357,7 +362,7 @@ conAngular
                 } else {
                     $scope.inventoryItems = itemsRes.inventory_items;
                 }
-                
+
                 $scope.currentPage++;
             });
         }
@@ -427,8 +432,8 @@ conAngular
                     return;
                 }
                 $scope.item = item;
-                
-                
+
+
                 $scope.locations = '';
                 $.each( item.locations, function(i, loc){
                     $scope.locations += loc.location + ', ';
@@ -465,7 +470,7 @@ conAngular
                 console.log( delivery );
                 $scope.supplier = delivery.supplier;
                 initGeoAutocomplete( '#address', '#map', delivery.latitude, delivery.longitude, 15 );
-                $(document).on('change', '#deliveryImg', function(){ 
+                $(document).on('change', '#deliveryImg', function(){
                     getDeliveryImg();
                 });
             });
@@ -660,8 +665,8 @@ conAngular
             $(document).on('click', '.delivery-items input[type="checkbox"]', function(e){
                 e.stopPropagation();
                 var target = $( e.target );
-                if ( ! target.is( "input" ) ) return; 
-        
+                if ( ! target.is( "input" ) ) return;
+
                 var itemId = target.val();
                 if( ! target.is(':checked') ){
                     $scope.removeItemToDeliver( itemId );
@@ -673,7 +678,7 @@ conAngular
             $('.js-added-items').click('a', function(e){
                 e.preventDefault();
                 var target = $( e.target );
-                if ( ! target.is( "a" ) ) return; 
+                if ( ! target.is( "a" ) ) return;
 
                 itemId = e.target.id.replace('remove-', '');
                 $scope.removeItemToDeliver( itemId );
@@ -694,7 +699,7 @@ conAngular
             InventoryTransactionService.lastCheckoutFolio( function( lastFolio ){
                 $scope.nextFolio = getNextFolio( lastFolio );
                 console.log($scope.nextFolio);
-            }); 
+            });
         }
 
         function getNextFolio(lastFolio){
