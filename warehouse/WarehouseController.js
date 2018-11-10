@@ -314,6 +314,21 @@ conAngular
             });
         }
 
+        $scope.removeItem = function(itemId){
+            LoaderHelper.showLoader('Sacando artículo de ubicación...');
+            WarehouseService.removeItem( $scope.userToken, $scope.locationId, itemId, function(response){
+                LoaderHelper.hideLoader();
+                if( response.success ){
+                    Materialize.toast( response.success, 4000, 'green');
+                    $state.go('/view-location', {
+                        locationId: $scope.locationId
+                    }, { reload: true });
+                }
+
+                Materialize.toast(response.errors, 4000, 'red');
+            });
+        }
+
         // $scope.getTransactionName = function( concept ){
         //     switch( concept ){
         //         case 'Entrada': return 'Entrada';
@@ -787,14 +802,14 @@ conAngular
         function initRackItemsDataTable(){
             $scope.dtRackItemsOptions = DTOptionsBuilder.newOptions()
                 .withPaginationType('full_numbers')
-                .withDisplayLength(20)
+                .withDisplayLength(40)
                 .withDOM('pitp')
                 .withButtons([
                     {
                         extend: "csvHtml5",
                         fileName:  "CustomFileName" + ".csv",
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6]
+                            columns: [1, 2, 3, 4, 5]
                         },
                         exportData: {decodeEntities:true}
                     }
@@ -802,8 +817,7 @@ conAngular
                 .withOption('responsive', true);
             $scope.dtRackItemsColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0).notSortable(),
-                DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(5).notSortable()
+                DTColumnDefBuilder.newColumnDef(6).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initRackItemsDataTable

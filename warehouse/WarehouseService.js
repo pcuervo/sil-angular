@@ -21,6 +21,7 @@ conAngular
         service.markAsFull = markAsFull
         service.markAsAvailable = markAsAvailable
         service.csvLocate = csvLocate
+        service.removeItem = removeItem
         return service;
 
         /******************
@@ -284,6 +285,21 @@ conAngular
                 callback ( response );
             });
         }// csvLocate
+
+        function removeItem( token, locationId, itemId, callback ) {
+            var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/remove_item';
+            $http.post(serviceUrl, {
+                auth_token: token,
+                inventory_item_id: itemId,
+                warehouse_location_id: locationId
+            })
+            .success(function ( response ) {
+                callback ( response );
+            })
+            .error(function ( response ) {
+                callback ( response );
+            });
+        }// removeItem
 
     }]);
 
