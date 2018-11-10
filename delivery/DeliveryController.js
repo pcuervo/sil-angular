@@ -30,19 +30,13 @@ conAngular
                 return;
             }
 
-            // var nextFolio = '-';
-            // console.log($scope.nextFolio);
-            // if( 'undefined' !== $scope.nextFolio ){
-            //     nextFolio = $scope.nextFolio;
-            // }
-
             initDeliverySummaryDataTable();
             $scope.address = $('#address').val();
             var deliveryDate = getDateTime( $scope.deliveryDate, $scope.deliveryTime );
             if( 'undefined' == typeof $scope.deliveryGuy || '' == $scope.deliveryGuy ) $scope.deliveryGuy = -1;
 
             DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.deliveryCompany, $scope.selectedItems, function( delivery ){
-
+                console.log(delivery);
                 $scope.delivery = delivery;
 
                 $scope.isSummary = true;
@@ -294,8 +288,6 @@ conAngular
                 case '/delivery-dashboard':
                     if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
                         fetchPendingDeliveryRequestsByUser( $rootScope.globals.currentUser.id );
-                    }else{
-                        fetchPendingDeliveryRequests();
                     }
                     if( 5 == $scope.role ){
                         fetchByDeliveryMan( $rootScope.globals.currentUser.id );
@@ -498,21 +490,6 @@ conAngular
         }// fetchDeliveryUsers
 
         function getSelectedDeliveryItems(){
-            // var id, type, quantity, item, items = [];
-            // $('input[type="checkbox"]:checked').each( function(i, itemCheckbox){
-            //     item = {};
-            //     id = $(itemCheckbox).val();
-
-            //     if( 0 == parseInt( $('#quantity-'+id).val() ) ) return 0;
-
-            //     item['item_id'] = id;
-            //     item['actable_type'] = $('#actable-type-'+id).val();
-            //     item['quantity'] = $('#quantity-'+id).val();
-            //     item['name'] = $('#item-name-'+id).html();
-            //     item['item_type'] = $('#item-type-'+id).html();
-            //     items.push( item );
-            // });
-            // return items;
             var items = []
             $('.js-added-items div').each(function(i, addedItem){
                 item = {};
@@ -521,6 +498,7 @@ conAngular
                 item['name'] = $(addedItem).data('name');
                 item['serial_number'] = $(addedItem).data('serial-number');
                 item['quantity'] = $(addedItem).data('quantity');
+                item['project'] = $(addedItem).data('project');
                 items.push( item );
             });
             return items;
@@ -582,9 +560,9 @@ conAngular
             DeliveryService.all( $scope.role, 'pending', function( deliveries ){
                 $scope.pendingDeliveries = deliveries;
             });
-            DeliveryService.all( $scope.role, 'completed', function( deliveries ){
-                $scope.completedDeliveries = deliveries;
-            });
+            // DeliveryService.all( $scope.role, 'completed', function( deliveries ){
+            //     $scope.completedDeliveries = deliveries;
+            // });
         }// fetchDeliveries
 
         function fetchByDeliveryMan(){
@@ -690,7 +668,8 @@ conAngular
             var itemName = $( '#name-'+itemId ).text();
             var itemSerialNumber = $( '#serial-number-'+itemId ).text();
             var itemQuantity = $( '#quantity-'+itemId ).val();
-            var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '"><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m5 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><p class="[ col s12 m2 ]"><a id="remove-' + itemId + '" href="#" ng-click="removeItemToDeliver( ' + itemId + ' )" class="[ btn red ]"><i class="[ fa fa-times ]"></i></a></p><hr></div>';
+            var project = $( '#project-'+itemId ).text();
+            var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '" data-project="' + project +'" ><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m3 ]">' + project + '</p><p class="[ col s12 m3 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><p class="[ col s12 m1 ]"><a id="remove-' + itemId + '" href="#" ng-click="removeItemToDeliver( ' + itemId + ' )" class="[ btn red ]"><i class="[ fa fa-times ]"></i></a></p><hr></div>';
             $('.js-added-items').append( itemHtml );
             Materialize.toast( 'Se agregó el artículo "' + itemName + '" a lista de artículos a retirar.', 4000, 'green');
         }

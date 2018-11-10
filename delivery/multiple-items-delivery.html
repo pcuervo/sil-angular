@@ -66,9 +66,10 @@
                 <h4 class="[ center-align ]">Artículos a enviar</h4>
                 <div class="[ withdraw-items-titles ][ row ]">
                     <p class="[ col s12 m3 ]">Nombre</p>
-                    <p class="[ col s12 m5 ]">Número de serie</p>
+                    <p class="[ col s12 m3 ]">Proyecto</p>
+                    <p class="[ col s12 m3 ]">Número de serie</p>
                     <p class="[ col s12 m2 ]">Cantidad</p>
-                    <p class="[ col s12 m2 ]">Eliminar</p>
+                    <p class="[ col s12 m1 ]">Eliminar</p>
                 </div>
                 <div class="[ js-added-items ][ row ]"></div>
             </div>
@@ -107,8 +108,8 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="i in inventoryItems">
-                            <td><img ng-src="{{ i.inventory_item.img }}" alt="{{i.inventory_item.name}}"></td>
-                            <td  class="[ center-align ]" id="serial-number-{{i.inventory_item.id}}">{{ i.inventory_item.project }}</td>
+                            <td><img ng-src="{{ i.inventory_item.thumb }}" alt="{{i.inventory_item.name}}"></td>
+                            <td  class="[ center-align ]" id="project-{{i.inventory_item.id}}">{{ i.inventory_item.project }}</td>
                             <td id="name-{{i.inventory_item.id}}"  class="[ center-align ]">{{ i.inventory_item.name }}</td>
                             <td  class="[ center-align ]" id="serial-number-{{i.inventory_item.id}}">{{ i.inventory_item.serial_number }}</td>
                             <td class="[ center-align ]">{{ i.inventory_item.barcode }}</td>
@@ -202,14 +203,14 @@
                 <thead>
                     <tr>
                         <th class="[ center-align ]">Nombre</th>
-                        <th class="[ center-align ]">Tipo de mercancía</th>
+                        <th class="[ center-align ]">Proyecto</th>
                         <th class="[ center-align ]">Cantidad</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="i in selectedItems">
                         <td>{{ i.name }}</td>
-                        <td class="[ center-align ]">{{ i.item_type }}</td>
+                        <td class="[ center-align ]">{{ i.project }}</td>
                         <td class="[ center-align ]">{{ i.quantity }}</td>
                     </tr>
                 </tbody>

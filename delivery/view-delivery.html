@@ -2,7 +2,13 @@
     <div class="[ row ]">
         <form name="delivery-form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" data-parsley-delivery>
             <h4 class="[ center-align ][ mb-20 ]">Información de envío</h4>
-            <div class="[ col s12 m4 offset-m2 ]" ng-if="1 == delivery.status || 2 == delivery.status || 3 == delivery.status">
+            <div class="[ col s12 m4 offset-m2 ]">
+                <div class="input-field">
+                    <input id="status-text" type="text" name="statusText" ng-readonly="true" ng-model="delivery.folio">
+                    <label for="status-text">Folio</label>
+                </div>
+            </div>
+            <div class="[ col s12 m4 ]" ng-if="1 == delivery.status || 2 == delivery.status || 3 == delivery.status">
                 <div class="input-field">
                     <input id="status-text" type="text" name="statusText" ng-readonly="true" ng-model="statusText">
                     <label for="status-text">Estatus</label>
@@ -75,22 +81,15 @@
                     <thead>
                         <tr>
                             <th class="[ center-align ]">Nombre</th>
-                            <th class="[ center-align ]">Tipo de mercancía</th>
+                            <th class="[ center-align ]">Proyecto</th>
                             <th class="[ center-align ]">Cantidad</th>
-                            <th class="[ center-align ]" ng-show="role != 2 && role != 3">Entregado</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="i in deliveryItems">
                             <td>{{ i.name }}</td>
-                            <td class="[ center-align ]">{{ i.item_type }}</td>
+                            <td class="[ center-align ]">{{ i.project }}</td>
                             <td class="[ center-align ]">{{ i.quantity }}</td>
-                            <td class="[ center-align ]" ng-show="role != 2 && role != 3">
-                                <div class="[ input-field ][ mt-0 ]">
-                                    <input class="[ filled-in ]" type="checkbox" id="{{i.id}}" value="{{i.id}}" name="item_id" checked="checked" />
-                                    <label for="{{i.id}}"></label>
-                                </div>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -103,13 +102,16 @@
             <div class="[ center ][ col s12 ]" ng-if="0 == delivery.status">
                 <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="send( 2 )"><i class="mdi-navigation-check left"></i>Enviar</button>
             </div>
-            <div class="[ center ][ col s12 ]" ng-if="1 == delivery.status && ( role != 2 && role != 3 && role != 6 )">
+            <div class="[ center ][ col s12 ][ print-hidden ]">
+                <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Imprimir remisión</button>
+            </div>
+            <!-- <div class="[ center ][ col s12 ]" ng-if="1 == delivery.status && ( role != 2 && role != 3 && role != 6 )">
                 <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="deliver( 2 )"><i class="mdi-navigation-check left"></i>Entregado</button>
                 <button class="[ waves-effect ][ btn btn-extra ][ red ]" ng-click="deliver( 3 )"><i class="mdi-navigation-close left"></i>Rechazado</button>
             </div>
             <div class="[ center ][ col s12 ]" ng-if="5 == delivery.status">
                 <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="deliver( 1 )"><i class="mdi-navigation-check left"></i>Confirmar solicitud envío</button>
-            </div>
+            </div> -->
         </form>
     </div>
 </div>

@@ -25,43 +25,17 @@
 
 <div class="[ card-panel ]" ng-if="5 != role">
     <div class="[ row ]">
-        <div class="[ col s12 m6 l4 offset-l4 ]" ng-show="1==role||4==role">
+        <div class="[ col s12 m6 l4 offset-l4 ]" ng-show="1==role||4==role||7==role">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/multiple-items-delivery"><i class="[ fa fa-truck ][ left ]"></i>Crear envío</a>
         </div>
-        <div class="[ col s12 m6 l4 offset-m3 offset-l4 ]" ng-show="2==role||3==role||6==role">
+        <!-- <div class="[ col s12 m6 l4 offset-m3 offset-l4 ]" ng-show="2==role||3==role||6==role">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/delivery-request"><i class="[ fa fa-truck ][ left ]"></i>Solicitud de envío</a>
-        </div>
+        </div> -->
     </div>
 </div>
 
-<div class="[ card-panel ]" ng-if="5 != role">
-    <h4 class="[ center-align ]">Solicitudes de envío pendientes</h4>
-    <table datatable="ng" dt-options="dtPendingDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
-        <thead>
-            <tr>
-                <th class="[ center-align ]">¿Quién solicita?</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Empresa donde se entrega</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Dirección</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Número de artículos</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Fecha de entrega solicitada</th>
-                <th class="[ center-align ]">Ver</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="d in pendingDeliveryRequests">
-                <td class="[ center-align ]">{{ d.user.first_name + ' ' + d.user.last_name }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.company }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.address }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ d.delivery_request_items.length }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ d.date_time | date:'dd/MM/yyyy' }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-delivery-request/{{ d.id }}"><i class="[ fa fa-eye ]"></i></a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
 <div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Envíos pendientes</h4>
+    <h4 class="[ center-align ]">Envíos</h4>
     <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
         <thead>
             <tr>
@@ -89,34 +63,3 @@
         </tbody>
     </table>
 </div>
-
-<div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Envíos completados</h4>
-    <table datatable="ng" dt-options="dtDeliveryOptions" dt-column-defs="dtDeliveryColumnDefs" class="row-border hover">
-        <thead>
-            <tr>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Repartidor</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Proveedor</th>
-                <th class="[ center-align ][ hide-on-small-only ]">Empresa donde se entrega</th>
-                <th class="[ center-align ]">¿Quién solicito?</th>
-                <th class="[ center-align ]">Fecha</th>
-                <th class="[ center-align ][ hide-on-med-and-down ]">Número de artículos</th>
-                <th class="[ center-align ]">Status</th>
-                <th class="[ center-align ]">Ver</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="d in completedDeliveries">
-                <td class="[ hide-on-med-and-down ]">{{ d.delivery_user }}</td>
-                <td class="[ hide-on-med-and-down ]">{{ d.supplier }}</td>
-                <td class="[ center-align ][ hide-on-small-only ]">{{ d.company }}</td>
-                <td class="[ center-align ]">{{ d.user.first_name + ' ' + d.user.last_name }}</td>
-                <td class="[ center-align ]">{{ d.date_time | date:'dd/MM/yyyy h:mm:ss a' }}</td>
-                <td class="[ center-align ][ hide-on-med-and-down ]">{{ d.delivery_items.length }}</td>
-                <td class="[ center-align ]">{{ getStatus( d.status ) }}</td>
-                <td class="[ center-align ]"><a class="[ btn waves-effect ]" href="#/view-delivery/{{d.id}}"><i class="[ fa fa-eye ]"></i></a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
