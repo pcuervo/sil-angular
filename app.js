@@ -2122,6 +2122,24 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 }]);
             }]
         }
+    })
+
+    // Logs
+    .state('/view-logs', {
+        url: "/view-logs",
+        templateUrl: "log/view-logs.html",
+        controller: "LogController",
+        data: { pageTitle: 'Bitácora'},
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
+        }
     });
 
 }]);
