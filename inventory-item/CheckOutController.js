@@ -82,13 +82,15 @@ conAngular
         }// getItemTypeIcon
 
         $scope.multipleWithdrawal = function(){
+            LoaderHelper.showLoader('Salida en progreso...');
+
             $scope.withdrawnItems = getItemsToWithdraw();
             if( 0 == $scope.withdrawnItems ){
                 Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
+                LoaderHelper.hideLoader();
                 return;
             }
 
-            LoaderHelper.showLoader('Salida en progreso...');
             var nextFolio = '-';
             if( 'undefined' !== $scope.nextFolio ){
                 nextFolio = $scope.nextFolio;
