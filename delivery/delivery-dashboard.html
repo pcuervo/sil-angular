@@ -1,36 +1,10 @@
 <div class="page-title" data-ng-include="'navigation/breadcrumbs.html'"></div>
 
-<div class="[ card-panel ]" ng-if="5 != role && 6 != role">
-    <div class="[ row ]">
-        <div class="[ col s12 m4 ]">
-            <div class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
-                <span class="[ count ]">{{ shipped }}</span>
-                <div class="name">En ruta</div>
-            </div>
-        </div>
-        <div class="[ col s12 m4 ]">
-            <div class="card-panel stats-card blue lighten-2 blue-text text-lighten-5">
-                <span class="[ count ]">{{ delivered }}</span>
-                <div class="name">Entregados</div>
-            </div>
-        </div>
-        <div class="[ col s12 m4 ]">
-            <div class="card-panel stats-card red lighten-2 blue-text text-lighten-5">
-                <span class="[ count ]">{{ rejected }}</span>
-                <div class="name">Rechazados</div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="[ card-panel ]" ng-if="5 != role">
     <div class="[ row ]">
         <div class="[ col s12 m6 l4 offset-l4 ]" ng-show="1==role||4==role||7==role">
             <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/multiple-items-delivery"><i class="[ fa fa-truck ][ left ]"></i>Crear envío</a>
         </div>
-        <!-- <div class="[ col s12 m6 l4 offset-m3 offset-l4 ]" ng-show="2==role||3==role||6==role">
-            <a class="[ col s12 ][ btn btn-extra ][ waves-effect ]" href="#/delivery-request"><i class="[ fa fa-truck ][ left ]"></i>Solicitud de envío</a>
-        </div> -->
     </div>
 </div>
 
