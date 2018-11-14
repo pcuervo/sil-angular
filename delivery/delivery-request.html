@@ -3,52 +3,52 @@
         <h4 class="[ center-align ]">Inventario en existencia</h4>
         <form ng-submit="requestDelivery()" data-parsley-validate>
             <h4 class="[ center-align ]">Datos de envío</h4>
-            <div class="[ col s12 m4 ]"> 
+            <div class="[ col s12 m4 ]">
                 <div class="input-field">
                     <input id="company" type="text" name="company" ng-model="company" required>
                     <label for="company">Empresa donde se entrega</label>
                 </div>
             </div>
-            <div class="[ col s12 m8 ]"> 
+            <div class="[ col s12 m8 ]">
                 <div class="input-field">
                     <input id="address" type="text" name="address" ng-model="address" required>
                     <input type='hidden' id='lat' ng-model="latitude" name='latitude' data-geo='lat' />
                     <input type='hidden' id='lng' ng-model="longitude" name='longitude' data-geo='lng' />
                 </div>
             </div>
-            <div class="[ col s12 ][ map-container ]"> 
+            <div class="[ col s12 ][ map-container ]">
                 <div id="map"></div>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="recipient-name" type="text" name="recipientName" ng-model="recipientName" required>
                     <label for="recipient-name">Persona que va a recibir</label>
                 </div>
             </div>
-            <div class="[ col s12 m6 ]"> 
+            <div class="[ col s12 m6 ]">
                 <div class="input-field">
                     <input id="recipient-phone" type="text" name="recipientPhone" ng-model="recipientPhone">
                     <label for="recipient-phone">Teléfono de quien va a recibir</label>
                 </div>
             </div>
             <div class="[ clear ]"></div>
-            <div class="[ col s12 m6 ]">    
+            <div class="[ col s12 m6 ]">
                 <label class="[ fs-12 ]" for="">Fecha de envío (mm/dd/aaaa)</label>
                 <input class="datepicker" type="date" name="deliveryDate" ng-model="deliveryDate" required>
             </div>
-            <div class="[ col s12 m6 ][ mt-5 ]"> 
+            <div class="[ col s12 m6 ][ mt-5 ]">
                 <div class="input-field">
                     <input id="clockpicker" class="clockpicker" type="text" ng-model="deliveryTime" data-donetext="OK">
                     <label for="clockpicker">Hora</label>
                 </div>
             </div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]">
                 <div class="input-field">
                     <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
                     <label for="textarea1">Observaciones adicionales</label>
                 </div>
             </div>
-            <div class="[ col s12 ]"> 
+            <div class="[ col s12 ]">
                 <h4 class="[ center-align ]">Artículos a enviar</h4>
                 <div class="[ withdraw-items-titles ][ row ]">
                     <p class="[ col s12 m3 ]">Nombre</p>
@@ -56,8 +56,8 @@
                     <p class="[ col s12 m2 ]">Cantidad</p>
                     <p class="[ col s12 m2 ]">Eliminar</p>
                 </div>
-                <div class="[ js-added-items ][ row ]">
-                    
+                <div class="[ js-added-items ]">
+
                 </div>
             </div>
             <div class="[ col s12 ][ center-align ]" >
@@ -103,5 +103,5 @@
 </div>
 
 <script>
-    $('[data-parsley-validate]').parsley();    
+    $('[data-parsley-validate]').parsley();
 </script>
