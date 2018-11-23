@@ -2,73 +2,73 @@
     <div class="[ row ]">
         <form name="delivery-form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" data-parsley-delivery>
             <h4 class="[ center-align ][ mb-20 ]">Información de envío</h4>
-            <div class="[ col s12 m4 offset-m2 ]">
+            <div class="[ col s12 m4 offset-m2 ][ print-col print-col4 ]">
                 <div class="input-field">
                     <input id="status-text" type="text" name="statusText" ng-readonly="true" ng-model="delivery.folio">
                     <label for="status-text">Folio</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 ]" ng-if="1 == delivery.status || 2 == delivery.status || 3 == delivery.status">
+            <div class="[ col s12 m4 ][ print-col print-col4 ]" ng-if="1 == delivery.status || 2 == delivery.status || 3 == delivery.status">
                 <div class="input-field">
                     <input id="status-text" type="text" name="statusText" ng-readonly="true" ng-model="statusText">
                     <label for="status-text">Estatus</label>
                 </div>
             </div>
-            <div class="[ clear ]"></div>
-            <div class="[ col s12 m4 offset-m2 ]" ng-if="5 != delivery.status">
+            <div class="[ clear ][ print-hidden ]"></div>
+            <div class="[ col s12 m4 offset-m2 ][ print-col print-col4 ]" ng-if="5 != delivery.status">
                 <div class="input-field">
                     <input id="delivery-guy" type="text" name="delivery-guy" ng-model="delivery.delivery_guy" ng-readonly="true">
                     <label for="delivery-guy">Repartidor</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 offset-m2 ][ mt-10 ]" ng-if="5 == delivery.status"> 
+            <div class="[ col s12 m4 offset-m2 ][ mt-10 ][ print-hidden ]" ng-if="5 == delivery.status">
                 <select name="delivery-guy" ng-model="deliveryGuy" required data-parsley-error-message="¡El repartidor es obligatorio!">
                     <option value="" disabled selected>Selecciona el repartidor</option>
                     <option ng:repeat="user in deliveryUsers" value="{{user.id}}">{{ user.first_name + ' ' + user.last_name }}</option>
                 </select>
             </div>
-            <div class="[ col s12 m4 ]"> 
+            <div class="[ col s12 m4 ][ print-col print-col4 ]">
                 <div class="input-field">
                     <input id="supplier" type="text" name="supplier" ng-model="supplier" disabled>
                     <label for="supplier">Proveedor</label>
                 </div>
             </div>
-            <div class="[ col s12 m2 offset-m2 ]"> 
+            <div class="[ col s12 m2 offset-m2 ][ print-col print-col4 ]">
                 <div class="input-field">
                     <input id="company" type="text" name="company" ng-model="company" required ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="company">Empresa donde se entrega</label>
                 </div>
             </div>
-            <div class="[ col s12 m6  ]"> 
+            <div class="[ col s12 m6 ][ print-col print-col4 ]">
                 <div class="input-field">
                     <input id="address" type="text" name="address" ng-model="address" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="address">Dirección</label>
                 </div>
             </div>
-            <div class="[ col s12 m8 offset-m2 ][ map-container ]"> 
+            <div class="[ col s12 m8 offset-m2 ][ map-container ][ print-hidden ]">
                 <div id="map"></div>
             </div>
-            <div class="[ col s12 m4 offset-m2 ]"> 
+            <div class="[ col s12 m4 offset-m2 ][ print-col print-col6 ]">
                 <div class="input-field">
                     <input id="recipient-name" type="text" name="addressee" ng-model="addressee" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="recipient-name">Persona que va a recibir</label>
                 </div>
             </div>
-            <div class="[ col s12 m4 ]"> 
+            <div class="[ col s12 m4 ][ print-col print-col6 ]">
                 <div class="input-field">
                     <input id="recipient-phone" type="text" name="addresseePhone" ng-model="addresseePhone" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
                     <label for="recipient-phone">Teléfono de quien va a recibir</label>
                 </div>
             </div>
-            <div class="[ col s12 m8 offset-m2 ]"> 
+            <div class="[ col s12 m8 offset-m2 ]">
                 <div class="input-field">
-                    <textarea id="textarea1" class="materialize-textarea" ng-model="delivery.additional_comments" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3" ></textarea>
+                    <textarea id="textarea1" class="materialize-textarea" ng-model="delivery.additional_comments" ng-readonly="true"></textarea>
                     <label for="textarea1">Observaciones adicionales</label>
                 </div>
             </div>
-            <div class="[ col s12 m8 offset-m2 ]" ng-if="1 == delivery.status && ( role != 2 && role != 3 && role != 6 )"> 
+            <div class="[ col s12 m8 offset-m2 ][ print-hidden ]" ng-if="1 == delivery.status && ( role != 2 && role != 3 && role != 6 )">
                 <div class="file-field input-field">
-                    <input id="delivery-img" class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen">
+                    <input id="delivery-img" class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen" ng-readonly="true">
                     <div class="">
                         <span>Subir imagen</span>
                         <input type="file" id="deliveryImg" ng-model="deliveryImg" />
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <h4 class="[ center-align ][ mb-20 ]">Artículos en envío</h4>
-            <div class="[ col s12 m8 offset-m2 ]"> 
+            <div class="[ col s12 m8 offset-m2 ]">
                 <table datatable="ng" dt-options="dtDeliverySummaryOptions" dt-column-defs="dtDeliverySummaryColumnDefs" class="row-border hover">
                     <thead>
                         <tr>
@@ -96,9 +96,9 @@
             </div>
             <div class="[ clear ]"></div>
             <div id="deliveryImgProof" ng-if="2 == delivery.status">
-                <h4 class="[ center-align ][ mb-20 ]">Comprobante de entrega</h4>               
+                <h4 class="[ center-align ][ mb-20 ]">Comprobante de entrega</h4>
                 <img class="[ col s12 m8 offset-m2 ][ ]" ng-src="{{delivery.image}}}">
-            </div> 
+            </div>
             <div class="[ center ][ col s12 ]" ng-if="0 == delivery.status">
                 <button class="[ waves-effect ][ btn btn-extra ][ green ]" ng-click="send( 2 )"><i class="mdi-navigation-check left"></i>Enviar</button>
             </div>

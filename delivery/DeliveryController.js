@@ -669,7 +669,7 @@ conAngular
             var itemSerialNumber = $( '#serial-number-'+itemId ).text();
             var itemQuantity = $( '#quantity-'+itemId ).val();
             var project = $( '#project-'+itemId ).text();
-            var itemHtml = '<div data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '" data-project="' + project +'" ><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m3 ]">' + project + '</p><p class="[ col s12 m3 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><p class="[ col s12 m1 ]"><a id="remove-' + itemId + '" href="#" ng-click="removeItemToDeliver( ' + itemId + ' )" class="[ btn red ]"><i class="[ fa fa-times ]"></i></a></p><hr></div>';
+            var itemHtml = '<div class="[ row ]" data-id="' + itemId + '" data-serial-number="' + itemSerialNumber + '" data-quantity="' + itemQuantity + '" data-name="' + itemName + '" data-project="' + project +'" ><p class="[ col s12 m3 ]">' + itemName + '</p><p class="[ col s12 m3 ]">' + project + '</p><p class="[ col s12 m3 ]">' + itemSerialNumber +'</p><p class="[ col s12 m2 ]">' + itemQuantity +'</p><p class="[ col s12 m1 ]"><a id="remove-' + itemId + '" href="#" ng-click="removeItemToDeliver( ' + itemId + ' )" class="[ btn red ]"><i class="[ fa fa-times ]"></i></a></p><hr></div>';
             $('.js-added-items').append( itemHtml );
             Materialize.toast( 'Se agregó el artículo "' + itemName + '" a lista de artículos a retirar.', 4000, 'green');
         }
