@@ -83,7 +83,7 @@ conAngular
 
         $scope.multipleWithdrawal = function(){
             LoaderHelper.showLoader('Salida en progreso...');
-
+            
             $scope.withdrawnItems = getItemsToWithdraw();
             if( 0 == $scope.withdrawnItems ){
                 Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
@@ -91,12 +91,7 @@ conAngular
                 return;
             }
 
-            var nextFolio = '-';
-            if( 'undefined' !== $scope.nextFolio ){
-                nextFolio = $scope.nextFolio;
-            }
-
-            InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments, nextFolio,  function( response ){
+            InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments,  function( response ){
                 LoaderHelper.hideLoader();
                 console.log(response);
                 if( response.errors ){
@@ -105,8 +100,12 @@ conAngular
                 }
 
                 Materialize.toast( response.success, 4000, 'green');
-                $scope.isSummary = true;
-                $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
+                $state.go('/view-folio', {folio: response.folio}, { reload: true });
+
+
+                // Materialize.toast( response.success, 4000, 'green');
+                // $scope.isSummary = true;
+                // $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
             });
         }
 
