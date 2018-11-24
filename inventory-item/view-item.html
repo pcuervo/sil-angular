@@ -76,6 +76,12 @@
             <label class="[ fs-12 ][ js-expiration-date-label ]" for="">Fecha vigencia (mm/dd/aaaa)</label>
             <input class="datepicker" type="date" ng-model="validityExpirationDate" ng-readonly="true">
         </div>
+        <div class="[ col s12 ]">
+            <div class="[ input-field ]">
+                <textarea id="additional-comments" class="materialize-textarea" name="additionalComments" ng-model="additionalComments" ng-readonly="true"></textarea>
+                <label for="additional-comments">Observaciones</label>
+            </div>
+        </div>
         <h4 class="[ center-align ]">Datos de proyecto</h4>
         <div class="[ col s12 m4 offset-m2 ]">
             <div class="input-field">

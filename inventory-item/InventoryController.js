@@ -438,6 +438,8 @@ conAngular
             $scope.entryDate = new Date( $filter('date')( item.created_at, 'yyyy-MM-dd' ) );
             $scope.validityExpirationDate = new Date( $filter('date')( item.validity_expiration_date, 'yyyy-MM-dd' ) );
             $scope.hasLocations = false;
+            $scope.additionalComments = item.additional_comments;
+
             if( item.locations.length > 0 ){
                 $scope.hasLocations = true;
                 initItemLocationsDataTable();
