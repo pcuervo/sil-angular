@@ -35,13 +35,13 @@
             </div>
             <div class="[ col s12 m2 offset-m2 ][ print-col print-col4 ]">
                 <div class="input-field">
-                    <input id="company" type="text" name="company" ng-model="company" required ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
+                    <input id="company" type="text" name="company" ng-model="company" required ng-readonly="true">
                     <label for="company">Empresa donde se entrega</label>
                 </div>
             </div>
             <div class="[ col s12 m6 ][ print-col print-col4 ]">
                 <div class="input-field">
-                    <input id="address" type="text" name="address" ng-model="address" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
+                    <input id="address" type="text" name="address" ng-model="address" ng-readonly="true">
                     <label for="address">Dirección</label>
                 </div>
             </div>
@@ -50,13 +50,13 @@
             </div>
             <div class="[ col s12 m4 offset-m2 ][ print-col print-col6 ]">
                 <div class="input-field">
-                    <input id="recipient-name" type="text" name="addressee" ng-model="addressee" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
+                    <input id="recipient-name" type="text" name="addressee" ng-model="addressee" ng-readonly="true">
                     <label for="recipient-name">Persona que va a recibir</label>
                 </div>
             </div>
             <div class="[ col s12 m4 ][ print-col print-col6 ]">
                 <div class="input-field">
-                    <input id="recipient-phone" type="text" name="addresseePhone" ng-model="addresseePhone" ng-readonly="role == 2 || role == 3 || role == 6 || delivery.status == 3">
+                    <input id="recipient-phone" type="text" name="addresseePhone" ng-model="addresseePhone" ng-readonly="true">
                     <label for="recipient-phone">Teléfono de quien va a recibir</label>
                 </div>
             </div>
@@ -64,15 +64,6 @@
                 <div class="input-field">
                     <textarea id="textarea1" class="materialize-textarea" ng-model="delivery.additional_comments" ng-readonly="true"></textarea>
                     <label for="textarea1">Observaciones adicionales</label>
-                </div>
-            </div>
-            <div class="[ col s12 m8 offset-m2 ][ print-hidden ]" ng-if="1 == delivery.status && ( role != 2 && role != 3 && role != 6 )">
-                <div class="file-field input-field">
-                    <input id="delivery-img" class="file-path validate" type="text" placeholder="Haz click aquí para subir una imagen" ng-readonly="true">
-                    <div class="">
-                        <span>Subir imagen</span>
-                        <input type="file" id="deliveryImg" ng-model="deliveryImg" />
-                    </div>
                 </div>
             </div>
             <h4 class="[ center-align ][ mb-20 ]">Artículos en envío</h4>
