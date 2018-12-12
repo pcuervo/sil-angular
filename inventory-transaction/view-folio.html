@@ -36,7 +36,7 @@
       <div class="[ col s10 offset-m1 print-s12 ]">
         <div class="[ input-field ]">
           <textarea id="additional-comments" class="materialize-textarea" name="additionalComments" ng-model="inventoryTransaction.additional_comments" ng-readonly="true"></textarea>
-          <label for="additional-comments">Comentarios adicionales</label>
+          <label for="additional-comments">Observaciones del movimiento</label>
         </div>
       </div>
       <div class="[ clear ]"></div>
@@ -47,8 +47,10 @@
             <tr>
               <th class="[ center-align ][ print-hidden ]"></th>
               <th class="[ center-align ]">Nombre</th>
+              <th class="[ center-align ]">Descripción</th>
               <th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
               <th class="[ center-align ]">Cantidad</th>
+              <th class="[ center-align ]">Comentarios</th>
             </tr>
           </thead>
           <tbody>
@@ -56,8 +58,10 @@
               <td class="[ print-hidden ]"><img ng-src="{{ i.inventory_item.thumb }}" alt=""></td>
               <td>
                 <a href="#/view-item/{{i.inventory_item.id}}">{{ i.inventory_item.name }}</td></a>
+              <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.description }}</td>
               <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.serial_number }}</td>
               <td class="[ center-align ]">{{ i.quantity }}</td>
+              <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.extra_parts }}</td>
             </tr>
           </tbody>
         </table>

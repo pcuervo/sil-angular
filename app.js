@@ -2203,7 +2203,6 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
 
 }]);
 
-
 var ErrorHelper = ErrorHelper || {};
 ErrorHelper = {
     display: function( errors ){

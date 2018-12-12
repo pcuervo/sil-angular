@@ -86,14 +86,14 @@
             <div class="[ clear ]"></div>
             <div class="[ col s12 ]">
                 <div class="[ input-field ]">
-                    <textarea id="extra-parts" class="materialize-textarea" name="extraParts" ng-model="extraParts" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
-                    <label for="extra-parts">Partes adicionales</label>
+                    <textarea id="description" class="materialize-textarea" name="description" ng-model="description" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
+                    <label for="description">Descripción</label>
                 </div>
             </div>
             <div class="[ col s12 ]">
                 <div class="[ input-field ]">
-                    <textarea id="description" class="materialize-textarea" name="description" ng-model="description" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
-                    <label for="description">Descripción</label>
+                    <textarea id="extra-parts" class="materialize-textarea" name="extraParts" ng-model="extraParts" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
+                    <label for="extra-parts">Comentarios adicionales</label>
                 </div>
             </div>
             <!-- Revisar si estas opciones serían dinámicas -->
@@ -160,7 +160,7 @@
             <div class="[ col s12 ]">
                 <div class="input-field">
                     <textarea id="textarea1" class="materialize-textarea" ng-model="additionalComments"></textarea>
-                    <label for="textarea1">Observaciones</label>
+                    <label for="textarea1">Observaciones de este movimiento al inventario</label>
                 </div>
             </div>
             <div class="[ col s12 ]">
@@ -252,7 +252,7 @@
         <div class="[ col s12 ][ print-hidden ]">
             <div class="[ input-field ]">
                 <textarea id="extra-parts" class="materialize-textarea" name="extraParts" ng-model="extraParts" disabled></textarea>
-                <label for="extra-parts">Partes adicionales</label>
+                <label for="extra-parts">Comentarios adicionales</label>
             </div>
         </div>
         <div class="[ col s12 m4 ]">
@@ -340,7 +340,7 @@
                     <button class="[ waves-effect ][ btn btn-extra ][  ]" ng-click="printBarcode( '#barcode' )"><i class="mdi-action-print left"></i>Código de barras</button>
                 </div>
                 <div class="[ center ][ col s12 ]">
-                    <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión entrada</button>
+                    <a href="#/view-folio/{{ nextFolio }}" class="[ waves-effect ][ btn btn-extra ]"><i class="[ fa fa-eye ][ left ]"></i>Ver folio</a>
                 </div>
                 <div class="[ center ][ col s12 ][ hidden ]">
                     <a href="#/new-delivery/{{ item.id }}" class="[ waves-effect ][ btn btn-extra ]"><i class="mdi-action-schedule left"></i>Programar envío</a>

@@ -53,9 +53,12 @@
         <label for="itemState">Estado</label>
         <select name="itemState" ng-model="itemState" required>
           <option value="1" selected>Nuevo</option>
-          <option value="2" selected>Como nuevo</option>
-          <option value="3" selected>Usado</option>
-          <option value="4" selected>Dañado</option>
+          <option value="2">Como nuevo</option>
+          <option value="3">Usado</option>
+          <option value="4">Dañado</option>
+          <option value="5">Incompleto</option>
+          <option value="6">Necesita mantenimiento</option>
+          <option value="7">Buen estado</option>
         </select>
       </div>
       <div class="[ col s12 m4 ]"> 
@@ -73,7 +76,7 @@
       <div class="[ col s12 ]"> 
         <div class="[ input-field ]">
             <textarea id="extra_parts" class="materialize-textarea" name="extra_parts" ng-model="item.extra_parts" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
-            <label for="extra_parts">Partes adicionales</label>
+            <label for="extra_parts">Comentarios adicionales</label>
         </div>
     </div>
       <div class="[ clear ]"></div>
