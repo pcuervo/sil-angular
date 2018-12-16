@@ -268,7 +268,8 @@ conAngular
               if( 2 === $scope.role || 3 === $scope.role || 6 === $scope.role ){
                 getUserProjects($rootScope.globals.currentUser.id);
               } else {
-                fetchProjects();
+                LoaderHelper.showLoader('Cargando proyectos...');
+                fetchLeanProjects();
               }
             
               
@@ -447,10 +448,18 @@ conAngular
         }// initItem
 
         function fetchProjects(){
-            ProjectService.getAll( function( projects ){
-                $scope.projects = projects;
-            });
+          ProjectService.getAll( function( projects ){
+              $scope.projects = projects;
+              LoaderHelper.hideLoader();
+          });
         }// fetchProjects
+
+        function fetchLeanProjects(){
+          ProjectService.all( function( projects ){
+            $scope.projects = projects;
+            LoaderHelper.hideLoader();
+          });
+        }
 
         function fetchStatuses(){
             InventoryItemService.getStatuses( function( statuses ){

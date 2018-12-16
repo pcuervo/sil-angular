@@ -4,6 +4,7 @@ conAngular
   ['$http', '$q', '$rootScope', function($http, $q, $rootScope ){
     var service = {};
     service.getAll = getAll;
+    service.all = all;
     service.get = get;
     service.byUser = byUser;
     service.getProjectUsers = getProjectUsers;
@@ -20,17 +21,26 @@ conAngular
     return service;
 
     function getAll(callback) {
-   
-        var serviceUrl = $rootScope.apiUrl  + 'projects/';
-        $http.get ( serviceUrl )
-            .success(function ( response ) {
-                callback( response.projects );
-            })
-            .error(function ( response ) {
-                callback( response );
-            });
+      var serviceUrl = $rootScope.apiUrl  + 'projects/';
+      $http.get ( serviceUrl )
+      .success(function ( response ) {
+        callback( response.projects );
+      })
+      .error(function ( response ) {
+        callback( response );
+      });
+    }// getAll
 
-          }// getAll
+    function all(callback) {
+      var serviceUrl = $rootScope.apiUrl  + 'projects/lean_index';
+      $http.get ( serviceUrl )
+      .success(function ( response ) {
+        callback( response.projects );
+      })
+      .error(function ( response ) {
+        callback( response );
+      });
+    }// all
 
     function get( id, callback ) {
         var serviceUrl = $rootScope.apiUrl  + 'projects/'+id;
