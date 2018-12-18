@@ -258,7 +258,12 @@ conAngular
         }// searchByBarcode
 
         $scope.reEntry = function(){
+            $scope.isLoading = true;
+            LoaderHelper.showLoader('Reingresando artículo...');
             InventoryItemService.reentry( $scope.item.id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantity , function( response ){
+                $scope.isLoading = false;
+                LoaderHelper.hideLoader();
+
                 if( response.errors ){
                     Materialize.toast( response.errors, 4000, 'red');
                     return;
@@ -484,6 +489,7 @@ conAngular
             }
 
             if( currentPath.indexOf( '/re-entry/' ) > -1 ){
+                $scope.isLoading = false;
                 if( 0 != $stateParams.barcode ){
                     getByBarcode( $stateParams.barcode );
                     $scope.hasItem = true;

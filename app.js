@@ -1181,6 +1181,29 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/view-project', {
+        url: "/view-project/:projectId",
+        templateUrl: "project/view-project.html",
+        controller: "ProjectController",
+        data: {
+            pageTitle: 'Detalle proyecto',
+            crumbs: [{
+                title: '<i class="fa fa-dashboard"></i> Dashboard',
+                href: '#/dashboard'
+            }, {
+                title: 'Detalle proyecto'
+            }]
+        }, resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
+        }
+    })
     .state('/edit-project', {
         url: "/edit-project/:projectId",
             templateUrl: "project/edit-project.html",

@@ -82,18 +82,21 @@ conAngular
         }// getItemTypeIcon
 
         $scope.multipleWithdrawal = function(){
+            $scope.isLoading = true;
             LoaderHelper.showLoader('Salida en progreso...');
             
             $scope.withdrawnItems = getItemsToWithdraw();
             if( 0 == $scope.withdrawnItems ){
                 Materialize.toast( 'Debe escoger al menos un artículos para darle salida', 4000, 'red');
                 LoaderHelper.hideLoader();
+                $scope.isLoading = false;
                 return;
             }
 
             InventoryItemService.multipleWithdrawal( $scope.withdrawnItems, $scope.exitDate, $scope.pickupCompany, $scope.pickupCompanyContact, $scope.returnDate, $scope.additionalComments,  function( response ){
                 LoaderHelper.hideLoader();
-                console.log(response);
+                $scope.isLoading = false;
+
                 if( response.errors ){
                     Materialize.toast( response.errors, 4000, 'red');
                     return;
@@ -101,11 +104,6 @@ conAngular
 
                 Materialize.toast( response.success, 4000, 'green');
                 $state.go('/view-folio', {folio: response.folio}, { reload: true });
-
-
-                // Materialize.toast( response.success, 4000, 'green');
-                // $scope.isSummary = true;
-                // $scope.selectedPickupCompanyText = $('[name="pickupCompany"] option:selected').text();
             });
         }
 
@@ -181,16 +179,16 @@ conAngular
         function initWithdrawalOptions( currentPath ){
 
             if( currentPath.indexOf( 'withdraw-items' ) > -1 ){
-                if( ! $rootScope.globals.initMultipleWithdrawal ) initItemsWithdrawal();
+                $scope.isLoading = false;
+                if( ! $rootScope.globals.initMultipleWithdrawal ) {
+                    initItemsWithdrawal();
+                }
 
                 fetchLastFolio();
                 initMultipleWithdrawalDataTable();
                 fetchSuppliers();
                 $scope.exitDate = new Date();
 
-                // angular.element('body').on('search.dt', function() {
-                //    var searchTerm = document.querySelector('.dataTables_filter input').value;
-                // });
                 return;
             }
 

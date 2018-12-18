@@ -21,11 +21,15 @@ conAngular
         }// getItemTypeIcon
 
         $scope.multipleItemsDelivery = function(){
+            $scope.isLoading = true;
+            LoaderHelper.showLoader('Creando envío...');
 
             $scope.selectedDeliveryGuy = $('[name="deliveryGuy"] option:selected').text();
             $scope.selectedItems = getSelectedDeliveryItems();
 
             if( 0 == $scope.selectedItems ){
+                LoaderHelper.hideLoader();
+                $scope.isLoading = false;
                 Materialize.toast( 'No se pueden enviar 0 piezas, por favor selecciona una cantidad mayor a 0', 4000, 'red');
                 return;
             }
@@ -36,7 +40,8 @@ conAngular
             if( 'undefined' == typeof $scope.deliveryGuy || '' == $scope.deliveryGuy ) $scope.deliveryGuy = -1;
 
             DeliveryService.create( $rootScope.globals.currentUser.id, this.deliveryGuy, this.company, $scope.address, $('#lat').val(), $('#lng').val(), 1, $scope.recipientName, $scope.recipientPhone, $scope.additionalComments, deliveryDate, $scope.deliveryCompany, $scope.selectedItems, function( delivery ){
-                console.log(delivery);
+                LoaderHelper.hideLoader();
+                $scope.isLoading = false;
                 $scope.delivery = delivery;
 
                 $scope.isSummary = true;
@@ -264,6 +269,8 @@ conAngular
 
             switch( currentPath ){
                 case '/multiple-items-delivery':
+                    
+                    $scope.isLoading = false;
                     if( ! $rootScope.globals.initMultipleDelivery ){
                         initItemsWithdrawal();
                     }

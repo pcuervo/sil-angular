@@ -1,0 +1,71 @@
+<div class="[ card-panel ]">
+  <h4 class="[ center-align ]">Detalle del proyecto</h4>
+  <div class="[ row ]">
+    <div class="[ mt-40 ][ left-align ]">
+      <div class="[ col s12 m4 ]"> 
+        <div class="input-field">
+          <input type="text" id="litobelId" ng-model="project.litobel_id" ng-readonly="true">
+          <label for="litobelId">Clave de proyecto Litobel</label>
+        </div>
+      </div>
+      <div class="[ col s12 m4 ]"> 
+        <div class="input-field">
+          <input type="text" id="projectName" ng-model="project.name" ng-readonly="true">
+          <label for="projectName">Nombre del proyecto</label>
+        </div>
+      </div>
+      <div class="[ col s12 m4 ]"> 
+        <div class="input-field">
+          <input type="text" id="clientName" ng-model="project.client.name" ng-readonly="true">
+          <label for="clientName">Cliente</label>
+        </div>
+      </div>
+      <div class="[ col s12 ]"> 
+        <div class="[ center-align ]">
+          <a href="#/edit-project/{{project.id}}" class="[ waves-effect ][ btn ]">editar</a>
+          <a class="[ waves-effect ][ btn red ]" ng-click="destroyProject(project.id)">eliminar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="[ mt-20 ]" ng-include src="'project/templates/project-users.html'"></div>
+
+<div class="[ card-panel ][ mt-20 ]">
+  <div class="[ row ]">
+    <div class="[ col s12 ]">
+      <h4 class="[ center-align ]">Inventrario</h4>
+      <table datatable="ng" dt-options="dtProjectInventoryOptions" dt-column-defs="dtProjectInventoryColumn" class="row-border hover responsive">
+        <thead>
+          <tr>
+            <th class="[ center-align ]" ng-hide="true">ID producto</th>
+            <th class="[ center-align ]"></th>
+            <th class="[ center-align ]">Nombre</th>
+            <th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
+            <th class="[ center-align ][ hide-on-med-and-down ]">Descripción</th>
+            <th class="[ center-align ]">Cantidad</th>
+            <th class="[ center-align ]">Ubicaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in project.inventory_items">
+              <td class="[ center-align ]" ng-hide="true">{{item.id}}</td>
+              <td><img ng-src="{{ item.thumb }}" alt=""></td>
+              <td>
+                <a href="#/view-item/{{item.id}}">{{ item.name + ' ' + item.model  }}</a></td>
+              <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.serial_number }}</td>
+              <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.description }}</td>
+              <td class="[ center-align ]">{{ item.quantity }}</td>
+              <td class="[ center-align ]">
+                <p ng-if="item.item_locations.length == 0 || role == 6">-</p>
+                <div ng-repeat="il in item.item_locations" ng-if="role != 6">
+                  <a href="#/view-location/{{il.warehouse_location.id}}" >{{il.warehouse_location.name}}</a>
+                </div>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

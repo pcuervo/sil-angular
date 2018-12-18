@@ -83,15 +83,15 @@ conAngular
         }// removeUserFromProject
 
         $scope.update = function(){
-            ProjectService.update( $scope.project.id, $scope.project.litobel_id, $scope.project.name, $scope.project.client_id, function ( response ){
-                    console.log( response );
-                    if(response.errors) {
-                        ErrorHelper.display( response.errors );
-                        return;
-                    }
-                    Materialize.toast('¡Proyecto "' + $scope.project.name + '" actualizado exitosamente!', 4000, 'green');
-                    $state.go('/view-projects', {}, { reload: true });
-            });
+          ProjectService.update( $scope.project.id, $scope.project.litobel_id, $scope.project.name, $scope.project.client_id, function ( response ){
+            console.log( response );
+            if(response.errors) {
+              ErrorHelper.display( response.errors );
+              return;
+            }
+            Materialize.toast('¡Proyecto "' + $scope.project.name + '" actualizado exitosamente!', 4000, 'green');
+            $state.go('/view-project', { projectId: $scope.project.id }, { reload: true });
+          });
         }// update
 
         $scope.destroyProject = function(projectId){
@@ -169,6 +169,13 @@ conAngular
             
             return;
           }
+          if( currentPath.indexOf( '/view-project/' ) > -1 ){
+            getProject( $stateParams.projectId );
+            initProjectUsersDataTable();
+            initProjectLeanInventoryDataTable();
+            return;
+          }
+
           switch( currentPath ){
             case '/view-projects':
               LoaderHelper.showLoader('Cargando proyectos...');
@@ -196,10 +203,10 @@ conAngular
         }// getAllClients
 
         function getAllProjects(){
-					ProjectService.getAll( function( projects ){
-						$scope.projects = projects;
-						LoaderHelper.hideLoader();
-					}); 
+          ProjectService.all( function( projects ){
+            $scope.projects = projects;
+            LoaderHelper.hideLoader();
+          });
         }// getAllProjects
 
         function getUserProjects(userId){
@@ -250,6 +257,29 @@ conAngular
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initProjectUsersDataTable
+        
+        function initProjectLeanInventoryDataTable(){
+            $scope.dtProjectInventoryOptions = DTOptionsBuilder.newOptions()
+              .withPaginationType('full_numbers')
+              .withDisplayLength(100)
+              .withDOM('riftp')
+              .withButtons([
+                {
+                  extend: "csvHtml5",
+                  fileName: "inventario_proyecto.csv",
+                  exportOptions: {
+                      columns: [0, 2, 3, 4, 5]
+                  },
+                  exportData: {decodeEntities:true}
+                }
+              ])
+              .withOption('responsive', true)
+              .withOption('searching', false);
+            $scope.dtProjectInventoryColumn = [
+                DTColumnDefBuilder.newColumnDef(1).notSortable()
+            ];
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+        }// initProjectLeanInventoryDataTable
 
         function getProject( id ){
           ProjectService.get( id, function( project ){
