@@ -32,7 +32,7 @@ conAngular
       }// getAll
 
       function byType( type, callback ) {
- 
+        console.log('we here?');
           var transactionType = type == 'checkIns' ? 'get_check_ins' : 'get_check_outs';
           var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/' + transactionType;
           $http.get (serviceUrl )
@@ -136,17 +136,18 @@ conAngular
       function latest( type, numTransactions, callback ) { 
         var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/latest';
         $http.post(serviceUrl,
-            { 
-                type: type,
-                num_transactions: numTransactions
-            }
+          { 
+            type: type,
+            num_transactions: numTransactions
+          }
         )
-          .success(function ( response ) {
-            callback( response.inventory_transactions );
-          })
-          .error(function ( response ) {
-            callback( response );
-          });
+        .success(function ( response ) {
+          if( type == 'check_out') callback( response.check_out_transactions );
+          else callback( response.check_in_transactions );          
+        })
+        .error(function ( response ) {
+          callback( response );
+        });
       }
       
       function latestByUser( userId, type, numTransactions, callback ) { 
