@@ -207,7 +207,8 @@ conAngular
         var serviceUrl = $rootScope.apiUrl + 'projects/inventory';
         $http.post(serviceUrl, { id: projectId } )
         .success(function ( response ) {
-            callback ( response.projects );
+            console.log(response);
+            callback ( response.inventory_items );
         })
         .error(function ( response ) {
             callback ( response );

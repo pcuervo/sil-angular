@@ -303,6 +303,7 @@ conAngular
 
         function getProjectInventory( id ){
             ProjectService.getInventory( id, function( items ){
+                console.log(items);
               if( items.errors ){
                 Materialize.toast( 'No se encontró el proyecto.', 4000, 'red');
                 //$state.go('/view-projects', {}, { reload: true });
