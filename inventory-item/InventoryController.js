@@ -245,6 +245,57 @@ conAngular
           return state;
         }
 
+        $scope.prepareForReplenish = function($fileContent){
+            LoaderHelper.showLoader('Cargando CSV...');
+            var lines = $fileContent.split('\n');
+
+            for(var line = 0; line < lines.length; line++){
+                if( 0 === line ) continue;
+
+                //lines =
+                //.trim().replace(/[\r\n]+$/, '')
+                var lineResults= lines[line].split(',');
+                // var itemToLoad = {};
+
+                // itemToLoad['id'] = lineResults[0];
+                // itemToLoad['name'] = lineResults[1];
+                // itemToLoad['quantity'] = lineResults[2];
+                // itemToLoad['location'] = lineResults[3];
+                // itemToLoad['comments'] = lineResults[4];
+
+                var itemToLoad = [];
+                itemToLoad.push(lineResults[0]);
+                itemToLoad.push(lineResults[1]);
+                itemToLoad.push(parseInt(lineResults[2]));
+                itemToLoad.push(lineResults[3]);
+                itemToLoad.push(lineResults[4]);
+
+                $scope.itemsToAdjust.push(itemToLoad);
+            }
+            console.log($scope.itemsToAdjust);
+            $scope.content = $fileContent;
+            $scope.fileWasRead = true;
+            LoaderHelper.hideLoader();
+        };
+
+        $scope.replenish = function(){
+            LoaderHelper.showLoader('Ajustando inventario...');
+            InventoryItemService.replenish( $scope.itemsToAdjust, function(response){
+                $scope.hasResponse = true;
+                LoaderHelper.hideLoader();
+                if( response.errors.length ) { 
+                    $scope.replenishErrors = true;
+                    $scope.errors = response.errors;
+                }
+
+                $scope.processed = response.processed;
+                $scope.folio = response.folio;
+                console.log(response);
+            });
+        }
+
+        $scope.reload = function() { location.reload() }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -287,6 +338,14 @@ conAngular
               LoaderHelper.showLoader('Cargando tipos de mercancía')
               initItemTypesDT();
               fetchItemTypes();
+              break;
+            case '/load-inventory-csv':
+              $scope.fileWasRead = false;
+              $scope.hasResponse = false;
+              $scope.replenishErrors = false;
+              $scope.itemsToAdjust = []
+              initLoadInventoryTable();
+              initLoadInventoryErrorTable();
               break;
           }
 
@@ -599,4 +658,25 @@ conAngular
             }); 
         }// getUserProjects
 
+        function initLoadInventoryTable(){
+            $scope.dtOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(30)
+                .withDOM('itp')
+                .withOption('responsive', true)
+                .withOption('order', []);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initLoadInventoryTable
+
+        function initLoadInventoryErrorTable(){
+            $scope.dtErrorOptions = DTOptionsBuilder.newOptions()
+                .withPaginationType('full_numbers')
+                .withDisplayLength(30)
+                .withDOM('itp')
+                .withOption('responsive', true)
+                .withOption('order', []);
+            DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+
+        }// initLoadInventoryErrorTable
     }]);

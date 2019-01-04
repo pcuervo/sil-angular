@@ -49,6 +49,7 @@ conAngular
         service.editItemType = editItemType;
         service.getInStockPaged = getInStockPaged;
         service.edit = edit;
+        service.replenish = replenish;
 
         service.quickSearch = quickSearch;
         return service;
@@ -869,5 +870,22 @@ conAngular
                 callback( response );
             });
         }// search
+
+        function replenish( inventoryItems, callback ) {
+            console.log(inventoryItems);
+            var serviceUrl = $rootScope.apiUrl + 'inventory_items/replenish';
+            $http.post( serviceUrl, 
+                { 
+                    data: inventoryItems
+                }
+            )
+            .success(function( response ) {
+                console.log(response);
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+        }// replenish
 
     }]);

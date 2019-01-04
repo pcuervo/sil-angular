@@ -33,7 +33,7 @@
           <label for="supplier-contact" ng-show=" 'CheckOutTransaction' ==  inventoryTransaction.actable_type ">¿Quién recibió?</label>
         </div>
       </div>
-      <div class="[ col s10 offset-m1 print-s12 ]">
+      <div class="[ col s10 offset-m1 print-s12 ]" ng-show="inventoryTransaction.actable_type == 'CheckOutTransaction'">
         <div class="[ input-field ]">
           <textarea id="additional-comments" class="materialize-textarea" name="additionalComments" ng-model="inventoryTransaction.additional_comments" ng-readonly="true"></textarea>
           <label for="additional-comments">Observaciones del movimiento</label>

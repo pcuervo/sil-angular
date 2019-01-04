@@ -137,6 +137,18 @@ conAngular
           });
         }
 
+        $scope.resetInventory = function( projectId ){
+            var confirmation = confirm( '¿Estás seguro que deseas reiniciar el inventario? Se perderá el historial de los productos y las existencias quedarán en 0' );
+            if( confirmation ){
+                LoaderHelper.showLoader('Reiniciando el inventario...');
+                ProjectService.resetInventory( projectId, function( response ){
+                   Materialize.toast( response.success, 4000, 'green');
+                   $state.go('/view-project', {projectId: projectId}, { reload: true });
+                   LoaderHelper.hideLoader();
+                });   
+            }   
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -172,7 +184,13 @@ conAngular
           if( currentPath.indexOf( '/view-project/' ) > -1 ){
             getProject( $stateParams.projectId );
             initProjectUsersDataTable();
-            initProjectLeanInventoryDataTable();
+            try{
+                initProjectLeanInventoryDataTable();
+            }
+            catch(err){
+                location.reload();
+            }
+            
             return;
           }
 
@@ -268,7 +286,7 @@ conAngular
                   extend: "csvHtml5",
                   fileName: "inventario_proyecto.csv",
                   exportOptions: {
-                      columns: [0, 2, 3, 4, 5]
+                      columns: [0, 2, 3, 4, 5, 6]
                   },
                   exportData: {decodeEntities:true}
                 }

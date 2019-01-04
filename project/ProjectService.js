@@ -17,6 +17,7 @@ conAngular
     service.transferInventory = transferInventory;
     service.transferPartialInventory = transferPartialInventory;
     service.getInventory = getInventory;
+    service.resetInventory = resetInventory;
 
     return service;
 
@@ -214,6 +215,20 @@ conAngular
             callback ( response );
         });
     }// getInventory
+
+    function resetInventory( projectId, callback ) {
+        var serviceUrl = $rootScope.apiUrl + 'projects/clean_inventory';
+        $http.post( serviceUrl, 
+            { id: projectId }
+        )
+        .success(function( response ) {
+            console.log(response);
+            callback( response );
+        })
+        .error(function( response ) {
+            callback( response );
+        });
+    }// resetInventory
     
   }]
 );

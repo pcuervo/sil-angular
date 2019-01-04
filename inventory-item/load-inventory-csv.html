@@ -1,0 +1,86 @@
+<div class="card-panel green white-text" ng-show="hasResponse">
+  <h5>Productos procesados exitosamente: <strong>{{processed}}</strong>
+  <div class="center-align" ng-show="folio != '-'">
+    <a class="[ btn ]" href="#/view-folio/{{folio}}" target="_blank">Ver folio</a>
+  </div></h5>
+</div>
+
+<div ng-show="hasResponse && replenishErrors" class="[ mt-20 ]">
+  <div class="card-panel red white-text">
+    <h5>Errores en la carga: <strong>{{errors.length}}</strong></h5>
+
+  </div>
+  <div class="[ card-panel ]">
+    <h4 class="[ center-align ]">Errores</h4>
+    <div class="[ row ]">
+      <table datatable="ng" dt-options="dtErrorOptions" class="row-border hover">
+        <thead>
+            <tr>
+                <th class="[ center-align ]">Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="e in errors">
+                <td class="[ center-align ]">{{ e }}</td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  
+<div class="[ card-panel ]" ng-show="! fileWasRead">
+  <h4 class="[ center-align ]">Carga de inventario por CSV</h4>
+  <p class="[ fs-16 ][ center-align ]">El orden de las columnas debe ser 
+    <strong>ID Producto</strong>, 
+    <strong>Nombre</strong>, 
+    <strong>Cantidad</strong>, 
+    <strong>Ubicación</strong> y 
+    <strong>Comentarios*</strong><br>
+    <small>* No incluir comas (,) en los comentarios.</small> </p>
+  <div class="[ row ]">
+      <form name="entry_form" class="[ mt-40 ][ left-align ]" enctype="multipart/form-data" ng-submit="csvLocate()" data-parsley-csv>
+          <div class="[ col s12 m6 offset-m3 ]">
+              <div class="file-field input-field">
+                  <input class="file-path validate" type="text" placeholder="Haz click aquí para subir el archivo" required>
+                  <div class="">
+                      <input type="file" id="csvFile" file-reader="fileContent" on-read-file="prepareForReplenish($fileContent)"/>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div><!-- row -->
+</div><!-- card-panel -->
+
+<div class="[ card-panel ]" ng-show="fileWasRead">
+<h4 class="[ center-align ]">Artículos a ajustar</h4>
+  <table datatable="ng" dt-options="dtOptions" class="row-border hover">
+    <thead>
+      <tr>
+        <th class="[ center-align ]">ID</th>
+        <th class="[ center-align ]">Nombre</th>
+        <th class="[ center-align ]">Cantidad</th>
+        <th class="[ center-align ]">Ubicación</th>
+        <th class="[ center-align ]">Comentarios</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="i in itemsToAdjust">
+        <!-- <td class="[ center-align ]">{{ i.id }}</td>
+        <td class="[ center-align ]">{{ i.name }}</td>
+        <td class="[ center-align ]">{{ i.quantity }}</td>
+        <td class="[ center-align ]">{{ i.location }}</td>
+        <td class="[ center-align ]">{{ i.comments }}</td> -->
+        <td class="[ center-align ]">{{ i[0] }}</td>
+        <td class="[ center-align ]">{{ i[1] }}</td>
+        <td class="[ center-align ]">{{ i[2] }}</td>
+        <td class="[ center-align ]">{{ i[3] }}</td>
+        <td class="[ center-align ]">{{ i[4] }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="[ center-align ]">
+      <button class="[ btn waves-effect ]" ng-click="replenish()" ng-hide="hasResponse">Cargar</button>
+      <button class="[ btn waves-effect ][ red ]" ng-click="reload()">Cancelar</button>
+  </div>
+</div>

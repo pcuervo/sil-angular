@@ -2163,6 +2163,25 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
                 }]);
             }]
         }
+    })
+
+    .state('/load-inventory-csv', {
+        url: "/load-inventory-csv",
+        templateUrl: "inventory-item/load-inventory-csv.html",
+        controller: "InventoryController",
+        data: {
+            pageTitle: 'Carga de inventario por CSV'
+        },
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('dataTables')
+                }]);
+            }]
+        }
     });
 
 }]);

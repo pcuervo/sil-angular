@@ -23,7 +23,7 @@
       <div class="[ col s12 ]"> 
         <div class="[ center-align ]">
           <a href="#/edit-project/{{project.id}}" class="[ waves-effect ][ btn ]">editar</a>
-          <a class="[ waves-effect ][ btn red ]" ng-click="destroyProject(project.id)">eliminar</a>
+          <button class="[ waves-effect ][ btn red ]" ng-click="resetInventory(project.id)">reiniciar inventario</button>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
 <div class="[ card-panel ][ mt-20 ]">
   <div class="[ row ]">
     <div class="[ col s12 ]">
-      <h4 class="[ center-align ]">Inventrario</h4>
+      <h4 class="[ center-align ]">Inventario</h4>
       <table datatable="ng" dt-options="dtProjectInventoryOptions" dt-column-defs="dtProjectInventoryColumn" class="row-border hover responsive">
         <thead>
           <tr>
