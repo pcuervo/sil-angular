@@ -264,11 +264,11 @@ conAngular
                 // itemToLoad['comments'] = lineResults[4];
 
                 var itemToLoad = [];
-                itemToLoad.push(lineResults[0]);
-                itemToLoad.push(lineResults[1]);
-                itemToLoad.push(parseInt(lineResults[2]));
-                itemToLoad.push(lineResults[3]);
-                itemToLoad.push(lineResults[4]);
+                itemToLoad.push(lineResults[0].replace(/(\r\n|\n|\r)/gm,""));
+                itemToLoad.push(lineResults[1].replace(/(\r\n|\n|\r)/gm,""));
+                itemToLoad.push(parseInt(lineResults[2].replace(/(\r\n|\n|\r)/gm,"")));
+                itemToLoad.push(lineResults[3].replace(/(\r\n|\n|\r)/gm,""));
+                if(typeof lineResults[4] != 'undefined' ) itemToLoad.push(lineResults[4].replace(/(\r\n|\n|\r)/gm,""));
 
                 $scope.itemsToAdjust.push(itemToLoad);
             }
@@ -285,12 +285,11 @@ conAngular
                 LoaderHelper.hideLoader();
                 if( response.errors.length ) { 
                     $scope.replenishErrors = true;
-                    $scope.errors = response.errors;
+                    $scope.loadErrors = response.errors;
+                    console.log(response.errors);
                 }
-
                 $scope.processed = response.processed;
                 $scope.folio = response.folio;
-                console.log(response);
             });
         }
 

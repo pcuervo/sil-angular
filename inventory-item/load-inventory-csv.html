@@ -8,7 +8,6 @@
 <div ng-show="hasResponse && replenishErrors" class="[ mt-20 ]">
   <div class="card-panel red white-text">
     <h5>Errores en la carga: <strong>{{errors.length}}</strong></h5>
-
   </div>
   <div class="[ card-panel ]">
     <h4 class="[ center-align ]">Errores</h4>
@@ -16,17 +15,20 @@
       <table datatable="ng" dt-options="dtErrorOptions" class="row-border hover">
         <thead>
             <tr>
+                <th class="[ center-align ]">Número de error</th>
                 <th class="[ center-align ]">Descripción</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="e in errors">
+            <tr ng-repeat="e in loadErrors track by $index">
+                <td class="[ center-align ]">{{ $index+1 }}</td>
                 <td class="[ center-align ]">{{ e }}</td>
             </tr>
         </tbody>
       </table>
     </div>
   </div>
+  <p>{{loadErrors | json}}</p>
 </div>
   
 <div class="[ card-panel ]" ng-show="! fileWasRead">

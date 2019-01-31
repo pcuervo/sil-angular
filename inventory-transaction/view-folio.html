@@ -69,6 +69,7 @@
     </form>
     <div class="[ center ][ col s12 ][ print-hidden ]">
       <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printFolio()"><i class="mdi-action-print left"></i>Imprimir folio</button>
+      <button ng-if="canCancel" class="[ waves-effect ][ btn btn-extra red ]" ng-click="cancelFolio()"><i class="mdi-navigation-cancel left"></i>Cancelar folio</button>
     </div>
     <div class="[ input-field ][ print--firma print-only print-left ][ print-s6 ]">
         <input class="[ withdraw-units ]" type="text" name="">

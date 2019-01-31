@@ -334,7 +334,7 @@ conAngular
           function initProjectInventoryDataTable(){
             $scope.dtProjectInventoryOptions = DTOptionsBuilder.newOptions()
                     .withPaginationType('full_numbers')
-                    .withDisplayLength(200)
+                    .withDisplayLength(1000)
                     .withDOM('rift')
                     .withOption('responsive', true)
                     .withOption('searching', true);

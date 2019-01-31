@@ -72,6 +72,16 @@ conAngular
             window.print();
         }
 
+        $scope.cancelFolio = function(){
+          var confirmation = confirm( '¿Estás seguro que deseas cancelar el folio? Las piezas se devolverán a su ubicación original.' );
+          if( confirmation ){
+            InventoryTransactionService.cancelFolio( $scope.folio, function( response ){
+              Materialize.toast( response.success, 4000, 'green');
+              $state.go('/view-folio', { 'folio' : response.folio }, { reload: true });
+            });   
+          }
+        }
+
         /******************
         * PRIVATE FUNCTIONS
         *******************/
@@ -83,10 +93,11 @@ conAngular
             }
 
             if( currentPath.indexOf( '/view-folio' ) > -1 ){
-                $scope.folio = $stateParams.folio;
-                getByFolio($scope.folio);
-                initItemsFolioDT();
-                return;
+              $scope.canCancel = false;
+              $scope.folio = $stateParams.folio;
+              getByFolio($scope.folio);
+              initItemsFolioDT();
+              return;
             }
 
 
@@ -193,9 +204,15 @@ conAngular
 
                 $scope.inventoryTransaction = inventoryTransactions[0];
                 $scope.inventoryTransactions = inventoryTransactions;
-                console.log($scope.inventoryTransaction);
+                $scope.canCancel = canCancel($scope.inventoryTransaction);
                 LoaderHelper.hideLoader();
             });
+        }
+
+        function canCancel(transaction){
+          if( transaction.folio.indexOf('Cancelado') > 0 ) return false;
+
+          return true;
         }
 
         function initItemsFolioDT(){
