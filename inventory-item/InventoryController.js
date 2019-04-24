@@ -241,6 +241,12 @@ conAngular
             case 7:
               state = 'Buen estado';
               break;
+            case 8:
+              state = 'Muestras';
+              break;
+            case 9:
+              state = 'Caja vacía';
+              break;
           }
           return state;
         }
