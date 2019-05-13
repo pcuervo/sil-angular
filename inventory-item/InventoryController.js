@@ -251,6 +251,25 @@ conAngular
           return state;
         }
 
+        $scope.getItemStatus = function( statusId ){
+            var status;
+            switch( statusId ){
+              case 1:
+                status = 'En existencia';
+                break;
+              case 2:
+                status = 'Sin existencias';
+                break;
+              case 3:
+                status = 'Existencia parcial';
+                break;
+              case 4:
+                status = 'Caducado';
+                break;
+            }
+            return status;
+          }
+
         $scope.prepareForReplenish = function($fileContent){
             LoaderHelper.showLoader('Cargando CSV...');
             var lines = $fileContent.split('\n');
