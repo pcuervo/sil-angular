@@ -83,7 +83,9 @@
                 <th class="[ center-align ]">Proyecto</th>
                 <th class="[ center-align ]">Project Manager</th>
                 <th class="[ center-align ]">Ejecutivo de Cuenta</th>
+                <th class="[ center-align ]">Fecha de ingeso</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Ubicaciones</th>
+                <th class="[ center-align ]">Comentarios</th>
                 <th class="[ center-align ]">Acciones</th>
             </tr>
         </thead>
@@ -100,12 +102,14 @@
                 <td>{{ i.inventory_item.project  }}</td>
                 <td>{{ i.inventory_item.pm  }}</td>
                 <td>{{ i.inventory_item.ae  }}</td>
+                <td class="[ center-align ]">{{ i.inventory_item.created_at | date:'yyyy/MM/dd' }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">
                     <p ng-if="i.inventory_item.locations.length == 0 || role == 6">-</p>
                     <div ng-repeat="loc in i.inventory_item.locations" ng-if="role != 6">
                         <a href="#/view-location/{{loc.location_id}}" >{{loc.location}}</a>
                     </div>
                 </td>
+                <td>{{ i.inventory_item.extra_parts  }}</td>
                 <td class="[ center-align ]">
                     <div ng-if="i.inventory_item.status == 1">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.inventory_item.id}}"><i class="[ fa fa-eye ]"></i></a>
