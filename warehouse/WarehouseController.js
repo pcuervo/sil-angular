@@ -15,8 +15,6 @@ conAngular
             fetchNewNotifications();
         })();
 
-
-
         /******************
         * PUBLIC FUNCTIONS
         *******************/
@@ -193,6 +191,11 @@ conAngular
 
         $scope.changeRack = function( rackId ){
             getRackRelocation( rackId );
+        }// changeRack
+
+        $scope.changeRackToTransfer = function( rackId ){
+            $scope.showRack = true;
+            getRackTransfer( rackId );
         }// changeRack
 
         $scope.deleteRack = function( rackId ){
@@ -404,6 +407,21 @@ conAngular
                 return;
             }
 
+            if( currentPath.indexOf('transfer-location') > -1 ){
+                $scope.showRack = false;
+                LoaderHelper.showLoader( 'Cargando Racks...' );
+                fetchWarehouseRacks();
+                getLocation( $stateParams.locationId )
+                $('body').on('click', '.js-transfer-location', function(){
+                    var oldLocationId = $stateParams.locationId;
+                    var newLocationId = $(this).data('location');
+                    
+                    transferLocation( oldLocationId, newLocationId );
+                    LoaderHelper.showLoader('Traspasando ubicación...');
+                });
+                return;
+            }
+
             switch( currentPath ){
                 case '/add-rack':
                     console.log('add');
@@ -430,7 +448,7 @@ conAngular
         function getRack( id ){
             WarehouseService.getRack( id, function( rack ){
                 var hasLocations = true;
-                displayRack( rack.locations, rack.rack_info.columns, hasLocations );
+                displayRack( rack.locations, rack.rack_info.columns, hasLocations, false );
                 $scope.warehouse_locations = rack.locations;
                 $scope.rack = rack;
                 getItemsByRack( id );
@@ -440,11 +458,19 @@ conAngular
         function getRackRelocation( id ){
             WarehouseService.getRack( id, function( rack ){
                 var hasLocations = false;
-                displayRack( rack.locations, rack.rack_info.columns, hasLocations );
+                displayRack( rack.locations, rack.rack_info.columns, hasLocations, false );
                 $scope.warehouse_locations = rack.locations;
                 getItemsByRack( id );
             });
-        }// getRackRelocation
+        }
+
+        function getRackTransfer( id ){
+            WarehouseService.getRack( id, function( rack ){
+                var isTransfer = true;
+                displayRack( rack.locations, rack.rack_info.columns, false, isTransfer );
+                $scope.warehouse_locations = rack.locations;
+            });
+        }
 
         function getItemsByRack( id ){
             WarehouseService.getItems( id, function( items ){
@@ -453,21 +479,22 @@ conAngular
             });
         }
 
-        function displayRack( locations, columns, hasLocations ){
+        function displayRack( locations, columns, hasLocations, isTransfer ){
             var rackHTML = [];
             $('.js-rack').empty();
-            rackHTML = getRackHTML( locations, columns, hasLocations );
+            rackHTML = getRackHTML( locations, columns, hasLocations, isTransfer );
             $('.js-rack').append( rackHTML );
             conApp.initCards();
         }// displayRack
 
-        function getRackHTML( locations, columns, hasLocations ){
+        function getRackHTML( locations, columns, hasLocations, isTransfer ){
             var rackHTML = [],
                 currentRow = 0,
                 colClass = getColClass( columns );
 
             rackHTML[ currentRow ] = '';
             $.each( locations, function( i, location ){
+                console.log(location)
                 var statusClass = $scope.getStatusClass( location.status );
                 rackHTML[ currentRow ] += '\
                     <div class="[ col s12 ' + colClass + ' ]"> \
@@ -477,7 +504,13 @@ conAngular
                                 <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
                             </div> \
                             <div class="[ content ][ center-align ]">';
-                if( hasLocations ){
+                if( isTransfer ){
+                    if( location.status != 3 ){
+                        rackHTML[currentRow] += '\
+                            <p>Traspasar aquí</p> \
+                            <button class="[ btn ][ mt-10 ][ js-transfer-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
+                    }
+                } else if( hasLocations ){
                     rackHTML[currentRow] += '\
                         <a class="[ btn ][ col-s6 ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
                         <a class="[ btn ][ col-s6 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
@@ -523,191 +556,6 @@ conAngular
             }// switch
             return colClass;
         }// getColClass
-
-        function getRackHTMLSevenCol( locations, columns, hasLocations ){
-            var rackHTML = [];
-            var currentRow = 0;
-            var j = 0;
-            rackHTML[ currentRow ] = '';
-
-            $.each( locations, function( i, location ){
-                var statusClass = $scope.getStatusClass( location.status );
-
-                if( j % 2 == 0 ) rackHTML[ currentRow ] += '<div class="[ col s12 m3 ]"><div class="row">';
-                rackHTML[ currentRow ] += '\
-                    <div class="[ col s6 ]"> \
-                        <div class="[ card ][ minimized ]"> \
-                            <div class="[ title ]' + statusClass + '"> \
-                                <h5>' + location.name + '</h5> \
-                                <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
-                            </div> \
-                            <div class="[ content ][ text-center ]"> \
-                                <p>Capacidad</p> \
-                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
-                if( hasLocations ){
-                    rackHTML[currentRow] += '\
-                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
-                } else {
-                    rackHTML[currentRow] += '\
-                        <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
-                }
-
-                rackHTML[ currentRow ] += '\
-                            </div> \
-                        </div> \
-                    </div>';
-
-                if( ( parseInt( i )+1 ) % 7 == 0){
-                    rackHTML[ currentRow ] += '<div class="[ col s6 ]"><div class="[ card ][ minimized ]"><div class="[ title ][ black ]"><h5>-</h5></div></div></div>';
-                    rackHTML[ currentRow ] += '</div></div>';
-                    currentRow += 1;
-                    rackHTML[ currentRow ] = '<div class="[ clear ]"></div>';
-                    j += 1;
-                }
-                if( j % 2 == 1 ) {
-                    rackHTML[ currentRow ] += '</div></div>';
-                }
-                j += 1;
-            });
-
-            return rackHTML;
-        }// getRackHTMLSevenCol
-
-        function getRackHTMLEightCol( locations, columns, hasLocations ){
-            var rackHTML = [];
-            var currentRow = 0;
-            rackHTML[ currentRow ] = '';
-
-            $.each( locations, function( i, location ){
-                var statusClass = $scope.getStatusClass( location.status );
-                if( i % 2 == 0 ) rackHTML[ currentRow ] += '<div class="[ col s12 m3 ]"><div class="row">';
-                rackHTML[ currentRow ] += '\
-                    <div class="[ col s6 ]"> \
-                        <div class="[ card ][ minimized ]"> \
-                            <div class="[ title ]' + statusClass + '"> \
-                                <h5>' + location.name + '</h5> \
-                                <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
-                            </div> \
-                            <div class="[ content ][ text-center ]"> \
-                                <p>Capacidad</p> \
-                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
-                if( hasLocations ){
-                    rackHTML[currentRow] += '\
-                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
-                } else {
-                    rackHTML[currentRow] += '\
-                        <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
-                }
-
-                rackHTML[ currentRow ] += '\
-                            </div> \
-                        </div> \
-                    </div>';
-                if( i % 2 == 1 ) rackHTML[ currentRow ] += '</div></div>';
-
-                if( ( parseInt( i )+1 ) % 8 == 0) {
-                    currentRow += 1;
-                    rackHTML[ currentRow ] = '<div class="[ clear ]"></div>';
-                }
-            });
-
-            return rackHTML;
-        }// getRackHTMLEightCol
-
-        function getRackHTMLNineCol( locations, columns, hasLocations ){
-            var rackHTML = [];
-            var currentRow = 0;
-            rackHTML[ currentRow ] = '';
-
-            $.each( locations, function( i, location ){
-                var statusClass = $scope.getStatusClass( location.status );
-                if( i % 3 == 0 ) rackHTML[ currentRow ] += '<div class="[ col s12 m4 ]"><div class="row">';
-                rackHTML[ currentRow ] += '\
-                    <div class="[ col s4 ]"> \
-                        <div class="[ card ][ minimized ]"> \
-                            <div class="[ title ]' + statusClass + '"> \
-                                <h5>' + location.name + '</h5> \
-                                <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
-                            </div> \
-                            <div class="[ content ][ text-center ]"> \
-                                <p>Capacidad</p> \
-                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
-                if( hasLocations ){
-                    rackHTML[currentRow] += '\
-                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ][ mt-10 ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
-                } else {
-                    rackHTML[currentRow] += '\
-                        <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
-                }
-
-                rackHTML[ currentRow ] += '\
-                            </div> \
-                        </div> \
-                    </div>';
-                if( i % 3 == 2 ) {
-                    rackHTML[ currentRow ] += '</div></div>';
-                }
-
-                if( ( parseInt( i )+1 ) % 9 == 0) {
-                    currentRow += 1;
-                    rackHTML[ currentRow ] = '<div class="[ clear ]"></div>';
-                }
-            });
-
-            return rackHTML;
-        }// getRackHTMLNineCol
-
-        function getRackHTMLTenCol( locations, columns, hasLocations ){
-            var rackHTML = [],
-                currentRow = 0,
-                colClass = getColClass( columns ),
-                offsetClass = '';
-
-            rackHTML[ currentRow ] = '';
-            $.each( locations, function( i, location ){
-                var statusClass = $scope.getStatusClass( location.status );
-                if( ( parseInt( i ) ) % 10 == 0) {
-                    offsetClass = 'offset-m1';
-                } else {
-                    offsetClass = '';
-                }
-                rackHTML[ currentRow ] += '\
-                    <div class="[ col s12 ' + colClass + ' ' + offsetClass + ' ]"> \
-                        <div class="[ card ][ minimized ]"> \
-                            <div class="[ title ]' + statusClass + '"> \
-                                <h5>' + location.name + '</h5> \
-                                <a class="minimize" href="#"><i class="mdi-navigation-expand-less"></i></a> \
-                            </div> \
-                            <div class="[ content ][ text-center ]"> \
-                                <p>Disponibilidad</p> \
-                                <p class="[ h3 ]">' + location.available_units + '/' + location.units + '</p>';
-                if( hasLocations ){
-                    rackHTML[currentRow] += '\
-                        <a class="[ btn ]" href="#/view-location/' + location.id + '"><i class="[ fa fa-eye ][ center-align ]"></i></a> \
-                        <a class="[ btn ]" href="#/edit-location/' + location.id + '"><i class="[ fa fa-edit ][ center-align ]"></i></a>';
-                } else {
-                    rackHTML[currentRow] += '\
-                        <p>Reubicar aquí</p> \
-                        <button class="[ btn ][ mt-10 ][ js-location ]" data-location="' + location.id + '"><i class="[ fa fa-location-arrow ][ center-align ]"></i></button>';
-                }
-
-                rackHTML[ currentRow ] += '\
-                            </div> \
-                        </div> \
-                    </div>';
-                if( 0 == (i+1) % parseInt( columns )  ) rackHTML[ currentRow ] += '<div class="[ clear ]"></div>';
-
-            });
-            return rackHTML;
-
-        }// getRackHTMLTenCol
-
 
         function getLocation( id ){
 
@@ -862,6 +710,23 @@ conAngular
                     locationId: item_location.warehouse_location.id
                  }, { reload: true });
                 location.reload();
+            });
+            return;
+        }
+
+        function transferLocation( oldLocationId, newLocationId ){
+            WarehouseService.transferLocation(oldLocationId, newLocationId, function( item_location ) {
+                console.log(item_location)
+                if( item_location.errors ){
+                    Materialize.toast( item_location.errors, 4000, 'red' );
+                    LoaderHelper.hideLoader();
+                    return;
+                }
+
+                Materialize.toast('¡Traspaso exitoso!', 4000, 'green');
+                $state.go('/view-location', {
+                    locationId: newLocationId
+                 }, { reload: true });
             });
             return;
         }

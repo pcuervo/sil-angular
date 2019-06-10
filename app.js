@@ -1672,6 +1672,12 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
             }]
         }
     })
+    .state('/transfer-location', {
+        url: "/transfer-location/:locationId",
+        templateUrl: "warehouse/transfer-location.html",
+        controller: "WarehouseController",
+        data: { pageTitle: 'Transferir Ubicación' }
+    })
 
     // Suppliers
     .state('/add-supplier', {
@@ -2193,7 +2199,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = test;
+    $rootScope.apiUrl = prod;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view

@@ -22,6 +22,7 @@ conAngular
         service.markAsAvailable = markAsAvailable
         service.csvLocate = csvLocate
         service.removeItem = removeItem
+        service.transferLocation = transferLocation;
         return service;
 
         /******************
@@ -301,5 +302,20 @@ conAngular
             });
         }// removeItem
 
+        function transferLocation( currentLocationId,  newLocationId, callback ){
+            var serviceUrl = $rootScope.apiUrl + 'warehouse_locations/transfer_to';
+            $http.post( serviceUrl, 
+                { 
+                    current_location_id: currentLocationId,
+                    new_location_id: newLocationId,
+                }
+            )
+            .success(function( response ) {
+                callback( response );
+            })
+            .error(function( response ) {
+                callback( response );
+            });
+        }// transferLocation
     }]);
 

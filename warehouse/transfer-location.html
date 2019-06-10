@@ -1,0 +1,23 @@
+<div class="[ card-panel ]">
+  <div class="[ row ]">
+    <h3 class="[ center-align ]">Traspaso de {{ locationName }}</h3>
+    <div class="[ col s12 m8 offset-m2 ][ center-align ]">
+      <p>Selecciona la nueva ubicación a la cual deseas traspasar el inventario de la ubicación {{locationName}}.</p>
+    </div>
+    <form name="location_form" class="[ left-align ]" ng-submit="addToLocation()" data-parsley-unit>
+      <div class="[ col s12 m6 offset-m3 ]">
+        <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="changeRackToTransfer( selectedRack )">
+            <option value="" disabled selected>Selecciona el rack</option>
+            <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+        </select>
+      </div>
+    </form>
+    <div class="[ clear ]"></div>
+    <div ng-show="showRack">
+      <h4 class="[ center-align ]">Rack actual: {{ itemLocation.rack_name }}</h4>
+      <div class="[ rack-card-panel ]">
+        <div class="[ row ][ rack-container ][ js-rack ]"></div><!--f row -->
+      </div>
+    </div>
+  </div>
+</div>
