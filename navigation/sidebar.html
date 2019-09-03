@@ -1,114 +1,112 @@
 <div class="[ top ]">
-    <div>
-        <!-- Sidebar toggle -->
-        <a href="#" class="[ yay-toggle ]">
-            <div class="[ burg1 ]"></div>
-            <div class="[ burg2 ]"></div>
-            <div class="[ burg3 ]"></div>
-        </a>
-        <!-- Logo -->
-        <a href="#" class="[ brand-logo ]">
-            <img src="assets/_con/images/litobel-header.jpg">
-        </a>
-        <!-- /Logo -->
-    </div>
+  <div>
+    <a href="#" class="[ yay-toggle ]">
+      <div class="[ burg1 ]"></div>
+      <div class="[ burg2 ]"></div>
+      <div class="[ burg3 ]"></div>
+    </a>
+    <a href="#" class="[ brand-logo ]">
+      <img src="assets/_con/images/litobel-header.jpg">
+    </a>
+  </div>
 </div>
 
 <div class="[ nano ]">
-    <div class="[ nano-content ]">
+  <div class="[ nano-content ]">
+    <ul>
+      <li class="[ notification-menu ]">
+        <a href="#/notifications"><i class="[ fa fa-bell ]"></i> Notificaciones<span class="[ badge ][ red ]">{{ unreadNotifications }}</span></a>
+      </li>
+      <li class="label">Control de inventario</li>
+      <li class="active">
+        <a href="#/dashboard" class="waves-effect waves-blue"><i class="fa fa-dashboard"></i> Dashboard {{roleName}}</a>
+      </li>
+      <li ng-if="( role != 5 )">
+        <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-th"></i> Inventario<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
         <ul>
-            <li class="[ notification-menu ]">
-                <a href="#/notifications"><i class="[ fa fa-bell ]"></i> Notificaciones<span class="[ badge ][ red ]">{{ unreadNotifications }}</span></a>
-            </li>
-            <li class="label">Control de inventario</li>
-            <li class="active">
-                <a href="#/dashboard" class="waves-effect waves-blue"><i class="fa fa-dashboard"></i> Dashboard {{roleName}}</a>
-            </li>
-            <li ng-if="( role != 5 )">
-                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-th"></i> Inventario<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
-                <ul>
-                    <li ng-show="( role == 1 || role == 4 || role == 7 )"><a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Movimientos por artículo</a>
-                    </li>
-                    <li ng-show="( role == 1 || role == 4 || role == 7 )"><a class="waves-effect" href="#/search-by-folio"><i class="mdi-av-repeat"></i>Movimientos por folio</a>
-                    </li>
-                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 || role == 7 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
-                    </li>
-                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4)"><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i>  Entradas</a>
-                    </li>
-                    <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 || role == 7 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
-                    </li>
-                    <li ng-if="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/load-inventory-csv"><i class="mdi-file-file-upload"></i>  Carga por CSV</a>
-                    </li>
-                </ul>
-            </li>
-            <li ng-show="( role == 1 || role == 4 || role == 7 )">
-                <a class="yay-sub-toggle waves-effect waves-blue"><i class="mdi-action-view-quilt"></i> Almacén<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
-                <ul>
-                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/view-warehouse-transactions"><i class="mdi-av-repeat"></i> Movimientos</a>
-                    </li>
-                    <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/wh-dashboard"><i class="fa fa-location-arrow"></i> Ubicaciones</a>
-                    </li>
-                    <li><a class="waves-effect waves-blue" href="#/view-racks"><i class="mdi-action-view-module"></i> Racks</a>
-                    </li>
-                </ul>
-            </li>
-            <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 || role == 7 )">
-                <a href="#/delivery-dashboard" class="waves-effect waves-blue"><i class="fa fa-motorcycle"></i> Envíos</a>
-            </li>
-            <li class="label" ng-show="( role == 1 || role == 4 )">Administración del sistema</li>
-            <li ng-show="role == 1 || role == 4">
-                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-users"></i> Usuarios Litobel <span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
-                <ul>
-                    <li><a class="waves-effect waves-blue" href="#/add-user"><i class="fa fa-user-plus"></i>Agregar usuario</a>
-                    </li>
-                    <li ng-show="role == 1"><a class="waves-effect waves-blue" href="#/view-users"><i class="fa fa-user"></i>Ver usuarios</a>
-                    </li>
-                </ul>
-            </li>
-            <li ng-show="( role == 1 || role == 4 )">
-                <a class="yay-sub-toggle waves-effect waves-blue"><i class="fa fa-briefcase"></i> Proyectos<span class="yay-collapse-icon mdi-navigation-expand-more"></a>
-                <ul>
-                    <li><a class="waves-effect waves-blue" href="#/view-projects"><i class="ion-eye"></i>Ver proyectos</a>
-                    </li>
-                    <li ng-show="role === 1"><a class="waves-effect waves-blue" href="#/add-project"><i class="mdi-content-add-box"></i>Agregar proyecto</a>
-                    </li>
-                </ul>
-            </li>
-            <li ng-show="( role == 1 )">
-                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="mdi-action-assignment-ind"></i> Clientes<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
-                <ul>
-                    <li><a class="waves-effect waves-blue" href="#/view-clients"><i class="ion-eye"></i>Ver clientes</a>
-                    </li>
-                    <li ng-show="role === 1 || role === 4"><a class="waves-effect waves-blue" href="#/add-client"><i class="mdi-content-add-box"></i>Agregar cliente</a>
-                    </li>
-                    <li ng-show="role != 4"><a class="waves-effect waves-blue" href="#/view-client-users"><i class="ion-eye"></i>Ver usuarios de cliente</a>
-                    </li>
-                    <li ng-show="role === 1 || role === 4"><a class="waves-effect waves-blue" href="#/add-client-user"><i class="mdi-content-add-box"></i>Agregar usuarios a cliente</a>
-                    </li>
-                </ul>
-            </li>
-            <li ng-show="( role == 1 || role == 4 )">
-                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-truck"></i> Proveedores<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
-                <ul>
-                    <li><a class="waves-effect waves-blue" href="#/view-suppliers"><i class="ion-eye"></i>Ver proveedores</a>
-                    </li>
-                    <li><a class="waves-effect waves-blue" href="#/add-supplier"><i class="mdi-content-add-box"></i>Agregar proveedor</a>
-                    </li>
-                </ul>
-            </li>
-            <li ng-show="role == 1 || role == 4">
-                <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-cubes"></i> Tipos de mercancía <span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
-                <ul>
-                    <li><a class="waves-effect waves-blue" href="#/view-item-types"><i class="ion-eye"></i>Ver tipos de mercancía</a>
-                    </li>
-                    <li><a class="waves-effect waves-blue" href="#/add-item-type"><i class="mdi-content-add-box"></i>Agregar tipo de mercancía</a>
-                    </li>
-                </ul>
-            </li>
-            <li ng-show="( role == 1 || role == 4 )">
-                <a href="#/view-logs" class="waves-effect waves-blue"><i class="mdi-action-list"></i> Bitácora</a>
-            </li>
+          <li ng-show="( role == 1 || role == 4 || role == 7 )">
+            <a class="waves-effect" href="#/transactions-by-project"><i class="mdi-av-repeat"></i>Movimientos por projecto</a>
+          </li>
+          <li ng-show="( role == 1 || role == 4 || role == 7 )">
+            <a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Movimientos por artículo</a>
+          </li>
+          <li ng-show="( role == 1 || role == 4 || role == 7 )">
+            <a class="waves-effect" href="#/search-by-folio"><i class="mdi-av-repeat"></i>Movimientos por folio</a>
+          </li>
+          <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 || role == 7 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
+          </li>
+          <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4)"><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i>  Entradas</a>
+          </li>
+          <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 || role == 7 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
+          </li>
+          <li ng-if="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/load-inventory-csv"><i class="mdi-file-file-upload"></i>  Carga por CSV</a>
+          </li>
         </ul>
-
-    </div><!-- nano-content -->
+      </li>
+      <li ng-show="( role == 1 || role == 4 || role == 7 )">
+        <a class="yay-sub-toggle waves-effect waves-blue"><i class="mdi-action-view-quilt"></i> Almacén<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+        <ul>
+          <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/view-warehouse-transactions"><i class="mdi-av-repeat"></i> Movimientos</a>
+          </li>
+          <li ng-show="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/wh-dashboard"><i class="fa fa-location-arrow"></i> Ubicaciones</a>
+          </li>
+          <li><a class="waves-effect waves-blue" href="#/view-racks"><i class="mdi-action-view-module"></i> Racks</a>
+          </li>
+        </ul>
+      </li>
+      <li class="label" ng-show="( role == 1 || role == 4 )">Administración del sistema</li>
+      <li ng-show="role == 1 || role == 4">
+        <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-users"></i> Usuarios Litobel <span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+        <ul>
+          <li><a class="waves-effect waves-blue" href="#/add-user"><i class="fa fa-user-plus"></i>Agregar usuario</a>
+          </li>
+          <li ng-show="role == 1"><a class="waves-effect waves-blue" href="#/view-users"><i class="fa fa-user"></i>Ver usuarios</a>
+          </li>
+        </ul>
+      </li>
+      <li ng-show="( role == 1 || role == 4 )">
+        <a class="yay-sub-toggle waves-effect waves-blue"><i class="fa fa-briefcase"></i> Proyectos<span class="yay-collapse-icon mdi-navigation-expand-more"></a>
+        <ul>
+          <li><a class="waves-effect waves-blue" href="#/view-projects"><i class="ion-eye"></i>Ver proyectos</a>
+          </li>
+          <li ng-show="role === 1"><a class="waves-effect waves-blue" href="#/add-project"><i class="mdi-content-add-box"></i>Agregar proyecto</a>
+          </li>
+        </ul>
+      </li>
+      <li ng-show="( role == 1 )">
+        <a class="yay-sub-toggle waves-effect waves-blue" ><i class="mdi-action-assignment-ind"></i> Clientes<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+        <ul>
+          <li><a class="waves-effect waves-blue" href="#/view-clients"><i class="ion-eye"></i>Ver clientes</a>
+          </li>
+          <li ng-show="role === 1 || role === 4"><a class="waves-effect waves-blue" href="#/add-client"><i class="mdi-content-add-box"></i>Agregar cliente</a>
+          </li>
+          <li ng-show="role != 4"><a class="waves-effect waves-blue" href="#/view-client-users"><i class="ion-eye"></i>Ver usuarios de cliente</a>
+          </li>
+          <li ng-show="role === 1 || role === 4"><a class="waves-effect waves-blue" href="#/add-client-user"><i class="mdi-content-add-box"></i>Agregar usuarios a cliente</a>
+          </li>
+        </ul>
+      </li>
+      <li ng-show="( role == 1 || role == 4 )">
+        <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-truck"></i> Proveedores<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+        <ul>
+          <li><a class="waves-effect waves-blue" href="#/view-suppliers"><i class="ion-eye"></i>Ver proveedores</a>
+          </li>
+          <li><a class="waves-effect waves-blue" href="#/add-supplier"><i class="mdi-content-add-box"></i>Agregar proveedor</a>
+          </li>
+        </ul>
+      </li>
+      <li ng-show="role == 1 || role == 4">
+        <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-cubes"></i> Tipos de mercancía <span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
+        <ul>
+          <li><a class="waves-effect waves-blue" href="#/view-item-types"><i class="ion-eye"></i>Ver tipos de mercancía</a>
+          </li>
+          <li><a class="waves-effect waves-blue" href="#/add-item-type"><i class="mdi-content-add-box"></i>Agregar tipo de mercancía</a>
+          </li>
+        </ul>
+      </li>
+      <li ng-show="( role == 1 || role == 4 )">
+        <a href="#/view-logs" class="waves-effect waves-blue"><i class="mdi-action-list"></i> Bitácora</a>
+      </li>
+    </ul>
+  </div><!-- nano-content -->
 </div><!-- nano -->

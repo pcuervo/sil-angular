@@ -1,0 +1,63 @@
+<div class="[ card-panel ]">
+  <div class="[ row ]">
+    <h4 class="[ center-align ]">Movimientos por proyecto</h4>
+    <div class="[ col s12 m8 offset-m2 ]">
+      <form ng-submit="searchByProject()" data-parsley-search>
+        <div class="[ col s12 m6 ]" >
+          <select name="project" ng-model="selectedProject" required data-parsley-error-message="¡El proyecto es obligatorio!">
+            <option value="" disabled selected>Selecciona el proyecto</option>
+            <option ng:repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
+          </select>
+        </div>
+        <div class="[ col s12 m6 ]" >
+          <select name="transaction-type" ng-model="transactionType" required>
+            <option value="" disabled selected>Tipo de movimiento</option>
+            <option value="all">Todos</option>
+            <option value="checkin">Entradas</option>
+            <option value="checkout">Salidas</option>
+          </select>
+        </div>
+        <div class="[ clear ]"></div>
+        <div class="[ center-align  ]">
+          <button class="[ waves-effect ][ btn ]"><i class="[ mdi-action-search ][ left ]"></i> Buscar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="[ card-panel ]" ng-show="inventoryTransactions.length">
+  <h4 class="[ center-align ]">Movimientos al inventario</h4>
+  <table datatable="ng" dt-options="dtITProjectOptions" dt-column-defs="dtITProjectColumnDefs" class="row-border hover">
+    <thead>
+      <tr>
+        <th class="[ center-align ]">Tipo</th>
+        <th class="[ center-align ]">Folio</th>
+        <th class="[ center-align ]">Nombre</th>
+        <th class="[ center-align ]">Número de serie</th>
+        <th class="[ center-align ][ hide-on-small-only ]">Cantidad movimiento</th>
+        <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad real</th>
+        <th class="[ center-align ][ hide-on-small-only ]">Fecha (A/M/D) </th>
+        <th class="[ center-align ][ hide-on-small-only ]">Comentarios</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="it in inventoryTransactions">
+        <td class="[ center-align ][ {{ getTransactionTypeClass( it.actable_type ) }} ]">{{ getTransactionConcept( it.actable_type ) }}</td>
+        <td class="[ center-align ]"><a href="#/view-folio/{{it.folio}}">{{ it.specific.folio }}</a></td>
+        <td class="[ center-align ]"><a href="#/view-item/{{it.inventory_item.id }}">{{ it.inventory_item.name }}</a></td>
+        <td class="[ center-align ]">{{ it.inventory_item.serial_number }}</td>
+        <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
+        <td class="[ center-align ][ hide-on-small-only ]">{{ it.inventory_item.quantity }}</td>
+        <td class="[ center-align ][ hide-on-small-only ]">
+          {{ getTransactionDate(it.specific) | date:'yyyy/MM/dd' }}
+        </td>
+        <td class="[ center-align ][ hide-on-small-only ]">{{ it.additional_comments }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $('[data-parsley-search]').parsley();
+</script>

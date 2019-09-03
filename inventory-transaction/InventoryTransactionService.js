@@ -15,6 +15,7 @@ conAngular
   service.latest = latest;
   service.latestByUser = latestByUser;
   service.cancelFolio = cancelFolio;
+  service.byProject = byProject;
   return service;
 
   /******************
@@ -98,7 +99,7 @@ conAngular
             callback( response );
         });
 
-        }// search
+        }
 
     function lastCheckoutFolio( callback ) {
         var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/last_checkout_folio';
@@ -132,7 +133,7 @@ conAngular
         .error(function ( response ) {
             callback( response );
         });
-    }// search
+    }
 
     function latest( type, numTransactions, callback ) { 
       var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/latest';
@@ -180,6 +181,16 @@ conAngular
     .error(function ( response ) {
       callback( response );
     });
-  }// search
+  }
 
+  function byProject( projectId, callback ) {
+    var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/by_project';
+    $http.post( serviceUrl, { project_id: projectId, type: 'all' } )
+    .success(function ( response ) {
+        callback( response.inventory_transactions );
+    })
+    .error(function ( response ) {
+        callback( response );
+    });
+  }
 }]);

@@ -2136,6 +2136,23 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         }
     })
 
+    .state('/transactions-by-project', {
+        url: "/transactions-by-project",
+        templateUrl: "inventory-transaction/by-project.html",
+        controller: "InventoryTransactionController",
+        data: { pageTitle: 'Movimientos por proyecto'},
+        resolve: {
+            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                {
+                    name: 'conAngular',
+                    insertBefore: '#ngInsertBefore',
+                    files: conAssets('parsley, dataTables')
+                }]);
+            }]
+        }
+    })
+
     .state('/search-deliveries', {
         url: "/search-deliveries",
         templateUrl: "delivery/search-deliveries.html",

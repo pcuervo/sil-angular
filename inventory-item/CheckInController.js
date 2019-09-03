@@ -549,7 +549,7 @@ conAngular
                     });
                     break;
                 default:
-                    ProjectService.getAll( function( projects ){
+                    ProjectService.all( function( projects ){
                         $scope.projects = projects;
                         LoaderHelper.hideLoader();
                     });
