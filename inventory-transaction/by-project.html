@@ -17,6 +17,14 @@
             <option value="checkout">Salidas</option>
           </select>
         </div>
+        <div class="[ col s12 m6 ]">
+          <label class="[ fs-12 ]" for="">Fecha inicial (mm/dd/aaaa)</label>
+          <input class="datepicker" type="date" name="transaction-start-date" ng-model="transactionStartDate">
+        </div>
+        <div class="[ col s12 m6 ]">
+          <label class="[ fs-12 ]" for="">Fecha final (mm/dd/aaaa)</label>
+          <input class="datepicker" type="date" name="transaction-end-date" ng-model="transactionEndDate">
+        </div>
         <div class="[ clear ]"></div>
         <div class="[ center-align  ]">
           <button class="[ waves-effect ][ btn ]"><i class="[ mdi-action-search ][ left ]"></i> Buscar</button>
@@ -26,7 +34,7 @@
   </div>
 </div>
 
-<div class="[ card-panel ]" ng-show="inventoryTransactions.length">
+<div class="[ card-panel ]">
   <h4 class="[ center-align ]">Movimientos al inventario</h4>
   <table datatable="ng" dt-options="dtITProjectOptions" dt-column-defs="dtITProjectColumnDefs" class="row-border hover">
     <thead>
@@ -36,7 +44,7 @@
         <th class="[ center-align ]">Nombre</th>
         <th class="[ center-align ]">Número de serie</th>
         <th class="[ center-align ][ hide-on-small-only ]">Cantidad movimiento</th>
-        <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad real</th>
+        <th class="[ center-align ][ hide-on-med-and-down ]">Cantidad en inventario</th>
         <th class="[ center-align ][ hide-on-small-only ]">Fecha (A/M/D) </th>
         <th class="[ center-align ][ hide-on-small-only ]">Comentarios</th>
       </tr>
@@ -50,7 +58,8 @@
         <td class="[ center-align ][ hide-on-small-only ]">{{ it.quantity }}</td>
         <td class="[ center-align ][ hide-on-small-only ]">{{ it.inventory_item.quantity }}</td>
         <td class="[ center-align ][ hide-on-small-only ]">
-          {{ getTransactionDate(it.specific) | date:'yyyy/MM/dd' }}
+          <!-- {{ getTransactionDate(it.specific) | date:'yyyy/MM/dd' }} -->
+          {{ it.created_at | date:'yyyy/MM/dd'  }}
         </td>
         <td class="[ center-align ][ hide-on-small-only ]">{{ it.additional_comments }}</td>
       </tr>
@@ -59,5 +68,5 @@
 </div>
 
 <script>
-  $('[data-parsley-search]').parsley();
+ // $('[data-parsley-search]').parsley();
 </script>

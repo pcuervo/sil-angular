@@ -183,9 +183,16 @@ conAngular
     });
   }
 
-  function byProject( projectId, callback ) {
+  function byProject( projectId, transactionType, startDate, endDate, callback ) {
     var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/by_project';
-    $http.post( serviceUrl, { project_id: projectId, type: 'all' } )
+    $http.post( serviceUrl, 
+      { 
+        project_id: projectId, 
+        type: transactionType,
+        start_date: startDate,
+        end_date: endDate
+      } 
+    )
     .success(function ( response ) {
         callback( response.inventory_transactions );
     })

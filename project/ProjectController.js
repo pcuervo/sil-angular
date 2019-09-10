@@ -108,8 +108,6 @@ conAngular
         $scope.transferInventory = function(fromProjectId){
           var toProjectId = $scope.destinationProject;
 
-          $scope.dtInstance.dataTable.fnFilter('');
-
           if( 'undefined' === typeof toProjectId ){
             Materialize.toast('Por favor selecciona el proyecto destino.' , 4000, 'red');
             return;
@@ -117,6 +115,7 @@ conAngular
 
           if( $scope.partialTransfer ){
             var itemsIds = getItemsIds();
+            console.log(itemsIds);
             
             if( 0 == itemsIds.length ){
                 Materialize.toast('Escoge al menos un artículo a transferir.' , 4000, 'red');

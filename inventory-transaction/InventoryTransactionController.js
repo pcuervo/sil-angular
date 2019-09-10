@@ -45,7 +45,6 @@ conAngular
     $scope.searchTransactions = function(){
         LoaderHelper.showLoader('Buscando...');
         InventoryTransactionService.search( $scope.keyword, function( inventoryTransactions ){
-            console.log(inventoryTransactions);
             if(! inventoryTransactions.length){
                 Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
             }
@@ -57,7 +56,6 @@ conAngular
     $scope.searchByFolio = function(){
         LoaderHelper.showLoader('Buscando...');
         InventoryTransactionService.searchByFolio( $scope.folio, function( inventoryTransactions ){
-            console.log(inventoryTransactions);
             if(! inventoryTransactions.length){
                 Materialize.toast( 'No se encontró ningún movimiento para ese folio.', 4000, 'red');
             }
@@ -100,6 +98,9 @@ conAngular
 
         if( currentPath == '/transactions-by-project' ){
           fetchProjects();
+          
+          try { initTransactionByProjectDT(); }
+          catch(err) { location.reload(); }
           $scope.inventoryTransactions = [];
         }
 
@@ -149,7 +150,6 @@ conAngular
     function getAllInventoryTransactions(){
         InventoryTransactionService.getAll( function( inventoryTransactions ){
             $scope.inventoryTransactions = inventoryTransactions;
-            console.log(inventoryTransactions);
             LoaderHelper.hideLoader();
         }); 
     }// getAllInventoryTransactions
@@ -198,7 +198,6 @@ conAngular
 
     function getByFolio( folio ){
         InventoryTransactionService.searchByFolio( folio, function( inventoryTransactions ){
-            console.log(inventoryTransactions);
             if( ! inventoryTransactions.length ){
                 Materialize.toast( 'No se encontró ningún movimiento para ese folio.', 4000, 'red');
                 $state.go('/dashboard', {}, { reload: true });
@@ -244,8 +243,7 @@ conAngular
 
     $scope.searchByProject = function(){
       LoaderHelper.showLoader('Buscando movimientos...');
-      InventoryTransactionService.byProject( $scope.selectedProject, function( inventoryTransactions ){
-        console.log(inventoryTransactions);
+      InventoryTransactionService.byProject( $scope.selectedProject, $scope.transactionType, $scope.transactionStartDate, $scope.transactionEndDate, function( inventoryTransactions ){
         LoaderHelper.hideLoader();
         if(! inventoryTransactions.length){
           Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
@@ -258,10 +256,29 @@ conAngular
     }// searchByProject
 
     $scope.getTransactionDate = function(transaction){
-      console.log(transaction);
       if(typeof transaction.entry_date !== 'undefined'){
         return transaction.entry_date;
       }
       return transaction.exit_date;
     }
+
+    function initTransactionByProjectDT(){
+      $scope.dtITProjectOptions = DTOptionsBuilder.newOptions()
+        .withPaginationType('full_numbers')
+        .withDisplayLength(30)
+        .withDOM('pitp')
+        .withButtons([
+          {
+            extend: "csvHtml5",
+            fileName:  "movimientos_por_proyecto" + ".csv",
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5, 6, 7]
+            },
+            exportData: {decodeEntities:true}
+          }
+        ])
+        .withOption('responsive', true);
+
+      DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
+    }// initTransactionByProjectDT
 }]);

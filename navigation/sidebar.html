@@ -25,7 +25,7 @@
         <a class="yay-sub-toggle waves-effect waves-blue" ><i class="fa fa-th"></i> Inventario<span class="yay-collapse-icon mdi-navigation-expand-more"></span></a>
         <ul>
           <li ng-show="( role == 1 || role == 4 || role == 7 )">
-            <a class="waves-effect" href="#/transactions-by-project"><i class="mdi-av-repeat"></i>Movimientos por projecto</a>
+            <a class="waves-effect" href="#/transactions-by-project"><i class="mdi-av-repeat"></i>Movimientos por proyecto</a>
           </li>
           <li ng-show="( role == 1 || role == 4 || role == 7 )">
             <a class="waves-effect" href="#/inventory-transactions/all"><i class="mdi-av-repeat"></i>Movimientos por artículo</a>
@@ -53,6 +53,9 @@
           <li><a class="waves-effect waves-blue" href="#/view-racks"><i class="mdi-action-view-module"></i> Racks</a>
           </li>
         </ul>
+      </li>
+      <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 )">
+          <a href="#/delivery-dashboard" class="waves-effect waves-blue"><i class="fa fa-motorcycle"></i> Envíos</a>
       </li>
       <li class="label" ng-show="( role == 1 || role == 4 )">Administración del sistema</li>
       <li ng-show="role == 1 || role == 4">

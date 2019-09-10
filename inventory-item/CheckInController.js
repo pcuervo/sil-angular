@@ -260,7 +260,7 @@ conAngular
         $scope.reEntry = function(){
             $scope.isLoading = true;
             LoaderHelper.showLoader('Reingresando artículo...');
-            InventoryItemService.reentry( $scope.item.id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantity , function( response ){
+            InventoryItemService.reentry( $scope.item.id, $scope.entryDate, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.itemState, $scope.additionalComments, $scope.quantityToReEnter , function( response ){
                 $scope.isLoading = false;
                 LoaderHelper.hideLoader();
 
@@ -489,14 +489,9 @@ conAngular
             }
 
             if( currentPath.indexOf( '/re-entry/' ) > -1 ){
-                $scope.isLoading = false;
-                if( 0 != $stateParams.barcode ){
-                    getByBarcode( $stateParams.barcode );
-                    $scope.hasItem = true;
-                    $scope.exitDate = new Date();
-                }
+                LoaderHelper.showLoader('Cargando artículo...');
+                getItem( $stateParams.itemId );
                 fetchSuppliers();
-                $scope.hasPartsToReturn = false;
                 $scope.entryDate = new Date();
             }
 
@@ -563,6 +558,7 @@ conAngular
         }// fetchWarehouseRacks
 
         function fillProjectUsersSelects(){
+            if(typeof $scope.selectedProject == 'undefined') return;
 
             ProjectService.getProjectUsers( $scope.selectedProject, function ( response ){
 
@@ -853,6 +849,7 @@ conAngular
                     return;
                 }
                 $scope.item = item;
+                console.log(item);
                 initItem( item );
                 fillProjectUsersSelects( item.project_id );
                 
@@ -862,6 +859,7 @@ conAngular
                 if( $('[name="storageType"]').length ) $('[name="storageType"]').val( $scope.item.storage_type );
                 if( $('[name="itemType"]').length ) $('[name="itemType"]').val( $scope.item.item_type );
                 getItemState( $scope.item.state );
+                LoaderHelper.hideLoader();
 
             });
         }// getItem

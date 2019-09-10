@@ -389,7 +389,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         }
     })
     .state('/re-entry', {
-        url: "/re-entry/:barcode",
+        url: "/re-entry/:itemId",
         templateUrl: "inventory-item/re-entry.html",
         controller: "CheckInController",
         data: {
@@ -2140,14 +2140,15 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         url: "/transactions-by-project",
         templateUrl: "inventory-transaction/by-project.html",
         controller: "InventoryTransactionController",
-        data: { pageTitle: 'Movimientos por proyecto'},
+        data: { pageTitle: 'Movimientos por proyecto' },
         resolve: {
             deps: ['$ocLazyLoad', function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                 {
+                    serie: true,
                     name: 'conAngular',
                     insertBefore: '#ngInsertBefore',
-                    files: conAssets('parsley, dataTables')
+                    files: conAssets('dataTables, parsley')
                 }]);
             }]
         }
