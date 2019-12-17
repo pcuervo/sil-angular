@@ -1,21 +1,25 @@
-<div class="[ card-panel ]">
-    <h4 class="[ center-align ]">Usuarios en proyecto</h4>
-    <table datatable="ng" dt-options="dtProjectUsersOptions" dt-column-defs="dtProjectUsersColumn" class="row-border hover responsive">
+<div class="[ card-panel ][ mt-20 ]">
+  <div class="[ row ]">
+    <div class="[ col s6 ]">
+      <h4 class="[ center-align ]">Usuarios en proyecto</h4>
+      <table datatable="ng" dt-options="dtProjectUsersOptions" dt-column-defs="dtProjectUsersColumn" class="row-border hover responsive">
         <thead>
-            <tr>
-                <th class="[ center-align ]">Nombre</th>
-                <th class="[ center-align ]">Rol</th>
-                <th class="[ center-align ]">Eliminar</th>
-            </tr>
+          <tr>
+            <th class="[ center-align ]">Nombre</th>
+            <th class="[ center-align ]">Rol</th>
+            <th class="[ center-align ]">Eliminar</th>
+          </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="u in project.users">
-                <td class="[ center-align ]">{{ u.first_name + ' ' + u.last_name }}</td>
-                <td class="[ center-align ]">{{ getUserRole( u.role ) }}</td>
-                <td class="[ center-align ]">
-                    <button class="[ btn waves-effect red ]" ng-click="removeUserFromProject( project.id, u.id  )"><i class="[ fa fa-times ]"></i></button>
-                </td>
-            </tr>
+          <tr ng-repeat="u in project.users">
+            <td class="[ center-align ]">{{ u.first_name + ' ' + u.last_name }}</td>
+            <td class="[ center-align ]">{{ getUserRole( u.role ) }}</td>
+            <td class="[ center-align ]">
+              <button class="[ btn waves-effect red ]" ng-click="removeUserFromProject( project.id, u.id  )"><i class="[ fa fa-times ]"></i></button>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
+    </div>
+  </div>
 </div>

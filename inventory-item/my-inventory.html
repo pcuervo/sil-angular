@@ -22,21 +22,14 @@
             </div>
             <div class="[ clear ]" ></div>
             <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1 && role !== 4">
-                <select name="pm" ng-model="selectedPM">
-                    <option value="" disabled selected>Project Manager</option>
-                    <option value="">Todos</option>
-                    <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.first_name + ' ' + user.last_name}}</option>
-                </select>
-            </div>
-            <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1 && role !== 4">
-                <select name="pm" ng-model="selectedAE">
+                <select name="ae" ng-model="selectedAE">
                     <option value="" disabled selected>Ejecutivo de cuenta</option>
                     <option value="">Todos</option>
                     <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.first_name + ' ' + user.last_name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m4 ][ mt-10 ]" ng-hide="role !== 1">
-                <select name="pm" ng-model="selectedClient" ng-hide="role !== 1 && role !== 4">
+                <select name="cl" ng-model="selectedClient" ng-hide="role !== 1 && role !== 4">
                     <option value="" disabled selected>Clientes</option>
                     <option value="">Todos</option>
                     <option ng:repeat="user in clientContacts" value="{{user.id}}">{{user.first_name + ' ' + user.last_name}}</option>
@@ -81,7 +74,6 @@
                 <th class="[ center-align ]">Status</th>
                 <th class="[ center-align ]">Almacenaje</th>
                 <th class="[ center-align ]">Proyecto</th>
-                <th class="[ center-align ]">Project Manager</th>
                 <th class="[ center-align ]">Ejecutivo de Cuenta</th>
                 <th class="[ center-align ]">Fecha de ingeso</th>
                 <th class="[ center-align ][ hide-on-small-only ]">Ubicaciones</th>
@@ -100,7 +92,6 @@
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ getItemStatus( i.inventory_item.status ) }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.storage_type }}</td>
                 <td>{{ i.inventory_item.project  }}</td>
-                <td>{{ i.inventory_item.pm  }}</td>
                 <td>{{ i.inventory_item.ae  }}</td>
                 <td class="[ center-align ]">{{ i.inventory_item.created_at | date:'yyyy/MM/dd' }}</td>
                 <td class="[ center-align ][ hide-on-small-only ]">

@@ -246,32 +246,14 @@ conAngular
                     getLatestCheckouts();
                     initLatestCheckoutDataTable();
                     break;
-                    // if( 6 == $scope.role ){
-                    //     getCheckOutTransactionsByClient( $rootScope.globals.currentUser.id );
-                    // } else {
-                    //     getCheckOutTransactions();
-                    // }
-                    // initCheckOutsDataTable();
-                    // break;
                 default:
                     getCheckOutTransactions();
             }
 
-            getProjectManagers();
             getAccountExecutives();
             getClients();
             initItemsDataTable();
-
-
         }// initWithdrawalOptions
-
-        function getProjectManagers(){
-
-            UserService.getProjectManagers( function( projectManagers ){
-                $scope.projectManagers = projectManagers;
-            });
-
-        }// getProjectManagers
 
         function getAccountExecutives(){
 
@@ -613,21 +595,6 @@ conAngular
                 $scope.withdrawItems = withdrawRequest.withdraw_request_items;
                 $scope.exitDate = new Date( withdrawRequest.exit_date );
                 $scope.deliveryCompany = withdrawRequest.pickup_company_id;
-                // $scope.itemRequestId = item.id;
-                // $scope.projectName = item.project;
-                // $scope.selectedProject = item.project_id;
-                // $scope.pmName = item.pm;
-                // $scope.aeName = item.ae;
-                // $scope.itemName = item.name;
-                // $scope.itemQuantity = item.quantity;
-                // $scope.itemType = item.item_type;
-                // $scope.description = item.description;
-                //
-                // if( null != item.validity_expiration_date ){
-                //     $scope.validityExpirationDate = new Date( item.validity_expiration_date );
-                // }
-                // $scope.itemState = item.state;
-                // getWithdrawState( item.state );
             });
         }// getWithdrawRequest
 

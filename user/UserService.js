@@ -6,7 +6,6 @@ conAngular
         service.update = update;
         service.getAll = getAll;
         service.get = get;
-        service.getProjectManagers = getProjectManagers
         service.getClientContacts = getClientContacts
         service.getAccountExecutives = getAccountExecutives
         service.getWarehouseAdmins = getWarehouseAdmins
@@ -97,17 +96,6 @@ conAngular
                });
         }// get
 
-        function getProjectManagers( callback ){
-            var serviceUrl = $rootScope.apiUrl + 'users/get_project_managers';
-            $http.get(serviceUrl)
-               .success(function ( response ) {
-                    callback( response.users );
-               })
-               .error(function ( response ) {
-                    callback( response );
-               });
-        }// getProjectManagers
-
         function getClientContacts( callback ){
             var serviceUrl = $rootScope.apiUrl + 'users/get_client_contacts';
             $http.get(serviceUrl)
@@ -155,7 +143,6 @@ conAngular
         function getRole( roleId ){
             switch( roleId ){
                 case 1: return 'Admin';
-                case 2: return 'Project Manager';
                 case 3: return 'Ejecutivo de cuenta';
                 case 4: return 'Jefe almacén';
                 case 5: return 'Repartidor';
@@ -184,13 +171,12 @@ conAngular
 
         }// changePassword
 
-        function deleteUser( id, pm, ae, whAdmin, callback ){
+        function deleteUser( id, ae, whAdmin, callback ){
 
             var serviceUrl = $rootScope.apiUrl + 'users/delete';
             $http.post(serviceUrl, 
             {
                 id: id,
-                pm: pm,
                 ae: ae,
                 wh_admin: whAdmin
             })

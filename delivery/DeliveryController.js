@@ -284,7 +284,6 @@ conAngular
                     break;
                 case '/single-item-delivery':
                     fetchItemsInStock();
-                    fetchProjectManagers();
                     fetchAccountExecutives();
                     fetchClientContacts();
                     fetchProjects();
@@ -397,12 +396,6 @@ conAngular
                 NotificationHelper.updateNotifications( numUnreadNotifications );
             });
         }
-
-        function fetchProjectManagers(){
-            UserService.getProjectManagers( function( projectManagers ){
-                $scope.projectManagers = projectManagers;
-            });
-        }// fetchProjectManagers
 
         function fetchAccountExecutives(){
             UserService.getAccountExecutives( function( accountExecutives ){

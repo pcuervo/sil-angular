@@ -68,9 +68,8 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
             case 1:
                 initDashboardAdmin();
                 break;
-            case 2:
             case 3:
-                initDashboardProjectManager();
+                initDashboardAccountExecutive();
                 break;
             case 4:
             case 7:
@@ -156,7 +155,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
 
     }// initDashboardWarehouseAdmin
 
-    function initDashboardProjectManager(){
+    function initDashboardAccountExecutive(){
         $scope.dashboardTemplate = 'dashboard/pm-dashboard.html';
 
         // Initialize charts with empty data
@@ -169,7 +168,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
         initPendingEntryRequestsDataTable();
         initPendingWithdrawalRequestsDataTable();
         
-        InventoryItemService.getStatsPM( function( stats ){
+        InventoryItemService.getStatsAE( function( stats ){
             $scope.totalInventory = stats.total_number_items;
             $scope.currentRent = stats.current_rent;
             $scope.numberProjects = stats.total_number_projects;
@@ -177,7 +176,7 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
         }); 
 
 
-    }// initDashboardProjectManager
+    }// initDashboardAccountExecutive
 
     function fetchStats(){
         InventoryItemService.getStats( function( stats ){

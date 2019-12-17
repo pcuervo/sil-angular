@@ -14,7 +14,7 @@ conAngular
 
         $scope.register = function(){
 
-            ProjectService.register( $scope.litobelId, $scope.projectName, $scope.clientId, $scope.clientContactId, $scope.projectManagerId, $scope.accountExecutiveId, function ( response ){
+            ProjectService.register( $scope.litobelId, $scope.projectName, $scope.clientId, $scope.clientContactId, $scope.accountExecutiveId, function ( response ){
 
                     if(response.errors) {
                         ErrorHelper.display( response.errors );
@@ -47,7 +47,7 @@ conAngular
         }// fillClientContact
 
         $scope.addUsersToProject = function(){
-            ProjectService.addUsers( $scope.project.id, $scope.projectManagerId, $scope.accountExecutiveId, $scope.clientContactId, function ( response ){
+            ProjectService.addUsers( $scope.project.id, $scope.accountExecutiveId, $scope.clientContactId, function ( response ){
 
                 if(response.errors) {
                     ErrorHelper.display( response.errors );
@@ -62,9 +62,6 @@ conAngular
         $scope.getUserRole = function( roleId ){
             var role;
             switch( roleId ){
-                case 2:
-                    role = 'Project Manager';
-                    break;
                 case 3:
                     role = 'Ejecutivo de cuenta';
                     break;
@@ -160,13 +157,13 @@ conAngular
             getAllClients();
             getProject( $stateParams.projectId );
             
-            getProjectManagersAndAccountExecutives();
+            getAccountExecutives();
             initProjectUsersDataTable()
             return;
           }
           if( currentPath.indexOf( '/add-user-to-project' ) > -1 ){
             getProject( $stateParams.projectId );
-            getProjectManagersAndAccountExecutives();
+            getAccountExecutives();
             initProjectUsersDataTable()
             return;
           }
@@ -208,7 +205,7 @@ conAngular
               break;
             case '/add-project':
               getAllClients();
-              getProjectManagersAndAccountExecutives();
+              getAccountExecutives();
               break;
           }
         }// initProjects
@@ -233,17 +230,14 @@ conAngular
 					}); 
         }// getUserProjects
 
-        function getProjectManagersAndAccountExecutives(){
-            UserService.getProjectManagers( function( pms ){
-                $scope.projectManagers = pms;
-            }); 
+        function getAccountExecutives(){
             UserService.getAccountExecutives( function( aes ){
                 $scope.accountExecutives = aes;
             });
             UserService.getClientContacts( function( cc ){
                 $scope.clientContacts = cc;
             }); 
-        }// getProjectManagersAndAccountExecutives
+        }// getAccountExecutives
 
         function initProjectDataTable(){
 

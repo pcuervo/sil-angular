@@ -30,12 +30,6 @@
                     <option ng:repeat="contact in clientContacts" value="{{contact.id}}">{{ contact.first_name + ' ' + contact.last_name }}</option>
                 </select>
             </div>
-            <div class="[ col s12 m6 l4 offset-l2  ][ mt-15 ]"> 
-                <select ng-model="projectManagerId" required >
-                    <option value="" disabled selected>Project Manager</option>
-                    <option ng:repeat="pm in projectManagers" value="{{pm.id}}">{{pm.first_name + ' ' + pm.last_name}}</option>
-                </select>
-            </div>
             <div class="[ col s12 m6 l4  ][ mt-15 ]"> 
                 <select ng-model="accountExecutiveId" required >
                     <option value="" disabled selected>Ejecutivo de cuenta</option>

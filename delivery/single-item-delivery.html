@@ -22,21 +22,14 @@
             </div>
             <div class="[ clear ]" ></div>
             <div class="[ col s12 m4 ][ mt-10 ]">
-                <select name="pm" ng-model="selectedPM">
-                    <option value="" disabled selected>Project Manager</option>
-                    <option value="">Todos</option>
-                    <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.first_name + '' + user.last_name}}</option>
-                </select>
-            </div>
-            <div class="[ col s12 m4 ][ mt-10 ]">
-                <select name="pm" ng-model="selectedAE">
+                <select name="ae" ng-model="selectedAE">
                     <option value="" disabled selected>Ejecutivo de cuenta</option>
                     <option value="">Todos</option>
                     <option ng:repeat="user in accountExecutives" value="{{user.id}}">{{user.first_name + '' + user.last_name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m4 ][ mt-10 ]">
-                <select name="pm" ng-model="selectedClient">
+                <select name="cl" ng-model="selectedClient">
                     <option value="" disabled selected>Clientes</option>
                     <option value="">Todos</option>
                     <option ng:repeat="user in clientContacts" value="{{user.id}}">{{user.first_name + '' + user.last_name}}</option>

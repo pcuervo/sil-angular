@@ -5,10 +5,6 @@
     <h4 class="[ center-align ]">Solicitud de entrada</h4>
     <div class="[ row ]">
         <form name="entry_form" class="[ mt-40 ][ left-align ]" ng-submit="requestEntry()" data-parsley-entry>
-
-            <div class="[ col s12 m5 offset-m1 ]" ng-if="role == 2"> 
-                <p for="pm">Project Manager: {{projectManagerName}}</p>
-            </div>
             <div class="[ col s12 m5 offset-m1 ]" ng-if="role == 3"> 
                 <p for="ae">Ejecutivo de cuenta: {{accountExecutiveName}}</p>
             </div>
@@ -17,12 +13,6 @@
                 <select name="project" ng-model="selectedProject" required data-parsley-error-message="¡El proyecto es obligatorio!" ng-change="fillProjectData()">
                     <option value="" disabled selected>Selecciona el proyecto</option>
                     <option ng:repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
-                </select>
-            </div>
-            <div class="[ col s12 m5 ]" ng-if="role != 2"> 
-                <select name="pm" ng-model="selectedPM" required data-parsley-error-message="Escoge un Project Manager" ng-disabled='!validSelectedProject' ng-change="selectPM( selectedPM )">
-                    <option value="" disabled selected>Selecciona el PM</option>
-                    <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.name}}</option>
                 </select>
             </div>
             <div class="[ col s12 m5 offset-m1 ]" ng-if="role != 3"> 

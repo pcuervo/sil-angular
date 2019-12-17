@@ -11,13 +11,12 @@ conAngular
         * PUBLIC FUNCTIONS
         *******************/
 
-        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, pm, ae, serialNumber, brand, model, extraParts, callback ) {
+        function create( name, quantity, description, projectId, itemType, imgBase64, filename, entryDate, storageType, deliveryCompany, deliveryCompanyContact, additionalComments, barcode, validityExpirationDate, itemValue, itemRequestId, status, isHighValue, ae, serialNumber, brand, model, extraParts, callback ) {
             var userId = $rootScope.globals.currentUser.id;
             var serviceUrl = $rootScope.apiUrl + 'users/' + userId + '/inventory_items/';
 
             $http.post(serviceUrl, 
                 { 
-                    pm_id: pm,
                     ae_id: ae,
                     inventory_item: {
                         name:                       name, 
@@ -67,14 +66,13 @@ conAngular
 
         }// getBulkItems
 
-        function edit( id, name, description, value, storageType, validityExpirationDate, state, isHighValue, isInventoryItem,  pm, ae, callback ) {
+        function edit( id, name, description, value, storageType, validityExpirationDate, state, isHighValue, isInventoryItem, ae, callback ) {
 
             var userId = $rootScope.globals.currentUser.id;
             var serviceUrl = $rootScope.apiUrl + 'bulk_items/update';
             $http.post(serviceUrl, 
                 { 
                     id:    id,
-                    pm_id: pm,
                     ae_id: ae,
                     is_inventory_item:  isInventoryItem,
                     bulk_item: {

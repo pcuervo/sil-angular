@@ -53,15 +53,9 @@
     <h4 class="[ center-align ]">Eliminar usuario</h4>
     <div class="[ row ]">
         <div class="[ col s12 m8 offset-m2 ]"> 
-            <p>Esta acción no se puede revertir. En caso de querer eliminar un project manager, ejecutivo de cuenta o jefe de almacén, deberás seleccionar a quien se le asignará su inventario.</p>
+            <p>Esta acción no se puede revertir. En caso de querer eliminar un ejecutivo de cuenta o jefe de almacén, deberás seleccionar a quien se le asignará su inventario.</p>
         </div>
         <div class="clear"></div>
-        <div class="[ col s12 m4 offset-m4 ]" ng-show="isPM">
-            <select name="pm" ng-model="selectedPM" data-parsley-error-message="Escoge un Project Manager" ng-change="canDelete=true">
-                <option value="" disabled selected>Selecciona el PM</option>
-                <option ng:repeat="user in projectManagers" value="{{user.id}}">{{user.first_name + ' ' +user.last_name}}</option>
-            </select>
-        </div>
         <div class="[ col s12 m4 offset-m4 ]" ng-show="isAE">
             <select name="ae" ng-model="selectedAE" required data-parsley-error-message="Escoge un Ejecutivo de cuenta" ng-change="canDelete=true">
                 <option value="" disabled selected>Selecciona el ejecutivo de cuenta</option>

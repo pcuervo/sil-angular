@@ -5,7 +5,6 @@ conAngular
         service.create = create;
         service.getAll = getAll;
         service.getLatestEntries = getLatestEntries;
-        service.getLatestEntriesByPM = getLatestEntriesByPM;
         service.getLatestEntriesByAE = getLatestEntriesByAE;
         service.getLatestEntriesByClient = getLatestEntriesByClient;
         service.getPendingEntries = getPendingEntries;
@@ -39,7 +38,7 @@ conAngular
         service.getPendingWithdrawalRequestsByUser = getPendingWithdrawalRequestsByUser;
         service.getWithdrawRequest = getWithdrawRequest;
         service.getStats = getStats;
-        service.getStatsPM = getStatsPM;
+        service.getStatsAE = getStatsAE;
         service.cancelEntryRequest = cancelEntryRequest;
         service.deleteItem = deleteItem;
         service.createItemType = createItemType;
@@ -83,24 +82,6 @@ conAngular
                     callback( response );
                });
         }// getLatestEntries
-
-        function getLatestEntriesByPM( userId, callback ) {
-            var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
-            $http ({
-                url: serviceUrl, 
-                method: "GET",
-                params: { 
-                    recent:     true, 
-                    pm_id:      userId  
-                } 
-            })
-           .success(function ( response ) {
-                callback( response.inventory_items );
-           })
-           .error(function ( response ) {
-                callback( response );
-           });
-        }// getLatestEntriesByPM
 
         function getLatestEntriesByAE( userId, callback ) {
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
@@ -434,7 +415,7 @@ conAngular
 
         }// isReentryWithPendingLocation
 
-        function search( projectId, clientContactId, pmId, aeId, status, itemType, storageType, keyword, serialNumber, callback ) {
+        function search( projectId, clientContactId, aeId, status, itemType, storageType, keyword, serialNumber, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
             $http ({
@@ -444,7 +425,6 @@ conAngular
                     { 
                         project_id:         projectId,
                         client_contact_id:  clientContactId,
-                        pm_id:              pmId,
                         ae_id:              aeId,
                         status:             status,
                         item_type:          itemType,
@@ -574,7 +554,7 @@ conAngular
                });
         }// getOutOfStock
     
-        function requestEntry( name, quantity, description, itemType, projectId, pmId, aeId, itemState, entryDate, validityExpirationDate, callback ){
+        function requestEntry( name, quantity, description, itemType, projectId, aeId, itemState, entryDate, validityExpirationDate, callback ){
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/request_item_entry';
             $http.post( serviceUrl, 
                 { 
@@ -584,7 +564,6 @@ conAngular
                         description:                description,
                         item_type:                  itemType,
                         project_id:                 projectId,
-                        pm_id:                      pmId,
                         ae_id:                      aeId,
                         project_id:                 projectId,
                         state:                      itemState,
@@ -708,8 +687,8 @@ conAngular
                });
         }// getStats
 
-        function getStatsPM( callback ) {
-            var serviceUrl = $rootScope.apiUrl  + 'inventory_items/get_stats_pm_ae/';
+        function getStatsAE( callback ) {
+            var serviceUrl = $rootScope.apiUrl  + 'inventory_items/get_stats_ae/';
             $http.get ( serviceUrl )
                .success(function ( response ) {
                     callback( response.stats );

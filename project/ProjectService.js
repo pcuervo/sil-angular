@@ -93,14 +93,13 @@ conAngular
 
           }// getProjectClient
 
-    function register( litobelId, projectName, clientId, clientContactId, pmId, aeId, callback ){
+    function register( litobelId, projectName, clientId, clientContactId, aeId, callback ){
         var serviceUrl = $rootScope.apiUrl  + 'projects/';
         $http.post(serviceUrl, {
                 litobel_id: litobelId,
                 name:       projectName,
                 client_id:  clientId,
                 client_contact_id: clientContactId,
-                pm_id:      pmId,
                 ae_id:      aeId,
             })
             .success(function ( response ) {
@@ -111,11 +110,10 @@ conAngular
             });
     }// register
 
-    function addUsers( projectId, projectManagerId, accountExecutiveId, clientContactId, callback ){
+    function addUsers( projectId, accountExecutiveId, clientContactId, callback ){
         var serviceUrl = $rootScope.apiUrl  + 'projects/add_users';
         $http.post(serviceUrl, {
             project_id:         projectId,
-            new_pm_id:          projectManagerId,
             new_ae_id:          accountExecutiveId,
             client_contact_id:  clientContactId
         })
@@ -134,7 +132,6 @@ conAngular
             project_id:  projectId,
         })
         .success(function ( response ) {
-            console.log( response )
             callback ( response );
         })
         .error(function ( response ) {
@@ -208,7 +205,6 @@ conAngular
         var serviceUrl = $rootScope.apiUrl + 'projects/inventory';
         $http.post(serviceUrl, { id: projectId } )
         .success(function ( response ) {
-            console.log(response);
             callback ( response.inventory_items );
         })
         .error(function ( response ) {
@@ -222,7 +218,6 @@ conAngular
             { id: projectId }
         )
         .success(function( response ) {
-            console.log(response);
             callback( response );
         })
         .error(function( response ) {

@@ -1,5 +1,5 @@
 conAngular
-    .controller('InventoryController', ['$rootScope', '$scope', '$state', '$stateParams', '$location', '$filter', 'ClientService', 'InventoryItemService', 'UnitItemService', 'BulkItemService', 'BundleItemService', 'ProjectService', 'UserService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($rootScope, $scope, $state, $stateParams, $location, $filter, ClientService, InventoryItemService, UnitItemService, BulkItemService, BundleItemService, ProjectService, UserService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
+    .controller('InventoryController', ['$rootScope', '$scope', '$state', '$stateParams', '$location', '$filter', 'ClientService', 'InventoryItemService', 'BulkItemService', 'ProjectService', 'UserService', 'NotificationService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTDefaultOptions', function($rootScope, $scope, $state, $stateParams, $location, $filter, ClientService, InventoryItemService, BulkItemService, ProjectService, UserService, NotificationService, DTOptionsBuilder, DTColumnDefBuilder, DTDefaultOptions){
         
         (function initController() {
             var currentPath = $location.path();
@@ -31,11 +31,9 @@ conAngular
           LoaderHelper.showLoader('Buscando...');
           if( 6 === $scope.role ) $scope.selectedClient = $rootScope.globals.currentUser.id;
 
-          if( 2 === $scope.role ) $scope.selectedPM = $rootScope.globals.currentUser.id;
-
           if( 3 === $scope.role ) $scope.selectedAE = $rootScope.globals.currentUser.id;
 
-          InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedPM, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+          InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
             if(! inventoryItems.length){
                 Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
             }
@@ -49,7 +47,6 @@ conAngular
             if( 'undefined' !== typeof $scope.keyword ) return false;
             if( 'undefined' !== typeof $scope.serialNumber ) return false;
             if( 'undefined' !== typeof $scope.selectedProject ) return false;
-            if( 'undefined' !== typeof $scope.selectedPM ) return false;
             if( 'undefined' !== typeof $scope.selectedAE ) return false;
             if( 'undefined' !== typeof $scope.selectedClient ) return false;
             if( 'undefined' !== typeof $scope.itemType ) return false;
@@ -99,7 +96,6 @@ conAngular
             barcodeWindow.document.write('</th></tr><tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.item.project + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
-            barcodeWindow.document.write('<tr><td>PM</td><td> ' + $scope.pm + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Ejecutivo de cuenta</td><td>' + $scope.ae + '</td></tr>');
  
             if( 'undefined' != typeof $scope.item.serial_number ){
@@ -330,7 +326,6 @@ conAngular
           switch( currentPath ){
             case '/my-inventory':
               if( 1 === $scope.role || 4 === $scope.role   ) {
-                fetchProjectManagers();
                 fetchAccountExecutives();
                 fetchClientContacts();
               }
@@ -340,7 +335,7 @@ conAngular
                 fetchInventory();
               }
 
-              if( 2 === $scope.role || 3 === $scope.role || 6 === $scope.role ){
+              if( 3 === $scope.role || 6 === $scope.role ){
                 getUserProjects($rootScope.globals.currentUser.id);
               } else {
                 LoaderHelper.showLoader('Cargando proyectos...');
@@ -424,14 +419,6 @@ conAngular
                 });
                 return;
             }
-            if( 2 === $scope.role ){ 
-                $scope.selectedPM = $rootScope.globals.currentUser.id;
-                InventoryItemService.search( '', '', $scope.selectedPM, '', '', '', '', '', '', function( inventoryItems ){
-                    $scope.inventoryItems = inventoryItems;
-                    LoaderHelper.hideLoader();
-                });
-                return;
-            }
             if( 3 === $scope.role ){ 
                 $scope.selectedAE = $rootScope.globals.currentUser.id;
                 InventoryItemService.search( '', '', '', $scope.selectedAE, '', '', '', '', '',function( inventoryItems ){
@@ -459,7 +446,7 @@ conAngular
                         extend: "csvHtml5",
                         fileName:  "CustomFileName" + ".csv",
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
                         },
                         exportData: {decodeEntities:true}
                     }
@@ -467,7 +454,7 @@ conAngular
                 .withOption('responsive', true);
             $scope.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(1).notSortable(),
-                DTColumnDefBuilder.newColumnDef(14).notSortable()
+                DTColumnDefBuilder.newColumnDef(13).notSortable()
             ];
             DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
         }// initInventoryDataTable
@@ -499,9 +486,7 @@ conAngular
         function initItem( item ){
             console.log(item);
             $scope.project = item.project;
-            $scope.pm = item.pm;
             $scope.ae = item.ae;
-            $scope.pm_id = item.pm_id;
             $scope.ae_id = item.ae_id;
             $scope.clientName = item.client.name;
             $scope.clientContact = item.client_contact;
@@ -549,12 +534,6 @@ conAngular
                 $scope.statuses = statuses;
             });
         }// fetchStatuses
-
-        function fetchProjectManagers(){
-            UserService.getProjectManagers( function( projectManagers ){
-                $scope.projectManagers = projectManagers;
-            });
-        }// fetchProjectManagers
 
         function fetchAccountExecutives(){
             UserService.getAccountExecutives( function( accountExecutives ){
@@ -621,23 +600,14 @@ conAngular
                     return;
                 }
 
-                $scope.projectManagers = [];
                 $scope.accountExecutives = [];
                 angular.forEach( response.users, function( user ) {
                     switch( user.role ){
-                        case 2:
-                            if( 2 == $scope.role ) break;
-                            $scope.projectManagers.push( user );
-                            break;
                         case 3:
                             if( 3 == $scope.role ) break;
                             $scope.accountExecutives.push( user );
                     }
                 })
-
-                if( $scope.projectManagers.length == 0 && 2 != $scope.role  ){
-                    Materialize.toast('El proyecto que seleccionaste no tiene Project Managers relacionados.', 6000, 'red');
-                }
                 if( $scope.accountExecutives.length == 0 && 3!= $scope.role  ){
                     Materialize.toast('El proyecto que seleccionaste no tiene Ejecutivos de Cuenta relacionados.', 6000, 'red');
                 }
