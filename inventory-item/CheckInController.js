@@ -376,7 +376,7 @@ conAngular
           barcodeWindow.document.write( barcodeEl );
           barcodeWindow.document.write('</th></tr><tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
           barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.selectedProjectText + '</td></tr>');
-          barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
+          barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + '</td></tr>');
           barcodeWindow.document.write('<tr><td>Ejecutivo de cuenta</td><td>' + $scope.selectedAEText + '</td></tr>');
 
           console.log($scope.serialNumber);
@@ -574,7 +574,6 @@ conAngular
           ProjectService.getProjectClient( projectId, function ( response ){
               console.log( response );
               $scope.clientName = response.client.name;
-              $scope.clientContact = response.client.contact_name;
           } );
 
       }// fillProjectClient
@@ -593,9 +592,6 @@ conAngular
 
       function registerBulkItem( itemRequestId ){
           var status = 1;
-          if( $('#checkbox-validation:checked').length ){
-              status = 7;
-          }
           var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
           var isHighValue = $('#checkbox-high-value:checked').length;
           BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.extraParts, function ( response ){
@@ -790,7 +786,6 @@ conAngular
           $scope.ae = item.ae;
           $scope.ae_id = item.ae_id;
           $scope.clientName = item.client;
-          $scope.clientContact = item.client_contact;
           $scope.description = item.description;
           $scope.itemName = item.name;
           $scope.itemState = item.state;
@@ -849,7 +844,6 @@ conAngular
           $scope.project = item.project;
           $scope.ae = item.ae;
           $scope.clientName = item.client;
-          $scope.clientContact = item.client_contact;
           $scope.description = item.description;
           $scope.itemName = item.name;
           $scope.itemState = item.state;

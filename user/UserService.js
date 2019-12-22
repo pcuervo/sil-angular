@@ -6,7 +6,6 @@ conAngular
         service.update = update;
         service.getAll = getAll;
         service.get = get;
-        service.getClientContacts = getClientContacts
         service.getAccountExecutives = getAccountExecutives
         service.getWarehouseAdmins = getWarehouseAdmins
         service.getDeliveryUsers = getDeliveryUsers
@@ -95,17 +94,6 @@ conAngular
                     callback( response );
                });
         }// get
-
-        function getClientContacts( callback ){
-            var serviceUrl = $rootScope.apiUrl + 'users/get_client_contacts';
-            $http.get(serviceUrl)
-               .success(function ( response ) {
-                    callback( response.users );
-               })
-               .error(function ( response ) {
-                    callback( response );
-               });
-        }// getClientContacts
 
         function getAccountExecutives( callback ){
             var serviceUrl = $rootScope.apiUrl + 'users/get_account_executives';

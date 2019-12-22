@@ -23,12 +23,6 @@
           <option ng:repeat="ae in accountExecutives" value="{{ae.id}}">{{ae.first_name + ' ' + ae.last_name}}</option>
         </select>
       </div>
-      <div class="[ col s12 m6 l4 ][ mt-15 ]"> 
-        <select ng-model="clientContactId">
-          <option value="" disabled selected>Clientes</option>
-          <option ng:repeat="client in clientContacts" value="{{client.parent_id}}">{{client.first_name + ' ' + client.last_name}}</option>
-        </select>
-      </div>
       <div class="[ clear ]"></div>
       <div class="[ col s12 ]"> 
         <div class="[ center-align ]">

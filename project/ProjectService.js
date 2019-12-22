@@ -93,13 +93,12 @@ conAngular
 
           }// getProjectClient
 
-    function register( litobelId, projectName, clientId, clientContactId, aeId, callback ){
+    function register( litobelId, projectName, clientId, aeId, callback ){
         var serviceUrl = $rootScope.apiUrl  + 'projects/';
         $http.post(serviceUrl, {
                 litobel_id: litobelId,
                 name:       projectName,
                 client_id:  clientId,
-                client_contact_id: clientContactId,
                 ae_id:      aeId,
             })
             .success(function ( response ) {
@@ -110,12 +109,11 @@ conAngular
             });
     }// register
 
-    function addUsers( projectId, accountExecutiveId, clientContactId, callback ){
+    function addUsers( projectId, accountExecutiveId, callback ){
         var serviceUrl = $rootScope.apiUrl  + 'projects/add_users';
         $http.post(serviceUrl, {
             project_id:         projectId,
-            new_ae_id:          accountExecutiveId,
-            client_contact_id:  clientContactId
+            new_ae_id:          accountExecutiveId
         })
         .success(function ( response ) {
             callback ( response );

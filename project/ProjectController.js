@@ -14,7 +14,7 @@ conAngular
 
         $scope.register = function(){
 
-            ProjectService.register( $scope.litobelId, $scope.projectName, $scope.clientId, $scope.clientContactId, $scope.accountExecutiveId, function ( response ){
+            ProjectService.register( $scope.litobelId, $scope.projectName, $scope.clientId, $scope.accountExecutiveId, function ( response ){
 
                     if(response.errors) {
                         ErrorHelper.display( response.errors );
@@ -38,16 +38,8 @@ conAngular
 
         }// getClientName
 
-        $scope.fillClientContact = function(){
-
-            ClientService.getContacts( $scope.clientId, function ( clientContacts ){
-                $scope.clientContacts = clientContacts;
-            });
-
-        }// fillClientContact
-
         $scope.addUsersToProject = function(){
-            ProjectService.addUsers( $scope.project.id, $scope.accountExecutiveId, $scope.clientContactId, function ( response ){
+            ProjectService.addUsers( $scope.project.id, $scope.accountExecutiveId, function ( response ){
 
                 if(response.errors) {
                     ErrorHelper.display( response.errors );
@@ -234,9 +226,6 @@ conAngular
             UserService.getAccountExecutives( function( aes ){
                 $scope.accountExecutives = aes;
             });
-            UserService.getClientContacts( function( cc ){
-                $scope.clientContacts = cc;
-            }); 
         }// getAccountExecutives
 
         function initProjectDataTable(){
@@ -299,8 +288,6 @@ conAngular
               $state.go('/view-projects', {}, { reload: true });
               return;
             }
-            //getAllClients();
-            getClientContacts( project.client_id );
 
             $scope.project = project;
             $scope.clientId = project.client_id;
@@ -350,12 +337,5 @@ conAngular
             ids.push(item.value);
           });
           return ids;
-        }
-
-        function getClientContacts(clientId){
-            ClientService.getContacts( clientId, function ( clientContacts ){
-                console.log(clientContacts)
-                $scope.clientContacts = clientContacts;
-            });
         }
     }]);

@@ -7,7 +7,6 @@ conAngular
   service.byId = byId;
   service.getCheckOuts = getCheckOuts;
   service.getTypeClass = getTypeClass;
-  service.getCheckOutsByClient = getCheckOutsByClient;
   service.search = search;
   service.lastCheckoutFolio = lastCheckoutFolio;
   service.lastCheckinFolio = lastCheckinFolio;
@@ -70,19 +69,6 @@ conAngular
             });
 
         }// getCheckOuts
-
-    function getCheckOutsByClient( clientId, callback ) {
- 
-        var serviceUrl = $rootScope.apiUrl + 'inventory_transactions/get_check_outs_by_client/' + clientId;
-        $http.get (serviceUrl )
-            .success(function ( response ) {
-                callback( response.inventory_transactions );
-            })
-            .error(function ( response ) {
-                callback( response );
-            });
-
-        }// getCheckOutsByClient
 
     function getTypeClass( type ){
         if( 'CheckOutTransaction' == type ) return 'red lighten-3';

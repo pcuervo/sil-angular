@@ -221,11 +221,7 @@ conAngular
                     getBundleItems();
                     break;
                 case '/request-exit':
-                    if( 6 == $scope.role ){
-                        fetchClientItemsInStock();
-                    }else{
-                        fetchItemsInStock();
-                    }
+                    fetchItemsInStock();
                     if( ! $rootScope.globals.initMultipleWithdrawal ){
                         initItemsWithdrawal();
                     }
@@ -422,13 +418,6 @@ conAngular
 
         function getCheckOutTransactions(){
             InventoryTransactionService.getCheckOuts( function( checkOutTransactions ){
-                $scope.checkOutTransactions = checkOutTransactions;
-            });
-        }// getCheckOutTransactions
-
-        function getCheckOutTransactionsByClient( clientId ){
-            InventoryTransactionService.getCheckOutsByClient( clientId, function( checkOutTransactions ){
-                console.log( checkOutTransactions );
                 $scope.checkOutTransactions = checkOutTransactions;
             });
         }// getCheckOutTransactions

@@ -285,14 +285,13 @@ conAngular
                 case '/single-item-delivery':
                     fetchItemsInStock();
                     fetchAccountExecutives();
-                    fetchClientContacts();
                     fetchProjects();
                     initDeliveryDataTable();
                     fetchDeliveryUsers();
                     fetchSuppliers();
                     break;
                 case '/delivery-dashboard':
-                    if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
+                    if( 2 == $scope.role || 3 == $scope.role ){
                         fetchPendingDeliveryRequestsByUser( $rootScope.globals.currentUser.id );
                     }
                     if( 5 == $scope.role ){
@@ -303,7 +302,7 @@ conAngular
                     }
                     break;
                 case '/pending-deliveries':
-                    if( 6 == $scope.role || 2 == $scope.role || 3 == $scope.role ){
+                    if( 2 == $scope.role || 3 == $scope.role ){
                         fetchPendingDeliveryRequestsByUser( $rootScope.globals.currentUser.id );
                     }else{
                         fetchPendingDeliveryRequests();
@@ -312,11 +311,7 @@ conAngular
                     break;
                 case '/delivery-request':
                     LoaderHelper.showLoader( 'Obteniendo inventario...' );
-                    if( 6 == $scope.role ){
-                        fetchClientItemsInStock();
-                    }else{
-                        fetchItemsInStock();
-                    }
+                    fetchItemsInStock();
                     if( ! $rootScope.globals.initMultipleDelivery ){
                         console.log('init');
                         initItemsWithdrawal();
@@ -402,12 +397,6 @@ conAngular
                 $scope.accountExecutives = accountExecutives;
             });
         }// fetchAccountExecutives
-
-        function fetchClientContacts(){
-            UserService.getClientContacts( function( clientContacts ){
-                $scope.clientContacts = clientContacts;
-            });
-        }// fetchClientContacts
 
         function fetchProjects(){
             ProjectService.getAll( function( projects ){

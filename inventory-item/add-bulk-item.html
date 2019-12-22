@@ -39,13 +39,19 @@
         </select>
       </div>
       <div class="[ clear ]"></div>
-      <div class="[ col s12 m6 ]">
+      <div class="[ col s12 m4 ][ mt-10 ]">
+        <select name="itemType" ng-model="itemType" required ng-change="updateExpirationDate( itemType )">
+            <option value="" disabled selected>Tipo de mercancía</option>
+            <option ng:repeat="it in itemTypes" value="{{it.name}}">{{it.name}}</option>
+        </select>
+      </div>
+      <div class="[ col s12 m4 ]">
           <div class="input-field">
               <input id="item-name" type="text" name="itemName" ng-model="itemName" required>
               <label for="item-name">Nombre (alias)</label>
           </div>
       </div>
-      <div class="[ col s12 m6 ]">
+      <div class="[ col s12 m4 ]">
           <div class="input-field">
               <input id="quantity" type="number" name="quantity" ng-model="quantity" required data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0." min="1">
               <label for="quantity">Cantidad</label>
@@ -60,7 +66,7 @@
       <div class="[ col s12 m4 ]">
           <div class="input-field">
               <input id="brand" type="text" name="brand" ng-model="brand">
-              <label for="brand">Marca</label>
+              <label for="brand">SKU</label>
           </div>
       </div>
       <div class="[ col s12 m4 ]">
@@ -82,14 +88,7 @@
               <label for="extra-parts">Comentarios adicionales</label>
           </div>
       </div>
-      <!-- Revisar si estas opciones serían dinámicas -->
-      <div class="[ col s12 m4 ][ mt-10 ]">
-          <select name="itemType" ng-model="itemType" required ng-change="updateExpirationDate( itemType )">
-              <option value="" disabled selected>Tipo de mercancía</option>
-              <option ng:repeat="it in itemTypes" value="{{it.name}}">{{it.name}}</option>
-          </select>
-      </div>
-      <div class="[ col s12 m4 ]">
+      <div class="[ col s12 m4 offset-m2 ]">
           <div class="input-field">
               <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="1">
               <label for="itemValue">Valor</label>
@@ -138,10 +137,6 @@
               <input class="[ filled-in ]" type="checkbox" id="checkbox-high-value" value="1" name="highValue" />
               <label for="checkbox-high-value">Alto Valor</label>
           </div>
-          <div class="[ input-field ]">
-              <input class="[ filled-in ]" type="checkbox" id="checkbox-validation" value="1" name="requireValidation" />
-              <label for="checkbox-validation">Require validación por parte del Ejecutivo de Cuenta</label>
-          </div>
       </div>
       <div class="[ col s12 ]">
           <div class="input-field">
@@ -183,20 +178,26 @@
               <label for="selected-ae">Ejecutivo de cuenta</label>
           </div>
       </div>
-      <div class="[ col s12 m4 offset-m4 ]">
+      <div class="[ col s12 m4 ]">
           <div class="input-field">
               <input id="input_text" type="text" name="clientName" ng-model="clientName" disabled>
               <label for="input_disabled">Cliente</label>
           </div>
       </div>
       <div class="[ clear ]"></div>
-      <div class="[ col s12 m6 ]">
-          <div class="input-field">
-              <input id="input_text" type="text" name="itemName" ng-model="itemName" disabled>
-              <label for="input_text">Nombre (alias)</label>
-          </div>
+      <div class="[ col s12 m4 ]">
+        <div class="input-field">
+            <input id="selected-item-type" type="text" name="selectedItemType" ng-model="selectedItemTypeText" disabled>
+            <label for="selected-item-type">Tipo de mercancía</label>
+        </div>
       </div>
-      <div class="[ col s12 m6 ]">
+      <div class="[ col s12 m4 ]">
+        <div class="input-field">
+          <input id="input_text" type="text" name="itemName" ng-model="itemName" disabled>
+          <label for="input_text">Nombre (alias)</label>
+        </div>
+      </div>
+      <div class="[ col s12 m4 ]">
           <div class="input-field">
               <input id="input_text" type="text" name="quantity" ng-model="quantity" disabled>
               <label for="input_text">Cantidad</label>
@@ -212,7 +213,7 @@
       <div class="[ col s12 m4 ]">
           <div class="input-field">
               <input id="brand" type="text" name="brand" ng-model="brand" disabled>
-              <label for="brand">Marca</label>
+              <label for="brand">SKU</label>
           </div>
       </div>
       <div class="[ col s12 m4 ]">
@@ -231,12 +232,6 @@
           <div class="[ input-field ]">
               <textarea id="extra-parts" class="materialize-textarea" name="extraParts" ng-model="extraParts" disabled></textarea>
               <label for="extra-parts">Comentarios adicionales</label>
-          </div>
-      </div>
-      <div class="[ col s12 m4 ]">
-          <div class="input-field">
-              <input id="selected-item-type" type="text" name="selectedItemType" ng-model="selectedItemTypeText" disabled>
-              <label for="selected-item-type">Tipo de mercancía</label>
           </div>
       </div>
       <div class="[ col s12 m4 ]">

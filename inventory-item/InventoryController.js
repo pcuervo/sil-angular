@@ -29,11 +29,10 @@ conAngular
             return;
           }
           LoaderHelper.showLoader('Buscando...');
-          if( 6 === $scope.role ) $scope.selectedClient = $rootScope.globals.currentUser.id;
 
           if( 3 === $scope.role ) $scope.selectedAE = $rootScope.globals.currentUser.id;
 
-          InventoryItemService.search( $scope.selectedProject, $scope.selectedClient, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+          InventoryItemService.search( $scope.selectedProject, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
             if(! inventoryItems.length){
                 Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
             }
@@ -95,7 +94,7 @@ conAngular
             barcodeWindow.document.write( barcodeEl );
             barcodeWindow.document.write('</th></tr><tr><td>Nombre</td><td>' + $scope.item.name + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Proyecto</td><td>' + $scope.item.project_number + ' - ' + $scope.item.project + '</td></tr>');
-            barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + ' - ' + $scope.clientContact + '</td></tr>');
+            barcodeWindow.document.write('<tr><td>Cliente</td><td>' + $scope.clientName + '</td></tr>');
             barcodeWindow.document.write('<tr><td>Ejecutivo de cuenta</td><td>' + $scope.ae + '</td></tr>');
  
             if( 'undefined' != typeof $scope.item.serial_number ){
@@ -327,15 +326,9 @@ conAngular
             case '/my-inventory':
               if( 1 === $scope.role || 4 === $scope.role   ) {
                 fetchAccountExecutives();
-                fetchClientContacts();
-              }
-              if( 6 === $scope.role ) {
-                LoaderHelper.showLoader('Cargando inventario...');
-                $scope.selectedClient = $rootScope.globals.currentUser.id;
-                fetchInventory();
               }
 
-              if( 3 === $scope.role || 6 === $scope.role ){
+              if( 3 === $scope.role ){
                 getUserProjects($rootScope.globals.currentUser.id);
               } else {
                 LoaderHelper.showLoader('Cargando proyectos...');
@@ -427,13 +420,6 @@ conAngular
                 });
                 return;
             }
-            if( 6 === $scope.role ){ 
-                $scope.selectedClient = $rootScope.globals.currentUser.id;
-                InventoryItemService.search( '', $scope.selectedClient, '', '', '', '', '', '', '', function( inventoryItems ){
-                    $scope.inventoryItems = inventoryItems;
-                    LoaderHelper.hideLoader();
-                });
-            }
         }// fetchInventory
 
         function initInventoryDataTable(){
@@ -489,7 +475,6 @@ conAngular
             $scope.ae = item.ae;
             $scope.ae_id = item.ae_id;
             $scope.clientName = item.client.name;
-            $scope.clientContact = item.client_contact;
             $scope.description = item.description;
             $scope.itemName = item.name;
             //$scope.itemState = item.state;
@@ -540,12 +525,6 @@ conAngular
                 $scope.accountExecutives = accountExecutives;
             });
         }// fetchAccountExecutives
-
-        function fetchClientContacts(){
-            UserService.getClientContacts( function( clientContacts ){
-                $scope.clientContacts = clientContacts;
-            });
-        }// fetchClientContacts
 
         function getItemState( stateId ){
             InventoryItemService.getItemState( stateId, function( state ){

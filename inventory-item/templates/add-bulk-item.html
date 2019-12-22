@@ -46,12 +46,6 @@
             </div>
             <div class="[ col s12 m6 ]">
                 <div class="input-field">
-                    <input id="client-contact" type="text" name="clientContact" ng-model="clientContact" ng-readonly="true">
-                    <label for="client-contact">Contacto cliente</label>
-                </div>
-            </div>
-            <div class="[ col s12 m6 ]">
-                <div class="input-field">
                     <input id="item-name" type="text" name="itemName" ng-model="itemName" required>
                     <label for="item-name">Nombre (alias)</label>
                 </div>
@@ -175,12 +169,6 @@
         </div>
         <div class="[ col s12 m6 ]">
             <div class="input-field">
-                <input id="input_disabled" type="text" name="clientContact" ng-model="clientContact" disabled>
-                <label for="input_disabled">Contacto cliente</label>
-            </div>
-        </div>
-        <div class="[ col s12 m6 ]">
-            <div class="input-field">
                 <input id="input_text" type="text" name="itemName" ng-model="itemName" disabled>
                 <label for="input_text">Nombre (alias)</label>
             </div>
@@ -277,9 +265,6 @@
                 </div>
                 <div class="[ center ][ col s12 ]">
                     <button class="[ waves-effect ][ btn btn-extra ]" ng-click="printSummary()"><i class="mdi-action-print left"></i>Remisión entrada</button>
-                </div>
-                <div class="[ center ][ col s12 ]">
-                    <a href="#/new-delivery/{{ item.id }}" class="[ waves-effect ][ btn btn-extra ]"><i class="mdi-action-schedule left"></i>Programar envío</a>
                 </div>
                 <div class="[ center ][ col s12 ]" ng-show="item.status != 7">
                     <a href="#" class="[ waves-effect ][ btn btn-extra ]" ng-click="setActiveStep(3)"><i class="[ fa fa-location-arrow ][ left ]"></i>Ubicar en almacén</a>

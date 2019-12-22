@@ -18,14 +18,8 @@ conAngular.controller('RentController', [ '$rootScope', '$scope', '$location', '
         switch( currentPath ){
             case '/rent-dashboard':
                 fetchWarehouseStats();
-                getAllClientUsers();
                 initClientsDataTable(); 
                 break;
-        }
-
-        if( currentPath.indexOf('view-rent') > -1 ){
-            getClient( $stateParams.clientId );
-            fetchClientStats( $stateParams.clientId );
         }
     }// initDashboard
 
@@ -49,28 +43,6 @@ conAngular.controller('RentController', [ '$rootScope', '$scope', '$location', '
         });
     }
 
-    function fetchClientStats( clientContactId ){
-        $scope.inventoryByItemData = [];
-        $scope.inventoryByItemOpts = {};
-        $scope.monthlySpaceData = [];
-        $scope.monthlySpaceOpts = {};
-        addMonthlySpaceTooltip();
-
-        ClientService.stats( clientContactId, function( stats ){
-            console.log( stats );
-            $scope.stats = stats;
-            initChartMonthlyRent( stats.rent_by_month );
-            initChartInventoryByItemType( stats.inventory_by_type );
-            initChartInventoryByHighValue( stats.total_number_items, stats.total_high_value_items );
-        });
-    }
-
-    function getAllClientUsers(){
-        ClientService.getAllUsers( function( clientUsers ){
-            $scope.clientUsers = clientUsers;
-        }); 
-    }// getAllClientUsers
-
     function initClientsDataTable(){
         $scope.dtClientsOptions = DTOptionsBuilder.newOptions()
             .withPaginationType('full_numbers')
@@ -81,12 +53,6 @@ conAngular.controller('RentController', [ '$rootScope', '$scope', '$location', '
             .withOption('searching', false);
         DTDefaultOptions.setLanguageSource('https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json');
     }// initPendingLocationDataTable
-
-    function getClient( clientId ){
-        ClientService.getClient( clientId, function( client_contact ){
-            $scope.client_contact = client_contact;
-        }); 
-    }// getClient
   
     function initChartInventoryByItemType( data ){
 

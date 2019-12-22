@@ -12,7 +12,6 @@
                         <th class="[ center-align ][ hide-on-med-and-down ]">Tipo de mercancía</th>
                         <th class="[ center-align ][ hide-on-med-and-down ]">Proyecto</th>
                         <th class="[ center-align ][ hide-on-small-only ]">Cliente</th>
-                        <th class="[ center-align ][ hide-on-small-only ]">Contacto Cliente</th>
                         <th class="[ center-align ][ hide-on-small-only ]">¿Quién solicita entrada?</th>
                         <th class="[ center-align ]">Validar</th>
                     </tr>
@@ -24,7 +23,6 @@
                         <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.item_type }}</td>
                         <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.project_data.name }}</td>
                         <td class="[ center-align ][ hide-on-small-only ]">{{ item.project_data.client }}</td>
-                        <td class="[ center-align ][ hide-on-small-only ]">{{ item.project_data.client_contact }}</td>
                         <td class="[ center-align ][ hide-on-small-only ]">{{ item.owner }}</td>
                         <td class="[ center-align ]">
                             <button class="[ btn waves-effect green ]" ng-click="validateEntry( item.id )"><i class="[ fa fa-check ]"></i></button>

@@ -106,11 +106,7 @@ conAngular
 
         if( 0 !== Object.keys( $stateParams ).length ) {
           LoaderHelper.showLoader('Cargando movimientos al inventario...');
-          if( $rootScope.globals.currentUser.role == 6 ){
-              getAllInventoryTransactions();
-          } else {
-              LoaderHelper.hideLoader();
-          }
+          LoaderHelper.hideLoader();
         } 
         try {
           initInventoryTransactionsDataTable();

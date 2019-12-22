@@ -240,17 +240,10 @@ conAngular
         function initSettingsOptions( currentPath ){
             if( currentPath.indexOf('system-settings') > -1 ){
                 getSettings( 1 );
-                getAllClientUsers();
                 initClientsDataTable(); 
                 return;
             }
         }// initWarehouseOptions
-
-        function getAllClientUsers(){
-            ClientService.getAllUsers( function( clientUsers ){
-                $scope.clientUsers = clientUsers;
-            }); 
-        }// getAllClientUsers
 
         function initClientsDataTable(){
             $scope.dtClientsOptions = DTOptionsBuilder.newOptions()

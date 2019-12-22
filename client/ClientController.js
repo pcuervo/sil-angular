@@ -107,7 +107,6 @@ conAngular
             }
 
             getAllClients();
-            getAllClientUsers();
             initClientDataTable();
             initClientUserDataTable();
 
@@ -118,17 +117,6 @@ conAngular
                 $scope.clients = clients;
             }); 
         }// getAllClients
-
-        function getAllClientUsers(){
-
-            ClientService.getAllUsers( function( clientUsers ){
-
-                $scope.clientUsers = clientUsers;
-                console.log( clientUsers );
-                
-            }); 
-
-        }// getAllClientUsers
 
         function getClientUser( userId ){
             ClientService.getClient( userId, function( client ){

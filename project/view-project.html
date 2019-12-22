@@ -58,7 +58,7 @@
               <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.description }}</td>
               <td class="[ center-align ]">{{ item.quantity }}</td>
               <td class="[ center-align ]">
-                <p ng-if="item.item_locations.length == 0 || role == 6">-</p>
+                <p ng-if="item.item_locations.length == 0">-</p>
                 <div ng-repeat="il in item.item_locations" ng-if="role != 6">
                   <a href="#/view-location/{{il.warehouse_location.id}}" >{{il.warehouse_location.name}}</a>
                 </div>

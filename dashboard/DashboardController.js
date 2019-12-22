@@ -79,44 +79,9 @@ conAngular.controller('DashboardController', [ '$rootScope', '$scope', '$state',
                 $state.go('/delivery-dashboard', {}, { reload: true });
                 break;
             default:
-                initDashboardClient();
+                initDashboardAdmin();
         }
     }// initDashboard
-
-    function initDashboardClient(){
-        $scope.dashboardTemplate = 'dashboard/client-dashboard.html';
-
-        ClientService.byUser( $rootScope.globals.currentUser.id, function( client_contact ){
-            console.log(client_contact)
-            $scope.client_contact = client_contact;
-        } )
-
-        $scope.hasInventory = true;
-        $scope.inventoryByHighValue = [];
-        $scope.inventoryByHighValueOpts = {};
-        $scope.inventoryByItemData = [];
-        $scope.inventoryByItemOpts = {};
-        $scope.monthlySpaceData = [];
-        $scope.monthlySpaceOpts = {};
-        addMonthlySpaceTooltip();
-
-        ClientService.stats( $rootScope.globals.currentUser.id, function( stats ){
-            console.log( stats );
-            $scope.stats = stats;
-
-            if( Object.keys( stats.inventory_by_type ).length != 0 ){
-                //$scope.hasInventory = false;
-                initChartInventoryByItemType( stats.inventory_by_type );
-            }
-            initChartInventoryByHighValue( stats.total_number_items, stats.total_high_value_items );
-        });
-
-        // Load data for tables
-        fetchClientWithdrawRequests( $rootScope.globals.currentUser.id );
-        fetchPendingDeliveriesByUser( $rootScope.globals.currentUser.id );
-        // Create DataTables
-        showWithdrawRequestsDataTable();
-    }// initDashboardClient
 
     function initDashboardAdmin(){
         $scope.dashboardTemplate = 'dashboard/admin-dashboard.html';

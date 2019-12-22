@@ -2,18 +2,8 @@
 
 <div class="[ row ][ mb-10 ]">
     <div class="[ col s12 m4 ]">
-        <div class="card-panel stats-card blue white-text">
-            <i class="fa fa-user"></i>
-            <span class="count">{{ client_contact.client.name }}</span>
-            <div class="name">{{ client_contact.first_name + ' ' + client_contact.last_name }}</div>
-        </div>
     </div>
     <div class="[ col s12 m4 ]">
-        <div class="card-panel stats-card blue white-text">
-            <i class="fa fa-dollar"></i>
-            <span class="count">{{ client_contact.current_month_rent | currency : symbol : fractionSize }}</span>
-            <div class="name">Renta del mes</div>
-        </div>
     </div>
     <div class="[ col s12 m4 ]">
         <div class="card-panel stats-card blue white-text">

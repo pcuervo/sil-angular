@@ -33,11 +33,11 @@
           <li ng-show="( role == 1 || role == 4 || role == 7 )">
             <a class="waves-effect" href="#/search-by-folio"><i class="mdi-av-repeat"></i>Movimientos por folio</a>
           </li>
-          <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 || role == 7 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
+          <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 7 )"><a class="waves-effect" href="#/my-inventory"><i class="fa fa-heart"></i> Mi inventario</a>
           </li>
           <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4)"><a class="waves-effect" href="#/check-in"><i class="fa fa-indent"></i>  Entradas</a>
           </li>
-          <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 || role == 7 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
+          <li ng-if="( role == 1 || role == 2 || role == 3 || role == 4 || role == 7 )"><a class="waves-effect waves-blue" href="#/check-out"><i class="fa fa-outdent"></i>  Salidas</a>
           </li>
           <li ng-if="( role == 1 || role == 4 )"><a class="waves-effect waves-blue" href="#/load-inventory-csv"><i class="mdi-file-file-upload"></i>  Carga por CSV</a>
           </li>
@@ -54,7 +54,7 @@
           </li>
         </ul>
       </li>
-      <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4 || role == 6 )">
+      <li ng-show="( role == 1 || role == 2 || role == 3 || role == 4  )">
           <a href="#/delivery-dashboard" class="waves-effect waves-blue"><i class="fa fa-motorcycle"></i> Envíos</a>
       </li>
       <li class="label" ng-show="( role == 1 || role == 4 )">Administración del sistema</li>
@@ -82,10 +82,6 @@
           <li><a class="waves-effect waves-blue" href="#/view-clients"><i class="ion-eye"></i>Ver clientes</a>
           </li>
           <li ng-show="role === 1 || role === 4"><a class="waves-effect waves-blue" href="#/add-client"><i class="mdi-content-add-box"></i>Agregar cliente</a>
-          </li>
-          <li ng-show="role != 4"><a class="waves-effect waves-blue" href="#/view-client-users"><i class="ion-eye"></i>Ver usuarios de cliente</a>
-          </li>
-          <li ng-show="role === 1 || role === 4"><a class="waves-effect waves-blue" href="#/add-client-user"><i class="mdi-content-add-box"></i>Agregar usuarios a cliente</a>
           </li>
         </ul>
       </li>

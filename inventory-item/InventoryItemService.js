@@ -415,7 +415,7 @@ conAngular
 
         }// isReentryWithPendingLocation
 
-        function search( projectId, clientContactId, aeId, status, itemType, storageType, keyword, serialNumber, callback ) {
+        function search( projectId, aeId, status, itemType, storageType, keyword, serialNumber, callback ) {
  
             var serviceUrl = $rootScope.apiUrl + 'inventory_items/';
             $http ({
@@ -424,7 +424,6 @@ conAngular
                 params: 
                     { 
                         project_id:         projectId,
-                        client_contact_id:  clientContactId,
                         ae_id:              aeId,
                         status:             status,
                         item_type:          itemType,
