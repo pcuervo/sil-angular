@@ -83,16 +83,31 @@
           </div>
       </div>
       <div class="[ col s12 ]">
-          <div class="[ input-field ]">
-              <textarea id="extra-parts" class="materialize-textarea" name="extraParts" ng-model="extraParts" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
-              <label for="extra-parts">Comentarios adicionales</label>
-          </div>
+        <div class="[ input-field ]">
+          <textarea id="extra-parts" class="materialize-textarea" name="extraParts" ng-model="extraParts" data-parsley-trigger="keyup" data-parsley-maxlength="200" data-parsley-maxlength-message = "Este campo debe contener menos de 200 caracteres."></textarea>
+          <label for="extra-parts">Comentarios adicionales</label>
+        </div>
       </div>
-      <div class="[ col s12 m4 offset-m2 ]">
-          <div class="input-field">
-              <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="1">
-              <label for="itemValue">Valor</label>
-          </div>
+      <div class="[ col s12 m4 ]">
+        <div class="input-field">
+          <select name="itemState" ng-model="itemState" required>
+            <option value="" selected disabled>Estado</option>
+            <option value="1">Nuevo</option>
+            <option value="2">Como nuevo</option>
+            <option value="3">Usado</option>
+            <option value="4">Dañado</option>
+            <option value="5">Incompleto</option>
+            <option value="6">Necesita mantenimiento</option>
+            <option value="7">Buen estado</option>
+            <option value="8">Muestras</option>
+          </select>
+        </div>
+      </div>
+      <div class="[ col s12 m4 ]">
+        <div class="input-field">
+          <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" data-parsley-type="number" data-parsley-type-message="Este campo debe ser númerico." data-parsley-min-message="El valor deber ser mayor que 0" min="1">
+          <label for="itemValue">Valor</label>
+        </div>
       </div>
       <div class="[ col s12 m4 ][ mt-10 ]">
           <select name="storageType" ng-model="storageType" ng-change="updateExpirationDate( storageType )" required>
@@ -235,10 +250,16 @@
           </div>
       </div>
       <div class="[ col s12 m4 ]">
-          <div class="input-field">
-              <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" disabled>
-              <label for="itemValue">Valor</label>
-          </div>
+        <div class="input-field">
+            <input id="selected-item-type" type="text" name="selectedState" ng-model="selectedStateText" disabled>
+            <label for="selected-item-type">Tipo de mercancía</label>
+        </div>
+      </div>
+      <div class="[ col s12 m4 ]">
+        <div class="input-field">
+          <input id="itemValue" type="text" name="itemValue" ng-model="itemValue" disabled>
+          <label for="itemValue">Valor</label>
+        </div>
       </div>
       <div class="[ col s12 m4 ][ print-hidden ]">
           <div class="input-field">

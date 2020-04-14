@@ -71,6 +71,7 @@ conAngular
     $scope.selectedItemTypeText = $('[name="itemType"] option:selected').text();
     $scope.selectedStorageTypeText = $('[name="storageType"] option:selected').text();
     $scope.selectedProviderText = $('[name="deliveryCompany"] option:selected').text();
+    $scope.selectedStateText = $('[name="itemState"] option:selected').text();
     if( 'undefined' == typeof $scope.serialNumber ){
       $scope.serialNumber = $('#serial-number').val();
     }
@@ -594,7 +595,7 @@ conAngular
           var status = 1;
           var itemImgName = $scope.itemName + '.' + $scope.itemImgExt;
           var isHighValue = $('#checkbox-high-value:checked').length;
-          BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.extraParts, function ( response ){
+          BulkItemService.create( $scope.itemName, $scope.quantity, $scope.description, $scope.selectedProject, $scope.itemType, $scope.itemImg, itemImgName, $scope.entryDate, $scope.storageType, $scope.deliveryCompany, $scope.deliveryCompanyContact, $scope.additionalComments, $scope.barCodeVal, $scope.validityExpirationDate, $scope.itemValue, itemRequestId, status, isHighValue, $scope.selectedAE, $scope.serialNumber, $scope.brand, $scope.model, $scope.extraParts, $scope.itemState, function ( response ){
 
               LoaderHelper.hideLoader();
               if( response.errors ) {
