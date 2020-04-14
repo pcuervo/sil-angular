@@ -61,6 +61,7 @@
                 <th class="[ center-align ]"></th>
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ][ hide-on-med-and-down ]">Número de serie</th>
+                <th class="[ center-align ][ hide-on-med-and-down ]">SKU</th>
                 <th class="[ center-align ]">Cantidad</th>
                 <th class="[ center-align ]">Estado</th>
                 <th class="[ center-align ]">Tipo de Mercancía</th>
@@ -79,6 +80,7 @@
                 <td><img ng-src="{{ i.inventory_item.img_thumb }}" alt=""></td>
                 <td>{{ i.inventory_item.name + ' ' + i.inventory_item.model  }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.serial_number }}</td>
+                <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.brand }}</td>
                 <td class="[ center-align ]">{{ i.inventory_item.quantity }}</td>
                 <td class="[ center-align ]">{{ getItemState( i.inventory_item.state ) }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ i.inventory_item.item_type }}</td>

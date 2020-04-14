@@ -33,9 +33,10 @@ conAngular
     }// getAll
 
     function all(callback) {
-      var serviceUrl = $rootScope.apiUrl  + 'projects/lean_index';
+      var serviceUrl = $rootScope.apiUrl  + 'projects/lean_index?order_by=litobel_id';
       $http.get ( serviceUrl )
       .success(function ( response ) {
+          console.log(response.projects)
         callback( response.projects );
       })
       .error(function ( response ) {
