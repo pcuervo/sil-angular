@@ -15,6 +15,7 @@
                 <th class="[ center-align ]">Nombre</th>
                 <th class="[ center-align ]">Número de serie</th>
                 <th class="[ center-align ]">SKU</th>
+                <th class="[ center-align ]">Proyecto</th>
                 <th class="[ center-align ][ hide-on-small-and-down ]">Ubicación</th>
                 <th class="[ center-align ][ hide-on-small-and-down ]">Cantidad</th>
                 <th class="[ center-align ][ hide-on-med-and-down ]">Fecha de ingreso</th>
@@ -27,6 +28,7 @@
                 <td><a href="#/view-item/{{item.id}}">{{ item.name }}</a></td>
                 <td class="[ center-align ]">{{ item.serial_number }}</td>
                 <td class="[ center-align ]">{{ item.brand }}</td>
+                <td class="[ center-align ]">{{ item.project_name }}</td>
                 <td class="[ center-align ][ hide-on-small-and-down ]"><a href="#/view-location/{{item.location_id}}">{{ item.location }}</a></td>
                 <td class="[ center-align ][ hide-on-small-and-down ]">{{ item.quantity }}</td>
                 <td class="[ center-align ][ hide-on-med-and-down ]">{{ item.created_at | date:'dd/MM/yyyy' }}</td>

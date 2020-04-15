@@ -28,11 +28,43 @@ conAngular
             Materialize.toast( 'Por favor selecciona al menos una opción de búsqueda.', 4000, 'red');
             return;
           }
-          LoaderHelper.showLoader('Buscando...');
+          //LoaderHelper.showLoader('Buscando...');
 
           if( 3 === $scope.role ) $scope.selectedAE = $rootScope.globals.currentUser.id;
+          var searchParams = {
+            project: $scope.selectedProject,
+            ae: $scope.selectedAE,
+            status: $scope.selectedStatus,
+            itemType: $scope.itemType,
+            storageType: $scope.storageType,
+            keyword: $scope.keyword,
+            sn: $scope.serialNumber,
+          }
+          $state.go('/my-inventory', searchParams, { reload: true });
+        //   InventoryItemService.search( $scope.selectedProject, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+        //     if(! inventoryItems.length){
+        //         Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
+        //     }
+        //     $scope.inventoryItems = inventoryItems;
+        //     console.log(inventoryItems);
+        //     LoaderHelper.hideLoader();
+        //   })
+        }// searchItem
+        
+        function searchItems(params){
 
-          InventoryItemService.search( $scope.selectedProject, $scope.selectedAE, $scope.selectedStatus, $scope.itemType, $scope.storageType, $scope.keyword, $scope.serialNumber, function( inventoryItems ){
+          LoaderHelper.showLoader('Buscando...');
+          var project = params.project;
+          var accountExecutive = params.ae;
+          var itemStatus = params.status;
+          var itemType = params.itemType;
+          var storageType = params.storageType;
+          var keyword = params.keyword;
+          var serialNumber = params.sn;
+          if( 3 === $scope.role ) accountExecutive = $rootScope.globals.currentUser.id;
+
+          // $state.go('/my-inventory', { x: 123 }, { reload: true });
+          InventoryItemService.search( project, accountExecutive, itemStatus, itemType, storageType, keyword, serialNumber, function( inventoryItems ){
             if(! inventoryItems.length){
                 Materialize.toast( 'No se encontró ningún artículo con el criterio seleccionado.', 4000, 'red');
             }
@@ -335,7 +367,6 @@ conAngular
                 fetchLeanProjects();
               }
             
-              
               fetchStatuses();
               // TODO: FIX TEMPORAL, DATATABLES NO CARGA BIEN 
               // EN ALGUNOS CASOS
@@ -345,6 +376,11 @@ conAngular
               catch(err){
                   location.reload();
               }
+
+              if($stateParams){
+                searchItems($stateParams)
+              }
+
               break;
             case '/view-item-types':
               LoaderHelper.showLoader('Cargando tipos de mercancía')
@@ -500,17 +536,9 @@ conAngular
             }
         }// initItem
 
-        function fetchProjects(){
-          ProjectService.getAll( function( projects ){
-              $scope.projects = projects;
-              LoaderHelper.hideLoader();
-          });
-        }// fetchProjects
-
         function fetchLeanProjects(){
           ProjectService.all( function( projects ){
             $scope.projects = projects;
-            LoaderHelper.hideLoader();
           });
         }
 
@@ -627,7 +655,6 @@ conAngular
         function getUserProjects(userId){
             ProjectService.byUser( userId, function( projects ){
                 $scope.projects = projects;
-                LoaderHelper.hideLoader();
             }); 
         }// getUserProjects
 

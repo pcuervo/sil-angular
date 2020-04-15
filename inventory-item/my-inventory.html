@@ -17,7 +17,7 @@
                 <select name="project" ng-model="selectedProject">
                     <option value="" selected disabled>Proyecto</option>
                     <option value="">Todos</option>
-                    <option ng:repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
+                    <option ng:repeat="project in projects" value="{{project.id}}">{{project.litobel_id + ' | ' + project.name}}</option>
                 </select>
             </div>
             <div class="[ clear ]" ></div>
@@ -100,16 +100,16 @@
                     <div ng-if="i.inventory_item.status == 1">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.inventory_item.id}}"><i class="[ fa fa-eye ]"></i></a>
                         <a class="[ btn waves-effect red ]" href="#/withdraw-item/{{i.inventory_item.id}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-outdent ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.inventory_item.barcode}}" ng-if="'BulkItem' == i.inventory_item.actable_type" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.inventory_item.id}}" ng-if="'BulkItem' == i.inventory_item.actable_type" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
                     </div>
                     <div ng-if="( i.inventory_item.status == 3 )">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.inventory_item.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.inventory_item.barcode}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.inventory_item.id}}" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
                         <a class="[ btn waves-effect red ]" href="#/withdraw-item/{{i.inventory_item.id}}"><i class="[ fa fa-outdent ]" ng-show="1 == role || 4 == role"></i></a>
                     </div>
                     <div ng-if="( i.inventory_item.status == 2 )">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.inventory_item.id}}"><i class="[ fa fa-eye ]"></i></a>
-                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.inventory_item.barcode}}" ng-show="1 == role || 4 == role" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
+                        <a class="[ btn waves-effect green ]" href="#/re-entry/{{i.inventory_item.id}}" ng-show="1 == role || 4 == role" ng-show="1 == role || 4 == role"><i class="[ fa fa-indent ]"></i></a>
                     </div>
                     <div ng-if="( i.inventory_item.status == 4 || i.inventory_item.status == 5 || i.inventory_item.status == 6  )">
                         <a class="[ btn waves-effect ]" href="#/view-item/{{i.inventory_item.id}}"><i class="[ fa fa-eye ]"></i></a>

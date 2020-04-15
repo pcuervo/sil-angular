@@ -1,6 +1,6 @@
 <div class="[ card-panel ]">  
     <h4 class="[ center-align ]">Reingreso</h4>  
-    <div class="[ row ]">
+    <div class="[ row ]" ng-show="currentStep==1">
         <div class="[ col s12 ][ mt-10 ]"> 
             <div class="[ row ]">
                 <div class="[ col s12 m5 ][ center-align ][ item ]"> 
@@ -84,6 +84,52 @@
             </div>
         </form>
     </div>
+
+    <div class="[ card-panel ]" ng-show="currentStep==2">
+        <div class="row">
+            <div class="[ col s12 m6 ][ mt-10 ]">
+                <div id="editor"></div>
+            </div>
+        </div>
+        <div class="row">
+            <h4 class="[ center-align ]">Ubicación en almacén</h4>
+            <div class="[ col s8 m4 offset-m2 ]">
+                <div class="input-field">
+                    <input id="input_text" type="text" name="itemName" ng-model="itemName" required disabled>
+                    <label for="input_text">Nombre (alias)</label>
+                </div>
+            </div>
+            <div class="[ col s4 m2 ]">
+                <div class="input-field">
+                    <input id="input_text" type="text" name="quantityToReEnter" ng-model="quantityToReEnter" required disabled>
+                    <label for="input_text">Cantidad</label>
+                </div>
+            </div>
+            <div class="[ clear ]"></div>
+            <form name="location_form" class="[ mt-40 ][ left-align ]" ng-submit="addReEntryToLocation( item.id, quantityToReEnter )" data-parsley-bulk-same>
+                <div>
+                    <div class="[ col s12 m6 l4 offset-l2 ]">
+                        <select name="rack" ng-model="selectedRack" required data-parsley-error-message="¡El rack es obligatorio!" ng-change="updateLocations( selectedRack )">
+                            <option value="" disabled selected>Selecciona el rack</option>
+                            <option ng:repeat="rack in racks" value="{{rack.id}}">{{rack.name}}</option>
+                        </select>
+                    </div>
+                    <div class="[ col s12 m6 l4 ]" >
+                        <select name="location" ng-model="selectedLocation" ng-change="showLocationDetails( selectedLocation )">
+                            <option value="" disabled selected>Selecciona la ubicación</option>
+                            <option ng:repeat="location in locations" value="{{location.id}}">{{location.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="[ clear ]"></div>
+                <div class="[ col s12 m4 offset-m4 ]">
+                    <div class="[ center-align ]">
+                        <button class="[ waves-effect ][ btn ]" ng-show="hasSameLocation">Ubicar</button>
+                    </div>
+                </div>
+            </form><!-- sameLocationType -->
+        </div><!-- row -->
+      </div><!-- ubicaciones -->
     
 </div>
 

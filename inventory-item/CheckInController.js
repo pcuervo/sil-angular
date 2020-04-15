@@ -234,6 +234,17 @@ conAngular
 
       }// addToLocation
 
+      $scope.addReEntryToLocation = function( itemId, quantity ){
+        LoaderHelper.showLoader( 'Ubicando ' + $scope.item.name + ' en almacén' );
+
+        WarehouseService.locateItem( itemId, $scope.selectedLocation, quantity, true, function( response ) {
+            console.log(response);
+            Materialize.toast('¡Se ubicó el artículo: "' + $scope.itemName + '" exitosamente!', 4000, 'green');
+            $state.go('/check-in', {}, { reload: true });
+        });
+        return;
+    }// addToLocation
+
 
 
       $scope.searchByBarcode = function( barcode ){
@@ -266,7 +277,8 @@ conAngular
                   return;
               }
               Materialize.toast( response.success, 4000, 'green');
-              $state.go('/check-in', {}, { reload: true });
+              $scope.currentStep = 2;
+              //$state.go('/check-in', {}, { reload: true });
           });
       }// reentry
 
@@ -487,7 +499,9 @@ conAngular
               LoaderHelper.showLoader('Cargando artículo...');
               getItem( $stateParams.itemId );
               fetchSuppliers();
+              fetchWarehouseRacks();
               $scope.entryDate = new Date();
+              $scope.currentStep = 1;
           }
 
           if( currentPath.indexOf( '/edit-item' ) > -1 ){
@@ -857,7 +871,7 @@ conAngular
           $scope.validityExpirationDate = new Date( $filter('date')( item.validity_expiration_date, 'yyyy-MM-dd' ) );
           $scope.hasLocations = 0;
 
-          if( item.locations.length > 0 ){
+          if( item.locations && item.locations.length > 0 ){
               $scope.hasLocations = 1;
               initItemLocationsDataTable();
           }

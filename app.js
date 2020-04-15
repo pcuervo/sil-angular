@@ -898,7 +898,7 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         }
     })
     .state('/my-inventory', {
-        url: "/my-inventory",
+        url: "/my-inventory?project&ae&status&itemType&storageType&keyword&sn",
         templateUrl: "inventory-item/my-inventory.html",
         controller: "InventoryController",
         data: {
@@ -2193,7 +2193,7 @@ conAngular.run(['$rootScope', '$state', '$cookies', '$http', 'AuthenticationServ
     var test = 'http://localhost:3000/api/';
     var stage = 'https://sil-api.herokuapp.com/api/';
     var prod = 'https://sil-prod.herokuapp.com/api/';
-    $rootScope.apiUrl = test;
+    $rootScope.apiUrl = prod;
 
     $rootScope.loggedIn = $cookies.get('loggedIn') == 'true' ? true : false;
     // state to be accessed from view
